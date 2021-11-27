@@ -15,16 +15,16 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private static final String UNIVERSITY_EMAIL = "@koreatech.ac.kr";
     @Async
-    public void send(String email, String value, RedisKey redisKey) {
+    public void send(String email, String value, String redisKey) {
         SimpleMailMessage smm = makeMail(email, value, redisKey);
         javaMailSender.send(smm);
     }
 
-    public SimpleMailMessage makeMail(String email, String value, RedisKey redisKey) {
+    public SimpleMailMessage makeMail(String email, String value, String redisKey) {
         SimpleMailMessage smm = new SimpleMailMessage();
 
-        String text = "http://localhost:8080/sign/email?email="+email+"&authCode="+value;
-        if (redisKey.equals(RedisKey.VERIFY)) {
+        String text = "http://localhost:8080/sign/verify?email="+email+"&authCode="+value;
+        if (redisKey.equals(RedisKey.VERIFY.getKey())) {
             smm.setTo(email + UNIVERSITY_EMAIL);
             smm.setSubject("회원가입 이메일 인증");
             smm.setText(text+"&redisKey=VERIFY");

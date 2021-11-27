@@ -65,4 +65,9 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-107, "유효하지 않은 인증코드입니다.");
     }
 
+    @ExceptionHandler(MemberNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result MemberNotFoundException() {
+        return responseService.getFailureResult(-108, "존재하지 않는 회원입니다.");
+    }
 }

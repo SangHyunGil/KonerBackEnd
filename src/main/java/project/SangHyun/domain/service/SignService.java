@@ -44,6 +44,7 @@ public class SignService {
                 Member.builder()
                         .email(requestDto.getEmail())
                         .password(passwordEncoder.encode(requestDto.getPassword()))
+                        .nickname(requestDto.getNickname())
                         .role(Role.ROLE_NOT_PERMITTED)
                         .build());
 
@@ -84,41 +85,41 @@ public class SignService {
     @Transactional
     public String sendEmail(MemberEmailAuthRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
+
+        String key = getKey(requestDto.getEmail(), requestDto.getRedisKey());
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration(RedisKey.EMAIL.getKey() + requestDto.getEmail(), authCode, 60 * 5L);
+        redisService.setDataWithExpiration(key, authCode, 60 * 5L);
         emailService.send(member.getEmail(), authCode, requestDto.getRedisKey());
 
         return "이메일 전송에 성공하였습니다.";
     }
 
     /**
-     * 이메일 인증 링크 검증
+     * 이메일 인증
      * @param requestDto
      * @return
      */
     @Transactional
-    public ValidateLinkResponseDto validateLink(ValidateLinkRequestDto requestDto) {
-        String findAuthCode = redisService.getData(RedisKey.EMAIL.getKey() + requestDto.getEmail());
+    public String verify(VerifyEmailRequestDto requestDto) {
+        String key = getKey(requestDto.getEmail(), requestDto.getRedisKey());
+        String findAuthCode = redisService.getData(key);
         if (findAuthCode == null || !findAuthCode.equals(requestDto.getAuthCode()))
             throw new InvalidAuthCodeException();
 
-        redisService.deleteData(RedisKey.EMAIL.getKey()+requestDto.getEmail());
-        String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration(requestDto.getRedisKey().toString()+requestDto.getEmail(), authCode, 60*5L);
-        return new ValidateLinkResponseDto(requestDto.getEmail(), authCode);
-    }
-
-    @Transactional
-    public String verifyEmail(VerifyEmailRequestDto requestDto) {
-        String findAuthCode = redisService.getData(RedisKey.VERIFY.getKey() + requestDto.getEmail());
-        if (findAuthCode == null || !findAuthCode.equals(requestDto.getAuthCode()))
-            throw new InvalidAuthCodeException();
-
-        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-        member.changeRole(Role.ROLE_MEMBER);
+        if (requestDto.getRedisKey().equals("VERIFY")) {
+            Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
+            member.changeRole(Role.ROLE_MEMBER);
+        }
         redisService.deleteData(RedisKey.VERIFY.getKey()+requestDto.getEmail());
 
         return "이메일 인증이 완료되었습니다.";
+    }
+
+    private String getKey(String email, String redisKey) {
+        String prefix = redisKey == RedisKey.VERIFY.getKey() ? RedisKey.VERIFY.getKey() : RedisKey.PASSWORD.getKey();
+        String key = prefix + email;
+
+        return key;
     }
 
     /**
@@ -128,12 +129,6 @@ public class SignService {
      */
     @Transactional
     public MemberChangePwResponseDto changePassword(MemberChangePwRequestDto requestDto) {
-        log.info("findAuthCode = {}", requestDto.getAuthCode(), requestDto.getEmail());
-        String findAuthCode = redisService.getData(RedisKey.PASSWORD.getKey() + requestDto.getEmail());
-        log.info("findAuthCode = {}", findAuthCode);
-        if (findAuthCode == null || !findAuthCode.equals(requestDto.getAuthCode()))
-            throw new InvalidAuthCodeException();
-
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
         redisService.deleteData(RedisKey.PASSWORD.getKey()+requestDto.getEmail());
