@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.domain.dto.*;
-import project.SangHyun.domain.result.SingleResult;
+import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.ResponseService;
 import project.SangHyun.domain.service.SignService;
 import project.SangHyun.web.dto.*;
