@@ -2,16 +2,15 @@ package project.SangHyun.domain.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.domain.result.MultipleResult;
-import project.SangHyun.domain.result.Result;
-import project.SangHyun.domain.result.SingleResult;
+import project.SangHyun.domain.response.MultipleResult;
+import project.SangHyun.domain.response.Result;
+import project.SangHyun.domain.response.SingleResult;
 
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class ResponseService {
-
     public <T> SingleResult<T> getSingleResult(T data) {
         SingleResult<T> result = new SingleResult<>();
         setSuccessResult(result);

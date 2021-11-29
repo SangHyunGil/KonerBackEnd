@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class MemberChangePwRequestDto {
     String email;
     String password;
-    String authCode;
 }

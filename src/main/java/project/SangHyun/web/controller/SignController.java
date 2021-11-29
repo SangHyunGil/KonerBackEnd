@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.domain.dto.*;
-import project.SangHyun.domain.result.SingleResult;
+import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.ResponseService;
 import project.SangHyun.domain.service.SignService;
 import project.SangHyun.web.dto.*;
@@ -30,21 +30,15 @@ public class SignController {
     @ApiOperation(value = "검증 메일 발송", notes = "검증을 위해 메일을 발송한다.")
     @PostMapping("/email")
     public SingleResult<String> sendEmail(@RequestBody MemberEmailAuthRequestDto requestDto) {
+        log.info("MemberEmailAuthRequestDto = {}, {}", requestDto.getEmail(), requestDto.getRedisKey());
         String result = signService.sendEmail(requestDto);
         return responseService.getSingleResult(result);
     }
 
-    @ApiOperation(value = "메일 링크 검증", notes = "메일 링크를 검증한다.")
-    @GetMapping("/email")
-    public SingleResult<ValidateLinkResponseDto> validateLink(@ModelAttribute ValidateLinkRequestDto requestDto) {
-        ValidateLinkResponseDto responseDto = signService.validateLink(requestDto);
-        return responseService.getSingleResult(responseDto);
-    }
-
     @ApiOperation(value = "이메일 인증", notes = "이메일 인증을 진행한다.")
     @PostMapping("/verify")
-    public SingleResult<String> verifyEmail(@RequestBody VerifyEmailRequestDto requestDto) {
-        String result = signService.verifyEmail(requestDto);
+    public SingleResult<String> verify(@RequestBody VerifyEmailRequestDto requestDto) {
+        String result = signService.verify(requestDto);
         return responseService.getSingleResult(result);
     }
 

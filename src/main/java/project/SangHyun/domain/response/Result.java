@@ -1,4 +1,4 @@
-package project.SangHyun.domain.result;
+package project.SangHyun.domain.response;
 
 import lombok.Getter;
 import lombok.Setter;

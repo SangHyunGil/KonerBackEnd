@@ -11,4 +11,5 @@ import project.SangHyun.domain.rediskey.RedisKey;
 public class VerifyEmailRequestDto {
     String email;
     String authCode;
+    String redisKey;
 }

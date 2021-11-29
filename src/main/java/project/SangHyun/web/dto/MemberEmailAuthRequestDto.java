@@ -10,5 +10,5 @@ import project.SangHyun.domain.rediskey.RedisKey;
 @AllArgsConstructor
 public class MemberEmailAuthRequestDto {
     String email;
-    RedisKey redisKey;
+    String redisKey;
 }
