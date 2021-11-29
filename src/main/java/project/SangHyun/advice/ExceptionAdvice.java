@@ -70,4 +70,10 @@ public class ExceptionAdvice {
     public Result MemberNotFoundException() {
         return responseService.getFailureResult(-108, "존재하지 않는 회원입니다.");
     }
+
+    @ExceptionHandler(InvalidAccessTokenException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result InvalidAccessTokenException() {
+        return responseService.getFailureResult(-109, "Access Token이 유효하지 않습니다.");
+    }
 }

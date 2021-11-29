@@ -14,6 +14,8 @@ import project.SangHyun.domain.entity.Role;
 import project.SangHyun.domain.rediskey.RedisKey;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.web.dto.*;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -39,19 +41,10 @@ public class SignService {
     @Transactional
     public MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) {
         validateDuplicated(requestDto.getEmail());
+        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        Member member = memberRepository.save(Member.createMember(requestDto));
 
-        Member member = memberRepository.save(
-                Member.builder()
-                        .email(requestDto.getEmail())
-                        .password(passwordEncoder.encode(requestDto.getPassword()))
-                        .nickname(requestDto.getNickname())
-                        .role(Role.ROLE_NOT_PERMITTED)
-                        .build());
-
-        return MemberRegisterResponseDto.builder()
-                .id(member.getId())
-                .email(member.getEmail())
-                .build();
+        return MemberRegisterResponseDto.createDto(member);
     }
 
     public void validateDuplicated(String email) {
@@ -72,9 +65,9 @@ public class SignService {
         if (member.getRole() == Role.ROLE_NOT_PERMITTED)
             throw new EmailNotAuthenticatedException();
 
-        String refreshToken = jwtTokenProvider.createRefreshToken();
-        redisService.setDataWithExpiration(RedisKey.REFRESH.getKey()+member.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        return new MemberLoginResponseDto(member.getId(), jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
+        String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
+        redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+        return MemberLoginResponseDto.createDto(member, jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
     }
 
     /**
@@ -133,7 +126,7 @@ public class SignService {
         member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
         redisService.deleteData(RedisKey.PASSWORD.getKey()+requestDto.getEmail());
 
-        return new MemberChangePwResponseDto(member.getEmail(), member.getPassword());
+        return MemberChangePwResponseDto.createDto(member);
     }
 
     /**
@@ -143,15 +136,16 @@ public class SignService {
      */
     @Transactional
     public TokenResponseDto reIssue(ReIssueRequestDto requestDto) {
-        String findRefreshToken = redisService.getData(RedisKey.REFRESH.getKey()+requestDto.getEmail());
-        if (findRefreshToken == null || !findRefreshToken.equals(requestDto.getRefreshToken()))
+        String redisEmail = redisService.getData(requestDto.getRefreshToken());
+        String jwtEmail = jwtTokenProvider.getMemberEmail(requestDto.getRefreshToken());
+        if (redisEmail == null || !redisEmail.equals(jwtEmail))
             throw new InvalidRefreshTokenException();
 
-        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-        String accessToken = jwtTokenProvider.createToken(member.getEmail());
-        String refreshToken = jwtTokenProvider.createRefreshToken();
-        redisService.setDataWithExpiration(RedisKey.REFRESH.getKey()+member.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+        String accessToken = jwtTokenProvider.createToken(jwtEmail);
+        String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
+        Member member = memberRepository.findByEmail(jwtEmail).orElseThrow(MemberNotFoundException::new);
+        redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-        return new TokenResponseDto(accessToken, refreshToken);
+        return TokenResponseDto.createDto(member, accessToken, refreshToken);
     }
 }

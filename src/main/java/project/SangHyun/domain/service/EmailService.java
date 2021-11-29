@@ -14,6 +14,7 @@ import project.SangHyun.domain.rediskey.RedisKey;
 public class EmailService {
     private final JavaMailSender javaMailSender;
     private static final String UNIVERSITY_EMAIL = "@koreatech.ac.kr";
+
     @Async
     public void send(String email, String value, String redisKey) {
         SimpleMailMessage smm = makeMail(email, value, redisKey);
@@ -23,15 +24,14 @@ public class EmailService {
     public SimpleMailMessage makeMail(String email, String value, String redisKey) {
         SimpleMailMessage smm = new SimpleMailMessage();
 
-        String text = "http://localhost:8080/sign/verify?email="+email+"&authCode="+value;
         if (redisKey.equals(RedisKey.VERIFY.getKey())) {
             smm.setTo(email + UNIVERSITY_EMAIL);
             smm.setSubject("회원가입 이메일 인증");
-            smm.setText(text+"&redisKey=VERIFY");
+            smm.setText("http://localhost:3000/signup/verify?email="+email+"&authCode="+value+"&redisKey=VERIFY");
         } else {
             smm.setTo(email + UNIVERSITY_EMAIL);
             smm.setSubject("비밀번호 변경");
-            smm.setText(text+"&redisKey=PASSWORD");
+            smm.setText("http://localhost:3000/signup/password?email="+email+"&authCode="+value+"&redisKey=PASSWORD");
         }
 
         return smm;

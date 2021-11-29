@@ -36,8 +36,8 @@ public class SignController {
     }
 
     @ApiOperation(value = "이메일 인증", notes = "이메일 인증을 진행한다.")
-    @GetMapping("/verify")
-    public SingleResult<String> verify(@ModelAttribute VerifyEmailRequestDto requestDto) {
+    @PostMapping("/verify")
+    public SingleResult<String> verify(@RequestBody VerifyEmailRequestDto requestDto) {
         String result = signService.verify(requestDto);
         return responseService.getSingleResult(result);
     }

@@ -7,9 +7,8 @@ import java.util.Arrays;
 
 @Getter
 public enum RedisKey {
-    REFRESH("REFRESH"), EMAIL("EMAIL"),
-    VERIFY("VERIFY"), PASSWORD("PASSWORD"),
-    UNKNOWN("UNKNOWN");
+    REFRESH("REFRESH"), VERIFY("VERIFY"),
+    PASSWORD("PASSWORD"), UNKNOWN("UNKNOWN");
 
     private String key;
 

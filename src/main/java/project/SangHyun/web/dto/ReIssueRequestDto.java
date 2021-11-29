@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReIssueRequestDto {
-    String email;
     String refreshToken;
 }
