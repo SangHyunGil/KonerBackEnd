@@ -2,17 +2,19 @@ package project.SangHyun.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import project.SangHyun.advice.exception.NotResourceOwnerException;
 import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.domain.dto.MemberInfoResponseDto;
+import project.SangHyun.domain.dto.MemberGetInfoResponseDto;
+import project.SangHyun.domain.dto.MemberUpdateInfoResponseDto;
 import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.ResponseService;
 import project.SangHyun.domain.service.UserService;
+import project.SangHyun.web.dto.MemberUpdateInfoRequestDto;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -21,9 +23,27 @@ public class UserController {
     private final ResponseService responseService;
     private final UserService userService;
 
-    @ApiOperation(value = "유저 정보 로드", notes = "유저에 대한 정보를 얻어온다.")
+    @ApiOperation(value = "유저 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")
     @PostMapping("/info")
-    public SingleResult<MemberInfoResponseDto> getMemberInfoByAccessToken(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public SingleResult<MemberGetInfoResponseDto> getMemberInfoByAccessToken(@AuthenticationPrincipal MemberDetails memberDetails) {
         return responseService.getSingleResult(userService.getMemberInfo(memberDetails));
+    }
+
+    @ApiOperation(value = "유저 정보 로드", notes = "ID(PK)로 유저에 대한 정보를 얻어온다.")
+    @GetMapping("/{userId}")
+    public SingleResult<MemberGetInfoResponseDto> getMemberInfoByUserId(@PathVariable Long userId) {
+        return responseService.getSingleResult(userService.getMemberInfo(userId));
+    }
+
+    @ApiOperation(value = "유저 정보 수정", notes = "유저에 대한 정보를 수정한다.")
+    @PutMapping("/{userId}")
+    public SingleResult<MemberUpdateInfoResponseDto> updateMemberInfo(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                                      @PathVariable Long userId,
+                                                                      @RequestBody MemberUpdateInfoRequestDto requestDto) {
+        log.info("Compare = {}, {}", memberDetails.getUsername(), requestDto.getEmail());
+        if (!memberDetails.getUsername().equals(requestDto.getEmail()))
+            throw new NotResourceOwnerException();
+
+        return responseService.getSingleResult(userService.updateMemberInfo(userId, requestDto));
     }
 }

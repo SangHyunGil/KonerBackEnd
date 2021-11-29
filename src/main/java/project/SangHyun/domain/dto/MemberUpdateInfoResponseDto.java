@@ -7,14 +7,14 @@ import project.SangHyun.domain.entity.Member;
 
 @Data
 @NoArgsConstructor
-public class MemberInfoResponseDto {
+public class MemberUpdateInfoResponseDto {
     private Long id;
     private String email;
     private String nickname;
     private String department;
 
-    public static MemberInfoResponseDto createDto(Member member) {
-        return MemberInfoResponseDto.builder()
+    public static MemberUpdateInfoResponseDto createDto(Member member) {
+        return MemberUpdateInfoResponseDto.builder()
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
@@ -23,7 +23,7 @@ public class MemberInfoResponseDto {
     }
 
     @Builder
-    public MemberInfoResponseDto(Long id, String email, String nickname, String department) {
+    public MemberUpdateInfoResponseDto(Long id, String email, String nickname, String department) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
