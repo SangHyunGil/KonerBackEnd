@@ -76,4 +76,17 @@ public class ExceptionAdvice {
     public Result InvalidAccessTokenException() {
         return responseService.getFailureResult(-109, "Access Token이 유효하지 않습니다.");
     }
+
+    @ExceptionHandler(NotResourceOwnerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result NotResourceOwnerException() {
+        return responseService.getFailureResult(-110, "자원에 대한 접근 권한이 없습니다.");
+    }
+
+    @ExceptionHandler(MemberSameNickNameException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result MemberSameNickNameException() {
+        return responseService.getFailureResult(-111, "중복된 닉네임이 존재합니다.");
+    }
+
 }
