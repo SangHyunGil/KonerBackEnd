@@ -11,7 +11,7 @@ import project.SangHyun.domain.dto.MemberGetInfoResponseDto;
 import project.SangHyun.domain.dto.MemberUpdateInfoResponseDto;
 import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.ResponseService;
-import project.SangHyun.domain.service.UserService;
+import project.SangHyun.domain.service.MemberService;
 import project.SangHyun.web.dto.MemberUpdateInfoRequestDto;
 
 @Slf4j
@@ -21,18 +21,18 @@ import project.SangHyun.web.dto.MemberUpdateInfoRequestDto;
 public class UserController {
 
     private final ResponseService responseService;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @ApiOperation(value = "유저 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")
     @PostMapping("/info")
     public SingleResult<MemberGetInfoResponseDto> getMemberInfoByAccessToken(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return responseService.getSingleResult(userService.getMemberInfo(memberDetails));
+        return responseService.getSingleResult(memberService.getMemberInfo(memberDetails));
     }
 
     @ApiOperation(value = "유저 정보 로드", notes = "ID(PK)로 유저에 대한 정보를 얻어온다.")
     @GetMapping("/{userId}")
     public SingleResult<MemberGetInfoResponseDto> getMemberInfoByUserId(@PathVariable Long userId) {
-        return responseService.getSingleResult(userService.getMemberInfo(userId));
+        return responseService.getSingleResult(memberService.getMemberInfo(userId));
     }
 
     @ApiOperation(value = "유저 정보 수정", notes = "유저에 대한 정보를 수정한다.")
@@ -44,6 +44,6 @@ public class UserController {
         if (!memberDetails.getUsername().equals(requestDto.getEmail()))
             throw new NotResourceOwnerException();
 
-        return responseService.getSingleResult(userService.updateMemberInfo(userId, requestDto));
+        return responseService.getSingleResult(memberService.updateMemberInfo(userId, requestDto));
     }
 }

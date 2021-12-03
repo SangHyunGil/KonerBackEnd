@@ -89,4 +89,16 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-111, "중복된 닉네임이 존재합니다.");
     }
 
+    @ExceptionHandler(ChatRoomNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result ChatRoomNotFoundException() {
+        return responseService.getFailureResult(-112, "이미 존재하는 이메일입니다.");
+    }
+
+    @ExceptionHandler(InvalidWebSocketConnection.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result InvalidWebSocketConnection() {
+        return responseService.getFailureResult(-113, "인증 후 웹소켓 연결을 진행해야합니다.");
+    }
+
 }
