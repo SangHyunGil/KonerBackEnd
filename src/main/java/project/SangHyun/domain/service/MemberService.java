@@ -20,9 +20,8 @@ import project.SangHyun.web.dto.MemberUpdateInfoRequestDto;
 @Transactional(readOnly = true)
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
-public class UserService {
+public class MemberService {
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
     /**
      * AccessToken으로 유저 정보 조회

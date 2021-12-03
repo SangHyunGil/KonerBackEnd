@@ -2,6 +2,7 @@ package project.SangHyun.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,12 +37,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .httpBasic().disable() // rest api이므로 기본설정 미사용
-            .cors().and()
-            .csrf().disable() // rest api이므로 csrf 보안 미사용
-            .formLogin().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt로 인증하므로 세션 미사용
+            http
+                .httpBasic().disable() // rest api이므로 기본설정 미사용
+                .cors()
+            .and()
+                .csrf().disable() // rest api이므로 csrf 보안 미사용
+                .headers()
+                    .frameOptions()
+                    .sameOrigin()
+            .and()
+                .formLogin().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt로 인증하므로 세션 미사용
             .and()
                 .authorizeRequests()
                 .antMatchers("/sign/**").permitAll()
@@ -49,6 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/exception/**").permitAll()
                 .antMatchers("/confirm-email").permitAll()
                 .antMatchers("/test").permitAll()
+                .antMatchers("/ws-stomp/**").permitAll()
+                .antMatchers("/pub/**").permitAll()
+                .antMatchers("/sub/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/room").permitAll()
                 .anyRequest().hasRole("MEMBER")
             .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
