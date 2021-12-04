@@ -6,14 +6,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import project.SangHyun.advice.exception.MemberNotFoundException;
-import project.SangHyun.advice.exception.MemberSameNickNameException;
 import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.dto.response.MemberGetInfoResponseDto;
+import project.SangHyun.domain.repository.StudyJoinRepository;
+import project.SangHyun.dto.response.BoardFindResponseDto;
+import project.SangHyun.dto.response.MemberInfoResponseDto;
+import project.SangHyun.dto.response.MemberProfileResponseDto;
 import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.domain.service.MemberService;
 import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,6 +27,7 @@ import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final StudyJoinRepository studyJoinRepository;
 
     /**
      * AccessToken으로 유저 정보 조회
@@ -29,20 +35,24 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public MemberGetInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
+    public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = memberRepository.findByEmail(memberDetails.getUsername()).orElseThrow(MemberNotFoundException::new);
-        return MemberGetInfoResponseDto.createDto(member);
+        return MemberInfoResponseDto.createDto(member);
     }
 
     /**
      * ID(PK)로 유저 정보 조회
-     * @param userId
+     * @param memberId
      * @return
      */
     @Override
-    public MemberGetInfoResponseDto getMemberInfo(Long userId) {
-        Member member = memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
-        return MemberGetInfoResponseDto.createDto(member);
+    public MemberProfileResponseDto getProfile(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        List<BoardFindResponseDto> boards = studyJoinRepository.findStudyByMemberId(memberId)
+                                                .stream()
+                                                .map(board -> BoardFindResponseDto.createDto(board))
+                                                .collect(Collectors.toList());
+        return MemberProfileResponseDto.createDto(member, boards);
     }
 
     /**
@@ -55,17 +65,6 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberUpdateInfoResponseDto updateMemberInfo(Long userId, MemberUpdateInfoRequestDto requestDto) {
         Member member = memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
-        UpdateMemberInfo(member, requestDto);
-        log.info("changed member = {}", member.getNickname(), member.getDepartment());
-        return MemberUpdateInfoResponseDto.createDto(member);
-    }
-
-    private void UpdateMemberInfo(Member member, MemberUpdateInfoRequestDto requestDto) {
-        if (requestDto.getNickname() == null) return;
-        if (requestDto.getNickname().equals(member.getNickname())) throw new MemberSameNickNameException();
-        member.changeNickname(requestDto.getNickname());
-
-        if (requestDto.getDepartment().equals(member.getDepartment())) return;
-        member.changeDepartment(requestDto.getDepartment());
+        return MemberUpdateInfoResponseDto.createDto(member.updateMemberInfo(requestDto));
     }
 }

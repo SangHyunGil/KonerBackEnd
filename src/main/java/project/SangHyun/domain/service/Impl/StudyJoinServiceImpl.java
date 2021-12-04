@@ -1,6 +1,7 @@
 package project.SangHyun.domain.service.Impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.BoardNotFountException;
@@ -16,6 +17,7 @@ import project.SangHyun.dto.request.StudyJoinRequestDto;
 import project.SangHyun.dto.response.StudyJoinCountResponseDto;
 import project.SangHyun.dto.response.StudyJoinResponseDto;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -37,5 +39,4 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         Long count = studyJoinRepository.findStudyMemberNum(boardId);
         return StudyJoinCountResponseDto.createDto(count);
     }
-
 }

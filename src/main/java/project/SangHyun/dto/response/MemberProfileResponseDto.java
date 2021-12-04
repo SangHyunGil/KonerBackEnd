@@ -5,28 +5,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.domain.entity.Member;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
-public class MemberGetInfoResponseDto {
-    private Long id;
+public class MemberProfileResponseDto {
+    private Long memberId;
     private String email;
     private String nickname;
     private String department;
+    private List<BoardFindResponseDto> boards;
 
-    public static MemberGetInfoResponseDto createDto(Member member) {
-        return MemberGetInfoResponseDto.builder()
-                .id(member.getId())
+    public static MemberProfileResponseDto createDto(Member member, List<BoardFindResponseDto> boards) {
+        return MemberProfileResponseDto.builder()
+                .memberId(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .department(member.getDepartment())
+                .boards(boards)
                 .build();
     }
 
     @Builder
-    public MemberGetInfoResponseDto(Long id, String email, String nickname, String department) {
-        this.id = id;
+    public MemberProfileResponseDto(Long memberId, String email, String nickname, String department, List<BoardFindResponseDto> boards) {
+        this.memberId = memberId;
         this.email = email;
         this.nickname = nickname;
         this.department = department;
+        this.boards = boards;
     }
 }

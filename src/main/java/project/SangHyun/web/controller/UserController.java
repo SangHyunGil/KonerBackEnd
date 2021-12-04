@@ -7,7 +7,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.advice.exception.NotResourceOwnerException;
 import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.dto.response.MemberGetInfoResponseDto;
+import project.SangHyun.dto.response.MemberInfoResponseDto;
+import project.SangHyun.dto.response.MemberProfileResponseDto;
 import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
 import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.MemberService;
@@ -25,14 +26,14 @@ public class UserController {
 
     @ApiOperation(value = "유저 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")
     @PostMapping("/info")
-    public SingleResult<MemberGetInfoResponseDto> getMemberInfoByAccessToken(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public SingleResult<MemberInfoResponseDto> getMemberInfo(@AuthenticationPrincipal MemberDetails memberDetails) {
         return responseService.getSingleResult(memberService.getMemberInfo(memberDetails));
     }
 
-    @ApiOperation(value = "유저 정보 로드", notes = "ID(PK)로 유저에 대한 정보를 얻어온다.")
+    @ApiOperation(value = "프로필 정보 로드", notes = "ID(PK)로 프로필에 대한 정보를 얻어온다.")
     @GetMapping("/{userId}")
-    public SingleResult<MemberGetInfoResponseDto> getMemberInfoByUserId(@PathVariable Long userId) {
-        return responseService.getSingleResult(memberService.getMemberInfo(userId));
+    public SingleResult<MemberProfileResponseDto> getProfile(@PathVariable Long userId) {
+        return responseService.getSingleResult(memberService.getProfile(userId));
     }
 
     @ApiOperation(value = "유저 정보 수정", notes = "유저에 대한 정보를 수정한다.")
