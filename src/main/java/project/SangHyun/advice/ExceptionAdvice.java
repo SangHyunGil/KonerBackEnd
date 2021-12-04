@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.SangHyun.advice.exception.*;
 import project.SangHyun.domain.response.Result;
-import project.SangHyun.domain.service.ResponseService;
+import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 
 
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionAdvice {
 
-    private final ResponseService responseService;
+    private final ResponseServiceImpl responseService;
 
     @ExceptionHandler(MemberEmailAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -101,4 +101,9 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-113, "인증 후 웹소켓 연결을 진행해야합니다.");
     }
 
+    @ExceptionHandler(BoardNotFountException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result BoardNotFountException() {
+        return responseService.getFailureResult(-114, "존재하지 않는 게시글입니다.");
+    }
 }
