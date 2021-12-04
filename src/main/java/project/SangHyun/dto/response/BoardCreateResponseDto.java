@@ -14,6 +14,7 @@ public class BoardCreateResponseDto {
     private Long memberId;
     private String title;
     private String topic;
+    private String content;
     private Long headCount;
     private StudyState studyState;
     private RecruitState recruitState;
@@ -24,6 +25,7 @@ public class BoardCreateResponseDto {
                 .memberId(board.getMember().getId())
                 .title(board.getTitle())
                 .topic(board.getTopic())
+                .content(board.getContent())
                 .headCount(board.getHeadCount())
                 .studyState(board.getStudyState())
                 .recruitState(board.getRecruitState())
@@ -31,11 +33,12 @@ public class BoardCreateResponseDto {
     }
 
     @Builder
-    public BoardCreateResponseDto(Long boardId, Long memberId, String title, String topic, Long headCount, StudyState studyState, RecruitState recruitState) {
+    public BoardCreateResponseDto(Long boardId, Long memberId, String title, String topic, String content, Long headCount, StudyState studyState, RecruitState recruitState) {
         this.boardId = boardId;
         this.memberId = memberId;
         this.title = title;
         this.topic = topic;
+        this.content = content;
         this.headCount = headCount;
         this.studyState = studyState;
         this.recruitState = recruitState;

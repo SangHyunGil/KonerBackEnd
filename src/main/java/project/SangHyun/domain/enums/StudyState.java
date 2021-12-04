@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StudyState {
-    PREPARE, PROCEED, END
+    PREPARE, STUDYING, FINISH
 }

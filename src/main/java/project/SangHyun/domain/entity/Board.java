@@ -17,9 +17,11 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Column(name = "board_id")
+    private Long id;
     private String title;
     private String topic;
+    private String content;
     @Enumerated(EnumType.STRING)
     private StudyState studyState;
     @Enumerated(EnumType.STRING)
@@ -33,6 +35,7 @@ public class Board {
         return Board.builder()
                 .title(requestDto.getTitle())
                 .topic(requestDto.getTopic())
+                .content(requestDto.getContent())
                 .studyState(requestDto.getStudyState())
                 .recruitState(requestDto.getRecruitState())
                 .headCount(requestDto.getHeadCount())
@@ -41,9 +44,10 @@ public class Board {
     }
 
     @Builder
-    public Board(String title, String topic, StudyState studyState, RecruitState recruitState, Long headCount, Member member) {
+    public Board(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member) {
         this.title = title;
         this.topic = topic;
+        this.content = content;
         this.studyState = studyState;
         this.recruitState = recruitState;
         this.headCount = headCount;
