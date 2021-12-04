@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.dto.request.BoardCreateRequestDto;
+import project.SangHyun.dto.request.BoardUpdateRequestDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Entity
@@ -30,6 +32,9 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @OneToMany(mappedBy = "board")
+    private List<StudyJoin> studyJoins;
+
 
     public static Board createBoard(BoardCreateRequestDto requestDto, Member member) {
         return Board.builder()
@@ -43,8 +48,19 @@ public class Board {
                 .build();
     }
 
+    public Board updateBoardInfo(BoardUpdateRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.topic = requestDto.getTopic();
+        this.content = requestDto.getContent();
+        this.studyState = requestDto.getStudyState();
+        this.recruitState = requestDto.getRecruitState();
+        this.headCount = requestDto.getHeadCount();
+
+        return this;
+    }
+
     @Builder
-    public Board(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member) {
+    public Board(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins) {
         this.title = title;
         this.topic = topic;
         this.content = content;
@@ -52,5 +68,6 @@ public class Board {
         this.recruitState = recruitState;
         this.headCount = headCount;
         this.member = member;
+        this.studyJoins = studyJoins;
     }
 }

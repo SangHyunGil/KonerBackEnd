@@ -9,23 +9,23 @@ import project.SangHyun.domain.enums.StudyState;
 
 @Data
 @NoArgsConstructor
-public class BoardFindResponseDto {
+public class BoardUpdateResponseDto {
     private Long boardId;
     private Long memberId;
     private String title;
     private String topic;
-    private Long joinCount;
+    private String content;
     private Long headCount;
     private StudyState studyState;
     private RecruitState recruitState;
 
-    public static BoardFindResponseDto createDto(Board board) {
-        return BoardFindResponseDto.builder()
+    public static BoardUpdateResponseDto createDto(Board board) {
+        return BoardUpdateResponseDto.builder()
                 .boardId(board.getId())
                 .memberId(board.getMember().getId())
                 .title(board.getTitle())
                 .topic(board.getTopic())
-                .joinCount(board.getStudyJoins().stream().count())
+                .content(board.getContent())
                 .headCount(board.getHeadCount())
                 .studyState(board.getStudyState())
                 .recruitState(board.getRecruitState())
@@ -33,12 +33,12 @@ public class BoardFindResponseDto {
     }
 
     @Builder
-    public BoardFindResponseDto(Long boardId, Long memberId, String title, String topic, Long joinCount, Long headCount, StudyState studyState, RecruitState recruitState) {
+    public BoardUpdateResponseDto(Long boardId, Long memberId, String title, String topic, String content, Long headCount, StudyState studyState, RecruitState recruitState) {
         this.boardId = boardId;
         this.memberId = memberId;
         this.title = title;
         this.topic = topic;
-        this.joinCount = joinCount;
+        this.content = content;
         this.headCount = headCount;
         this.studyState = studyState;
         this.recruitState = recruitState;

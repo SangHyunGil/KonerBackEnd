@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.SangHyun.domain.enums.Role;
 import project.SangHyun.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +37,14 @@ public class Member {
                 .build();
     }
 
+    public Member updateMemberInfo(MemberUpdateInfoRequestDto requestDto) {
+        this.email = requestDto.getEmail();
+        this.nickname = requestDto.getNickname();
+        this.department = requestDto.getDepartment();
+
+        return this;
+    }
+
     @Builder
     public Member(String email, String password, String nickname, String department, Role role) {
         this.email = email;
@@ -50,13 +60,5 @@ public class Member {
 
     public void changePassword(String password) {
         this.password = password;
-    }
-
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void changeDepartment(String department) {
-        this.department = department;
     }
 }

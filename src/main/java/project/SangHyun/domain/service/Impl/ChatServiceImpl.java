@@ -37,7 +37,6 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ChatMessageResponseDto createChat(ChatMessageRequestDto requestDto) {
-        log.info("memberId = {}", requestDto.getMemberId());
         ChatRoom chatRoom = roomRepository.findById(requestDto.getRoomId()).orElseThrow(ChatRoomNotFoundException::new);
         Member member = memberRepository.findById(requestDto.getMemberId()).orElseThrow(MemberNotFoundException::new);
         Chat chat = chatRepository.save(Chat.createChat(requestDto.getContent(), chatRoom, member));
