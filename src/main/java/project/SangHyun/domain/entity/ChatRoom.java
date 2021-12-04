@@ -14,6 +14,7 @@ public class ChatRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "chatroom_id")
     private Long id;
     private String roomName;
 

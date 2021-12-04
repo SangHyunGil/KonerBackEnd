@@ -6,14 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Chat {
+public class StudyJoin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_id")
+    @Column(name = "studyjoin_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,23 +23,19 @@ public class Chat {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private ChatRoom chatRoom;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
-    private String content;
-
-    public static Chat createChat(String content, ChatRoom chatRoom, Member member) {
-        return Chat.builder()
+    public static StudyJoin createStudyJoin(Board board, Member member) {
+        return StudyJoin.builder()
+                .board(board)
                 .member(member)
-                .content(content)
-                .chatRoom(chatRoom)
                 .build();
     }
 
     @Builder
-    public Chat(Member member, ChatRoom chatRoom, String content) {
+    public StudyJoin(Member member, Board board) {
         this.member = member;
-        this.chatRoom = chatRoom;
-        this.content = content;
+        this.board = board;
     }
 }
