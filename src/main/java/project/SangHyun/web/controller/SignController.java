@@ -4,11 +4,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.domain.dto.*;
 import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.service.ResponseService;
+import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.SignService;
-import project.SangHyun.web.dto.*;
+import project.SangHyun.dto.request.*;
+import project.SangHyun.dto.response.MemberChangePwResponseDto;
+import project.SangHyun.dto.response.MemberLoginResponseDto;
+import project.SangHyun.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.dto.response.TokenResponseDto;
 
 @Slf4j
 @RestController
@@ -17,7 +20,7 @@ import project.SangHyun.web.dto.*;
 public class SignController {
 
     private final SignService signService;
-    private final ResponseService responseService;
+    private final ResponseServiceImpl responseService;
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")

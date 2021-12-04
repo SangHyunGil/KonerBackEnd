@@ -4,12 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.SangHyun.web.dto.MemberRegisterRequestDto;
+import project.SangHyun.domain.enums.Role;
+import project.SangHyun.dto.request.MemberRegisterRequestDto;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Entity
 @Getter

@@ -7,12 +7,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.advice.exception.NotResourceOwnerException;
 import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.domain.dto.MemberGetInfoResponseDto;
-import project.SangHyun.domain.dto.MemberUpdateInfoResponseDto;
+import project.SangHyun.dto.response.MemberGetInfoResponseDto;
+import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
 import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.service.ResponseService;
 import project.SangHyun.domain.service.MemberService;
-import project.SangHyun.web.dto.MemberUpdateInfoRequestDto;
+import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
+import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
 
 @Slf4j
 @RestController
@@ -20,7 +20,7 @@ import project.SangHyun.web.dto.MemberUpdateInfoRequestDto;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final ResponseService responseService;
+    private final ResponseServiceImpl responseService;
     private final MemberService memberService;
 
     @ApiOperation(value = "유저 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")
