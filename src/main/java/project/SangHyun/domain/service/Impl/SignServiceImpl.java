@@ -78,7 +78,8 @@ public class SignServiceImpl implements SignService {
 
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        return MemberLoginResponseDto.createDto(member, jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
+        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
+        return MemberLoginResponseDto.createDto(member, studies, jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
     }
 
     /**

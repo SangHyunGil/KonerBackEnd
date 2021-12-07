@@ -1,9 +1,6 @@
 package project.SangHyun.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
@@ -14,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "MEMBERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,7 +5,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.domain.entity.Member;
+import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.MemberRole;
+import project.SangHyun.domain.enums.RecruitState;
+import project.SangHyun.domain.enums.StudyRole;
+import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.domain.repository.MemberRepository;
 
 import javax.annotation.PostConstruct;

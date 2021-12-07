@@ -7,6 +7,8 @@ import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class StudyFindResponseDto {
@@ -14,8 +16,11 @@ public class StudyFindResponseDto {
     private Long memberId;
     private String title;
     private String topic;
+    private String content;
     private Long joinCount;
     private Long headCount;
+    private List<String> studyMembers;
+    private List<Long> studyBoardCategories;
     private StudyState studyState;
     private RecruitState recruitState;
 
@@ -33,13 +38,16 @@ public class StudyFindResponseDto {
     }
 
     @Builder
-    public StudyFindResponseDto(Long studyId, Long memberId, String title, String topic, Long joinCount, Long headCount, StudyState studyState, RecruitState recruitState) {
+    public StudyFindResponseDto(Long studyId, Long memberId, String title, String topic, String content, Long joinCount, Long headCount, List<String> studyMembers, List<Long> studyBoardCategories, StudyState studyState, RecruitState recruitState) {
         this.studyId = studyId;
         this.memberId = memberId;
         this.title = title;
         this.topic = topic;
+        this.content = content;
         this.joinCount = joinCount;
         this.headCount = headCount;
+        this.studyMembers = studyMembers;
+        this.studyBoardCategories = studyBoardCategories;
         this.studyState = studyState;
         this.recruitState = recruitState;
     }
