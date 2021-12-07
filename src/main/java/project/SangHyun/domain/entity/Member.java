@@ -4,12 +4,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.SangHyun.domain.enums.Role;
+import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,7 +24,7 @@ public class Member {
     private String nickname;
     private String department;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private MemberRole memberRole;
 
     public static Member createMember(MemberRegisterRequestDto requestDto) {
         return Member.builder()
@@ -33,7 +32,7 @@ public class Member {
                 .password(requestDto.getPassword())
                 .nickname(requestDto.getNickname())
                 .department(requestDto.getDepartment())
-                .role(Role.ROLE_NOT_PERMITTED)
+                .memberRole(MemberRole.ROLE_NOT_PERMITTED)
                 .build();
     }
 
@@ -45,17 +44,21 @@ public class Member {
         return this;
     }
 
+    public Member(Long id) {
+        this.id = id;
+    }
+
     @Builder
-    public Member(String email, String password, String nickname, String department, Role role) {
+    public Member(String email, String password, String nickname, String department, MemberRole memberRole) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.department = department;
-        this.role = role;
+        this.memberRole = memberRole;
     }
 
-    public void changeRole(Role role) {
-        this.role = role;
+    public void changeRole(MemberRole memberRole) {
+        this.memberRole = memberRole;
     }
 
     public void changePassword(String password) {

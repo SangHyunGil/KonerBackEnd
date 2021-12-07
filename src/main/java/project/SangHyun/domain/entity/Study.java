@@ -6,20 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
-import project.SangHyun.dto.request.BoardCreateRequestDto;
-import project.SangHyun.dto.request.BoardUpdateRequestDto;
+import project.SangHyun.dto.request.StudyUpdateRequestDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board {
+public class Study {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
+    @Column(name = "study_id")
     private Long id;
     private String title;
     private String topic;
@@ -32,23 +32,12 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @OneToMany(mappedBy = "board")
-    private List<StudyJoin> studyJoins;
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
+    private List<StudyJoin> studyJoins = new ArrayList<>();
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
+    private List<StudyBoardCategory> studyBoardCategories = new ArrayList<>();
 
-
-    public static Board createBoard(BoardCreateRequestDto requestDto, Member member) {
-        return Board.builder()
-                .title(requestDto.getTitle())
-                .topic(requestDto.getTopic())
-                .content(requestDto.getContent())
-                .studyState(requestDto.getStudyState())
-                .recruitState(requestDto.getRecruitState())
-                .headCount(requestDto.getHeadCount())
-                .member(member)
-                .build();
-    }
-
-    public Board updateBoardInfo(BoardUpdateRequestDto requestDto) {
+    public Study updateStudyInfo(StudyUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.topic = requestDto.getTopic();
         this.content = requestDto.getContent();
@@ -59,8 +48,22 @@ public class Board {
         return this;
     }
 
+    public Study(Long id) {
+        this.id = id;
+    }
+
+    public void join(StudyJoin studyJoin) {
+        this.studyJoins.add(studyJoin);
+        studyJoin.setStudy(this);
+    }
+
+    public void addBoard(StudyBoardCategory studyBoardCategory) {
+        this.studyBoardCategories.add(studyBoardCategory);
+        studyBoardCategory.setStudy(this);
+    }
+
     @Builder
-    public Board(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins) {
+    public Study(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins, List<StudyBoardCategory> studyBoardCategories) {
         this.title = title;
         this.topic = topic;
         this.content = content;
@@ -69,5 +72,6 @@ public class Board {
         this.headCount = headCount;
         this.member = member;
         this.studyJoins = studyJoins;
+        this.studyBoardCategories = studyBoardCategories;
     }
 }

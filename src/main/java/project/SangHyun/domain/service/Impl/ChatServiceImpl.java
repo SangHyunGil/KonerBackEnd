@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
-    private final ChatRoomRepository roomRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public List<ChatFindResponseDto> findAllChats(Long roomId) {
@@ -37,9 +35,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ChatMessageResponseDto createChat(ChatMessageRequestDto requestDto) {
-        ChatRoom chatRoom = roomRepository.findById(requestDto.getRoomId()).orElseThrow(ChatRoomNotFoundException::new);
-        Member member = memberRepository.findById(requestDto.getMemberId()).orElseThrow(MemberNotFoundException::new);
-        Chat chat = chatRepository.save(Chat.createChat(requestDto.getContent(), chatRoom, member));
+        Chat chat = chatRepository.save(requestDto.toEntity());
         return ChatMessageResponseDto.createDto(chat);
     }
 }

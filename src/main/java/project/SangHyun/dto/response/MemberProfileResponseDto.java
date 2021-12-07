@@ -14,9 +14,9 @@ public class MemberProfileResponseDto {
     private String email;
     private String nickname;
     private String department;
-    private List<BoardFindResponseDto> boards;
+    private List<StudyFindResponseDto> boards;
 
-    public static MemberProfileResponseDto createDto(Member member, List<BoardFindResponseDto> boards) {
+    public static MemberProfileResponseDto createDto(Member member, List<StudyFindResponseDto> boards) {
         return MemberProfileResponseDto.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
@@ -27,7 +27,7 @@ public class MemberProfileResponseDto {
     }
 
     @Builder
-    public MemberProfileResponseDto(Long memberId, String email, String nickname, String department, List<BoardFindResponseDto> boards) {
+    public MemberProfileResponseDto(Long memberId, String email, String nickname, String department, List<StudyFindResponseDto> boards) {
         this.memberId = memberId;
         this.email = email;
         this.nickname = nickname;

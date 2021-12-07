@@ -3,13 +3,13 @@ package project.SangHyun.dto.response;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.domain.entity.Board;
+import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 
 @Data
 @NoArgsConstructor
-public class BoardUpdateResponseDto {
+public class StudyUpdateResponseDto {
     private Long boardId;
     private Long memberId;
     private String title;
@@ -19,21 +19,21 @@ public class BoardUpdateResponseDto {
     private StudyState studyState;
     private RecruitState recruitState;
 
-    public static BoardUpdateResponseDto createDto(Board board) {
-        return BoardUpdateResponseDto.builder()
-                .boardId(board.getId())
-                .memberId(board.getMember().getId())
-                .title(board.getTitle())
-                .topic(board.getTopic())
-                .content(board.getContent())
-                .headCount(board.getHeadCount())
-                .studyState(board.getStudyState())
-                .recruitState(board.getRecruitState())
+    public static StudyUpdateResponseDto createDto(Study study) {
+        return StudyUpdateResponseDto.builder()
+                .boardId(study.getId())
+                .memberId(study.getMember().getId())
+                .title(study.getTitle())
+                .topic(study.getTopic())
+                .content(study.getContent())
+                .headCount(study.getHeadCount())
+                .studyState(study.getStudyState())
+                .recruitState(study.getRecruitState())
                 .build();
     }
 
     @Builder
-    public BoardUpdateResponseDto(Long boardId, Long memberId, String title, String topic, String content, Long headCount, StudyState studyState, RecruitState recruitState) {
+    public StudyUpdateResponseDto(Long boardId, Long memberId, String title, String topic, String content, Long headCount, StudyState studyState, RecruitState recruitState) {
         this.boardId = boardId;
         this.memberId = memberId;
         this.title = title;

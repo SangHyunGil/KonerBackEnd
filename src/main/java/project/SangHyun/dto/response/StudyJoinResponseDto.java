@@ -15,7 +15,7 @@ public class StudyJoinResponseDto {
     public static StudyJoinResponseDto createDto(StudyJoin studyJoin) {
         return StudyJoinResponseDto.builder()
                 .studyJoinId(studyJoin.getId())
-                .boardId(studyJoin.getBoard().getId())
+                .boardId(studyJoin.getStudy().getId())
                 .memberId(studyJoin.getMember().getId())
                 .build();
     }

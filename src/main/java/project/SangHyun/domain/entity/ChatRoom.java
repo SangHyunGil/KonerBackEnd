@@ -22,16 +22,13 @@ public class ChatRoom {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public ChatRoom(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public ChatRoom(String roomName, Member member) {
         this.roomName = roomName;
         this.member = member;
-    }
-
-    public static ChatRoom createRoom(String roomName, Member member) {
-        return ChatRoom.builder()
-                .roomName(roomName)
-                .member(member)
-                .build();
     }
 }
