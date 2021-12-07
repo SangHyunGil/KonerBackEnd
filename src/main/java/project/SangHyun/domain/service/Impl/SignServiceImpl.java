@@ -78,8 +78,8 @@ public class SignServiceImpl implements SignService {
 
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
-        return MemberLoginResponseDto.createDto(member, studies, jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
+
+        return MemberLoginResponseDto.createDto(member, jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
     }
 
     /**
@@ -161,9 +161,8 @@ public class SignServiceImpl implements SignService {
         String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
         Member member = memberRepository.findByEmail(jwtEmail).orElseThrow(MemberNotFoundException::new);
 
-        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-        return TokenResponseDto.createDto(member, studies, accessToken, refreshToken);
+        return TokenResponseDto.createDto(member, accessToken, refreshToken);
     }
 }

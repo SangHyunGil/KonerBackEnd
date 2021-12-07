@@ -1,6 +1,7 @@
 package project.SangHyun;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Profile("TestData")
 public class TestData {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;

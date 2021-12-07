@@ -24,9 +24,4 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         StudyJoin studyJoin = studyJoinRepository.save(requestDto.toEntity());
         return StudyJoinResponseDto.createDto(studyJoin);
     }
-
-    public StudyJoinCountResponseDto countStudyMember(Long studyId) {
-        Long count = studyJoinRepository.findStudyMemberNum(studyId);
-        return StudyJoinCountResponseDto.createDto(count);
-    }
 }

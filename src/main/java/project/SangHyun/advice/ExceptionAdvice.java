@@ -103,7 +103,13 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(StudyNotFountException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result BoardNotFountException() {
-        return responseService.getFailureResult(-114, "존재하지 않는 게시글입니다.");
+    public Result StudyNotFountException() {
+        return responseService.getFailureResult(-114, "존재하지 않는 스터디입니다.");
+    }
+
+    @ExceptionHandler(StudyBoardNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result StudyBoardNotFoundException() {
+        return responseService.getFailureResult(-115, "존재하지 않는 게시판입니다.");
     }
 }
