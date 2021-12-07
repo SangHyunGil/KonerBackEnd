@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.StudyNotFountException;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.entity.Member;
-import project.SangHyun.domain.entity.StudyBoardCategory;
+import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.StudyRole;
 import project.SangHyun.domain.repository.StudyRepository;
@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class StudyServiceImpl implements StudyService {
 
     private final StudyRepository studyRepository;
-    private final StudyJoinRepository studyJoinRepository;
 
     @Override
     @Transactional
@@ -41,8 +40,8 @@ public class StudyServiceImpl implements StudyService {
     private Study makeStudy(StudyCreateRequestDto requestDto) {
         Study study = requestDto.toEntity();
         study.join(new StudyJoin(new Member(requestDto.getMemberId()), study, StudyRole.ADMIN));
-        study.addBoard(new StudyBoardCategory("공지사항", study));
-        study.addBoard(new StudyBoardCategory("자유게시판", study));
+        study.addBoard(new StudyBoard("공지사항", study));
+        study.addBoard(new StudyBoard("자유게시판", study));
 
         return study;
     }

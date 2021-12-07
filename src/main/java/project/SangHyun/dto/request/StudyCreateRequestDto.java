@@ -30,7 +30,7 @@ public class StudyCreateRequestDto {
                 .studyState(this.studyState)
                 .member(new Member(this.memberId))
                 .studyJoins(new ArrayList<>())
-                .studyBoardCategories(new ArrayList<>())
+                .studyBoards(new ArrayList<>())
                 .recruitState(this.recruitState)
                 .headCount(this.headCount)
                 .build();

@@ -22,26 +22,26 @@ import project.SangHyun.dto.response.StudyJoinResponseDto;
 @RequestMapping("/study")
 public class StudyController {
 
-    private final StudyService sutdyService;
+    private final StudyService studyService;
     private final StudyJoinService studyJoinService;
     private final ResponseServiceImpl responseService;
 
     @ApiOperation(value = "스터디 정보 로드", notes = "모든 스터디 정보를 얻어온다.")
     @GetMapping
     public MultipleResult<StudyFindResponseDto> findAllStudies() {
-        return responseService.getMultipleResult(sutdyService.findAllStudies());
+        return responseService.getMultipleResult(studyService.findAllStudies());
     }
 
     @ApiOperation(value = "스터디 세부 정보 로드", notes = "스터디 세부 정보를 얻어온다.")
     @GetMapping("/{studyId}")
     public SingleResult<StudyFindResponseDto> findStudy(@PathVariable Long studyId) {
-        return responseService.getSingleResult(sutdyService.findStudy(studyId));
+        return responseService.getSingleResult(studyService.findStudy(studyId));
     }
 
     @ApiOperation(value = "스터디 생성", notes = "스터디를 생성한다.")
     @PostMapping
     public SingleResult<StudyCreateResponseDto> createStudy(@RequestBody StudyCreateRequestDto requestDto) {
-        return responseService.getSingleResult(sutdyService.createStudy(requestDto));
+        return responseService.getSingleResult(studyService.createStudy(requestDto));
     }
 
     @ApiOperation(value = "스터디 참여", notes = "스터디에 참여한다.")

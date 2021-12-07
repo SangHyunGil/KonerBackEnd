@@ -33,7 +33,7 @@ public class Study {
     @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyJoin> studyJoins = new ArrayList<>();
     @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
-    private List<StudyBoardCategory> studyBoardCategories = new ArrayList<>();
+    private List<StudyBoard> studyBoards = new ArrayList<>();
 
     public Study updateStudyInfo(StudyUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
@@ -55,13 +55,13 @@ public class Study {
         studyJoin.setStudy(this);
     }
 
-    public void addBoard(StudyBoardCategory studyBoardCategory) {
-        this.studyBoardCategories.add(studyBoardCategory);
-        studyBoardCategory.setStudy(this);
+    public void addBoard(StudyBoard studyBoard) {
+        this.studyBoards.add(studyBoard);
+        studyBoard.setStudy(this);
     }
 
     @Builder
-    public Study(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins, List<StudyBoardCategory> studyBoardCategories) {
+    public Study(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
         this.topic = topic;
         this.content = content;
@@ -70,6 +70,6 @@ public class Study {
         this.headCount = headCount;
         this.member = member;
         this.studyJoins = studyJoins;
-        this.studyBoardCategories = studyBoardCategories;
+        this.studyBoards = studyBoards;
     }
 }

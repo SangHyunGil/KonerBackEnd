@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -21,7 +23,7 @@ public class StudyFindResponseDto {
     private Long joinCount;
     private Long headCount;
     private List<String> studyMembers;
-    private List<Long> studyBoardCategories;
+    private Map<Long, String> studyBoards;
     private StudyState studyState;
     private RecruitState recruitState;
 
@@ -30,9 +32,8 @@ public class StudyFindResponseDto {
                 .map(studyJoin -> studyJoin.getMember().getNickname())
                 .collect(Collectors.toList());
 
-        List<Long> studyBoardCategories = study.getStudyBoardCategories().stream()
-                .map(boardCategory -> boardCategory.getId())
-                .collect(Collectors.toList());
+        Map<Long, String> studyBoards = study.getStudyBoards().stream()
+                .collect(Collectors.toMap(StudyBoard::getId, StudyBoard::getName));
 
         return StudyFindResponseDto.builder()
                 .studyId(study.getId())
@@ -42,14 +43,14 @@ public class StudyFindResponseDto {
                 .joinCount((long) studyMembers.size())
                 .headCount(study.getHeadCount())
                 .studyMembers(studyMembers)
-                .studyBoardCategories(studyBoardCategories)
+                .studyBoards(studyBoards)
                 .studyState(study.getStudyState())
                 .recruitState(study.getRecruitState())
                 .build();
     }
 
     @Builder
-    public StudyFindResponseDto(Long studyId, Long memberId, String title, String topic, String content, Long joinCount, Long headCount, List<String> studyMembers, List<Long> studyBoardCategories, StudyState studyState, RecruitState recruitState) {
+    public StudyFindResponseDto(Long studyId, Long memberId, String title, String topic, String content, Long joinCount, Long headCount, List<String> studyMembers, Map<Long, String> studyBoards, StudyState studyState, RecruitState recruitState) {
         this.studyId = studyId;
         this.memberId = memberId;
         this.title = title;
@@ -58,7 +59,7 @@ public class StudyFindResponseDto {
         this.joinCount = joinCount;
         this.headCount = headCount;
         this.studyMembers = studyMembers;
-        this.studyBoardCategories = studyBoardCategories;
+        this.studyBoards = studyBoards;
         this.studyState = studyState;
         this.recruitState = recruitState;
     }
