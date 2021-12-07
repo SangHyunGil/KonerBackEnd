@@ -6,11 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.domain.response.MultipleResult;
 import project.SangHyun.domain.response.SingleResult;
+import project.SangHyun.domain.service.StudyBoardService;
 import project.SangHyun.domain.service.StudyService;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.StudyJoinService;
 import project.SangHyun.dto.request.StudyCreateRequestDto;
 import project.SangHyun.dto.request.StudyJoinRequestDto;
+import project.SangHyun.dto.response.StudyBoardFindResponseDto;
 import project.SangHyun.dto.response.StudyCreateResponseDto;
 import project.SangHyun.dto.response.StudyFindResponseDto;
 import project.SangHyun.dto.response.StudyJoinResponseDto;
@@ -23,6 +25,7 @@ import project.SangHyun.dto.response.StudyJoinResponseDto;
 public class StudyController {
 
     private final StudyService studyService;
+    private final StudyBoardService studyBoardService;
     private final StudyJoinService studyJoinService;
     private final ResponseServiceImpl responseService;
 
@@ -48,5 +51,11 @@ public class StudyController {
     @PostMapping("/join")
     public SingleResult<StudyJoinResponseDto> join(@RequestBody StudyJoinRequestDto requestDto) {
         return responseService.getSingleResult(studyJoinService.join(requestDto));
+    }
+
+    @ApiOperation(value = "스터디 게시판 로드", notes = "스터디에 포함된 게시판의 목록을 로드한다.")
+    @GetMapping("/{studyId}/board")
+    public MultipleResult<StudyBoardFindResponseDto> findStudyBoards(@PathVariable Long studyId) {
+        return responseService.getMultipleResult(studyBoardService.findBoards(studyId));
     }
 }

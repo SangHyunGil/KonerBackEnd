@@ -15,7 +15,7 @@ public class StudyBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
-    private String name;
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
@@ -26,9 +26,13 @@ public class StudyBoard {
     }
 
     @Builder
-    public StudyBoard(String name, Study study) {
-        this.name = name;
+    public StudyBoard(String title, Study study) {
+        this.title = title;
         this.study = study;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
     }
 
     public void setStudy(Study study) {

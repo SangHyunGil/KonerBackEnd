@@ -38,8 +38,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = memberRepository.findByEmail(memberDetails.getUsername()).orElseThrow(MemberNotFoundException::new);
-        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
-        return MemberInfoResponseDto.createDto(member, studies);
+        return MemberInfoResponseDto.createDto(member);
     }
 
     /**

@@ -33,7 +33,7 @@ public class StudyFindResponseDto {
                 .collect(Collectors.toList());
 
         Map<Long, String> studyBoards = study.getStudyBoards().stream()
-                .collect(Collectors.toMap(StudyBoard::getId, StudyBoard::getName));
+                .collect(Collectors.toMap(StudyBoard::getId, StudyBoard::getTitle));
 
         return StudyFindResponseDto.builder()
                 .studyId(study.getId())
