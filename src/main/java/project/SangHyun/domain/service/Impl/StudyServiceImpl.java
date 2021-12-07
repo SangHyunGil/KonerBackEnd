@@ -57,8 +57,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public StudyFindResponseDto findStudy(Long studyId) {
-        Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFountException::new);
-        return StudyFindResponseDto.createDto(study);
+        return studyRepository.findStudyById(studyId);
     }
 
     @Override

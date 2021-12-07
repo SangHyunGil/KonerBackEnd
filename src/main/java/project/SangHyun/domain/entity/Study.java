@@ -1,9 +1,6 @@
 package project.SangHyun.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.dto.request.StudyUpdateRequestDto;
@@ -15,6 +12,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Study {
 
     @Id
