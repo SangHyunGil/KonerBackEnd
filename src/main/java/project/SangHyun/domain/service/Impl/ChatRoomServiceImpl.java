@@ -22,12 +22,10 @@ import java.util.stream.Collectors;
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public ChatRoomCreateResponseDto createRoom(ChatRoomCreateRequestDto requestDto) {
-        Member member = memberRepository.findById(requestDto.getMemberId()).orElseThrow(MemberNotFoundException::new);
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createRoom(requestDto.getRoomName(), member));
+        ChatRoom chatRoom = chatRoomRepository.save(requestDto.toEntity());
         return ChatRoomCreateResponseDto.createDto(chatRoom);
     }
 

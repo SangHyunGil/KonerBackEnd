@@ -9,8 +9,8 @@ import project.SangHyun.domain.enums.StudyState;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardCreateRequestDto {
-    private Long memberId;
+public class StudyUpdateRequestDto {
+    private Long studyId;
     private String title;
     private String topic;
     private String content;

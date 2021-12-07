@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pub/**").permitAll()
                 .antMatchers("/sub/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/room").permitAll()
-                .antMatchers(HttpMethod.GET, "/board/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/study/**").permitAll()
                 .anyRequest().hasRole("MEMBER")
             .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())

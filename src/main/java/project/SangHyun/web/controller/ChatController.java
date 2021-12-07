@@ -1,5 +1,6 @@
 package project.SangHyun.web.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,23 +27,27 @@ public class ChatController {
     private final ChatService chatService;
     private final ResponseServiceImpl responseService;
 
+    @ApiOperation(value = "Pub, Sub", notes = "Stomp의 메세지를 처리한다.")
     @MessageMapping("/chat/{roomId}")
     @SendTo("/sub/{roomId}")
     public ChatMessageResponseDto sendChat(ChatMessageRequestDto message) {
         return chatService.createChat(message);
     }
 
+    @ApiOperation(value = "모든 채팅방 조회", notes = "모든 채팅방을 조회한다.")
     @GetMapping("/room")
     public MultipleResult<ChatRoomFindResponseDto> findAllRooms() {
         return responseService.getMultipleResult(chatRoomService.findAllRooms());
     }
 
+    @ApiOperation(value = "채팅방 생성", notes = "채팅방을 생성한다.")
     @PostMapping("/room")
     public SingleResult<ChatRoomCreateResponseDto> createRoom(@RequestBody ChatRoomCreateRequestDto requestDto) {
         ChatRoomCreateResponseDto room = chatRoomService.createRoom(requestDto);
         return responseService.getSingleResult(room);
     }
 
+    @ApiOperation(value = "모든 채팅 조회", notes = "모든 채팅을 조회한다.")
     @GetMapping("/room/{roomId}")
     public MultipleResult<ChatFindResponseDto> findAllChats(@PathVariable Long roomId) {
         return responseService.getMultipleResult(chatService.findAllChats(roomId));

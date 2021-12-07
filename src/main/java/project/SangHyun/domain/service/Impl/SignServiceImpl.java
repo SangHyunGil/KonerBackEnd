@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import project.SangHyun.advice.exception.*;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
-import project.SangHyun.domain.enums.Role;
+import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.domain.repository.MemberRepository;
+import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.service.EmailService;
 import project.SangHyun.domain.service.RedisService;
 import project.SangHyun.domain.service.SignService;
@@ -21,6 +23,7 @@ import project.SangHyun.dto.response.MemberLoginResponseDto;
 import project.SangHyun.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.dto.response.TokenResponseDto;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -34,6 +37,7 @@ public class SignServiceImpl implements SignService {
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
+    private final StudyJoinRepository studyJoinRepository;
 
     private final RedisService redisService;
     private final EmailService emailService;
@@ -69,7 +73,7 @@ public class SignServiceImpl implements SignService {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword()))
             throw new LoginFailureException();
-        if (member.getRole() == Role.ROLE_NOT_PERMITTED)
+        if (member.getMemberRole() == MemberRole.ROLE_NOT_PERMITTED)
             throw new EmailNotAuthenticatedException();
 
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
@@ -110,7 +114,7 @@ public class SignServiceImpl implements SignService {
 
         if (requestDto.getRedisKey().equals("VERIFY")) {
             Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-            member.changeRole(Role.ROLE_MEMBER);
+            member.changeRole(MemberRole.ROLE_MEMBER);
         }
         redisService.deleteData(RedisKey.VERIFY.getKey()+requestDto.getEmail());
 
@@ -155,8 +159,10 @@ public class SignServiceImpl implements SignService {
         String accessToken = jwtTokenProvider.createToken(jwtEmail);
         String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
         Member member = memberRepository.findByEmail(jwtEmail).orElseThrow(MemberNotFoundException::new);
+
+        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-        return TokenResponseDto.createDto(member, accessToken, refreshToken);
+        return TokenResponseDto.createDto(member, studies, accessToken, refreshToken);
     }
 }

@@ -26,7 +26,7 @@ public class MemberDetailsService implements UserDetailsService {
         return MemberDetails.builder()
                 .email(member.getEmail())
                 .password(member.getPassword())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(member.getRole().toString())))
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(member.getMemberRole().toString())))
                 .build();
     }
 }

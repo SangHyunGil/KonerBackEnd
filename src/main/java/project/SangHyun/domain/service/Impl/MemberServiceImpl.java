@@ -7,8 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.member.MemberDetails;
+import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.repository.StudyJoinRepository;
-import project.SangHyun.dto.response.BoardFindResponseDto;
+import project.SangHyun.dto.response.StudyFindResponseDto;
 import project.SangHyun.dto.response.MemberInfoResponseDto;
 import project.SangHyun.dto.response.MemberProfileResponseDto;
 import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
@@ -37,7 +38,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = memberRepository.findByEmail(memberDetails.getUsername()).orElseThrow(MemberNotFoundException::new);
-        return MemberInfoResponseDto.createDto(member);
+        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
+        return MemberInfoResponseDto.createDto(member, studies);
     }
 
     /**
@@ -48,11 +50,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberProfileResponseDto getProfile(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        List<BoardFindResponseDto> boards = studyJoinRepository.findStudyByMemberId(memberId)
+        List<StudyFindResponseDto> studies = studyJoinRepository.findStudyByMemberId(memberId)
                                                 .stream()
-                                                .map(board -> BoardFindResponseDto.createDto(board))
+                                                .map(study -> StudyFindResponseDto.createDto(study))
                                                 .collect(Collectors.toList());
-        return MemberProfileResponseDto.createDto(member, boards);
+        return MemberProfileResponseDto.createDto(member, studies);
     }
 
     /**

@@ -101,7 +101,7 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-113, "인증 후 웹소켓 연결을 진행해야합니다.");
     }
 
-    @ExceptionHandler(BoardNotFountException.class)
+    @ExceptionHandler(StudyNotFountException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result BoardNotFountException() {
         return responseService.getFailureResult(-114, "존재하지 않는 게시글입니다.");
