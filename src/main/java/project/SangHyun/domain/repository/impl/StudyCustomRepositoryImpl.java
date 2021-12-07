@@ -26,8 +26,8 @@ public class StudyCustomRepositoryImpl implements StudyCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public StudyFindResponseDto findStudyById(Long studyId) {
-        Study findStudy = jpaQueryFactory.select(study)
+    public Study findStudyById(Long studyId) {
+        return jpaQueryFactory.select(study)
                 .from(study)
                 .innerJoin(study.studyBoardCategories, studyBoardCategory)
                 .innerJoin(study.member, member).fetchJoin()
@@ -36,15 +36,5 @@ public class StudyCustomRepositoryImpl implements StudyCustomRepository {
                 .where(study.id.eq(studyId))
                 .distinct()
                 .fetchOne();
-
-//        log.info("study query = {}", findStudy.getMember().getNickname());
-//        findStudy.getStudyJoins().stream().forEach(studyJoin -> log.info("studyJoinId = {}", studyJoin.getMember().getNickname()));
-        findStudy.getStudyBoardCategories().stream().forEach(boardCategory -> log.info("studyBoardId = {}", boardCategory.getName()));
-
-//        Projections.constructor(StudyFindResponseDto.class,
-//                study.id, member.id, study.title, study.topic, study.content,
-//                studyJoin.id.count(), study.headCount, studyJoin.member.nickname,
-//                studyBoardCategory.id, study.studyState, study.recruitState)
-        return null;
     }
 }

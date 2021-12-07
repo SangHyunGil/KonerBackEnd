@@ -8,6 +8,7 @@ import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -25,13 +26,23 @@ public class StudyFindResponseDto {
     private RecruitState recruitState;
 
     public static StudyFindResponseDto createDto(Study study) {
+        List<String> studyMembers = study.getStudyJoins().stream()
+                .map(studyJoin -> studyJoin.getMember().getNickname())
+                .collect(Collectors.toList());
+
+        List<Long> studyBoardCategories = study.getStudyBoardCategories().stream()
+                .map(boardCategory -> boardCategory.getId())
+                .collect(Collectors.toList());
+
         return StudyFindResponseDto.builder()
                 .studyId(study.getId())
                 .memberId(study.getMember().getId())
                 .title(study.getTitle())
                 .topic(study.getTopic())
-                .joinCount(study.getStudyJoins().stream().count())
+                .joinCount((long) studyMembers.size())
                 .headCount(study.getHeadCount())
+                .studyMembers(studyMembers)
+                .studyBoardCategories(studyBoardCategories)
                 .studyState(study.getStudyState())
                 .recruitState(study.getRecruitState())
                 .build();
