@@ -1,6 +1,7 @@
 package project.SangHyun.domain.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,17 +11,27 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyBoard {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "studyboard_id")
+    @Column(name = "board_id")
     private Long id;
-    private String title;
-    private String content;
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private StudyBoardCategory studyBoardCategory;
+    @JoinColumn(name = "study_id")
+    private Study study;
+
+    public StudyBoard(Long id) {
+        this.id = id;
+    }
+
+    @Builder
+    public StudyBoard(String name, Study study) {
+        this.name = name;
+        this.study = study;
+    }
+
+    public void setStudy(Study study) {
+        this.study = study;
+    }
 }
