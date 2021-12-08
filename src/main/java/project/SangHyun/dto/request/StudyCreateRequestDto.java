@@ -24,15 +24,15 @@ public class StudyCreateRequestDto {
 
     public Study toEntity() {
         return Study.builder()
-                .title(this.title)
-                .topic(this.topic)
-                .content(this.content)
-                .studyState(this.studyState)
-                .member(new Member(this.memberId))
+                .title(title)
+                .topic(topic)
+                .content(content)
+                .studyState(studyState)
+                .member(new Member(memberId))
                 .studyJoins(new ArrayList<>())
                 .studyBoards(new ArrayList<>())
-                .recruitState(this.recruitState)
-                .headCount(this.headCount)
+                .recruitState(recruitState)
+                .headCount(headCount)
                 .build();
     }
 }

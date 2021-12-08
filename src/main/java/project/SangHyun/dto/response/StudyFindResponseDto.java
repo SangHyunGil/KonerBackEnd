@@ -23,7 +23,7 @@ public class StudyFindResponseDto {
     private Long joinCount;
     private Long headCount;
     private List<String> studyMembers;
-    private Map<Long, String> studyBoards;
+    private List<Long> studyBoards;
     private StudyState studyState;
     private RecruitState recruitState;
 
@@ -32,8 +32,9 @@ public class StudyFindResponseDto {
                 .map(studyJoin -> studyJoin.getMember().getNickname())
                 .collect(Collectors.toList());
 
-        Map<Long, String> studyBoards = study.getStudyBoards().stream()
-                .collect(Collectors.toMap(StudyBoard::getId, StudyBoard::getTitle));
+        List<Long> studyBoards = study.getStudyBoards().stream()
+                .map(studyBoard -> studyBoard.getId())
+                .collect(Collectors.toList());
 
         return StudyFindResponseDto.builder()
                 .studyId(study.getId())
@@ -50,7 +51,7 @@ public class StudyFindResponseDto {
     }
 
     @Builder
-    public StudyFindResponseDto(Long studyId, Long memberId, String title, String topic, String content, Long joinCount, Long headCount, List<String> studyMembers, Map<Long, String> studyBoards, StudyState studyState, RecruitState recruitState) {
+    public StudyFindResponseDto(Long studyId, Long memberId, String title, String topic, String content, Long joinCount, Long headCount, List<String> studyMembers, List<Long> studyBoards, StudyState studyState, RecruitState recruitState) {
         this.studyId = studyId;
         this.memberId = memberId;
         this.title = title;

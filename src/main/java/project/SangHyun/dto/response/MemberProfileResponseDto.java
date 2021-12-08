@@ -14,24 +14,21 @@ public class MemberProfileResponseDto {
     private String email;
     private String nickname;
     private String department;
-    private List<StudyFindResponseDto> boards;
 
-    public static MemberProfileResponseDto createDto(Member member, List<StudyFindResponseDto> boards) {
+    public static MemberProfileResponseDto createDto(Member member) {
         return MemberProfileResponseDto.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .department(member.getDepartment())
-                .boards(boards)
                 .build();
     }
 
     @Builder
-    public MemberProfileResponseDto(Long memberId, String email, String nickname, String department, List<StudyFindResponseDto> boards) {
+    public MemberProfileResponseDto(Long memberId, String email, String nickname, String department) {
         this.memberId = memberId;
         this.email = email;
         this.nickname = nickname;
         this.department = department;
-        this.boards = boards;
     }
 }

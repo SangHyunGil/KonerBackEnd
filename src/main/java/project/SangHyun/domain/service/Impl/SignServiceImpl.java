@@ -10,6 +10,7 @@ import project.SangHyun.advice.exception.*;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.domain.repository.MemberRepository;
@@ -50,16 +51,18 @@ public class SignServiceImpl implements SignService {
     @Override
     @Transactional
     public MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) {
-        validateDuplicated(requestDto.getEmail());
+        validateDuplicated(requestDto.getEmail(), requestDto.getNickname());
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        Member member = memberRepository.save(Member.createMember(requestDto));
+        Member member = memberRepository.save(requestDto.toEntity());
 
         return MemberRegisterResponseDto.createDto(member);
     }
 
-    private void validateDuplicated(String email) {
+    private void validateDuplicated(String email, String nickname) {
         if (memberRepository.findByEmail(email).isPresent())
             throw new MemberEmailAlreadyExistsException();
+        if (memberRepository.findByNickname(nickname).isPresent())
+            throw new MemberNicknameAlreadyExistsException();
     }
 
     /**
@@ -71,15 +74,20 @@ public class SignServiceImpl implements SignService {
     @Transactional
     public MemberLoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
+        validateLoginInfo(requestDto, member);
+
+        String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
+        redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
+
+        return MemberLoginResponseDto.createDto(member, studies, jwtTokenProvider.createAccessToken(requestDto.getEmail()), refreshToken);
+    }
+
+    private void validateLoginInfo(MemberLoginRequestDto requestDto, Member member) {
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword()))
             throw new LoginFailureException();
         if (member.getMemberRole() == MemberRole.ROLE_NOT_PERMITTED)
             throw new EmailNotAuthenticatedException();
-
-        String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
-        redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-
-        return MemberLoginResponseDto.createDto(member, jwtTokenProvider.createToken(requestDto.getEmail()), refreshToken);
     }
 
     /**
@@ -157,12 +165,13 @@ public class SignServiceImpl implements SignService {
         if (redisEmail == null || !redisEmail.equals(jwtEmail))
             throw new InvalidRefreshTokenException();
 
-        String accessToken = jwtTokenProvider.createToken(jwtEmail);
-        String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
         Member member = memberRepository.findByEmail(jwtEmail).orElseThrow(MemberNotFoundException::new);
 
+        String accessToken = jwtTokenProvider.createAccessToken(jwtEmail);
+        String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
 
-        return TokenResponseDto.createDto(member, accessToken, refreshToken);
+        return TokenResponseDto.createDto(member, studies, accessToken, refreshToken);
     }
 }

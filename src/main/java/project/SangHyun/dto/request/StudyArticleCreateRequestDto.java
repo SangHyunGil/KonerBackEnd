@@ -18,10 +18,10 @@ public class StudyArticleCreateRequestDto {
 
     public StudyArticle toEntity() {
         return StudyArticle.builder()
-                .member(new Member(this.memberId))
-                .studyBoard(new StudyBoard(this.categoryId))
-                .title(this.title)
-                .content(this.content)
+                .member(new Member(memberId))
+                .studyBoard(new StudyBoard(categoryId))
+                .title(title)
+                .content(content)
                 .build();
     }
 }
