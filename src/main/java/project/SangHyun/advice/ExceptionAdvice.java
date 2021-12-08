@@ -17,9 +17,15 @@ public class ExceptionAdvice {
 
     private final ResponseServiceImpl responseService;
 
+    @ExceptionHandler(MemberNicknameAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result MemberNicknameAlreadyExistsException() {
+        return responseService.getFailureResult(-100, "이미 존재하는 닉네임입니다.");
+    }
+
     @ExceptionHandler(MemberEmailAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result userEmailAlreadyExistsException() {
+    public Result MemberEmailAlreadyExistsException() {
         return responseService.getFailureResult(-101, "이미 존재하는 이메일입니다.");
     }
 

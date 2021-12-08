@@ -24,16 +24,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
-    public static Member createMember(MemberRegisterRequestDto requestDto) {
-        return Member.builder()
-                .email(requestDto.getEmail())
-                .password(requestDto.getPassword())
-                .nickname(requestDto.getNickname())
-                .department(requestDto.getDepartment())
-                .memberRole(MemberRole.ROLE_NOT_PERMITTED)
-                .build();
-    }
-
     public Member updateMemberInfo(MemberUpdateInfoRequestDto requestDto) {
         this.email = requestDto.getEmail();
         this.nickname = requestDto.getNickname();

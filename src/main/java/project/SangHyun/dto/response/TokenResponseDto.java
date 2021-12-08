@@ -16,26 +16,33 @@ public class TokenResponseDto {
     private String email;
     private String nickname;
     private String department;
+    private List<Long> studyIds;
     private String accessToken;
     private String refreshToken;
 
-    public static TokenResponseDto createDto(Member member, String accessToken, String refreshToken) {
+    public static TokenResponseDto createDto(Member member, List<Study> studies, String accessToken, String refreshToken) {
+        List<Long> studyIds = studies.stream()
+                .map(study -> study.getId())
+                .collect(Collectors.toList());
+
         return TokenResponseDto.builder()
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .department(member.getDepartment())
+                .studyIds(studyIds)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
     @Builder
-    public TokenResponseDto(Long id, String email, String nickname, String department, String accessToken, String refreshToken) {
+    public TokenResponseDto(Long id, String email, String nickname, String department, List<Long> studyIds, String accessToken, String refreshToken) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.department = department;
+        this.studyIds = studyIds;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }

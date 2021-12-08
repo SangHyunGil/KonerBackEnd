@@ -16,8 +16,8 @@ public class StudyJoinRequestDto {
 
     public StudyJoin toEntity() {
         return StudyJoin.builder()
-                .study(new Study(this.studyId))
-                .member(new Member(this.memberId))
+                .study(new Study(studyId))
+                .member(new Member(memberId))
                 .build();
     }
 }
