@@ -9,6 +9,7 @@ import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.repository.StudyJoinRepository;
+import project.SangHyun.domain.repository.impl.dto.StudyInfoDto;
 import project.SangHyun.dto.response.MemberInfoResponseDto;
 import project.SangHyun.dto.response.MemberProfileResponseDto;
 import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
@@ -37,8 +38,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = memberRepository.findByEmail(memberDetails.getUsername()).orElseThrow(MemberNotFoundException::new);
-        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
-        return MemberInfoResponseDto.createDto(member, studies);
+        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyByMemberId(member.getId());
+        return MemberInfoResponseDto.createDto(member, studyInfoDtos);
     }
 
     /**

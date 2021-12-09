@@ -50,12 +50,13 @@ class UserControllerIntegrationTest {
     public void 유저정보로드_성공() throws Exception {
         //given
         String accessToken = jwtTokenProvider.createAccessToken("test");
+        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
 
         //when, then
         mockMvc.perform(post("/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L))
+                .andExpect(jsonPath("$.data.memberId").value(member.getId()))
                 .andExpect(jsonPath("$.data.email").value("test"))
                 .andExpect(jsonPath("$.data.nickname").value("승범"))
                 .andExpect(jsonPath("$.data.department").value("컴공"));

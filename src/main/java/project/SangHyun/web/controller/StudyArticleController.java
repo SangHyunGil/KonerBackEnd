@@ -19,13 +19,13 @@ public class StudyArticleController {
     public final ResponseServiceImpl responseService;
 
     @GetMapping
-    public MultipleResult<StudyArticleFindResponseDto> findAllArticles(@PathVariable Long studyId, @PathVariable Long boardId) {
+    public MultipleResult<StudyArticleFindResponseDto> findStudyArticles(@PathVariable Long studyId, @PathVariable Long boardId) {
         return responseService.getMultipleResult(studyArticleService.findAllArticles(boardId));
     }
 
     @PostMapping
-    public SingleResult<StudyArticleCreateResponseDto> createArticle(@PathVariable Long studyId, @PathVariable Long boardId,
-                                                                     @RequestBody StudyArticleCreateRequestDto requestDto) {
-        return responseService.getSingleResult(studyArticleService.createArticle(requestDto, boardId));
+    public SingleResult<StudyArticleCreateResponseDto> createStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId,
+                                                                          @RequestBody StudyArticleCreateRequestDto requestDto) {
+        return responseService.getSingleResult(studyArticleService.createArticle(boardId, requestDto));
     }
 }

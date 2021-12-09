@@ -14,6 +14,7 @@ import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.domain.repository.StudyJoinRepository;
+import project.SangHyun.domain.repository.impl.dto.StudyInfoDto;
 import project.SangHyun.domain.service.EmailService;
 import project.SangHyun.domain.service.RedisService;
 import project.SangHyun.domain.service.SignService;
@@ -77,9 +78,9 @@ public class SignServiceImpl implements SignService {
 
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
+        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyByMemberId(member.getId());
 
-        return MemberLoginResponseDto.createDto(member, studies, jwtTokenProvider.createAccessToken(requestDto.getEmail()), refreshToken);
+        return MemberLoginResponseDto.createDto(member, studyInfoDtos, jwtTokenProvider.createAccessToken(requestDto.getEmail()), refreshToken);
     }
 
     private void validateLoginInfo(MemberLoginRequestDto requestDto, Member member) {
@@ -170,8 +171,8 @@ public class SignServiceImpl implements SignService {
         String accessToken = jwtTokenProvider.createAccessToken(jwtEmail);
         String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        List<Study> studies = studyJoinRepository.findStudyByMemberId(member.getId());
+        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyByMemberId(member.getId());
 
-        return TokenResponseDto.createDto(member, studies, accessToken, refreshToken);
+        return TokenResponseDto.createDto(member, studyInfoDtos, accessToken, refreshToken);
     }
 }

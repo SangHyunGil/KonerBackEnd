@@ -118,4 +118,10 @@ public class ExceptionAdvice {
     public Result StudyBoardNotFoundException() {
         return responseService.getFailureResult(-115, "존재하지 않는 게시판입니다.");
     }
+
+    @ExceptionHandler(AlreadyJoinStudyMember.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result AlreadyJoinStudyMember() {
+        return responseService.getFailureResult(-116, "이미 가입한 스터디입니다.");
+    }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.advice.exception.AlreadyJoinStudyMember;
 import project.SangHyun.advice.exception.ExceedMaximumStudyMember;
 import project.SangHyun.advice.exception.StudyNotFountException;
 import project.SangHyun.domain.entity.Study;
@@ -22,12 +23,18 @@ public class StudyJoinServiceImpl implements StudyJoinService {
 
     private final StudyJoinRepository studyJoinRepository;
     private final StudyRepository studyRepository;
+
     @Transactional
     public StudyJoinResponseDto join(StudyJoinRequestDto requestDto) {
         Study study = studyRepository.findById(requestDto.getStudyId()).orElseThrow(StudyNotFountException::new);
         Long joinCount = studyJoinRepository.findStudyJoinCount(requestDto.getStudyId());
+
+        if (studyJoinRepository.exist(requestDto.getStudyId(), requestDto.getMemberId()))
+            throw new AlreadyJoinStudyMember();
+
         if (study.getHeadCount() < joinCount)
             throw new ExceedMaximumStudyMember();
+
         StudyJoin studyJoin = studyJoinRepository.save(requestDto.toEntity());
         return StudyJoinResponseDto.createDto(studyJoin);
     }

@@ -60,7 +60,7 @@ class MemberServiceUnitImplTest {
         Assertions.assertEquals(ExpectResult.getEmail(), ActualResult.getEmail());
         Assertions.assertEquals(ExpectResult.getNickname(), ActualResult.getNickname());
         Assertions.assertEquals(ExpectResult.getDepartment(), ActualResult.getDepartment());
-        Assertions.assertEquals(ExpectResult.getStudyIds(), ActualResult.getStudyIds());
+        Assertions.assertEquals(ExpectResult.getStudyInfos(), ActualResult.getStudyInfos());
     }
 
     @Test

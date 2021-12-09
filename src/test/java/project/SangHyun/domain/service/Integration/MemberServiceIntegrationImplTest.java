@@ -57,7 +57,7 @@ class MemberServiceIntegrationImplTest {
         Assertions.assertEquals("test", ActualResult.getEmail());
         Assertions.assertEquals("승범", ActualResult.getNickname());
         Assertions.assertEquals("컴공", ActualResult.getDepartment());
-        Assertions.assertEquals(0, ActualResult.getStudyIds().size());
+        Assertions.assertEquals(0, ActualResult.getStudyInfos().size());
     }
 
     @Test

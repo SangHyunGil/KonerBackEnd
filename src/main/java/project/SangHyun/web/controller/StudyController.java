@@ -25,7 +25,6 @@ import project.SangHyun.dto.response.StudyJoinResponseDto;
 public class StudyController {
 
     private final StudyService studyService;
-    private final StudyBoardService studyBoardService;
     private final StudyJoinService studyJoinService;
     private final ResponseServiceImpl responseService;
 
@@ -51,11 +50,5 @@ public class StudyController {
     @PostMapping("/join")
     public SingleResult<StudyJoinResponseDto> join(@RequestBody StudyJoinRequestDto requestDto) {
         return responseService.getSingleResult(studyJoinService.join(requestDto));
-    }
-
-    @ApiOperation(value = "스터디 게시판 로드", notes = "스터디에 포함된 게시판의 목록을 로드한다.")
-    @GetMapping("/{studyId}/board")
-    public MultipleResult<StudyBoardFindResponseDto> findStudyBoards(@PathVariable Long studyId) {
-        return responseService.getMultipleResult(studyBoardService.findBoards(studyId));
     }
 }

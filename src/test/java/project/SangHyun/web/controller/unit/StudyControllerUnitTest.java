@@ -183,32 +183,4 @@ class StudyControllerUnitTest {
                 .andExpect(jsonPath("$.data.studyId").value(ExpectResult.getData().getStudyId()))
                 .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
     }
-
-    @Test
-    public void 스터디게시판로드() throws Exception {
-        //given
-
-        Long studyBoardId = 1L;
-        StudyBoard studyBoard = new StudyBoard("공지사항", new Study(1L));
-        ReflectionTestUtils.setField(studyBoard, "id", studyBoardId);
-        List<StudyBoardFindResponseDto> responseDtos = List.of(StudyBoardFindResponseDto.createDto(studyBoard));
-
-        MultipleResult<StudyBoardFindResponseDto> ExpectResult = new MultipleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDtos);
-
-        //mocking
-        given(studyBoardService.findBoards(1L)).willReturn(responseDtos);
-        given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(get("/study/{id}/board",1))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.length()").value(1L))
-                .andExpect(jsonPath("$.data[0].title").value(ExpectResult.getData().get(0).getTitle()))
-                .andExpect(jsonPath("$.data[0].studyBoardId").value(ExpectResult.getData().get(0).getStudyBoardId()));
-
-    }
-
-
 }
