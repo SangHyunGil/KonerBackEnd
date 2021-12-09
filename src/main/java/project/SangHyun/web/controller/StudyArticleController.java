@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.domain.response.MultipleResult;
 import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.response.StudyArticleCreateResponseDto;
+import project.SangHyun.dto.response.StudyArticleCreateResponseDto;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.StudyArticleService;
 import project.SangHyun.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.dto.response.StudyArticleFindResponseDto;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class StudyArticleController {
 
     @PostMapping
     public SingleResult<StudyArticleCreateResponseDto> createStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId,
-                                                                          @RequestBody StudyArticleCreateRequestDto requestDto) {
+                                                                          @Valid @RequestBody StudyArticleCreateRequestDto requestDto) {
         return responseService.getSingleResult(studyArticleService.createArticle(boardId, requestDto));
     }
 }

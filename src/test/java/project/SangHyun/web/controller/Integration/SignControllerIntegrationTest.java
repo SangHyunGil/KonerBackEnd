@@ -51,7 +51,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 회원가입() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test4", "test4", "테스터4", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm4!", "xptmxm4!", "테스터4", "컴퓨터공학부");
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -64,7 +64,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 회원가입_중복이메일() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test", "test", "테스터3", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm1!", "테스터3", "컴퓨터공학부");
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -77,7 +77,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 회원가입_중복닉네임() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test3", "test3", "테스터", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm1!", "테스터", "컴퓨터공학부");
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -90,7 +90,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 이메일전송_처음로그인() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test3", "VERIFY");
+        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("xptmxm2!", "VERIFY");
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -103,7 +103,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 이메일전송_비밀번호변경() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test3", "PASSWORD");
+        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("xptmxm1!", "PASSWORD");
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -117,9 +117,9 @@ class SignControllerIntegrationTest {
     public void 이메일인증_처음로그인() throws Exception {
         //given
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration("VERIFY"+"test3", authCode, 60 * 5L);
-        redisService.getData("VERIFY"+"test3");
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test3", authCode, "VERIFY");
+        redisService.setDataWithExpiration("VERIFY"+"xptmxm2!", authCode, 60 * 5L);
+        redisService.getData("VERIFY"+"xptmxm2!");
+        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
 
         //when, then
         mockMvc.perform(post("/sign/verify")
@@ -134,9 +134,9 @@ class SignControllerIntegrationTest {
     public void 이메일인증_비밀번호변경() throws Exception {
         //given
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration("PASSWORD"+"test3", authCode, 60 * 5L);
+        redisService.setDataWithExpiration("PASSWORD"+"xptmxm1!", authCode, 60 * 5L);
 
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test3", authCode, "PASSWORD");
+        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
 
         //when, then
         mockMvc.perform(post("/sign/verify")
@@ -150,7 +150,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 비밀번호변경() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("test", "changePassword");
+        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("xptmxm1!", "xptmxm1!changePassword");
 
         //when, then
         mockMvc.perform(post("/sign/password")
@@ -163,7 +163,7 @@ class SignControllerIntegrationTest {
     @Test
     public void 로그인() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "test");
+        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm1!", "xptmxm1!");
 
         //when, then
         mockMvc.perform(post("/sign/login")
@@ -176,8 +176,8 @@ class SignControllerIntegrationTest {
     @Test
     public void 토큰재발행() throws Exception {
         //given
-        String refreshToken = jwtTokenProvider.createRefreshToken("test");
-        redisService.setDataWithExpiration(refreshToken, "test", JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+        String refreshToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        redisService.setDataWithExpiration(refreshToken, "xptmxm1!", JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
         ReIssueRequestDto requestDto = new ReIssueRequestDto(refreshToken);
 

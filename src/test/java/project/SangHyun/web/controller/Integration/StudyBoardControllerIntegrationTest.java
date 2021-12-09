@@ -83,7 +83,7 @@ class StudyBoardControllerIntegrationTest {
     @Test
     public void 게시판생성() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createRefreshToken("test");
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyBoardCreateRequestDto request = new StudyBoardCreateRequestDto("테스트 게시판");
         //when, then

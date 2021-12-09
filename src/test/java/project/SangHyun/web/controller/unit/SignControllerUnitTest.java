@@ -59,10 +59,10 @@ class SignControllerUnitTest {
     @Test
     public void 회원가입() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test", "test", "테스터", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm1!", "테스터", "컴퓨터공학부");
 
         Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
+        Member member = new Member("xptmxm1!", "xptmxm1!encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
         ReflectionTestUtils.setField(member, "id", memberId);
         MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.createDto(member);
 
@@ -193,10 +193,10 @@ class SignControllerUnitTest {
     @Test
     public void 비밀번호변경() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("test", "testChange");
+        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("xptmxm1!", "xptmxm1!testChange");
 
         Long memberId = 1L;
-        Member member = new Member("test", "changedEncodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm1!", "xptmxm1!changedEncodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         MemberChangePwResponseDto responseDto = MemberChangePwResponseDto.createDto(member);
 
@@ -222,10 +222,10 @@ class SignControllerUnitTest {
     @Test
     public void 로그인() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "test");
+        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm1!", "xptmxm1!");
 
         Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm1!", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         MemberLoginResponseDto responseDto = MemberLoginResponseDto.createDto(member, List.of(), "accessToken", "refreshToken");
 
@@ -249,7 +249,6 @@ class SignControllerUnitTest {
                 .andExpect(jsonPath("$.data.email").value(ExpectResult.getData().getEmail()))
                 .andExpect(jsonPath("$.data.nickname").value(ExpectResult.getData().getNickname()))
                 .andExpect(jsonPath("$.data.department").value(ExpectResult.getData().getDepartment()))
-                .andExpect(jsonPath("$.data.studyInfos").value(ExpectResult.getData().getStudyInfos()))
                 .andExpect(jsonPath("$.data.accessToken").value(ExpectResult.getData().getAccessToken()))
                 .andExpect(jsonPath("$.data.refreshToken").value(ExpectResult.getData().getRefreshToken()));
     }
@@ -260,7 +259,7 @@ class SignControllerUnitTest {
         ReIssueRequestDto requestDto = new ReIssueRequestDto("refreshToken");
 
         Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
+        Member member = new Member("test", "xptmxm1!encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         TokenResponseDto responseDto = TokenResponseDto.createDto(member, List.of(), "newAccessToken", "newRefreshToken");
 
@@ -284,7 +283,6 @@ class SignControllerUnitTest {
                 .andExpect(jsonPath("$.data.email").value(ExpectResult.getData().getEmail()))
                 .andExpect(jsonPath("$.data.nickname").value(ExpectResult.getData().getNickname()))
                 .andExpect(jsonPath("$.data.department").value(ExpectResult.getData().getDepartment()))
-                .andExpect(jsonPath("$.data.studyIds").value(ExpectResult.getData().getStudyInfos()))
                 .andExpect(jsonPath("$.data.accessToken").value(ExpectResult.getData().getAccessToken()))
                 .andExpect(jsonPath("$.data.refreshToken").value(ExpectResult.getData().getRefreshToken()));
     }

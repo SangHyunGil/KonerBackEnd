@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.domain.entity.StudyArticle;
 import project.SangHyun.domain.repository.StudyArticleRepository;
-import project.SangHyun.domain.response.StudyArticleCreateResponseDto;
+import project.SangHyun.dto.response.StudyArticleCreateResponseDto;
 import project.SangHyun.domain.service.StudyArticleService;
 import project.SangHyun.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.dto.response.StudyArticleFindResponseDto;

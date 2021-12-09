@@ -17,6 +17,8 @@ import project.SangHyun.dto.response.StudyCreateResponseDto;
 import project.SangHyun.dto.response.StudyFindResponseDto;
 import project.SangHyun.dto.response.StudyJoinResponseDto;
 
+import javax.validation.Valid;
+
 
 @Slf4j
 @RestController
@@ -42,7 +44,7 @@ public class StudyController {
 
     @ApiOperation(value = "스터디 생성", notes = "스터디를 생성한다.")
     @PostMapping
-    public SingleResult<StudyCreateResponseDto> createStudy(@RequestBody StudyCreateRequestDto requestDto) {
+    public SingleResult<StudyCreateResponseDto> createStudy(@Valid @RequestBody StudyCreateRequestDto requestDto) {
         return responseService.getSingleResult(studyService.createStudy(requestDto));
     }
 

@@ -52,14 +52,14 @@ class StudyJoinServiceIntegrationImplTest {
     @Test
     public void 스터디_참여() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.join(requestDto);
         //then
-        Assertions.assertEquals(study.getId(), ActualResult.getStudyId());
+        Assertions.assertEquals(1, ActualResult.getStudyInfos().size());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
     }
 

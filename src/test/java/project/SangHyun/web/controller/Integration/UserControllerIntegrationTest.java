@@ -49,15 +49,15 @@ class UserControllerIntegrationTest {
     @Test
     public void 유저정보로드_성공() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createAccessToken("test");
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String accessToken = jwtTokenProvider.createAccessToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
 
         //when, then
         mockMvc.perform(post("/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(member.getId()))
-                .andExpect(jsonPath("$.data.email").value("test"))
+                .andExpect(jsonPath("$.data.email").value("xptmxm1!"))
                 .andExpect(jsonPath("$.data.nickname").value("승범"))
                 .andExpect(jsonPath("$.data.department").value("컴공"));
     }
@@ -76,8 +76,8 @@ class UserControllerIntegrationTest {
     @Test
     public void 유저프로필로드() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createAccessToken("test");
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String accessToken = jwtTokenProvider.createAccessToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
 
         //when, then
         mockMvc.perform(get("/users/{id}", member.getId())
@@ -93,9 +93,9 @@ class UserControllerIntegrationTest {
     @Test
     public void 유저프로필수정() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createAccessToken("test");
-        MemberUpdateInfoRequestDto requestDto = new MemberUpdateInfoRequestDto("test", "철수", "기공");
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String accessToken = jwtTokenProvider.createAccessToken("xptmxm1!");
+        MemberUpdateInfoRequestDto requestDto = new MemberUpdateInfoRequestDto("xptmxm1!", "철수", "기공");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
 
         //when, then
         mockMvc.perform(put("/users/{id}", member.getId())
@@ -105,7 +105,7 @@ class UserControllerIntegrationTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(member.getId()))
-                .andExpect(jsonPath("$.data.email").value("test"))
+                .andExpect(jsonPath("$.data.email").value("xptmxm1!"))
                 .andExpect(jsonPath("$.data.nickname").value("철수"))
                 .andExpect(jsonPath("$.data.department").value("기공"));
     }

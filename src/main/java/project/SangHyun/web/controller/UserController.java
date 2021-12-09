@@ -15,6 +15,8 @@ import project.SangHyun.domain.service.MemberService;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -40,7 +42,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public SingleResult<MemberUpdateInfoResponseDto> updateMemberInfo(@AuthenticationPrincipal MemberDetails memberDetails,
                                                                       @PathVariable Long userId,
-                                                                      @RequestBody MemberUpdateInfoRequestDto requestDto) {
+                                                                      @Valid @RequestBody MemberUpdateInfoRequestDto requestDto) {
         log.info("Compare = {}, {}", memberDetails.getUsername(), requestDto.getEmail());
         if (!memberDetails.getUsername().equals(requestDto.getEmail()))
             throw new NotResourceOwnerException();

@@ -58,7 +58,7 @@ class StudyServiceIntegrationImplTest {
     @Test
     public void 스터디_생성() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(member.getId(), "테스트 스터디", "백엔드",
                 null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
 

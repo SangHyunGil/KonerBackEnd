@@ -11,27 +11,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
-import project.SangHyun.domain.entity.StudyArticle;
 import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.response.MultipleResult;
 import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.response.StudyArticleCreateResponseDto;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
-import project.SangHyun.domain.service.StudyArticleService;
 import project.SangHyun.domain.service.StudyBoardService;
-import project.SangHyun.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.dto.response.StudyArticleFindResponseDto;
 import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
 import project.SangHyun.dto.response.StudyBoardFindResponseDto;
-import project.SangHyun.web.controller.StudyArticleController;
 import project.SangHyun.web.controller.StudyBoardController;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
