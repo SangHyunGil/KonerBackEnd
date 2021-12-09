@@ -8,27 +8,27 @@ import project.SangHyun.domain.entity.StudyArticle;
 @Data
 @NoArgsConstructor
 public class StudyArticleCreateResponseDto {
-    private Long boardId;
+    private Long articleId;
     private Long memberId;
-    private Long categoryId;
+    private Long boardId;
     private String title;
     private String content;
 
-    public static StudyArticleCreateResponseDto createDto(StudyArticle studyBoard) {
+    public static StudyArticleCreateResponseDto createDto(StudyArticle studyArticle) {
         return StudyArticleCreateResponseDto.builder()
-                .boardId(studyBoard.getId())
-                .memberId(studyBoard.getMember().getId())
-                .categoryId(studyBoard.getStudyBoard().getId())
-                .title(studyBoard.getTitle())
-                .content(studyBoard.getContent())
+                .articleId(studyArticle.getId())
+                .memberId(studyArticle.getMember().getId())
+                .boardId(studyArticle.getStudyBoard().getId())
+                .title(studyArticle.getTitle())
+                .content(studyArticle.getContent())
                 .build();
     }
 
     @Builder
-    public StudyArticleCreateResponseDto(Long boardId, Long memberId, Long categoryId, String title, String content) {
-        this.boardId = boardId;
+    public StudyArticleCreateResponseDto(Long articleId, Long memberId, Long boardId, String title, String content) {
+        this.articleId = articleId;
         this.memberId = memberId;
-        this.categoryId = categoryId;
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
     }

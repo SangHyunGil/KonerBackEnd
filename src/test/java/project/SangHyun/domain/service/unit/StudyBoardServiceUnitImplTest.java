@@ -1,4 +1,4 @@
-package project.SangHyun.domain.service.Impl;
+package project.SangHyun.domain.service.unit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,22 +7,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.repository.StudyBoardRepository;
-import project.SangHyun.domain.service.StudyBoardCreateRequestDto;
+import project.SangHyun.domain.service.Impl.StudyBoardServiceImpl;
+import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.dto.request.StudyBoardUpdateRequestDto;
-import project.SangHyun.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
 import project.SangHyun.dto.response.StudyBoardUpdateResponseDto;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class StudyBoardServiceImplTest {
+class StudyBoardServiceUnitImplTest {
 
     @InjectMocks
     StudyBoardServiceImpl studyBoardService;
@@ -32,10 +32,10 @@ class StudyBoardServiceImplTest {
     @Test
     public void 스터디_글_작성() throws Exception {
         //given
-        Long studyBoardId = 1L;
-        Long studyId = 1L;
-        StudyBoardCreateRequestDto requestDto = new StudyBoardCreateRequestDto("테스트 글");
+        StudyBoardCreateRequestDto requestDto = new StudyBoardCreateRequestDto("테스트 게시판");
 
+        Long studyId = 1L;
+        Long studyBoardId = 1L;
         StudyBoard studyBoard = requestDto.toEntity(studyId);
         ReflectionTestUtils.setField(studyBoard, "id", studyBoardId);
 
@@ -55,14 +55,12 @@ class StudyBoardServiceImplTest {
     @Test
     public void 스터디_글_수정() throws Exception {
         //given
-        Long studyBoardId = 1L;
         Long studyId = 1L;
-        StudyBoardCreateRequestDto requestDto = new StudyBoardCreateRequestDto("테스트 글");
-
-        StudyBoard studyBoard = requestDto.toEntity(studyId);
+        Long studyBoardId = 1L;
+        StudyBoard studyBoard = new StudyBoard("테스트 게시판", new Study(studyId));
         ReflectionTestUtils.setField(studyBoard, "id", studyBoardId);
 
-        StudyBoardUpdateRequestDto updateRequestDto = new StudyBoardUpdateRequestDto("테스트 글 수정");
+        StudyBoardUpdateRequestDto updateRequestDto = new StudyBoardUpdateRequestDto("테스트 게시판 수정");
 
         //mocking
         given(studyBoardRepository.findById(studyId)).willReturn(Optional.ofNullable(studyBoard));
@@ -72,8 +70,6 @@ class StudyBoardServiceImplTest {
 
         //then
         Assertions.assertEquals(studyBoardId, ActualResult.getStudyBoardId());
-        Assertions.assertEquals("테스트 글 수정", ActualResult.getTitle());
-
+        Assertions.assertEquals("테스트 게시판 수정", ActualResult.getTitle());
     }
-
 }

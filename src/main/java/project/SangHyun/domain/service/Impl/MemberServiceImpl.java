@@ -54,14 +54,14 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 유저 정보 수정
-     * @param userId
+     * @param memberId
      * @param requestDto
      * @return
      */
     @Override
     @Transactional
-    public MemberUpdateInfoResponseDto updateMemberInfo(Long userId, MemberUpdateInfoRequestDto requestDto) {
-        Member member = memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
+    public MemberUpdateInfoResponseDto updateMemberInfo(Long memberId, MemberUpdateInfoRequestDto requestDto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         return MemberUpdateInfoResponseDto.createDto(member.updateMemberInfo(requestDto));
     }
 }

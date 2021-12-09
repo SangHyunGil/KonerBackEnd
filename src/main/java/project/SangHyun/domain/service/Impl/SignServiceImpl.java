@@ -10,7 +10,6 @@ import project.SangHyun.advice.exception.*;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
-import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.domain.repository.MemberRepository;
@@ -118,6 +117,7 @@ public class SignServiceImpl implements SignService {
     public String verify(VerifyEmailRequestDto requestDto) {
         String key = getKey(requestDto.getEmail(), requestDto.getRedisKey());
         String findAuthCode = redisService.getData(key);
+
         if (findAuthCode == null || !findAuthCode.equals(requestDto.getAuthCode()))
             throw new InvalidAuthCodeException();
 
@@ -131,7 +131,7 @@ public class SignServiceImpl implements SignService {
     }
 
     private String getKey(String email, String redisKey) {
-        String prefix = redisKey == RedisKey.VERIFY.getKey() ? RedisKey.VERIFY.getKey() : RedisKey.PASSWORD.getKey();
+        String prefix = redisKey.equals(RedisKey.VERIFY.getKey()) ? RedisKey.VERIFY.getKey() : RedisKey.PASSWORD.getKey();
         String key = prefix + email;
 
         return key;
@@ -163,7 +163,7 @@ public class SignServiceImpl implements SignService {
         String redisEmail = redisService.getData(requestDto.getRefreshToken());
         String jwtEmail = jwtTokenProvider.getMemberEmail(requestDto.getRefreshToken());
         if (redisEmail == null || !redisEmail.equals(jwtEmail))
-            throw new InvalidRefreshTokenException();
+            throw new InvalidTokenException();
 
         Member member = memberRepository.findByEmail(jwtEmail).orElseThrow(MemberNotFoundException::new);
 

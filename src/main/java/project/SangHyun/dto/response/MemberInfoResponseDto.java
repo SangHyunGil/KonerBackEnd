@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 public class MemberInfoResponseDto {
-    private Long id;
+    private Long memberId;
     private String email;
     private String nickname;
     private String department;
@@ -24,7 +24,7 @@ public class MemberInfoResponseDto {
                 .collect(Collectors.toList());
 
         return MemberInfoResponseDto.builder()
-                .id(member.getId())
+                .memberId(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .department(member.getDepartment())
@@ -33,8 +33,8 @@ public class MemberInfoResponseDto {
     }
 
     @Builder
-    public MemberInfoResponseDto(Long id, String email, String nickname, String department, List<Long> studyIds) {
-        this.id = id;
+    public MemberInfoResponseDto(Long memberId, String email, String nickname, String department, List<Long> studyIds) {
+        this.memberId = memberId;
         this.email = email;
         this.nickname = nickname;
         this.department = department;

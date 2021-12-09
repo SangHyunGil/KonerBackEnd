@@ -47,10 +47,10 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-103, "권한이 필요합니다.");
     }
 
-    @ExceptionHandler(InvalidRefreshTokenException.class)
+    @ExceptionHandler(ExceedMaximumStudyMember.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result invalidRefreshTokenException() {
-        return responseService.getFailureResult(-104, "Refresh Token이 유효하지 않습니다.");
+    public Result ExceedMaximumStudyMember() {
+        return responseService.getFailureResult(-104, "스터디 정원을 초과할 수 없습니다.");
     }
 
     @ExceptionHandler(EmailNotAuthenticatedException.class)
@@ -77,10 +77,10 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-108, "존재하지 않는 회원입니다.");
     }
 
-    @ExceptionHandler(InvalidAccessTokenException.class)
+    @ExceptionHandler(InvalidTokenException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result InvalidAccessTokenException() {
-        return responseService.getFailureResult(-109, "Access Token이 유효하지 않습니다.");
+    public Result InvalidTokenException() {
+        return responseService.getFailureResult(-109, "Token이 유효하지 않습니다.");
     }
 
     @ExceptionHandler(NotResourceOwnerException.class)

@@ -1,5 +1,6 @@
 package project.SangHyun.domain.service;
 
+import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.dto.request.StudyBoardUpdateRequestDto;
 import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
 import project.SangHyun.dto.response.StudyBoardFindResponseDto;

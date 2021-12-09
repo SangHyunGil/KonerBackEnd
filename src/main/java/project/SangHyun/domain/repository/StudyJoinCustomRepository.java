@@ -5,6 +5,6 @@ import project.SangHyun.domain.entity.Study;
 import java.util.List;
 
 public interface StudyJoinCustomRepository {
-    Long findStudyMemberNum(Long boardId);
+    Long findStudyJoinCount(Long studyId);
     List<Study> findStudyByMemberId(Long memberId);
 }

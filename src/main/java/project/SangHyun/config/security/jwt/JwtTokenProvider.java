@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import project.SangHyun.advice.exception.InvalidTokenException;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -67,8 +68,8 @@ public class JwtTokenProvider {
     public String getMemberEmail(String token) {
         try {
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-        } catch(ExpiredJwtException e) {
-            return e.getClaims().getSubject();
+        } catch(Exception e) {
+            throw new InvalidTokenException();
         }
     }
 
