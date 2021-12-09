@@ -249,7 +249,7 @@ class SignControllerUnitTest {
                 .andExpect(jsonPath("$.data.email").value(ExpectResult.getData().getEmail()))
                 .andExpect(jsonPath("$.data.nickname").value(ExpectResult.getData().getNickname()))
                 .andExpect(jsonPath("$.data.department").value(ExpectResult.getData().getDepartment()))
-                .andExpect(jsonPath("$.data.studyIds").value(ExpectResult.getData().getStudyIds()))
+                .andExpect(jsonPath("$.data.studyInfos").value(ExpectResult.getData().getStudyInfos()))
                 .andExpect(jsonPath("$.data.accessToken").value(ExpectResult.getData().getAccessToken()))
                 .andExpect(jsonPath("$.data.refreshToken").value(ExpectResult.getData().getRefreshToken()));
     }
@@ -284,7 +284,7 @@ class SignControllerUnitTest {
                 .andExpect(jsonPath("$.data.email").value(ExpectResult.getData().getEmail()))
                 .andExpect(jsonPath("$.data.nickname").value(ExpectResult.getData().getNickname()))
                 .andExpect(jsonPath("$.data.department").value(ExpectResult.getData().getDepartment()))
-                .andExpect(jsonPath("$.data.studyIds").value(ExpectResult.getData().getStudyIds()))
+                .andExpect(jsonPath("$.data.studyIds").value(ExpectResult.getData().getStudyInfos()))
                 .andExpect(jsonPath("$.data.accessToken").value(ExpectResult.getData().getAccessToken()))
                 .andExpect(jsonPath("$.data.refreshToken").value(ExpectResult.getData().getRefreshToken()));
     }

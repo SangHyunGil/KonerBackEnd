@@ -45,7 +45,7 @@ class StudyArticleServiceUnitImplTest {
         given(studyArticleRepository.save(any())).willReturn(studyArticle);
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(requestDto, studyBoardId);
+        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoardId, requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getArticleId(), ActualResult.getArticleId());

@@ -1,10 +1,14 @@
 package project.SangHyun.domain.repository.impl;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import project.SangHyun.domain.entity.QStudy;
+import project.SangHyun.domain.entity.QStudyJoin;
 import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.repository.StudyJoinCustomRepository;
+import project.SangHyun.domain.repository.impl.dto.StudyInfoDto;
 
 import java.util.List;
 
@@ -26,11 +30,24 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     }
 
     @Override
-    public List<Study> findStudyByMemberId(Long memberId) {
+    public List<StudyInfoDto> findStudyByMemberId(Long memberId) {
         return jpaQueryFactory
-                .select(study)
+                .select(Projections.constructor(StudyInfoDto.class,
+                        studyJoin.study.id, studyJoin.studyRole))
                 .from(studyJoin)
+                .join(studyJoin.study, study)
                 .where(studyJoin.member.id.eq(memberId))
                 .fetch();
+    }
+
+    @Override
+    public Boolean exist(Long studyId, Long memberId) {
+        StudyJoin studyJoin = jpaQueryFactory
+                .selectFrom(QStudyJoin.studyJoin)
+                .where(QStudyJoin.studyJoin.study.id.eq(studyId),
+                        QStudyJoin.studyJoin.member.id.eq(memberId))
+                .fetchFirst();
+
+        return studyJoin != null;
     }
 }

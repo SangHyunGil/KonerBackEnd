@@ -133,7 +133,7 @@ class SignServiceUnitImplTest {
         Assertions.assertEquals(ExpectResult.getEmail(), ActualResult.getEmail());
         Assertions.assertEquals(ExpectResult.getNickname(), ActualResult.getNickname());
         Assertions.assertEquals(ExpectResult.getDepartment(), ActualResult.getDepartment());
-        Assertions.assertEquals(ExpectResult.getStudyIds().size(), 0);
+        Assertions.assertEquals(ExpectResult.getStudyInfos().size(), 0);
         Assertions.assertEquals(ExpectResult.getAccessToken(), ActualResult.getAccessToken());
         Assertions.assertEquals(ExpectResult.getRefreshToken(), ActualResult.getRefreshToken());
     }
@@ -315,7 +315,7 @@ class SignServiceUnitImplTest {
         Assertions.assertEquals(ExpectResult.getDepartment(), ActualResult.getDepartment());
         Assertions.assertEquals(ExpectResult.getAccessToken(), ActualResult.getAccessToken());
         Assertions.assertEquals(ExpectResult.getRefreshToken(), ActualResult.getRefreshToken());
-        Assertions.assertEquals(ExpectResult.getStudyIds(), ActualResult.getStudyIds());
+        Assertions.assertEquals(ExpectResult.getStudyInfos(), ActualResult.getStudyInfos());
     }
 
     @Test

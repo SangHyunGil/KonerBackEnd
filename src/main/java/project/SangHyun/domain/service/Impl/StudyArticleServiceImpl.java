@@ -21,7 +21,8 @@ public class StudyArticleServiceImpl implements StudyArticleService {
     private final StudyArticleRepository studyArticleRepository;
 
     @Override
-    public StudyArticleCreateResponseDto createArticle(StudyArticleCreateRequestDto requestDto, Long boardId) {
+    @Transactional
+    public StudyArticleCreateResponseDto createArticle(Long boardId, StudyArticleCreateRequestDto requestDto) {
         StudyArticle studyBoard = studyArticleRepository.save(requestDto.toEntity(boardId));
         return StudyArticleCreateResponseDto.createDto(studyBoard);
     }

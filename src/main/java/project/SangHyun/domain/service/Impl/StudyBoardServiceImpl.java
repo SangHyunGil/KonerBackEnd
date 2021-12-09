@@ -32,12 +32,14 @@ public class StudyBoardServiceImpl implements StudyBoardService {
     }
 
     @Override
+    @Transactional
     public StudyBoardCreateResponseDto createBoard(Long studyId, StudyBoardCreateRequestDto requestDto) {
         StudyBoard studyBoard = studyBoardRepository.save(requestDto.toEntity(studyId));
         return StudyBoardCreateResponseDto.createDto(studyBoard);
     }
 
     @Override
+    @Transactional
     public StudyBoardUpdateResponseDto updateBoard(Long studyId, Long studyBoardId, StudyBoardUpdateRequestDto requestDto) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(StudyBoardNotFoundException::new);
         studyBoard.changeTitle(requestDto.getTitle());

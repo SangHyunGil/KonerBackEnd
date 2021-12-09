@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.StudyJoin;
+import project.SangHyun.domain.enums.StudyRole;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +19,7 @@ public class StudyJoinRequestDto {
         return StudyJoin.builder()
                 .study(new Study(studyId))
                 .member(new Member(memberId))
+                .studyRole(StudyRole.MEMBER)
                 .build();
     }
 }

@@ -94,7 +94,7 @@ class SignServiceIntegrationImplTest {
         Assertions.assertEquals(member.getNickname(), ActualResult.getNickname());
         Assertions.assertEquals(member.getEmail(), ActualResult.getEmail());
         Assertions.assertEquals(member.getDepartment(), ActualResult.getDepartment());
-        Assertions.assertEquals(0, ActualResult.getStudyIds().size());
+        Assertions.assertEquals(0, ActualResult.getStudyInfos().size());
     }
 
     @Test
@@ -208,7 +208,7 @@ class SignServiceIntegrationImplTest {
         Assertions.assertEquals(member.getNickname(), ActualResult.getNickname());
         Assertions.assertEquals(member.getEmail(), ActualResult.getEmail());
         Assertions.assertEquals(member.getDepartment(), ActualResult.getDepartment());
-        Assertions.assertEquals(0, ActualResult.getStudyIds().size());
+        Assertions.assertEquals(0, ActualResult.getStudyInfos().size());
     }
 
     @Test

@@ -58,7 +58,7 @@ class StudyArticleServiceIntegrationImplTest {
         StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 내용");
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(requestDto, studyBoard.getId());
+        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
         StudyArticleFindResponseDto article = studyArticleService.findAllArticles(studyBoard.getId()).get(0);
