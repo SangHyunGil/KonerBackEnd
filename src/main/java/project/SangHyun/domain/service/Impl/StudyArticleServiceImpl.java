@@ -21,14 +21,14 @@ public class StudyArticleServiceImpl implements StudyArticleService {
     private final StudyArticleRepository studyArticleRepository;
 
     @Override
-    public StudyArticleCreateResponseDto createArticle(StudyArticleCreateRequestDto requestDto) {
-        StudyArticle studyBoard = studyArticleRepository.save(requestDto.toEntity());
+    public StudyArticleCreateResponseDto createArticle(StudyArticleCreateRequestDto requestDto, Long boardId) {
+        StudyArticle studyBoard = studyArticleRepository.save(requestDto.toEntity(boardId));
         return StudyArticleCreateResponseDto.createDto(studyBoard);
     }
 
     @Override
-    public List<StudyArticleFindResponseDto> findAllArticles(Long categoryId) {
-        List<StudyArticle> studyBoards = studyArticleRepository.findAllArticles(categoryId);
+    public List<StudyArticleFindResponseDto> findAllArticles(Long boardId) {
+        List<StudyArticle> studyBoards = studyArticleRepository.findAllArticles(boardId);
         return studyBoards.stream()
                 .map(studyBoard -> StudyArticleFindResponseDto.createDto(studyBoard))
                 .collect(Collectors.toList());

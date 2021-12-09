@@ -7,6 +7,6 @@ import project.SangHyun.dto.response.StudyArticleFindResponseDto;
 import java.util.List;
 
 public interface StudyArticleService {
-    StudyArticleCreateResponseDto createArticle(StudyArticleCreateRequestDto requestDto);
-    List<StudyArticleFindResponseDto> findAllArticles(Long categoryId);
+    StudyArticleCreateResponseDto createArticle(StudyArticleCreateRequestDto requestDto, Long boardId);
+    List<StudyArticleFindResponseDto> findAllArticles(Long boardId);
 }

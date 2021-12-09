@@ -12,14 +12,13 @@ import project.SangHyun.domain.entity.StudyBoard;
 @AllArgsConstructor
 public class StudyArticleCreateRequestDto {
     private Long memberId;
-    private Long categoryId;
     private String title;
     private String content;
 
-    public StudyArticle toEntity() {
+    public StudyArticle toEntity(Long boardId) {
         return StudyArticle.builder()
                 .member(new Member(memberId))
-                .studyBoard(new StudyBoard(categoryId))
+                .studyBoard(new StudyBoard(boardId))
                 .title(title)
                 .content(content)
                 .build();

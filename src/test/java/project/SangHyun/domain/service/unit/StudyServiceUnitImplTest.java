@@ -1,27 +1,23 @@
-package project.SangHyun.domain.service.Impl;
+package project.SangHyun.domain.service.unit;
 
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.domain.repository.StudyRepository;
+import project.SangHyun.domain.service.Impl.StudyServiceImpl;
 import project.SangHyun.dto.request.StudyCreateRequestDto;
 import project.SangHyun.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.dto.response.StudyCreateResponseDto;
 import project.SangHyun.dto.response.StudyFindResponseDto;
 import project.SangHyun.dto.response.StudyUpdateResponseDto;
-
-import javax.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 
 
 @ExtendWith(MockitoExtension.class)
-class StudyServiceImplTest {
+class StudyServiceUnitImplTest {
     @InjectMocks
     StudyServiceImpl studyService;
     @Mock
@@ -42,11 +38,11 @@ class StudyServiceImplTest {
     @Test
     public void 스터디_생성() throws Exception {
         //given
-        Long studyId = 1L;
         Long memberId = 1L;
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(memberId, "테스트 스터디", "백엔드",
                 null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
+        Long studyId = 1L;
         Study study = requestDto.toEntity();
         ReflectionTestUtils.setField(study, "id", studyId);
 
@@ -60,18 +56,18 @@ class StudyServiceImplTest {
 
         //then
         Assertions.assertEquals(ExpectResult.getStudyId(), ActualResult.getStudyId());
-        Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getStudyId());
+        Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
         Assertions.assertEquals(ExpectResult.getHeadCount(), 2L);
     }
 
     @Test
     public void 스터디_모두_찾기() throws Exception {
         //given
-        Long studyId = 1L;
         Long memberId = 1L;
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(memberId, "테스트 스터디", "백엔드",
                 null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
+        Long studyId = 1L;
         Study study = requestDto.toEntity();
         ReflectionTestUtils.setField(study, "id", studyId);
 
@@ -91,11 +87,11 @@ class StudyServiceImplTest {
     @Test
     public void 스터디_찾기() throws Exception {
         //given
-        Long studyId = 1L;
         Long memberId = 1L;
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(memberId, "테스트 스터디", "백엔드",
                 null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
+        Long studyId = 1L;
         Study study = requestDto.toEntity();
         ReflectionTestUtils.setField(study, "id", studyId);
 
@@ -109,18 +105,18 @@ class StudyServiceImplTest {
 
         //then
         Assertions.assertEquals(ExpectResult.getStudyId(), ActualResult.getStudyId());
-        Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getStudyId());
+        Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
         Assertions.assertEquals(ExpectResult.getHeadCount(), 2L);
     }
 
     @Test
     public void 스터디_업데이트() throws Exception {
         //given
-        Long studyId = 1L;
         Long memberId = 1L;
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(memberId, "테스트 스터디", "백엔드",
                 null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
+        Long studyId = 1L;
         Study study = requestDto.toEntity();
         ReflectionTestUtils.setField(study, "id", studyId);
 

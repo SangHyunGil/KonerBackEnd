@@ -44,6 +44,7 @@ public class StudyFindResponseDto {
                 .joinCount((long) studyMembers.size())
                 .headCount(study.getHeadCount())
                 .studyMembers(studyMembers)
+                .content(study.getContent())
                 .studyBoards(studyBoards)
                 .studyState(study.getStudyState())
                 .recruitState(study.getRecruitState())

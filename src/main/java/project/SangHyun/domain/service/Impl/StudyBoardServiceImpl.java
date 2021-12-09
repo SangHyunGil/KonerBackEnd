@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.StudyBoardNotFoundException;
 import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.repository.StudyBoardRepository;
-import project.SangHyun.domain.service.StudyBoardCreateRequestDto;
+import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.domain.service.StudyBoardService;
 import project.SangHyun.dto.request.StudyBoardUpdateRequestDto;
 import project.SangHyun.dto.response.StudyBoardCreateResponseDto;

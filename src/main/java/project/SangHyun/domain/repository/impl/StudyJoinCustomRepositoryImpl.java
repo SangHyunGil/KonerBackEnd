@@ -17,10 +17,11 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Long findStudyMemberNum(Long boardId) {
+    public Long findStudyJoinCount(Long studyId) {
         return jpaQueryFactory
-                .selectFrom(study)
-                .where(studyJoin.study.id.eq(boardId))
+                .select(study)
+                .from(studyJoin)
+                .where(studyJoin.study.id.eq(studyId))
                 .fetchCount();
     }
 

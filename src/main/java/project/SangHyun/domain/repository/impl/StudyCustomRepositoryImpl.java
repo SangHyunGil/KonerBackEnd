@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.repository.StudyCustomRepository;
 
+import java.util.List;
+
 import static project.SangHyun.domain.entity.QMember.member;
 import static project.SangHyun.domain.entity.QStudy.study;
 import static project.SangHyun.domain.entity.QStudyBoard.studyBoard;
@@ -19,8 +21,7 @@ public class StudyCustomRepositoryImpl implements StudyCustomRepository {
 
     @Override
     public Study findStudyById(Long studyId) {
-        return jpaQueryFactory.select(study)
-                .from(study)
+        return jpaQueryFactory.selectFrom(study)
                 .innerJoin(study.studyBoards, studyBoard)
                 .innerJoin(study.member, member).fetchJoin()
                 .innerJoin(study.studyJoins, studyJoin).fetchJoin()
@@ -28,5 +29,12 @@ public class StudyCustomRepositoryImpl implements StudyCustomRepository {
                 .where(study.id.eq(studyId))
                 .distinct()
                 .fetchOne();
+    }
+
+    @Override
+    public List<Study> findStudyByTitle(String title) {
+        return jpaQueryFactory.selectFrom(study)
+                .where(study.title.contains(title))
+                .fetch();
     }
 }
