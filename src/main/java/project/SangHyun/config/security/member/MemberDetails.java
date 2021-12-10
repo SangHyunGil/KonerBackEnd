@@ -9,15 +9,21 @@ import java.util.List;
 
 public class MemberDetails implements UserDetails {
 
+    private Long id;
     private String email;
     private String password;
     List<GrantedAuthority> authorities;
 
     @Builder
-    public MemberDetails(String email, String password, List<GrantedAuthority> authorities) {
+    public MemberDetails(Long id, String email, String password, List<GrantedAuthority> authorities) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

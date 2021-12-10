@@ -17,11 +17,11 @@ import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.service.EmailService;
 import project.SangHyun.domain.service.Impl.SignServiceImpl;
 import project.SangHyun.domain.service.RedisService;
-import project.SangHyun.dto.request.*;
-import project.SangHyun.dto.response.MemberChangePwResponseDto;
-import project.SangHyun.dto.response.MemberLoginResponseDto;
-import project.SangHyun.dto.response.MemberRegisterResponseDto;
-import project.SangHyun.dto.response.TokenResponseDto;
+import project.SangHyun.dto.request.member.*;
+import project.SangHyun.dto.response.member.MemberChangePwResponseDto;
+import project.SangHyun.dto.response.member.MemberLoginResponseDto;
+import project.SangHyun.dto.response.member.MemberRegisterResponseDto;
+import project.SangHyun.dto.response.member.TokenResponseDto;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -119,7 +119,7 @@ class SignServiceUnitImplTest {
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
-        given(studyJoinRepository.findStudyByMemberId(any())).willReturn(new ArrayList<>());
+        given(studyJoinRepository.findStudyInfoByMemberId(any())).willReturn(new ArrayList<>());
         given(passwordEncoder.matches(any(), any())).willReturn(true);
         given(jwtTokenProvider.createAccessToken(any())).willReturn("accessToken");
         given(jwtTokenProvider.createRefreshToken(any())).willReturn("refreshToken");
@@ -303,7 +303,7 @@ class SignServiceUnitImplTest {
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
         given(jwtTokenProvider.createAccessToken(any())).willReturn("newAccessToken");
         given(jwtTokenProvider.createRefreshToken(any())).willReturn("newRefreshToken");
-        given(studyJoinRepository.findStudyByMemberId(any())).willReturn(new ArrayList<>());
+        given(studyJoinRepository.findStudyInfoByMemberId(any())).willReturn(new ArrayList<>());
 
         //when
         TokenResponseDto ActualResult = signService.reIssue(requestDto);

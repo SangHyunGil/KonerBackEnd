@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.SignService;
-import project.SangHyun.dto.request.*;
-import project.SangHyun.dto.response.MemberChangePwResponseDto;
-import project.SangHyun.dto.response.MemberLoginResponseDto;
-import project.SangHyun.dto.response.MemberRegisterResponseDto;
-import project.SangHyun.dto.response.TokenResponseDto;
+import project.SangHyun.dto.request.member.*;
+import project.SangHyun.dto.response.member.MemberChangePwResponseDto;
+import project.SangHyun.dto.response.member.MemberLoginResponseDto;
+import project.SangHyun.dto.response.member.MemberRegisterResponseDto;
+import project.SangHyun.dto.response.member.TokenResponseDto;
 
 import javax.validation.Valid;
 

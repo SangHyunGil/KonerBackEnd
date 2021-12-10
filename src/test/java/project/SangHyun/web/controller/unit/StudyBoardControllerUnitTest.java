@@ -17,9 +17,12 @@ import project.SangHyun.domain.response.MultipleResult;
 import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.StudyBoardService;
-import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
-import project.SangHyun.dto.response.StudyBoardFindResponseDto;
+import project.SangHyun.dto.request.study.StudyBoardCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyBoardUpdateRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
+import project.SangHyun.dto.response.study.StudyBoardCreateResponseDto;
+import project.SangHyun.dto.response.study.StudyBoardFindResponseDto;
+import project.SangHyun.dto.response.study.StudyBoardUpdateResponseDto;
 import project.SangHyun.web.controller.StudyBoardController;
 
 import java.util.List;

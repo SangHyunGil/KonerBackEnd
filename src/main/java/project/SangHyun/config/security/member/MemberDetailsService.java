@@ -24,6 +24,7 @@ public class MemberDetailsService implements UserDetailsService {
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
 
         return MemberDetails.builder()
+                .id(member.getId())
                 .email(member.getEmail())
                 .password(member.getPassword())
                 .authorities(Collections.singletonList(new SimpleGrantedAuthority(member.getMemberRole().toString())))
