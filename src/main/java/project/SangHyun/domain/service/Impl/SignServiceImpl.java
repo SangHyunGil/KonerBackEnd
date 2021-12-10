@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import project.SangHyun.advice.exception.*;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
-import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.domain.repository.MemberRepository;
@@ -18,11 +17,11 @@ import project.SangHyun.domain.repository.impl.dto.StudyInfoDto;
 import project.SangHyun.domain.service.EmailService;
 import project.SangHyun.domain.service.RedisService;
 import project.SangHyun.domain.service.SignService;
-import project.SangHyun.dto.request.*;
-import project.SangHyun.dto.response.MemberChangePwResponseDto;
-import project.SangHyun.dto.response.MemberLoginResponseDto;
-import project.SangHyun.dto.response.MemberRegisterResponseDto;
-import project.SangHyun.dto.response.TokenResponseDto;
+import project.SangHyun.dto.request.member.*;
+import project.SangHyun.dto.response.member.MemberChangePwResponseDto;
+import project.SangHyun.dto.response.member.MemberLoginResponseDto;
+import project.SangHyun.dto.response.member.MemberRegisterResponseDto;
+import project.SangHyun.dto.response.member.TokenResponseDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -78,7 +77,7 @@ public class SignServiceImpl implements SignService {
 
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyByMemberId(member.getId());
+        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
 
         return MemberLoginResponseDto.createDto(member, studyInfoDtos, jwtTokenProvider.createAccessToken(requestDto.getEmail()), refreshToken);
     }
@@ -171,7 +170,7 @@ public class SignServiceImpl implements SignService {
         String accessToken = jwtTokenProvider.createAccessToken(jwtEmail);
         String refreshToken = jwtTokenProvider.createRefreshToken(jwtEmail);
         redisService.setDataWithExpiration(refreshToken, member.getEmail(), JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyByMemberId(member.getId());
+        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
 
         return TokenResponseDto.createDto(member, studyInfoDtos, accessToken, refreshToken);
     }

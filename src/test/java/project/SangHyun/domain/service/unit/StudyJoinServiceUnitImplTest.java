@@ -15,8 +15,8 @@ import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.service.Impl.StudyJoinServiceImpl;
-import project.SangHyun.dto.request.StudyJoinRequestDto;
-import project.SangHyun.dto.response.StudyJoinResponseDto;
+import project.SangHyun.dto.request.study.StudyJoinRequestDto;
+import project.SangHyun.dto.response.study.StudyJoinResponseDto;
 
 import java.util.List;
 import java.util.Optional;

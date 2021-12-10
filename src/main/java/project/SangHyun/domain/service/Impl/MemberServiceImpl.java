@@ -4,19 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.impl.dto.StudyInfoDto;
-import project.SangHyun.dto.response.MemberInfoResponseDto;
-import project.SangHyun.dto.response.MemberProfileResponseDto;
-import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
+import project.SangHyun.dto.response.member.MemberDeleteResponseDto;
+import project.SangHyun.dto.response.member.MemberInfoResponseDto;
+import project.SangHyun.dto.response.member.MemberProfileResponseDto;
+import project.SangHyun.dto.response.member.MemberUpdateInfoResponseDto;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.domain.service.MemberService;
-import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
+import project.SangHyun.dto.request.member.MemberUpdateInfoRequestDto;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional(readOnly = true)
-@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
@@ -38,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = memberRepository.findByEmail(memberDetails.getUsername()).orElseThrow(MemberNotFoundException::new);
-        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyByMemberId(member.getId());
+        List<StudyInfoDto> studyInfoDtos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
         return MemberInfoResponseDto.createDto(member, studyInfoDtos);
     }
 
@@ -64,5 +62,13 @@ public class MemberServiceImpl implements MemberService {
     public MemberUpdateInfoResponseDto updateMemberInfo(Long memberId, MemberUpdateInfoRequestDto requestDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         return MemberUpdateInfoResponseDto.createDto(member.updateMemberInfo(requestDto));
+    }
+
+    @Override
+    @Transactional
+    public MemberDeleteResponseDto deleteMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        memberRepository.delete(member);
+        return  MemberDeleteResponseDto.createDto(member);
     }
 }

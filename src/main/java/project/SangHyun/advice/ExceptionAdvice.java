@@ -108,7 +108,7 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-113, "인증 후 웹소켓 연결을 진행해야합니다.");
     }
 
-    @ExceptionHandler(StudyNotFountException.class)
+    @ExceptionHandler(StudyNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result StudyNotFountException() {
         return responseService.getFailureResult(-114, "존재하지 않는 스터디입니다.");
@@ -129,6 +129,24 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return responseService.getFailureResult(-116, e.getBindingResult().getFieldError().getDefaultMessage());
+        return responseService.getFailureResult(-117, e.getBindingResult().getFieldError().getDefaultMessage());
+    }
+
+    @ExceptionHandler(NotBelongStudyMemberException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result NotBelongStudyMemberException() {
+        return responseService.getFailureResult(-118, "해당 스터디에 소속되어 있지 않습니다.");
+    }
+
+    @ExceptionHandler(StudyHasNoProperRoleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result StudyHasNoProperRoleException() {
+        return responseService.getFailureResult(-119, "해당 스터디의 행동에 대한 권한이 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(StudyArticleNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result StudyArticleNotFoundException() {
+        return responseService.getFailureResult(-120, "해당 스터디 게시글이 존재하지 않습니다.");
     }
 }

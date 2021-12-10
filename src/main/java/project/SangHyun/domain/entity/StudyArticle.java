@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.SangHyun.dto.request.study.StudyArticleUpdateRequestDto;
 
 import javax.persistence.*;
 
@@ -30,5 +31,10 @@ public class StudyArticle {
         this.content = content;
         this.member = member;
         this.studyBoard = studyBoard;
+    }
+
+    public void updateArticleInfo(StudyArticleUpdateRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
     }
 }

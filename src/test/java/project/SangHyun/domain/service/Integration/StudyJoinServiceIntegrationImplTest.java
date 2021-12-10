@@ -3,30 +3,22 @@ package project.SangHyun.domain.service.Integration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
-import project.SangHyun.domain.entity.StudyBoard;
-import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.service.Impl.StudyJoinServiceImpl;
-import project.SangHyun.dto.request.StudyJoinRequestDto;
-import project.SangHyun.dto.response.StudyJoinResponseDto;
+import project.SangHyun.dto.request.study.StudyJoinRequestDto;
+import project.SangHyun.dto.response.study.StudyJoinResponseDto;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @Transactional

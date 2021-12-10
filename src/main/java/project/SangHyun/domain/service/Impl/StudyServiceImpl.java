@@ -4,20 +4,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.StudyNotFountException;
+import project.SangHyun.advice.exception.NotBelongStudyMemberException;
+import project.SangHyun.advice.exception.StudyHasNoProperRoleException;
+import project.SangHyun.advice.exception.StudyNotFoundException;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.StudyRole;
-import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.repository.StudyJoinRepository;
+import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.service.StudyService;
-import project.SangHyun.dto.request.StudyCreateRequestDto;
-import project.SangHyun.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.dto.response.StudyCreateResponseDto;
-import project.SangHyun.dto.response.StudyFindResponseDto;
-import project.SangHyun.dto.response.StudyUpdateResponseDto;
+import project.SangHyun.dto.request.study.StudyCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
+import project.SangHyun.dto.response.study.StudyCreateResponseDto;
+import project.SangHyun.dto.response.study.StudyDeleteResponseDto;
+import project.SangHyun.dto.response.study.StudyFindResponseDto;
+import project.SangHyun.dto.response.study.StudyUpdateResponseDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
 public class StudyServiceImpl implements StudyService {
 
     private final StudyRepository studyRepository;
+    private final StudyJoinRepository studyJoinRepository;
 
     @Override
     @Transactional
@@ -39,7 +43,7 @@ public class StudyServiceImpl implements StudyService {
 
     private Study makeStudy(StudyCreateRequestDto requestDto) {
         Study study = requestDto.toEntity();
-        study.join(new StudyJoin(new Member(requestDto.getMemberId()), study, StudyRole.ADMIN));
+        study.join(new StudyJoin(new Member(requestDto.getMemberId()), study, StudyRole.CREATOR));
         study.addBoard(new StudyBoard("공지사항", study));
         study.addBoard(new StudyBoard("자유게시판", study));
 
@@ -62,8 +66,24 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyUpdateResponseDto updateStudyInfo(StudyUpdateRequestDto requestDto) {
-        Study study = studyRepository.findById(requestDto.getStudyId()).orElseThrow(StudyNotFountException::new);
+    public StudyUpdateResponseDto updateStudyInfo(Long memberId, Long studyId, StudyUpdateRequestDto requestDto) {
+        validateAuthority(memberId, studyId);
+        Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
         return StudyUpdateResponseDto.createDto(study.updateStudyInfo(requestDto));
+    }
+
+    @Override
+    @Transactional
+    public StudyDeleteResponseDto deleteStudy(Long memberId, Long studyId) {
+        validateAuthority(memberId, studyId);
+        Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
+        studyRepository.delete(study);
+        return StudyDeleteResponseDto.createDto(study);
+    }
+
+    private void validateAuthority(Long memberId, Long studyId) {
+        StudyJoin studyJoin = studyJoinRepository.findByMemberIdAndStudyId(memberId, studyId).orElseThrow(NotBelongStudyMemberException::new);
+        if (!studyJoin.getStudyRole().equals(StudyRole.CREATOR))
+            throw new StudyHasNoProperRoleException();
     }
 }

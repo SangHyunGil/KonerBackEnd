@@ -3,19 +3,18 @@ package project.SangHyun.web.controller;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.domain.response.MultipleResult;
 import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.service.StudyBoardService;
 import project.SangHyun.domain.service.StudyService;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.StudyJoinService;
-import project.SangHyun.dto.request.StudyCreateRequestDto;
-import project.SangHyun.dto.request.StudyJoinRequestDto;
-import project.SangHyun.dto.response.StudyBoardFindResponseDto;
-import project.SangHyun.dto.response.StudyCreateResponseDto;
-import project.SangHyun.dto.response.StudyFindResponseDto;
-import project.SangHyun.dto.response.StudyJoinResponseDto;
+import project.SangHyun.dto.request.study.StudyCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyJoinRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
+import project.SangHyun.dto.response.study.*;
 
 import javax.validation.Valid;
 
@@ -52,5 +51,20 @@ public class StudyController {
     @PostMapping("/join")
     public SingleResult<StudyJoinResponseDto> join(@RequestBody StudyJoinRequestDto requestDto) {
         return responseService.getSingleResult(studyJoinService.join(requestDto));
+    }
+
+    @ApiOperation(value = "스터디 정보 업데이트", notes = "스터디 정보를 업데이트한다.")
+    @PutMapping("/{studyId}")
+    public SingleResult<StudyUpdateResponseDto> updateStudy(@PathVariable Long studyId,
+                                                            @AuthenticationPrincipal MemberDetails memberDetails,
+                                                            @Valid @RequestBody StudyUpdateRequestDto requestDto) {
+        return responseService.getSingleResult(studyService.updateStudyInfo(memberDetails.getId(), studyId, requestDto));
+    }
+
+    @ApiOperation(value = "스터디 정보 업데이트", notes = "스터디 정보를 업데이트한다.")
+    @DeleteMapping("/{studyId}")
+    public SingleResult<StudyDeleteResponseDto> deleteStudy(@PathVariable Long studyId,
+                                                            @AuthenticationPrincipal MemberDetails memberDetails) {
+        return responseService.getSingleResult(studyService.deleteStudy(memberDetails.getId(), studyId));
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.service.RedisService;
-import project.SangHyun.dto.request.*;
+import project.SangHyun.dto.request.member.*;
 
 import java.util.UUID;
 
