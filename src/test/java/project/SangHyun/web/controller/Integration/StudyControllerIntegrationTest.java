@@ -17,21 +17,21 @@ import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.RecruitState;
+import project.SangHyun.domain.enums.StudyRole;
 import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.domain.repository.MemberRepository;
+import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.service.RedisService;
-import project.SangHyun.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.dto.request.StudyCreateRequestDto;
-import project.SangHyun.dto.request.StudyJoinRequestDto;
+import project.SangHyun.dto.request.study.StudyCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyJoinRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,6 +53,8 @@ class StudyControllerIntegrationTest {
     RedisService redisService;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    StudyJoinRepository studyJoinRepository;
     @Autowired
     TestDB testDB;
 
@@ -123,13 +125,79 @@ class StudyControllerIntegrationTest {
     @Test
     public void 스터디게시판로드() throws Exception {
         //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm3!");
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
 
         //when, then
-        mockMvc.perform(get("/study/{id}/board",study.getId()))
+        mockMvc.perform(get("/study/{id}/board",study.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(3));
     }
 
+    @Test
+    public void 스터디업데이트_권한O() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm3!");
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("모바일 모집", "모바일", "모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}", study.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.title").value("모바일 모집"))
+                .andExpect(jsonPath("$.data.topic").value("모바일"));
+    }
+
+    @Test
+    public void 스터디업데이트_권한X() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+
+        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("모바일 모집", "모바일", "모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}", study.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    public void 스터디삭제_권한O() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm3!");
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}", study.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 스터디삭제_권한X() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+
+        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("모바일 모집", "모바일", "모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}", study.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is5xxServerError());
+    }
 
 }

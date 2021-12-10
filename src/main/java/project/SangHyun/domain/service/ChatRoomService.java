@@ -1,8 +1,8 @@
 package project.SangHyun.domain.service;
 
-import project.SangHyun.dto.response.ChatRoomCreateResponseDto;
-import project.SangHyun.dto.response.ChatRoomFindResponseDto;
-import project.SangHyun.dto.request.ChatRoomCreateRequestDto;
+import project.SangHyun.dto.response.chat.ChatRoomCreateResponseDto;
+import project.SangHyun.dto.response.chat.ChatRoomFindResponseDto;
+import project.SangHyun.dto.request.chat.ChatRoomCreateRequestDto;
 
 import java.util.List;
 

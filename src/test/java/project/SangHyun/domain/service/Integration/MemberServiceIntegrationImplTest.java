@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.advice.exception.MemberNotFoundException;
@@ -16,12 +15,14 @@ import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.enums.MemberRole;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.domain.service.MemberService;
-import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
-import project.SangHyun.dto.response.MemberInfoResponseDto;
-import project.SangHyun.dto.response.MemberProfileResponseDto;
-import project.SangHyun.dto.response.MemberUpdateInfoResponseDto;
+import project.SangHyun.dto.request.member.MemberUpdateInfoRequestDto;
+import project.SangHyun.dto.response.member.MemberDeleteResponseDto;
+import project.SangHyun.dto.response.member.MemberInfoResponseDto;
+import project.SangHyun.dto.response.member.MemberProfileResponseDto;
+import project.SangHyun.dto.response.member.MemberUpdateInfoResponseDto;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -46,7 +47,7 @@ class MemberServiceIntegrationImplTest {
     @Test
     public void 회원정보로드() throws Exception {
         //given
-        MemberDetails memberDetails = new MemberDetails("xptmxm1!", "encodedPW",
+        MemberDetails memberDetails = new MemberDetails(1L,"xptmxm1!", "encodedPW",
                 Collections.singletonList(new SimpleGrantedAuthority(MemberRole.ROLE_MEMBER.toString())));
 
         //when
@@ -88,5 +89,19 @@ class MemberServiceIntegrationImplTest {
         Assertions.assertEquals("xptmxm1!", ActualResult.getEmail());
         Assertions.assertEquals("철수", ActualResult.getNickname());
         Assertions.assertEquals("기계공학부", ActualResult.getDepartment());
+    }
+
+    @Test
+    public void 회원삭제() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+
+        //when
+        MemberDeleteResponseDto ActualResult = memberService.deleteMember(member.getId());
+        List<Member> members = memberRepository.findAll();
+        //then
+        Assertions.assertEquals(2, members.size());
+        Assertions.assertEquals("xptmxm1!", ActualResult.getEmail());
+        Assertions.assertEquals("승범", ActualResult.getNickname());
     }
 }

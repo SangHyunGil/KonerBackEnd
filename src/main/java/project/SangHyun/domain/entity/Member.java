@@ -2,8 +2,7 @@ package project.SangHyun.domain.entity;
 
 import lombok.*;
 import project.SangHyun.domain.enums.MemberRole;
-import project.SangHyun.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.dto.request.MemberUpdateInfoRequestDto;
+import project.SangHyun.dto.request.member.MemberUpdateInfoRequestDto;
 
 import javax.persistence.*;
 
@@ -24,14 +23,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
-    public Member updateMemberInfo(MemberUpdateInfoRequestDto requestDto) {
-        this.email = requestDto.getEmail();
-        this.nickname = requestDto.getNickname();
-        this.department = requestDto.getDepartment();
-
-        return this;
-    }
-
     public Member(Long id) {
         this.id = id;
     }
@@ -43,6 +34,14 @@ public class Member {
         this.nickname = nickname;
         this.department = department;
         this.memberRole = memberRole;
+    }
+
+    public Member updateMemberInfo(MemberUpdateInfoRequestDto requestDto) {
+        this.email = requestDto.getEmail();
+        this.nickname = requestDto.getNickname();
+        this.department = requestDto.getDepartment();
+
+        return this;
     }
 
     public void changeRole(MemberRole memberRole) {

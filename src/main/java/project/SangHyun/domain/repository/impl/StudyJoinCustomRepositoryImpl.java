@@ -30,7 +30,7 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     }
 
     @Override
-    public List<StudyInfoDto> findStudyByMemberId(Long memberId) {
+    public List<StudyInfoDto> findStudyInfoByMemberId(Long memberId) {
         return jpaQueryFactory
                 .select(Projections.constructor(StudyInfoDto.class,
                         studyJoin.study.id, studyJoin.studyRole))

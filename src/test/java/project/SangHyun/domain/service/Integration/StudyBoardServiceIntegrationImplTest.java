@@ -3,30 +3,29 @@ package project.SangHyun.domain.service.Integration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
+import project.SangHyun.advice.exception.MemberNotFoundException;
+import project.SangHyun.advice.exception.StudyHasNoProperRoleException;
+import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.entity.StudyBoard;
-import project.SangHyun.domain.repository.StudyBoardRepository;
+import project.SangHyun.domain.entity.StudyJoin;
+import project.SangHyun.domain.enums.StudyRole;
+import project.SangHyun.domain.repository.MemberRepository;
+import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.service.Impl.StudyBoardServiceImpl;
-import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.dto.request.StudyBoardUpdateRequestDto;
-import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
-import project.SangHyun.dto.response.StudyBoardUpdateResponseDto;
-
-import java.util.Optional;
+import project.SangHyun.dto.request.study.StudyBoardCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyBoardUpdateRequestDto;
+import project.SangHyun.dto.response.study.StudyBoardCreateResponseDto;
+import project.SangHyun.dto.response.study.StudyBoardDeleteResponseDto;
+import project.SangHyun.dto.response.study.StudyBoardUpdateResponseDto;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @Transactional
@@ -38,6 +37,10 @@ class StudyBoardServiceIntegrationImplTest {
     @Autowired
     StudyRepository studyRepository;
     @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    StudyJoinRepository studyJoinRepository;
+    @Autowired
     TestDB testDB;
 
     @BeforeEach
@@ -46,7 +49,7 @@ class StudyBoardServiceIntegrationImplTest {
     }
 
     @Test
-    public void 스터디_게시판_작성() throws Exception {
+    public void 스터디_게시판작성() throws Exception {
         //given
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyBoardCreateRequestDto requestDto = new StudyBoardCreateRequestDto("테스트 게시판");
@@ -59,18 +62,56 @@ class StudyBoardServiceIntegrationImplTest {
     }
 
     @Test
-    public void 스터디_게시판_수정() throws Exception {
+    public void 스터디_게시판수정_권한O() throws Exception {
         //given
+        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyBoard studyBoard = study.getStudyBoards().get(0);
         StudyBoardUpdateRequestDto requestDto = new StudyBoardUpdateRequestDto("테스트 게시판 수정");
 
         //when
-        StudyBoardUpdateResponseDto ActualResult = studyBoardService.updateBoard(studyBoard.getId(), study.getId(), requestDto);
+        StudyBoardUpdateResponseDto ActualResult = studyBoardService.updateBoard(member.getId(), study.getId(), studyBoard.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스트 게시판 수정", ActualResult.getTitle());
-
     }
 
+    @Test
+    public void 스터디_게시판수정_권한X() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+        StudyBoardUpdateRequestDto requestDto = new StudyBoardUpdateRequestDto("테스트 게시판 수정");
+
+        //when, then
+        Assertions.assertThrows(StudyHasNoProperRoleException.class, ()->studyBoardService.updateBoard(member.getId(), study.getId(), studyBoard.getId(), requestDto));
+    }
+
+    @Test
+    public void 스터디_게시판삭제_권한O() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+        //when
+        StudyBoardDeleteResponseDto ActualResult = studyBoardService.deleteBoard(member.getId(), study.getId(), studyBoard.getId());
+
+        //then
+        Assertions.assertEquals(studyBoard.getId(), ActualResult.getStudyBoardId());
+        Assertions.assertEquals(studyBoard.getTitle(), ActualResult.getTitle());
+    }
+
+    @Test
+    public void 스터디_게시판삭제_권한X() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+
+        //when, then
+        Assertions.assertThrows(StudyHasNoProperRoleException.class, ()->studyBoardService.deleteBoard(member.getId(), study.getId(), studyBoard.getId()));
+    }
 }

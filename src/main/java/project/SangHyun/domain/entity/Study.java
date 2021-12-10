@@ -3,7 +3,7 @@ package project.SangHyun.domain.entity;
 import lombok.*;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyState;
-import project.SangHyun.dto.request.StudyUpdateRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;

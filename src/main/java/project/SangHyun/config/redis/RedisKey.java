@@ -15,12 +15,4 @@ public enum RedisKey {
     RedisKey(String key) {
         this.key = key;
     }
-
-    @JsonCreator
-    public static RedisKey fromRedisKey(String value) {
-        return Arrays.stream(RedisKey.values())
-                .filter(v -> v.getKey().equals(value))
-                .findFirst()
-                .orElse(UNKNOWN);
-    }
 }

@@ -3,16 +3,11 @@ package project.SangHyun.web.controller.Integration;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,25 +18,17 @@ import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
 import project.SangHyun.domain.entity.StudyBoard;
+import project.SangHyun.domain.entity.StudyJoin;
+import project.SangHyun.domain.enums.StudyRole;
 import project.SangHyun.domain.repository.MemberRepository;
+import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.StudyRepository;
-import project.SangHyun.domain.response.MultipleResult;
-import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.RedisService;
-import project.SangHyun.domain.service.StudyBoardService;
-import project.SangHyun.dto.request.StudyArticleCreateRequestDto;
-import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
-import project.SangHyun.dto.response.StudyBoardFindResponseDto;
-import project.SangHyun.web.controller.StudyBoardController;
+import project.SangHyun.dto.request.study.StudyBoardCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyBoardUpdateRequestDto;
 
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +46,8 @@ class StudyBoardControllerIntegrationTest {
     @Autowired
     StudyRepository studyRepository;
     @Autowired
+    StudyJoinRepository studyJoinRepository;
+    @Autowired
     RedisService redisService;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -73,10 +62,12 @@ class StudyBoardControllerIntegrationTest {
     @Test
     public void 게시판모두찾기() throws Exception {
         //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm3!");
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board", study.getId()))
+        mockMvc.perform(get("/study/{studyId}/board", study.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
 
@@ -85,13 +76,83 @@ class StudyBoardControllerIntegrationTest {
         //given
         String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoardCreateRequestDto request = new StudyBoardCreateRequestDto("테스트 게시판");
+        StudyBoardCreateRequestDto requestDto = new StudyBoardCreateRequestDto("테스트 게시판");
+
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new Gson().toJson(request))
+                        .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 게시판수정_권한O() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm3!");
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+        StudyBoardUpdateRequestDto requestDto = new StudyBoardUpdateRequestDto("알고리즘 게시판");
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 게시판수정_권한X() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+
+        StudyBoardUpdateRequestDto requestDto = new StudyBoardUpdateRequestDto("알고리즘 게시판");
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    public void 게시판삭제_권한O() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm3!");
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 게시판삭제_권한X() throws Exception {
+        //given
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+
+        StudyBoardUpdateRequestDto requestDto = new StudyBoardUpdateRequestDto("알고리즘 게시판");
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is5xxServerError());
     }
 }

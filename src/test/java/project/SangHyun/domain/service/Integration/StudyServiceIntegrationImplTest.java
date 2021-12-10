@@ -4,37 +4,33 @@ package project.SangHyun.domain.service.Integration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.advice.exception.MemberNotFoundException;
+import project.SangHyun.advice.exception.NotBelongStudyMemberException;
+import project.SangHyun.advice.exception.StudyHasNoProperRoleException;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
+import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.RecruitState;
+import project.SangHyun.domain.enums.StudyRole;
 import project.SangHyun.domain.enums.StudyState;
 import project.SangHyun.domain.repository.MemberRepository;
+import project.SangHyun.domain.repository.StudyJoinRepository;
 import project.SangHyun.domain.repository.StudyRepository;
 import project.SangHyun.domain.service.Impl.StudyServiceImpl;
-import project.SangHyun.dto.request.StudyCreateRequestDto;
-import project.SangHyun.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.dto.response.StudyCreateResponseDto;
-import project.SangHyun.dto.response.StudyFindResponseDto;
-import project.SangHyun.dto.response.StudyUpdateResponseDto;
+import project.SangHyun.dto.request.study.StudyCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
+import project.SangHyun.dto.response.study.StudyCreateResponseDto;
+import project.SangHyun.dto.response.study.StudyFindResponseDto;
+import project.SangHyun.dto.response.study.StudyUpdateResponseDto;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 
 @SpringBootTest
@@ -47,6 +43,8 @@ class StudyServiceIntegrationImplTest {
     StudyRepository studyRepository;
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    StudyJoinRepository studyJoinRepository;
     @Autowired
     TestDB testDB;
 
@@ -97,17 +95,31 @@ class StudyServiceIntegrationImplTest {
     }
 
     @Test
-    public void 스터디_업데이트() throws Exception {
+    public void 스터디_업데이트_권한O() throws Exception {
         //given
+        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyUpdateRequestDto updateRequestDto = new StudyUpdateRequestDto(study.getId(), "프론트엔드 스터디", "프론트엔드",
+        StudyUpdateRequestDto updateRequestDto = new StudyUpdateRequestDto("프론트엔드 스터디", "프론트엔드",
                 null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when
-        StudyUpdateResponseDto ActualResult = studyService.updateStudyInfo(updateRequestDto);
+        StudyUpdateResponseDto ActualResult = studyService.updateStudyInfo(member.getId(), study.getId(), updateRequestDto);
 
         //then
         Assertions.assertEquals("프론트엔드 스터디", ActualResult.getTitle());
         Assertions.assertEquals("프론트엔드", ActualResult.getTopic());
+    }
+
+    @Test
+    public void 스터디_업데이트_권한X() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        studyJoinRepository.save(new StudyJoin(member, study, StudyRole.MEMBER));
+        StudyUpdateRequestDto updateRequestDto = new StudyUpdateRequestDto("프론트엔드 스터디", "프론트엔드",
+                null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
+
+        //when, then
+        Assertions.assertThrows(StudyHasNoProperRoleException.class, () -> studyService.updateStudyInfo(member.getId(), study.getId(), updateRequestDto));
     }
 }

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface StudyJoinCustomRepository {
     Long findStudyJoinCount(Long studyId);
-    List<StudyInfoDto> findStudyByMemberId(Long memberId);
+    List<StudyInfoDto> findStudyInfoByMemberId(Long memberId);
     Boolean exist(Long studyId, Long memberId);
 }

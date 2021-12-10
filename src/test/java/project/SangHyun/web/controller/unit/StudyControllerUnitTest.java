@@ -7,20 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
-import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
-import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.entity.StudyJoin;
 import project.SangHyun.domain.enums.RecruitState;
 import project.SangHyun.domain.enums.StudyRole;
@@ -29,20 +21,21 @@ import project.SangHyun.domain.response.MultipleResult;
 import project.SangHyun.domain.response.SingleResult;
 import project.SangHyun.domain.service.*;
 import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
-import project.SangHyun.dto.request.StudyCreateRequestDto;
-import project.SangHyun.dto.request.StudyJoinRequestDto;
-import project.SangHyun.dto.response.*;
-import project.SangHyun.web.controller.SignController;
+import project.SangHyun.dto.request.study.StudyCreateRequestDto;
+import project.SangHyun.dto.request.study.StudyJoinRequestDto;
+import project.SangHyun.dto.request.study.StudyUpdateRequestDto;
+import project.SangHyun.dto.response.study.StudyCreateResponseDto;
+import project.SangHyun.dto.response.study.StudyFindResponseDto;
+import project.SangHyun.dto.response.study.StudyJoinResponseDto;
+import project.SangHyun.dto.response.study.StudyUpdateResponseDto;
 import project.SangHyun.web.controller.StudyController;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -160,7 +153,7 @@ class StudyControllerUnitTest {
         StudyJoinRequestDto requestDto = new StudyJoinRequestDto(1L, 1L);
 
         Long studyJoinId = 1L;
-        StudyJoin studyJoin = new StudyJoin(new Member(1L), new Study(1L), StudyRole.ADMIN);
+        StudyJoin studyJoin = new StudyJoin(new Member(1L), new Study(1L), StudyRole.CREATOR);
         ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
         StudyJoinResponseDto responseDto = StudyJoinResponseDto.createDto(studyJoin);
 
