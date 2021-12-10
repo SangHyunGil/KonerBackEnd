@@ -180,7 +180,6 @@ class StudyControllerUnitTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
-                .andExpect(jsonPath("$.data.studyId").value(ExpectResult.getData().getStudyId()))
                 .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
     }
 }

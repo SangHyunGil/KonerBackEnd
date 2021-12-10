@@ -45,15 +45,15 @@ public class TestData {
 
 
         private void initMember() {
-            Member memberA = new Member("test", passwordEncoder.encode("test"), "승범", "컴공", MemberRole.ROLE_MEMBER);
+            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴공", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberA);
 
-            Member memberB = new Member("test3", passwordEncoder.encode("test3"), "유나", "컴공", MemberRole.ROLE_NOT_PERMITTED);
+            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴공", MemberRole.ROLE_NOT_PERMITTED);
             memberRepository.save(memberB);
         }
 
         private void initStudy() {
-            Member member = new Member("test2", passwordEncoder.encode("test2"), "상현", "컴공", MemberRole.ROLE_MEMBER);
+            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", MemberRole.ROLE_MEMBER);
             memberRepository.save(member);
 
             Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, member, new ArrayList<>(), new ArrayList<>());

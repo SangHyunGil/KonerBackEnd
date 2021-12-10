@@ -11,7 +11,7 @@ import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.StudyArticle;
 import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.repository.StudyArticleRepository;
-import project.SangHyun.domain.response.StudyArticleCreateResponseDto;
+import project.SangHyun.dto.response.StudyArticleCreateResponseDto;
 import project.SangHyun.domain.service.Impl.StudyArticleServiceImpl;
 import project.SangHyun.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.dto.response.StudyArticleFindResponseDto;

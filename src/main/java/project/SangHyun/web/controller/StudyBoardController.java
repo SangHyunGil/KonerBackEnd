@@ -11,6 +11,8 @@ import project.SangHyun.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.dto.response.StudyBoardCreateResponseDto;
 import project.SangHyun.dto.response.StudyBoardFindResponseDto;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/study/{studyId}/board")
@@ -28,7 +30,7 @@ public class StudyBoardController {
     @ApiOperation(value = "스터디 게시판 생성", notes = "스터디에 포함된 게시판을 생성한다.")
     @PostMapping
     public SingleResult<StudyBoardCreateResponseDto> createStudyBoard(@PathVariable Long studyId,
-                                                                      @RequestBody StudyBoardCreateRequestDto requestDto) {
+                                                                      @Valid @RequestBody StudyBoardCreateRequestDto requestDto) {
         return responseService.getSingleResult(studyBoardService.createBoard(studyId, requestDto));
     }
 }

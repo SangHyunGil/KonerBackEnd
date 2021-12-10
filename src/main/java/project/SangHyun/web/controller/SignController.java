@@ -13,6 +13,8 @@ import project.SangHyun.dto.response.MemberLoginResponseDto;
 import project.SangHyun.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.dto.response.TokenResponseDto;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class SignController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
-    public SingleResult<MemberRegisterResponseDto> register(@RequestBody MemberRegisterRequestDto requestDto) {
+    public SingleResult<MemberRegisterResponseDto> register(@Valid @RequestBody MemberRegisterRequestDto requestDto) {
         log.info("request = {}, {}", requestDto.getEmail(), requestDto.getPassword());
         MemberRegisterResponseDto responseDto = signService.registerMember(requestDto);
         return responseService.getSingleResult(responseDto);
@@ -47,14 +49,14 @@ public class SignController {
 
     @ApiOperation(value = "비밀번호 변경", notes = "비밀번호 변경을 진행한다.")
     @PostMapping("/password")
-    public SingleResult<MemberChangePwResponseDto> changePassword(@RequestBody MemberChangePwRequestDto requestDto) {
+    public SingleResult<MemberChangePwResponseDto> changePassword(@Valid @RequestBody MemberChangePwRequestDto requestDto) {
         MemberChangePwResponseDto responseDto = signService.changePassword(requestDto);
         return responseService.getSingleResult(responseDto);
     }
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
-    public SingleResult<MemberLoginResponseDto> login(@RequestBody MemberLoginRequestDto requestDto) {
+    public SingleResult<MemberLoginResponseDto> login(@Valid @RequestBody MemberLoginRequestDto requestDto) {
         MemberLoginResponseDto responseDto = signService.loginMember(requestDto);
         return responseService.getSingleResult(responseDto);
     }

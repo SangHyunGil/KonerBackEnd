@@ -3,16 +3,11 @@ package project.SangHyun.web.controller.Integration;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,23 +17,12 @@ import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.jwt.JwtTokenProvider;
 import project.SangHyun.domain.entity.Member;
 import project.SangHyun.domain.entity.Study;
-import project.SangHyun.domain.entity.StudyArticle;
 import project.SangHyun.domain.entity.StudyBoard;
 import project.SangHyun.domain.repository.MemberRepository;
 import project.SangHyun.domain.repository.StudyRepository;
-import project.SangHyun.domain.response.MultipleResult;
-import project.SangHyun.domain.response.SingleResult;
-import project.SangHyun.domain.response.StudyArticleCreateResponseDto;
-import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
 import project.SangHyun.domain.service.RedisService;
-import project.SangHyun.domain.service.StudyArticleService;
 import project.SangHyun.dto.request.StudyArticleCreateRequestDto;
-import project.SangHyun.dto.response.StudyArticleFindResponseDto;
-import project.SangHyun.web.controller.StudyArticleController;
 
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -74,7 +58,7 @@ class StudyArticleControllerIntegrationTest {
     @Test
     public void 게시글모두찾기() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyBoard studyBoard = study.getStudyBoards().get(0);
 
@@ -86,8 +70,8 @@ class StudyArticleControllerIntegrationTest {
     @Test
     public void 게시글생성() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createRefreshToken("test");
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyBoard studyBoard = study.getStudyBoards().get(0);
         StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 글");

@@ -1,5 +1,7 @@
 package project.SangHyun.dto.response;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,19 +11,35 @@ import project.SangHyun.domain.enums.StudyState;
 
 @Data
 @NoArgsConstructor
+@ApiModel(value = "스터디 업데이트 요청 결과")
 public class StudyUpdateResponseDto {
-    private Long boardId;
+    @ApiModelProperty(value = "스터디 ID(PK)")
+    private Long studyId;
+
+    @ApiModelProperty(value = "회원 ID(PK)")
     private Long memberId;
+
+    @ApiModelProperty(value = "스터디 제목")
     private String title;
+
+    @ApiModelProperty(value = "스터디 주제")
     private String topic;
+
+    @ApiModelProperty(value = "스터디 내용")
     private String content;
+
+    @ApiModelProperty(value = "스터디 정원")
     private Long headCount;
+
+    @ApiModelProperty(value = "스터디 상태")
     private StudyState studyState;
+
+    @ApiModelProperty(value = "스터디 모집 상태")
     private RecruitState recruitState;
 
     public static StudyUpdateResponseDto createDto(Study study) {
         return StudyUpdateResponseDto.builder()
-                .boardId(study.getId())
+                .studyId(study.getId())
                 .memberId(study.getMember().getId())
                 .title(study.getTitle())
                 .topic(study.getTopic())
@@ -33,8 +51,8 @@ public class StudyUpdateResponseDto {
     }
 
     @Builder
-    public StudyUpdateResponseDto(Long boardId, Long memberId, String title, String topic, String content, Long headCount, StudyState studyState, RecruitState recruitState) {
-        this.boardId = boardId;
+    public StudyUpdateResponseDto(Long studyId, Long memberId, String title, String topic, String content, Long headCount, StudyState studyState, RecruitState recruitState) {
+        this.studyId = studyId;
         this.memberId = memberId;
         this.title = title;
         this.topic = topic;

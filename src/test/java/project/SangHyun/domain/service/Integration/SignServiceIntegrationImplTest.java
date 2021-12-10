@@ -53,19 +53,19 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 회원가입() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test5", "test5", "테스터5", "컴퓨터공학과");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm5!", "xptmxm5!", "테스터5", "컴퓨터공학과");
 
         //when
         MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);
 
         //then
-        Assertions.assertEquals("test5", ActualResult.getEmail());
+        Assertions.assertEquals("xptmxm5!", ActualResult.getEmail());
     }
 
     @Test
     public void 회원가입_이메일중복() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test", "test6", "테스터6", "컴퓨터공학과");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과");
 
         //when, then
         Assertions.assertThrows(MemberEmailAlreadyExistsException.class, ()->signService.registerMember(requestDto));
@@ -74,7 +74,7 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 회원가입_닉네임중복() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test7", "test7", "승범", "컴퓨터공학과");
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm7!", "xptmxm7!", "승범", "컴퓨터공학과");
 
         //when, then
         Assertions.assertThrows(MemberNicknameAlreadyExistsException.class, ()->signService.registerMember(requestDto));
@@ -83,8 +83,8 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 로그인_인증유저() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "test");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm1!", "xptmxm1!");
 
         //when
         MemberLoginResponseDto ActualResult = signService.loginMember(requestDto);
@@ -100,7 +100,7 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 로그인_인증유저X() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test3", "test3");
+        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm2!", "xptmxm2!");
 
         //when, then
         Assertions.assertThrows(EmailNotAuthenticatedException.class, ()->signService.loginMember(requestDto));
@@ -109,7 +109,7 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 로그인_비밀번호틀림() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "wrongPW");
+        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm1!", "wrongPW");
 
         //when, then
         Assertions.assertThrows(LoginFailureException.class, ()->signService.loginMember(requestDto));
@@ -118,7 +118,7 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 이메일전송_처음로그인() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test", "VERIFY");
+        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("xptmxm1!", "VERIFY");
 
         //when
         String ActualResult = signService.sendEmail(requestDto);
@@ -130,7 +130,7 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 이메일전송_비밀번호변경() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test", "PASSWORD");
+        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("xptmxm1!", "PASSWORD");
 
         //when
         String ActualResult = signService.sendEmail(requestDto);
@@ -143,8 +143,8 @@ class SignServiceIntegrationImplTest {
     public void 이메일검증_처음로그인() throws Exception {
         //given
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration("VERIFY"+"test3", authCode,60*5L);
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test3", authCode, "VERIFY");
+        redisService.setDataWithExpiration("VERIFY"+"xptmxm2!", authCode,60*5L);
+        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
 
         //when
         String ActualResult = signService.verify(requestDto);
@@ -157,8 +157,8 @@ class SignServiceIntegrationImplTest {
     public void 이메일검증_비밀번호찾기() throws Exception {
         //given
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration("PASSWORD"+"test3", authCode,60*5L);
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test3", authCode, "PASSWORD");
+        redisService.setDataWithExpiration("PASSWORD"+"xptmxm1!", authCode,60*5L);
+        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
 
         //when
         String ActualResult = signService.verify(requestDto);
@@ -170,7 +170,7 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 이메일실패() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test", "authCode", "PASSWORD");
+        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm1!", "authCode", "PASSWORD");
 
         //when, then
         Assertions.assertThrows(InvalidAuthCodeException.class, ()->signService.verify(requestDto));
@@ -179,8 +179,8 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 비밀번호변경() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
-        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("test", "change");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("xptmxm1!", "change");
 
         //when
         MemberChangePwResponseDto ActualResult = signService.changePassword(requestDto);
@@ -194,9 +194,9 @@ class SignServiceIntegrationImplTest {
     @Test
     public void 토큰재발행() throws Exception {
         //given
-        String refreshToken = jwtTokenProvider.createRefreshToken("test");
-        redisService.setDataWithExpiration(refreshToken, "test", JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String refreshToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        redisService.setDataWithExpiration(refreshToken, "xptmxm1!", JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
 
         ReIssueRequestDto requestDto = new ReIssueRequestDto(refreshToken);
 
@@ -217,7 +217,7 @@ class SignServiceIntegrationImplTest {
         ReIssueRequestDto requestDto = new ReIssueRequestDto(UUID.randomUUID().toString());
 
         Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
+        Member member = new Member("xptmxm1!", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
         ReflectionTestUtils.setField(member, "id", memberId);
 
         //when, then

@@ -46,7 +46,7 @@ class MemberServiceIntegrationImplTest {
     @Test
     public void 회원정보로드() throws Exception {
         //given
-        MemberDetails memberDetails = new MemberDetails("test", "encodedPW",
+        MemberDetails memberDetails = new MemberDetails("xptmxm1!", "encodedPW",
                 Collections.singletonList(new SimpleGrantedAuthority(MemberRole.ROLE_MEMBER.toString())));
 
         //when
@@ -54,7 +54,7 @@ class MemberServiceIntegrationImplTest {
 
 
         //then
-        Assertions.assertEquals("test", ActualResult.getEmail());
+        Assertions.assertEquals("xptmxm1!", ActualResult.getEmail());
         Assertions.assertEquals("승범", ActualResult.getNickname());
         Assertions.assertEquals("컴공", ActualResult.getDepartment());
         Assertions.assertEquals(0, ActualResult.getStudyInfos().size());
@@ -63,7 +63,7 @@ class MemberServiceIntegrationImplTest {
     @Test
     public void 프로필로드() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
 
         //when
         MemberProfileResponseDto ActualResult = memberService.getProfile(member.getId());
@@ -78,14 +78,14 @@ class MemberServiceIntegrationImplTest {
     @Test
     public void 회원정보수정() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
-        MemberUpdateInfoRequestDto requestDto = new MemberUpdateInfoRequestDto("test", "철수", "기계공학부");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+        MemberUpdateInfoRequestDto requestDto = new MemberUpdateInfoRequestDto("xptmxm1!", "철수", "기계공학부");
 
         //when
         MemberUpdateInfoResponseDto ActualResult = memberService.updateMemberInfo(member.getId(), requestDto);
 
         //then
-        Assertions.assertEquals("test", ActualResult.getEmail());
+        Assertions.assertEquals("xptmxm1!", ActualResult.getEmail());
         Assertions.assertEquals("철수", ActualResult.getNickname());
         Assertions.assertEquals("기계공학부", ActualResult.getDepartment());
     }

@@ -87,8 +87,8 @@ class StudyControllerIntegrationTest {
     @Test
     public void 스터디생성() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createRefreshToken("test");
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(member.getId(), "프론트엔드 모집", "프론트엔드", "프론트엔드 모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when, then
@@ -105,8 +105,8 @@ class StudyControllerIntegrationTest {
     @Test
     public void 스터디참여() throws Exception {
         //given
-        String accessToken = jwtTokenProvider.createRefreshToken("test");
-        Member member = memberRepository.findByEmail("test").orElseThrow(MemberNotFoundException::new);
+        String accessToken = jwtTokenProvider.createRefreshToken("xptmxm1!");
+        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
 
@@ -117,7 +117,6 @@ class StudyControllerIntegrationTest {
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.studyId").value(study.getId()))
                 .andExpect(jsonPath("$.data.memberId").value(member.getId()));
     }
 

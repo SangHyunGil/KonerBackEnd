@@ -1,5 +1,7 @@
 package project.SangHyun.dto.response;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +14,21 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
+@ApiModel(value = "회원 정보 요청 결과")
 public class MemberInfoResponseDto {
+    @ApiModelProperty(value = "회원 ID(PK)")
     private Long memberId;
+
+    @ApiModelProperty(value = "아이디")
     private String email;
+
+    @ApiModelProperty(value = "닉네임")
     private String nickname;
+
+    @ApiModelProperty(value = "학과")
     private String department;
+
+    @ApiModelProperty(value = "스터디 정보")
     private List<StudyInfoDto> studyInfos;
 
     public static MemberInfoResponseDto createDto(Member member, List<StudyInfoDto> studyInfoDtos) {
