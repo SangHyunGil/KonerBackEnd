@@ -9,16 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import project.SangHyun.config.security.AccessDeniedHandler.CustomAccessDeniedHandler;
-import project.SangHyun.config.security.AuthenticationEntryPoint.CustomAuthenticationEntryPoint;
-import project.SangHyun.config.security.jwt.JwtAuthenticationFilter;
-import project.SangHyun.config.security.jwt.JwtTokenProvider;
+import project.SangHyun.config.jwt.JwtAuthenticationFilter;
+import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.config.security.accessDeniedHandler.CustomAccessDeniedHandler;
+import project.SangHyun.config.security.authenticationEntryPoint.CustomAuthenticationEntryPoint;
+import project.SangHyun.config.security.member.MemberDetailsService;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenHelper accessTokenHelper;
+    private final MemberDetailsService memberDetailsService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -60,12 +62,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/room").permitAll()
                 .antMatchers(HttpMethod.GET, "/study").permitAll()
                 .antMatchers(HttpMethod.GET, "/study/*").permitAll()
-                .anyRequest().hasRole("MEMBER")
+
+                .antMatchers(HttpMethod.PUT, "/users/{userId}").access("@memberGuard.check(#userId)")
+                .antMatchers(HttpMethod.DELETE, "/users/{userId}").access("@memberGuard.check(#userId)")
+
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}").access("@studyGuard.check(#studyId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}").access("@studyGuard.check(#studyId)")
+
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*").access("@studyBoardGuard.check(#studyId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*").access("@studyBoardGuard.check(#studyId)")
+
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article").access("@studyArticleGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*").access("@studyArticleGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article/*").access("@studyArticleGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/{articleId}").access("@studyArticleGuard.checkJoinAndAuth(#studyId, #articleId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/{articleId}").access("@studyArticleGuard.checkJoinAndAuth(#studyId, #articleId)")
+                .anyRequest().hasAnyRole("MEMBER", "ADMIN")
+
             .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
             .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
             .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt 필터 추가
+                .addFilterBefore(new JwtAuthenticationFilter(accessTokenHelper, memberDetailsService), UsernamePasswordAuthenticationFilter.class); // jwt 필터 추가
     }
 }

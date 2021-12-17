@@ -2,14 +2,14 @@ package project.SangHyun.config.security.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.MemberNotFoundException;
-import project.SangHyun.domain.entity.Member;
-import project.SangHyun.domain.repository.MemberRepository;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
+
 import java.util.Collections;
 
 @Service
@@ -20,7 +20,7 @@ public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public MemberDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
 
         return MemberDetails.builder()
