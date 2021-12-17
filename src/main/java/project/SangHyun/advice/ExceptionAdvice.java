@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.SangHyun.advice.exception.*;
-import project.SangHyun.domain.response.Result;
-import project.SangHyun.domain.service.Impl.ResponseServiceImpl;
+import project.SangHyun.response.domain.Result;
+import project.SangHyun.response.service.ResponseServiceImpl;
 
 
 @RestControllerAdvice
@@ -78,7 +78,7 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-108, "존재하지 않는 회원입니다.");
     }
 
-    @ExceptionHandler(InvalidTokenException.class)
+    @ExceptionHandler(RedisValueDifferentException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result InvalidTokenException() {
         return responseService.getFailureResult(-109, "Token이 유효하지 않습니다.");
@@ -148,5 +148,17 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result StudyArticleNotFoundException() {
         return responseService.getFailureResult(-120, "해당 스터디 게시글이 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(StudyArticleNotWriterException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result StudyArticleNotOwnerException() {
+        return responseService.getFailureResult(-121, "해당 스터디 게시글 작성자가 아닙니다.");
+    }
+
+    @ExceptionHandler(ResourceNotOwnerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result ResourceNotOwnerException() {
+        return responseService.getFailureResult(-121, "해당 자원에 대한 권한이 없습니다.");
     }
 }

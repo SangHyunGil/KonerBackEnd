@@ -9,7 +9,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import project.SangHyun.advice.exception.InvalidWebSocketConnection;
-import project.SangHyun.config.security.jwt.JwtTokenProvider;
+import project.SangHyun.config.jwt.JwtTokenHelper;
 
 import java.util.Objects;
 
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenHelper accessTokenHelper;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -25,7 +25,7 @@ public class StompHandler implements ChannelInterceptor {
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String token = Objects.requireNonNull(accessor.getFirstNativeHeader("X-AUTH-TOKEN"));
-            if (!jwtTokenProvider.validateTokenExpiration(token))
+            if (!accessTokenHelper.validateToken(token))
                 throw new InvalidWebSocketConnection();
         }
 
