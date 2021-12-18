@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
-@Profile("local")
 public class TestData {
 
     private final InitService initService;
