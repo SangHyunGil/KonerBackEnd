@@ -4,10 +4,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.repository.StudyBoardCustomRepository;
-
 import java.util.List;
 
-import static project.SangHyun.domain.entity.QStudyBoard.studyBoard;
+import static project.SangHyun.study.studyboard.domain.QStudyBoard.studyBoard;
 
 @RequiredArgsConstructor
 public class StudyBoardCustomRepositoryImpl implements StudyBoardCustomRepository {
