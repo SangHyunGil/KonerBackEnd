@@ -4,13 +4,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleCustomRepository;
-
 import java.util.List;
 
-import static project.SangHyun.domain.entity.QMember.member;
-import static project.SangHyun.domain.entity.QStudyArticle.studyArticle;
-import static project.SangHyun.domain.entity.QStudyBoard.studyBoard;
-
+import static project.SangHyun.member.domain.QMember.member;
+import static project.SangHyun.study.studyarticle.domain.QStudyArticle.studyArticle;
+import static project.SangHyun.study.studyboard.domain.QStudyBoard.studyBoard;
 
 @RequiredArgsConstructor
 public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepository {

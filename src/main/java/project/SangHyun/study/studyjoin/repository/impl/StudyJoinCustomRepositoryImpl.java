@@ -3,15 +3,14 @@ package project.SangHyun.study.studyjoin.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import project.SangHyun.domain.entity.QStudyJoin;
+import project.SangHyun.study.studyjoin.domain.QStudyJoin;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
-
 import java.util.List;
 import java.util.Optional;
 
-import static project.SangHyun.domain.entity.QStudy.study;
-import static project.SangHyun.domain.entity.QStudyJoin.studyJoin;
+import static project.SangHyun.study.study.domain.QStudy.study;
+import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
 
 @RequiredArgsConstructor
 public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository {
