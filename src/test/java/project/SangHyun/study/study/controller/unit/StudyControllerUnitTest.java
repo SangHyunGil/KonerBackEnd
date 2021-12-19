@@ -16,6 +16,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.studyboard.service.StudyBoardService;
+import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
+import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.study.enums.RecruitState;
@@ -32,6 +34,7 @@ import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.study.controller.StudyController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -163,5 +166,36 @@ class StudyControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
                 .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
+    }
+
+    @Test
+    @DisplayName("스터디에 참여한 스터디원들의 정보를 로드한다.")
+    public void findStudyMembers() throws Exception {
+        //given
+        String accessToken = "accessToken";
+        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(1L, 1L);
+
+        Long studyId = 1L;
+        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.CREATOR);
+        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.MEMBER);
+        StudyFindMembersResponseDto responseDto1 = StudyFindMembersResponseDto.create(studyMember1);
+        StudyFindMembersResponseDto responseDto2 = StudyFindMembersResponseDto.create(studyMember2);
+        List<StudyFindMembersResponseDto> responseDtos = new ArrayList<>(Arrays.asList(responseDto1, responseDto2));
+
+        MultipleResult<StudyFindMembersResponseDto> ExpectResult = new MultipleResult<>();
+        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
+        ExpectResult.setData(responseDtos);
+
+        //mocking
+        given(studyJoinService.findStudyMembers(studyId)).willReturn(responseDtos);
+        given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
+
+        //when, then
+        mockMvc.perform(get("/study/{studyId}/member", studyId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
     }
 }

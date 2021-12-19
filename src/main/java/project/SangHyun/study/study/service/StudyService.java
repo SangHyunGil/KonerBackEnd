@@ -1,11 +1,8 @@
 package project.SangHyun.study.study.service;
 
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
+import project.SangHyun.study.study.dto.response.*;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
-import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
-import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 
 import java.util.List;
 
