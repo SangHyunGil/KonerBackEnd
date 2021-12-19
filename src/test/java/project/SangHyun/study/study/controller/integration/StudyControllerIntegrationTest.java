@@ -32,7 +32,6 @@ import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -274,6 +273,19 @@ class StudyControllerIntegrationTest {
         mockMvc.perform(delete("/study/{studyId}", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("스터디에 참여한 스터디원들의 정보를 가져온다.")
+    public void findStudyMember() throws Exception {
+        //given
+        String accessToken = accessTokenHelper.createToken("xptmxm3!");
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+
+        //when, then
+        mockMvc.perform(get("/study/{studyId}/member", study.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
     }
 
 }

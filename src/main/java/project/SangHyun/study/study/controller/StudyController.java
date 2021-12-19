@@ -15,6 +15,7 @@ import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
+import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 
@@ -66,5 +67,11 @@ public class StudyController {
     @DeleteMapping("/{studyId}")
     public SingleResult<StudyDeleteResponseDto> deleteStudy(@PathVariable Long studyId) {
         return responseService.getSingleResult(studyService.deleteStudy(studyId));
+    }
+
+    @ApiOperation(value = "스터디원 정보 로드", notes = "스터디에 참여한 스터디원의 정보를 로드한다.")
+    @GetMapping("/{studyId}/member")
+    public MultipleResult<StudyFindMembersResponseDto> findStudyMembers(@PathVariable Long studyId) {
+        return responseService.getMultipleResult(studyJoinService.findStudyMembers(studyId));
     }
 }

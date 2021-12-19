@@ -13,11 +13,14 @@ import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.service.impl.StudyJoinServiceImpl;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -52,9 +55,23 @@ class StudyJoinServiceIntegrationTest {
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.joinStudy(requestDto);
+
         //then
         Assertions.assertEquals(1, ActualResult.getStudyInfos().size());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+    }
+
+    @Test
+    @DisplayName("스터디에 참여한 스터디원의 정보를 로드한다.")
+    public void findStudyMembers() throws Exception {
+        //given
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+
+        //when
+        List<StudyFindMembersResponseDto> ActualResult = studyJoinService.findStudyMembers(study.getId());
+
+        //then
+        Assertions.assertEquals(2, ActualResult.size());
     }
 
 }

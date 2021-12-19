@@ -9,6 +9,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
 import java.util.List;
 import java.util.Optional;
 
+import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
 import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
 
@@ -55,5 +56,16 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
                 .where(studyJoin.study.id.eq(studyId),
                         studyJoin.member.id.eq(memberId))
                 .fetchOne());
+    }
+
+    @Override
+    public List<StudyMembersInfoDto> findStudyMembers(Long studyId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(StudyMembersInfoDto.class,
+                        member.id, member.nickname, studyJoin.studyRole))
+                .from(studyJoin)
+                .innerJoin(studyJoin.member, member)
+                .where(studyJoin.study.id.eq(studyId))
+                .fetch();
     }
 }

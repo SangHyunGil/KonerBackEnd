@@ -20,7 +20,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .groupName("apiV1")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("project.SangHyun.web.controller"))
+                .apis(RequestHandlerSelectors.basePackage("project"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
