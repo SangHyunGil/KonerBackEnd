@@ -64,13 +64,14 @@ class SignServiceUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(notAuthMember);
+        Member createdMember = requestDto.toEntity(passwordEncoder);
+        MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
         given(memberRepository.findByNickname(any())).willReturn(Optional.empty());
         given(passwordEncoder.encode(any())).willReturn("encodedPW");
-        given(memberRepository.save(any())).willReturn(notAuthMember);
+        given(memberRepository.save(any())).willReturn(createdMember);
         
         //when
         MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);

@@ -54,10 +54,11 @@ class StudyServiceUnitTest {
     public void createStudy() throws Exception {
         //given
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
-        StudyCreateResponseDto ExpectResult = StudyFactory.makeCreateResponseDto(study);
+        Study createdStudy = requestDto.toEntity();
+        StudyCreateResponseDto ExpectResult = StudyFactory.makeCreateResponseDto(createdStudy);
 
         //mocking
-        given(studyRepository.save(any())).willReturn(study);
+        given(studyRepository.save(any())).willReturn(createdStudy);
 
         //when
         StudyCreateResponseDto ActualResult = studyService.createStudy(requestDto);

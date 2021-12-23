@@ -13,15 +13,27 @@ public class StudyBoardGuard {
     private final AuthHelper authHelper;
     private final StudyJoinRepository studyJoinRepository;
 
-    public boolean check(Long studyId) {
+    public boolean checkJoin(Long studyId) {
+        return authHelper.isAuthenticated() && isJoinMember(studyId);
+    }
+
+    public boolean isJoinMember(Long studyId) {
+        return (isMember() && isStudyMember(studyId)) || isAdmin();
+    }
+
+    private boolean isStudyMember(Long studyId) {
+        return studyJoinRepository.exist(studyId, authHelper.extractMemberId());
+    }
+
+    public boolean checkJoinAndAuth(Long studyId) {
         return authHelper.isAuthenticated() && hasAuthority(studyId);
     }
 
     private boolean hasAuthority(Long studyId) {
-        return (isAuthMember() && isStudyAdminOrCreator(studyId)) || isAdmin();
+        return (isMember() && isStudyAdminOrCreator(studyId)) || isAdmin();
     }
 
-    private boolean isAuthMember() {
+    private boolean isMember() {
         return authHelper.extractMemberRole().equals("ROLE_MEMBER");
     }
 

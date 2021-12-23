@@ -19,6 +19,7 @@ import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.service.impl.StudyJoinServiceImpl;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
+import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
 import java.util.List;
 
@@ -49,9 +50,9 @@ class StudyJoinServiceIntegrationTest {
     @DisplayName("스터디에 참여한다.")
     public void join() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
+        Member member = testDB.findGeneralMember();
+        Study study = testDB.findBackEndStudy();
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeCreateDto(study, member);
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.joinStudy(requestDto);
@@ -65,13 +66,13 @@ class StudyJoinServiceIntegrationTest {
     @DisplayName("스터디에 참여한 스터디원의 정보를 로드한다.")
     public void findStudyMembers() throws Exception {
         //given
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        Study study = testDB.findBackEndStudy();
 
         //when
         List<StudyFindMembersResponseDto> ActualResult = studyJoinService.findStudyMembers(study.getId());
 
         //then
-        Assertions.assertEquals(2, ActualResult.size());
+        Assertions.assertEquals(3, ActualResult.size());
     }
 
 }

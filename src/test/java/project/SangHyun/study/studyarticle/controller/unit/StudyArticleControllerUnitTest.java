@@ -112,7 +112,8 @@ public class StudyArticleControllerUnitTest {
     public void createArticle() throws Exception {
         //given
         StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateDto(member);
-        StudyArticleCreateResponseDto responseDto = StudyArticleFactory.makeCreateResponseDto(studyArticle);
+        StudyArticle createdArticle = requestDto.toEntity(studyBoard.getId());
+        StudyArticleCreateResponseDto responseDto = StudyArticleFactory.makeCreateResponseDto(createdArticle);
         SingleResult<StudyArticleCreateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
