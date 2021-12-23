@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class StudyBoardServiceImpl implements StudyBoardService {
 
     private final StudyBoardRepository studyBoardRepository;
-    private final StudyJoinRepository studyJoinRepository;
 
     @Override
     public List<StudyBoardFindResponseDto> findAllBoards(Long studyId) {

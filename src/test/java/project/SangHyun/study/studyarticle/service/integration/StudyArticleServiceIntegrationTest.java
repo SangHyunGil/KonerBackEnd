@@ -122,19 +122,30 @@ class StudyArticleServiceIntegrationTest {
         StudyBoard studyBoard = study.getStudyBoards().get(0);
         StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 내용");
 
-
-        List<StudyArticle> allArticles22 = studyArticleRepository.findAllArticles(studyBoard.getId());
-
-        System.out.println("allArticles22.get(0).getId() = " + allArticles22.get(0).getId() + " " + allArticles22.size());
         //when
-        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(study.getId(), allArticles22.get(0).getId());
-
         List<StudyArticle> allArticles = studyArticleRepository.findAllArticles(studyBoard.getId());
         Long id = allArticles.get(0).getId();
-        System.out.println("id = " + id + " " + allArticles.size());
         studyArticleService.deleteArticle(study.getId(), id);
         List<StudyArticleFindResponseDto> allArticles1 = studyArticleService.findAllArticles(study.getId(), studyBoard.getId());
+
         //then
         Assertions.assertEquals(1, allArticles1.size());
+    }
+
+    @Test
+    @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 보면 조회수가 증가한다.")
+    public void updateViews() throws Exception {
+        //given
+        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        StudyBoard studyBoard = study.getStudyBoards().get(0);
+        StudyArticle studyArticle = studyArticleRepository.findAllArticles(studyBoard.getId()).get(0);
+
+        //when
+        StudyArticleFindResponseDto prevResult = studyArticleService.findArticle(study.getId(), studyArticle.getId());
+        Assertions.assertEquals(1, prevResult.getViews());
+        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(study.getId(), studyArticle.getId());
+
+        //then
+        Assertions.assertEquals(2,ActualResult.getViews());
     }
 }

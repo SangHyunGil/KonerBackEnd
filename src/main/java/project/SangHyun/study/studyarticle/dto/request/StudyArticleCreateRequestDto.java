@@ -33,6 +33,7 @@ public class StudyArticleCreateRequestDto {
                 .member(new Member(memberId))
                 .title(title)
                 .content(content)
+                .views(0L)
                 .build();
     }
 }
