@@ -88,6 +88,11 @@ public class TestDB {
         return studyRepository.findStudyByTitle("백엔드 모집").get(0).getStudyBoards().get(0);
     }
 
+    @Transactional(readOnly = true)
+    public StudyArticle findAnnounceTestArticle() {
+        return studyArticleRepository.findArticleByTitle("공지사항").get(0);
+    }
+
     private void initMember() {
         Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberA);

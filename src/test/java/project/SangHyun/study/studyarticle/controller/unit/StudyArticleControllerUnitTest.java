@@ -23,6 +23,7 @@ import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
 import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.service.StudyService;
+import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyarticle.controller.StudyArticleController;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
@@ -32,9 +33,11 @@ import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteRespon
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponseDto;
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleUpdateResponseDto;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
+import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -44,7 +47,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class StudyArticleControllerUnitTest {
+    String accessToken;
     MockMvc mockMvc;
+    Member member;
+    Study study;
+    StudyBoard studyBoard;
+    StudyArticle studyArticle;
     @InjectMocks
     StudyArticleController studyArticleController;
     @Mock
@@ -55,31 +63,28 @@ public class StudyArticleControllerUnitTest {
     @BeforeEach
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(studyArticleController).build();
+
+        accessToken = "accessToken";
+        member = StudyFactory.makeTestAuthMember();
+        study = StudyArticleFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
+        studyBoard = StudyArticleFactory.makeTestStudyBoard(study);
+        study.addBoard(studyBoard);
+        studyArticle = StudyArticleFactory.makeTestStudyArticle(member, studyBoard);
     }
 
     @Test
     @DisplayName("스터디의 한 카테고리에 해당하는 모든 게시글을 로드한다.")
     public void loadArticles() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Long memberId = 1L;
-        Long studyId = 1L;
-        Long boardId = 1L;
-
-        Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
-        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
-        List<StudyArticleFindResponseDto> responseDtos = List.of(StudyArticleFindResponseDto.create(studyArticle));
-
-        MultipleResult<StudyArticleFindResponseDto> ExpectResult = new MultipleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDtos);
+        List<StudyArticleFindResponseDto> responseDtos = StudyArticleFactory.makeFindAllResponseDto(studyArticle);
+        MultipleResult<StudyArticleFindResponseDto> ExpectResult = StudyArticleFactory.makeMultipleResult(responseDtos);
 
         //mocking
-        given(studyArticleService.findAllArticles(boardId)).willReturn(responseDtos);
+        given(studyArticleService.findAllArticles(studyBoard.getId())).willReturn(responseDtos);
         given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
+
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", studyId, boardId)
+        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -88,25 +93,15 @@ public class StudyArticleControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 조회한다.")
     public void loadArticle() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Long memberId = 1L;
-        Long studyId = 1L;
-        Long boardId = 1L;
-
-        Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
-        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
-        StudyArticleFindResponseDto responseDto = StudyArticleFindResponseDto.create(studyArticle);
-
-        SingleResult<StudyArticleFindResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        StudyArticleFindResponseDto responseDto = StudyArticleFactory.makeFindResponseDto(studyArticle);
+        SingleResult<StudyArticleFindResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyArticleService.findArticle(boardId)).willReturn(responseDto);
+        given(studyArticleService.findArticle(studyBoard.getId())).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article/{articleId}", studyId, boardId, studyArticleId)
+        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -115,28 +110,16 @@ public class StudyArticleControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 생성한다.")
     public void createArticle() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Long memberId = 1L;
-        Long studyId = 1L;
-        Long boardId = 1L;
-
-        Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
-        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
-        StudyArticleCreateResponseDto responseDto = StudyArticleCreateResponseDto.create(studyArticle);
-
-        SingleResult<StudyArticleCreateResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
-
-        StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(memberId, "테스트 글", "테스트 글입니다.");
+        StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateDto(member);
+        StudyArticleCreateResponseDto responseDto = StudyArticleFactory.makeCreateResponseDto(studyArticle);
+        SingleResult<StudyArticleCreateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyArticleService.createArticle(boardId, requestDto)).willReturn(responseDto);
+        given(studyArticleService.createArticle(studyBoard.getId(), requestDto)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/board/{boardId}/article", studyId, boardId)
+        mockMvc.perform(post("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -148,28 +131,16 @@ public class StudyArticleControllerUnitTest {
     @DisplayName("스터디에 속한 게시판을 수정한다.")
     public void updateBoard() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Long memberId = 1L;
-        Long studyId = 1L;
-        Long boardId = 1L;
-
-        Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
-        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
-        StudyArticleUpdateResponseDto responseDto = StudyArticleUpdateResponseDto.create(studyArticle);
-
-        SingleResult<StudyArticleUpdateResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
-
-        StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("테스트 수정 글", "테스트 수정 글입니다.");
+        StudyArticleUpdateRequestDto requestDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 글 수정 내용");
+        StudyArticleUpdateResponseDto responseDto = StudyArticleFactory.makeUpdateResponseDto(studyArticle);
+        SingleResult<StudyArticleUpdateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyArticleService.updateArticle(boardId, requestDto)).willReturn(responseDto);
+        given(studyArticleService.updateArticle(studyBoard.getId(), requestDto)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}", studyId, boardId, studyArticleId)
+        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -181,26 +152,16 @@ public class StudyArticleControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 삭제한다.")
     public void deleteArticle() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Long memberId = 1L;
-        Long studyId = 1L;
-        Long boardId = 1L;
+        StudyArticleDeleteResponseDto responseDto = StudyArticleFactory.makeDeleteResponseDto(studyArticle);
+        SingleResult<StudyArticleDeleteResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
-        Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
-        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
-        StudyArticleDeleteResponseDto responseDto = StudyArticleDeleteResponseDto.create(studyArticle);
-
-        SingleResult<StudyArticleDeleteResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
 
         //mocking
-        given(studyArticleService.deleteArticle(boardId)).willReturn(responseDto);
+        given(studyArticleService.deleteArticle(studyBoard.getId())).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}", studyId, boardId, studyArticleId)
+        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }

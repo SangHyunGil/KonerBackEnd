@@ -22,6 +22,7 @@ import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
+import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ class StudyArticleRepositoryTest {
     MemberRepository memberRepository;
     @Autowired
     StudyRepository studyRepository;
+    @Autowired
+    StudyBoardRepository studyBoardRepository;
     @Autowired
     StudyArticleRepository studyArticleRepository;
     @Autowired
@@ -71,12 +74,25 @@ class StudyArticleRepositoryTest {
     @DisplayName("모든 게시글을 조회한다.")
     public void findAllArticles() throws Exception {
         //given
-        List<StudyArticle> allArticles = studyArticleRepository.findAllArticles(1L);
 
         //when
-        int size = allArticles.size();
+        Study study = studyRepository.findStudyByTitle("백엔드 모집").get(0);
+        StudyBoard studyBoard = studyBoardRepository.findBoards(study.getId()).get(0);
+        List<StudyArticle> allArticles = studyArticleRepository.findAllArticles(studyBoard.getId());
 
         //then
-        Assertions.assertEquals(3, size);
+        Assertions.assertEquals(3, allArticles.size());
+    }
+
+    @Test
+    @DisplayName("게시글을 제목으로 조회한다.")
+    public void findArticleByTitle() throws Exception {
+        //given
+
+        //when
+        List<StudyArticle> studyArticle = studyArticleRepository.findArticleByTitle("공지사항");
+
+        //then
+        Assertions.assertEquals("공지사항 테스트 글", studyArticle.get(0).getTitle());
     }
 }

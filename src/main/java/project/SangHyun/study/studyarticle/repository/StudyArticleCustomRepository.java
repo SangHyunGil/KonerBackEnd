@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface StudyArticleCustomRepository {
     List<StudyArticle> findAllArticles(Long categoryId);
+    List<StudyArticle> findArticleByTitle(String title);
 }

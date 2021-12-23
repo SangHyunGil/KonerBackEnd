@@ -10,6 +10,7 @@ import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
+import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
@@ -57,5 +58,19 @@ public class BasicFactory {
         StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
         ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
         return studyJoin;
+    }
+
+    public static StudyBoard makeTestStudyBoard(Study study) {
+        Long studyBoardId = 1L;
+        StudyBoard studyBoard = new StudyBoard("테스트 게시판", study);
+        ReflectionTestUtils.setField(studyBoard, "id", studyBoardId);
+        return studyBoard;
+    }
+
+    public static StudyArticle makeTestStudyArticle(Member member, StudyBoard studyBoard) {
+        Long studyArticleId = 1L;
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, member, studyBoard);
+        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
+        return studyArticle;
     }
 }
