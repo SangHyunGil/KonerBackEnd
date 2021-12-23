@@ -45,6 +45,7 @@ public class StudyArticleServiceImpl implements StudyArticleService {
     @Override
     public StudyArticleFindResponseDto findArticle(Long studyId, Long articleId) {
         StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(StudyArticleNotFoundException::new);
+        studyArticle.updateViews();
         return StudyArticleFindResponseDto.create(studyArticle);
     }
 

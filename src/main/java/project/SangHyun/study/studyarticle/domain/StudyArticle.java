@@ -21,6 +21,7 @@ public class StudyArticle extends EntityDate {
     private Long id;
     private String title;
     private String content;
+    private Long views;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -29,9 +30,10 @@ public class StudyArticle extends EntityDate {
     private StudyBoard studyBoard;
 
     @Builder
-    public StudyArticle(String title, String content, Member member, StudyBoard studyBoard) {
+    public StudyArticle(String title, String content, Long views, Member member, StudyBoard studyBoard) {
         this.title = title;
         this.content = content;
+        this.views = views;
         this.member = member;
         this.studyBoard = studyBoard;
     }
@@ -39,5 +41,9 @@ public class StudyArticle extends EntityDate {
     public void updateArticleInfo(StudyArticleUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+    }
+
+    public void updateViews() {
+        this.views += 1;
     }
 }

@@ -141,11 +141,10 @@ class StudyArticleServiceIntegrationTest {
         StudyArticle studyArticle = studyArticleRepository.findAllArticles(studyBoard.getId()).get(0);
 
         //when
-        StudyArticleFindResponseDto prevResult = studyArticleService.findArticle(study.getId(), studyArticle.getId());
-        Assertions.assertEquals(1, prevResult.getViews());
+        Assertions.assertEquals(0, studyArticle.getViews());
         StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(study.getId(), studyArticle.getId());
 
         //then
-        Assertions.assertEquals(2,ActualResult.getViews());
+        Assertions.assertEquals(1,ActualResult.getViews());
     }
 }

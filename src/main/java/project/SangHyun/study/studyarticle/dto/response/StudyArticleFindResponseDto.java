@@ -27,8 +27,11 @@ public class StudyArticleFindResponseDto {
     @ApiModelProperty(value = "스터디 게시글 내용")
     private String content;
 
+    @ApiModelProperty(value = "스터디 게시글 조회수")
+    private Long views;
+
     public static StudyArticleFindResponseDto create(StudyArticle studyArticle) {
         return new StudyArticleFindResponseDto(studyArticle.getId(), studyArticle.getStudyBoard().getId(),
-                studyArticle.getMember().getNickname(), studyArticle.getTitle(), studyArticle.getContent());
+                studyArticle.getMember().getNickname(), studyArticle.getTitle(), studyArticle.getContent(), studyArticle.getViews());
     }
 }

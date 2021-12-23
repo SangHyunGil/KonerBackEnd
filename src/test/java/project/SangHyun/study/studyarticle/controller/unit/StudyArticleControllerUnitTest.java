@@ -67,7 +67,7 @@ public class StudyArticleControllerUnitTest {
         Long boardId = 1L;
 
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", new Member(memberId), new StudyBoard(boardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
         List<StudyArticleFindResponseDto> responseDtos = List.of(StudyArticleFindResponseDto.create(studyArticle));
 
@@ -94,7 +94,7 @@ public class StudyArticleControllerUnitTest {
         Long boardId = 1L;
 
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", new Member(memberId), new StudyBoard(boardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
         StudyArticleFindResponseDto responseDto = StudyArticleFindResponseDto.create(studyArticle);
 
@@ -121,7 +121,7 @@ public class StudyArticleControllerUnitTest {
         Long boardId = 1L;
 
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", new Member(memberId), new StudyBoard(boardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
         StudyArticleCreateResponseDto responseDto = StudyArticleCreateResponseDto.create(studyArticle);
 
@@ -154,7 +154,7 @@ public class StudyArticleControllerUnitTest {
         Long boardId = 1L;
 
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", new Member(memberId), new StudyBoard(boardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
         StudyArticleUpdateResponseDto responseDto = StudyArticleUpdateResponseDto.create(studyArticle);
 
@@ -187,7 +187,7 @@ public class StudyArticleControllerUnitTest {
         Long boardId = 1L;
 
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", new Member(memberId), new StudyBoard(boardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 글입니다.", 0L, new Member(memberId), new StudyBoard(boardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
         StudyArticleDeleteResponseDto responseDto = StudyArticleDeleteResponseDto.create(studyArticle);
 

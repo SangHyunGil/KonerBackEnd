@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
@@ -48,7 +49,7 @@ class StudyArticleServiceUnitTest {
 
         Long studyBoardId = 1L;
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", new Member(memberId), new StudyBoard(studyBoardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, new Member(memberId), new StudyBoard(studyBoardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
         StudyArticleCreateResponseDto ExpectResult = StudyArticleCreateResponseDto.create(studyArticle);
 
@@ -75,7 +76,7 @@ class StudyArticleServiceUnitTest {
 
         Long studyBoardId = 1L;
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", new Member(memberId), new StudyBoard(studyBoardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, new Member(memberId), new StudyBoard(studyBoardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
 
         //mocking
@@ -99,7 +100,7 @@ class StudyArticleServiceUnitTest {
 
         Long studyBoardId = 1L;
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", new Member(memberId), new StudyBoard(studyBoardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, new Member(memberId), new StudyBoard(studyBoardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
 
         //mocking
@@ -122,7 +123,7 @@ class StudyArticleServiceUnitTest {
 
         Long studyBoardId = 1L;
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", new Member(memberId), new StudyBoard(studyBoardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, new Member(memberId), new StudyBoard(studyBoardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
 
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("테스트 글 수정", "테스트 내용 수정");
@@ -147,7 +148,7 @@ class StudyArticleServiceUnitTest {
 
         Long studyBoardId = 1L;
         Long studyArticleId = 1L;
-        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", new Member(memberId), new StudyBoard(studyBoardId));
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, new Member(memberId), new StudyBoard(studyBoardId));
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
 
         //mocking
@@ -159,5 +160,27 @@ class StudyArticleServiceUnitTest {
 
         //then
         Assertions.assertEquals("테스트 글", ActualResult.getTitle());
+    }
+
+    @Test
+    @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 보면 조회수가 증가한다.")
+    public void updateViews() throws Exception {
+        //given
+        Long memberId = 1L;
+        Long studyId = 1L;
+        Long studyBoardId = 1L;
+        Long studyArticleId = 1L;
+        StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, new Member(memberId), new StudyBoard(studyBoardId));
+        ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
+
+        //mocking
+        given(studyArticleRepository.findById(studyArticleId)).willReturn(Optional.of(studyArticle));
+
+        //when
+        Assertions.assertEquals(0, studyArticle.getViews());
+        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyId, studyArticleId);
+
+        //then
+        Assertions.assertEquals(1,ActualResult.getViews());
     }
 }

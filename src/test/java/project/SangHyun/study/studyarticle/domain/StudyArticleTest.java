@@ -14,7 +14,7 @@ class StudyArticleTest {
         //given
         Member member = new Member(1L);
         StudyBoard studyBoard = new StudyBoard(1L);
-        StudyArticle studyArticle = new StudyArticle("테스트 게시글", "하이요", member, studyBoard);
+        StudyArticle studyArticle = new StudyArticle("테스트 게시글", "하이요", 0L, member, studyBoard);
 
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("수정", "수정!");
 
