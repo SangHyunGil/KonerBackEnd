@@ -29,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class SignControllerTest {
+    Member authMember;
+    Member notAuthMember;
+
     MockMvc mockMvc;
     @InjectMocks
     SignController signController;
@@ -40,6 +43,9 @@ class SignControllerTest {
     @BeforeEach
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(signController).build();
+
+        authMember = SignFactory.makeTestAuthMember();
+        notAuthMember = SignFactory.makeTestNotAuthMember();
     }
 
     @Test
@@ -47,8 +53,7 @@ class SignControllerTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member member = SignFactory.makeTestNotAuthMember();
-        MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(member);
+        MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(notAuthMember);
         SingleResult<MemberRegisterResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -142,9 +147,8 @@ class SignControllerTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        Member member = SignFactory.makeAuthTestMember();
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(member.getEmail(), "change1!");
-        MemberChangePwResponseDto responseDto = SignFactory.makeChangePwResponseDto(member);
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change1!");
+        MemberChangePwResponseDto responseDto = SignFactory.makeChangePwResponseDto(authMember);
         SingleResult<MemberChangePwResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -163,8 +167,7 @@ class SignControllerTest {
     public void login() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        Member member = SignFactory.makeAuthTestMember();
-        MemberLoginResponseDto responseDto = SignFactory.makeLoginResponseDto(member);
+        MemberLoginResponseDto responseDto = SignFactory.makeLoginResponseDto(authMember);
         SingleResult<MemberLoginResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -183,8 +186,7 @@ class SignControllerTest {
     public void reIssue() throws Exception {
         //given
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto("refreshToken");
-        Member member = SignFactory.makeAuthTestMember();
-        TokenResponseDto responseDto = SignFactory.makeTokenResponseDto(member);
+        TokenResponseDto responseDto = SignFactory.makeTokenResponseDto(authMember);
         SingleResult<TokenResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking

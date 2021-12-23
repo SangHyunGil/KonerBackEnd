@@ -1,6 +1,7 @@
 package project.SangHyun.member.service.unit;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.member.service.impl.MemberServiceImpl;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
@@ -28,6 +30,8 @@ import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceUnitTest {
+    Member authMember;
+    Member notAuthMember;
 
     @InjectMocks
     MemberServiceImpl memberService;
@@ -36,17 +40,22 @@ class MemberServiceUnitTest {
     @Mock
     StudyJoinRepository studyJoinRepository;
 
+    @BeforeEach
+    public void init() {
+        authMember = SignFactory.makeAuthTestMember();
+        notAuthMember = SignFactory.makeTestNotAuthMember();
+    }
+
     @Test
     @DisplayName("회원 정보를 로드한다.")
     public void loadUserInfo() throws Exception {
         //given
         MemberDetails memberDetails = MemberFactory.makeMemberDetails();
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberInfoResponseDto ExpectResult = MemberFactory.makeInfoResponseDto(member);
+        MemberInfoResponseDto ExpectResult = MemberFactory.makeInfoResponseDto(authMember);
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
-        given(studyJoinRepository.findStudyInfoByMemberId(member.getId())).willReturn(List.of());
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
+        given(studyJoinRepository.findStudyInfoByMemberId(authMember.getId())).willReturn(List.of());
 
         //when
         MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
@@ -59,14 +68,13 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 로드한다.")
     public void loadProfile() throws Exception {
         //given
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberProfileResponseDto ExpectResult = MemberFactory.makeProfileResponseDto(member);
+        MemberProfileResponseDto ExpectResult = MemberFactory.makeProfileResponseDto(authMember);
 
         //mocking
-        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
-        MemberProfileResponseDto ActualResult = memberService.getProfile(member.getId());
+        MemberProfileResponseDto ActualResult = memberService.getProfile(authMember.getId());
 
         //then
         Assertions.assertEquals(ExpectResult.getMemberId(), ActualResult.getMemberId());
@@ -76,14 +84,13 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 수정한다.")
     public void updateMember() throws Exception {
         //given
-        Member member = MemberFactory.makeTestAuthMember();
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("테스터 변경");
 
         //mocking
-        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
-        MemberUpdateResponseDto ActualResult = memberService.updateMember(member.getId(), requestDto);
+        MemberUpdateResponseDto ActualResult = memberService.updateMember(authMember.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스터 변경", ActualResult.getNickname());
@@ -93,15 +100,14 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 삭제한다.")
     public void deleteMember() throws Exception {
         //given
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberDeleteResponseDto ExpectResult = MemberFactory.makeDeleteResponseDto(member);
+        MemberDeleteResponseDto ExpectResult = MemberFactory.makeDeleteResponseDto(authMember);
 
         //mocking
-        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(member));
-        willDoNothing().given(memberRepository).delete(member);
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
+        willDoNothing().given(memberRepository).delete(authMember);
 
         //when
-        MemberDeleteResponseDto ActualResult = memberService.deleteMember(member.getId());
+        MemberDeleteResponseDto ActualResult = memberService.deleteMember(authMember.getId());
 
         //then
         Assertions.assertEquals(ExpectResult.getMemberId(), ActualResult.getMemberId());

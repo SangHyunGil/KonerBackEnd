@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 import project.SangHyun.member.service.MemberService;
@@ -34,6 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class MemberControllerTest {
+    String accessToken;
+    Member authMember;
+    Member notAuthMember;
+
     MockMvc mockMvc;
     @InjectMocks
     MemberController memberController;
@@ -45,15 +50,17 @@ class MemberControllerTest {
     @BeforeEach
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
+
+        accessToken = "accessToken";
+        authMember = SignFactory.makeTestAuthMember();
+        notAuthMember = SignFactory.makeTestNotAuthMember();
     }
 
     @Test
     @DisplayName("AccessToken을 이용해 회원의 정보를 로드한다.")
     public void getMemberInfo() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberInfoResponseDto responseDto = MemberFactory.makeInfoResponseDto(member);
+        MemberInfoResponseDto responseDto = MemberFactory.makeInfoResponseDto(authMember);
         SingleResult<MemberInfoResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -72,9 +79,7 @@ class MemberControllerTest {
     @DisplayName("회원의 유저 프로필을 로드한다.")
     public void getUserProfile() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberProfileResponseDto responseDto = MemberFactory.makeProfileResponseDto(member);
+        MemberProfileResponseDto responseDto = MemberFactory.makeProfileResponseDto(authMember);
         SingleResult<MemberProfileResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -94,10 +99,8 @@ class MemberControllerTest {
     @DisplayName("회원의 유저 프로필을 수정한다.")
     public void updateMember() throws Exception {
         //given
-        String accessToken = "accessToken";
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("상현");
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberUpdateResponseDto responseDto = MemberFactory.makeUpdateResponseDto(member);
+        MemberUpdateResponseDto responseDto = MemberFactory.makeUpdateResponseDto(authMember);
         SingleResult<MemberUpdateResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -118,9 +121,7 @@ class MemberControllerTest {
     @DisplayName("회원을 삭제한다.")
     public void deleteMember() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Member member = MemberFactory.makeTestAuthMember();
-        MemberDeleteResponseDto responseDto = MemberFactory.makeDeleteResponseDto(member);
+        MemberDeleteResponseDto responseDto = MemberFactory.makeDeleteResponseDto(authMember);
         SingleResult<MemberDeleteResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking

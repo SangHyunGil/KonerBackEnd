@@ -46,6 +46,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class StudyControllerUnitTest {
+    String accessToken;
+    Member member;
+    Study study;
+
     MockMvc mockMvc;
     @InjectMocks
     StudyController studyController;
@@ -59,21 +63,22 @@ class StudyControllerUnitTest {
     @BeforeEach
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(studyController).build();
+
+        accessToken = "accessToken";
+        member = StudyFactory.makeTestAuthMember();
+        study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
     @DisplayName("스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         List<StudyFindResponseDto> responseDtos = StudyFactory.makeFindAllResponseDto(study);
         MultipleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeMultipleResult(responseDtos);
 
         //mocking
         given(studyService.findAllStudies()).willReturn(responseDtos);
         given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
-
 
         //when, then
         mockMvc.perform(get("/study"))
@@ -85,8 +90,6 @@ class StudyControllerUnitTest {
     @DisplayName("스터디에 대한 세부정보를 로드한다.")
     public void loadStudyDetail() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyFindResponseDto responseDto = StudyFactory.makeFindResponseDto(study);
         SingleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
@@ -104,11 +107,7 @@ class StudyControllerUnitTest {
     @DisplayName("스터디를 생성한다.")
     public void createStudy() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Member member = StudyFactory.makeTestAuthMember();
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
-
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyCreateResponseDto responseDto = StudyCreateResponseDto.create(study);
         SingleResult<StudyCreateResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
@@ -130,11 +129,7 @@ class StudyControllerUnitTest {
     @DisplayName("스터디에 참여한다.")
     public void join() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
-
         StudyJoin studyJoin = StudyFactory.makeTestStudyJoin(member, study);
         StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(studyJoin);
         SingleResult<StudyJoinResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
@@ -158,8 +153,6 @@ class StudyControllerUnitTest {
     @DisplayName("스터디에 참여한 스터디원들의 정보를 로드한다.")
     public void findStudyMembers() throws Exception {
         //given
-        String accessToken = "accessToken";
-        Member member = StudyFactory.makeTestAuthMember();
         Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
 

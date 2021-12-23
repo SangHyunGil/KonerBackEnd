@@ -2,6 +2,7 @@ package project.SangHyun.study.study.service.unit;
 
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,18 +35,25 @@ import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 class StudyServiceUnitTest {
+    Member member;
+    Study study;
+
     @InjectMocks
     StudyServiceImpl studyService;
     @Mock
     StudyRepository studyRepository;
 
+    @BeforeEach
+    public void init() {
+        member = StudyFactory.makeTestAuthMember();
+        study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
+    }
+
     @Test
     @DisplayName("스터디를 생성한다.")
     public void createStudy() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
-        Study study = StudyFactory.makeTestStudy(member, null, null);
         StudyCreateResponseDto ExpectResult = StudyFactory.makeCreateResponseDto(study);
 
         //mocking
@@ -64,8 +72,6 @@ class StudyServiceUnitTest {
     @DisplayName("모든 스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         List<StudyFindResponseDto> ExpectResult = StudyFactory.makeFindAllResponseDto(study);
 
         //mocking
@@ -83,8 +89,6 @@ class StudyServiceUnitTest {
     @DisplayName("스터디에 대한 세부정보를 로드한다.")
     public void loadStudyDetail() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyFindResponseDto ExpectResult = StudyFactory.makeFindResponseDto(study);
 
         //mocking
@@ -102,8 +106,6 @@ class StudyServiceUnitTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateDto("테스트 스터디 변경", "프론트엔드");
 
         //mocking
@@ -121,8 +123,6 @@ class StudyServiceUnitTest {
     @DisplayName("스터디의 정보를 삭제한다.")
     public void deleteStudy() throws Exception {
         //given
-        Member member = StudyFactory.makeTestAuthMember();
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyDeleteResponseDto ExpectResult = StudyDeleteResponseDto.create(study);
 
         //mocking

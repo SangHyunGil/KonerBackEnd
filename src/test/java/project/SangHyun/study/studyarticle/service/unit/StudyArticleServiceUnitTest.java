@@ -35,11 +35,11 @@ import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 class StudyArticleServiceUnitTest {
-
     Member member;
     Study study;
     StudyBoard studyBoard;
     StudyArticle studyArticle;
+
     @InjectMocks
     StudyArticleServiceImpl studyArticleService;
     @Mock

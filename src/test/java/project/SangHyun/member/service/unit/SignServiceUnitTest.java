@@ -32,6 +32,8 @@ import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 class SignServiceUnitTest {
+    Member authMember;
+    Member notAuthMember;
 
     SignServiceImpl signService;
     @Mock
@@ -52,6 +54,9 @@ class SignServiceUnitTest {
     @BeforeEach
     public void init() {
         signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, passwordEncoder, memberRepository, studyJoinRepository, redisService, emailService);
+
+        authMember = SignFactory.makeAuthTestMember();
+        notAuthMember = SignFactory.makeTestNotAuthMember();
     }
 
     @Test
@@ -59,14 +64,13 @@ class SignServiceUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member member = SignFactory.makeAuthTestMember();
-        MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(member);
+        MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(notAuthMember);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
         given(memberRepository.findByNickname(any())).willReturn(Optional.empty());
         given(passwordEncoder.encode(any())).willReturn("encodedPW");
-        given(memberRepository.save(any())).willReturn(member);
+        given(memberRepository.save(any())).willReturn(notAuthMember);
         
         //when
         MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);
@@ -80,10 +84,9 @@ class SignServiceUnitTest {
     public void register_fail1() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member member = SignFactory.makeAuthTestMember();
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
 
         //when, then
         Assertions.assertThrows(MemberEmailAlreadyExistsException.class, ()->signService.registerMember(requestDto));
@@ -94,11 +97,10 @@ class SignServiceUnitTest {
     public void register_fail2() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member member = SignFactory.makeAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
-        given(memberRepository.findByNickname(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByNickname(any())).willReturn(Optional.ofNullable(notAuthMember));
 
         //when, then
         Assertions.assertThrows(MemberNicknameAlreadyExistsException.class, ()->signService.registerMember(requestDto));
@@ -109,11 +111,10 @@ class SignServiceUnitTest {
     public void login() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        Member member = SignFactory.makeAuthTestMember();
-        MemberLoginResponseDto ExpectResult = SignFactory.makeLoginResponseDto(member);
+        MemberLoginResponseDto ExpectResult = SignFactory.makeLoginResponseDto(authMember);
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(studyJoinRepository.findStudyInfoByMemberId(any())).willReturn(new ArrayList<>());
         given(passwordEncoder.matches(any(), any())).willReturn(true);
         given(accessTokenHelper.createToken(any())).willReturn("accessToken");
@@ -132,10 +133,9 @@ class SignServiceUnitTest {
     public void login_fail1() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
         given(passwordEncoder.matches(any(), any())).willReturn(true);
 
         //when, then
@@ -147,10 +147,9 @@ class SignServiceUnitTest {
     public void login_fail2() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(passwordEncoder.matches(any(), any())).willReturn(false);
 
         //when, then
@@ -162,10 +161,9 @@ class SignServiceUnitTest {
     public void sendMail_register() throws Exception {
         //given
         MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("VERIFY");
-        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
         willDoNothing().given(redisService).setDataWithExpiration(any(), any(), any());
         willDoNothing().given(emailService).send(any(), any(), any());
 
@@ -181,10 +179,9 @@ class SignServiceUnitTest {
     public void sendMail_pw() throws Exception {
         //given
         MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("PASSWORD");
-        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         willDoNothing().given(redisService).setDataWithExpiration(any(), any(), any());
         willDoNothing().given(emailService).send(any(), any(), any());
 
@@ -199,11 +196,10 @@ class SignServiceUnitTest {
     @DisplayName("회원가입 후 인증에 대한 메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        Member member = SignFactory.makeTestNotAuthMember();
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(member.getEmail(), "authCode", "VERIFY");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(notAuthMember.getEmail(), "authCode", "VERIFY");
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
         given(redisService.getData(any())).willReturn("authCode");
         willDoNothing().given(redisService).deleteData(any());
 
@@ -248,11 +244,10 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        Member member = SignFactory.makeAuthTestMember();
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(member.getEmail(), "change");
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change");
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(passwordEncoder.encode(any())).willReturn("encodedChangedPW");
         willDoNothing().given(redisService).deleteData(any());
 
@@ -268,13 +263,12 @@ class SignServiceUnitTest {
     public void reIssue() throws Exception {
         //given
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto("refreshToken");
-        Member member = SignFactory.makeAuthTestMember();
-        TokenResponseDto ExpectResult = SignFactory.makeTokenResponseDto(member);
+        TokenResponseDto ExpectResult = SignFactory.makeTokenResponseDto(authMember);
 
         //mocking
         given(redisService.getData(any())).willReturn("test");
         given(refreshTokenHelper.extractSubject(any())).willReturn("test");
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(accessTokenHelper.createToken(any())).willReturn("newAccessToken");
         given(refreshTokenHelper.createToken(any())).willReturn("newRefreshToken");
         given(studyJoinRepository.findStudyInfoByMemberId(any())).willReturn(new ArrayList<>());
@@ -291,7 +285,6 @@ class SignServiceUnitTest {
     public void reIssue_fail() throws Exception {
         //given
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto("refreshToken");
-        Member member = SignFactory.makeAuthTestMember();
 
         //mocking
         given(redisService.getData(any())).willReturn("wrongToken!!!!");

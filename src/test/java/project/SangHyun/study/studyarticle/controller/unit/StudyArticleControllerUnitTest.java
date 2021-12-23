@@ -53,6 +53,7 @@ public class StudyArticleControllerUnitTest {
     Study study;
     StudyBoard studyBoard;
     StudyArticle studyArticle;
+
     @InjectMocks
     StudyArticleController studyArticleController;
     @Mock
