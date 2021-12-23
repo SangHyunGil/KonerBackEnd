@@ -1,6 +1,7 @@
 package project.SangHyun.study.study.domain;
 
 import lombok.*;
+import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.enums.RecruitState;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Study {
+public class Study extends EntityDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class StudyArticleServiceImpl implements StudyArticleService {
 
     private final StudyArticleRepository studyArticleRepository;
-    private final StudyJoinRepository studyJoinRepository;
 
     @Override
     @Transactional

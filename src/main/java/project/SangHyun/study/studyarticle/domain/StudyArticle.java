@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudyArticle {
+public class StudyArticle extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
