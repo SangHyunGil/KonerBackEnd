@@ -52,7 +52,7 @@ class MemberControllerTest {
     public void getMemberInfo() throws Exception {
         //given
         String accessToken = "accessToken";
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberInfoResponseDto responseDto = MemberFactory.makeInfoResponseDto(member);
         SingleResult<MemberInfoResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
@@ -73,7 +73,7 @@ class MemberControllerTest {
     public void getUserProfile() throws Exception {
         //given
         String accessToken = "accessToken";
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberProfileResponseDto responseDto = MemberFactory.makeProfileResponseDto(member);
         SingleResult<MemberProfileResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
@@ -96,7 +96,7 @@ class MemberControllerTest {
         //given
         String accessToken = "accessToken";
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("상현");
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberUpdateResponseDto responseDto = MemberFactory.makeUpdateResponseDto(member);
         SingleResult<MemberUpdateResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
@@ -119,7 +119,7 @@ class MemberControllerTest {
     public void deleteMember() throws Exception {
         //given
         String accessToken = "accessToken";
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberDeleteResponseDto responseDto = MemberFactory.makeDeleteResponseDto(member);
         SingleResult<MemberDeleteResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 

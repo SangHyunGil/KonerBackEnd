@@ -41,7 +41,7 @@ class MemberServiceUnitTest {
     public void loadUserInfo() throws Exception {
         //given
         MemberDetails memberDetails = MemberFactory.makeMemberDetails();
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberInfoResponseDto ExpectResult = MemberFactory.makeInfoResponseDto(member);
 
         //mocking
@@ -59,7 +59,7 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 로드한다.")
     public void loadProfile() throws Exception {
         //given
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberProfileResponseDto ExpectResult = MemberFactory.makeProfileResponseDto(member);
 
         //mocking
@@ -76,7 +76,7 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 수정한다.")
     public void updateMember() throws Exception {
         //given
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("테스터 변경");
 
         //mocking
@@ -93,7 +93,7 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 삭제한다.")
     public void deleteMember() throws Exception {
         //given
-        Member member = MemberFactory.makeTestMember();
+        Member member = MemberFactory.makeTestAuthMember();
         MemberDeleteResponseDto ExpectResult = MemberFactory.makeDeleteResponseDto(member);
 
         //mocking

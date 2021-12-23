@@ -132,7 +132,7 @@ class SignServiceUnitTest {
     public void login_fail1() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        Member member = SignFactory.makeNotAuthTestMember();
+        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -147,7 +147,7 @@ class SignServiceUnitTest {
     public void login_fail2() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        Member member = SignFactory.makeNotAuthTestMember();
+        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -162,7 +162,7 @@ class SignServiceUnitTest {
     public void sendMail_register() throws Exception {
         //given
         MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("VERIFY");
-        Member member = SignFactory.makeNotAuthTestMember();
+        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -181,7 +181,7 @@ class SignServiceUnitTest {
     public void sendMail_pw() throws Exception {
         //given
         MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("PASSWORD");
-        Member member = SignFactory.makeNotAuthTestMember();
+        Member member = SignFactory.makeTestNotAuthMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -199,7 +199,7 @@ class SignServiceUnitTest {
     @DisplayName("회원가입 후 인증에 대한 메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        Member member = SignFactory.makeNotAuthTestMember();
+        Member member = SignFactory.makeTestNotAuthMember();
         VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(member.getEmail(), "authCode", "VERIFY");
 
         //mocking

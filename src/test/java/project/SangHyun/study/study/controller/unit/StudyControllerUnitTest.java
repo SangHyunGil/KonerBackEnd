@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.service.StudyService;
+import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyboard.service.StudyBoardService;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
@@ -64,14 +65,10 @@ class StudyControllerUnitTest {
     @DisplayName("스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        Long studyId = 1L;
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, new Member(1L), new ArrayList<>(), new ArrayList<>());
-        ReflectionTestUtils.setField(study, "id", studyId);
-        List<StudyFindResponseDto> responseDtos = List.of(StudyFindResponseDto.create(study));
-
-        MultipleResult<StudyFindResponseDto> ExpectResult = new MultipleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDtos);
+        Member member = StudyFactory.makeTestAuthMember();
+        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
+        List<StudyFindResponseDto> responseDtos = StudyFactory.makeFindAllResponseDto(study);
+        MultipleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeMultipleResult(responseDtos);
 
         //mocking
         given(studyService.findAllStudies()).willReturn(responseDtos);
@@ -88,14 +85,10 @@ class StudyControllerUnitTest {
     @DisplayName("스터디에 대한 세부정보를 로드한다.")
     public void loadStudyDetail() throws Exception {
         //given
-        Long studyId = 1L;
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, new Member(1L), new ArrayList<>(), new ArrayList<>());
-        ReflectionTestUtils.setField(study, "id", studyId);
-        StudyFindResponseDto responseDto = StudyFindResponseDto.create(study);
-
-        SingleResult<StudyFindResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        Member member = StudyFactory.makeTestAuthMember();
+        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
+        StudyFindResponseDto responseDto = StudyFactory.makeFindResponseDto(study);
+        SingleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
         given(studyService.findStudy(1L)).willReturn(responseDto);
@@ -112,16 +105,12 @@ class StudyControllerUnitTest {
     public void createStudy() throws Exception {
         //given
         String accessToken = "accessToken";
-        StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 모집", "백엔드", "백엔드 모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
+        Member member = StudyFactory.makeTestAuthMember();
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
 
-        Long studyId = 1L;
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, new Member(1L), new ArrayList<>(), new ArrayList<>());
-        ReflectionTestUtils.setField(study, "id", studyId);
+        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         StudyCreateResponseDto responseDto = StudyCreateResponseDto.create(study);
-
-        SingleResult<StudyCreateResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        SingleResult<StudyCreateResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
         given(studyService.createStudy(requestDto)).willReturn(responseDto);
@@ -142,16 +131,13 @@ class StudyControllerUnitTest {
     public void join() throws Exception {
         //given
         String accessToken = "accessToken";
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(1L, 1L);
+        Member member = StudyFactory.makeTestAuthMember();
+        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
+        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
 
-        Long studyJoinId = 1L;
-        StudyJoin studyJoin = new StudyJoin(new Member(1L), new Study(1L), StudyRole.CREATOR);
-        ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
+        StudyJoin studyJoin = StudyFactory.makeTestStudyJoin(member, study);
         StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(studyJoin);
-
-        SingleResult<StudyJoinResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        SingleResult<StudyJoinResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
         given(studyJoinService.joinStudy(requestDto)).willReturn(responseDto);
@@ -173,7 +159,9 @@ class StudyControllerUnitTest {
     public void findStudyMembers() throws Exception {
         //given
         String accessToken = "accessToken";
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(1L, 1L);
+        Member member = StudyFactory.makeTestAuthMember();
+        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
+        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
 
         Long studyId = 1L;
         StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.CREATOR);

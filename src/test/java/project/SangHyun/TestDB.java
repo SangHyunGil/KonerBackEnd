@@ -64,6 +64,10 @@ public class TestDB {
         return memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
     }
 
+    public Member findStudyGeneralMember() {
+        return memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new);
+    }
+
     @Transactional(readOnly = true)
     public Member findStudyCreatorMember() {
         return memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
@@ -102,13 +106,19 @@ public class TestDB {
         Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberB);
 
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, memberA, new ArrayList<>(), new ArrayList<>());
+        Member memberC = new Member("xptmxm0!", passwordEncoder.encode("xptmxm0!"), "예림", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
+        memberRepository.save(memberC);
+
+        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 4L, memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
         study.join(studyJoin);
 
         StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.ADMIN);
         study.join(studyJoin2);
+
+        StudyJoin studyJoin3 = new StudyJoin(memberC, study, StudyRole.MEMBER);
+        study.join(studyJoin3);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);

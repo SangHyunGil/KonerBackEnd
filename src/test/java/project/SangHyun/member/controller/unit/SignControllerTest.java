@@ -47,7 +47,7 @@ class SignControllerTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member member = SignFactory.makeNotAuthTestMember();
+        Member member = SignFactory.makeTestNotAuthMember();
         MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(member);
         SingleResult<MemberRegisterResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 

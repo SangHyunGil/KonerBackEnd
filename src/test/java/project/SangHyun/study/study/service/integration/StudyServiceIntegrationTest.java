@@ -58,7 +58,7 @@ class StudyServiceIntegrationTest {
 
         //when
         StudyCreateResponseDto ActualResult = studyService.createStudy(requestDto);
-        Study study = studyRepository.findStudyByTitle("테스트").get(0);
+        Study study = studyRepository.findStudyByTitle("프론트엔드 모집").get(0);
 
         //then
         Assertions.assertEquals(study.getId(), ActualResult.getStudyId());

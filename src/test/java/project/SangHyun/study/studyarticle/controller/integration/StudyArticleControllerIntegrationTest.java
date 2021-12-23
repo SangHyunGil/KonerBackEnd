@@ -70,7 +70,8 @@ class StudyArticleControllerIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 모든 게시글을 로드한다.")
     public void loadArticles() throws Exception {
         //given
-        String accessToken = accessTokenHelper.createToken("xptmxm3!");
+        Member member = testDB.findStudyCreatorMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
         Study study = studyRepository.findStudyByTitle("백엔드").get(0);
         StudyBoard studyBoard = study.getStudyBoards().get(0);
 
