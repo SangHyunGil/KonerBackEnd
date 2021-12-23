@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
@@ -19,12 +18,9 @@ import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.member.tools.member.MemberRequestFactory;
+import project.SangHyun.member.tools.member.MemberFactory;
 
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @SpringBootTest
 @Transactional
@@ -47,7 +43,7 @@ class MemberServiceIntegrationTest {
     @DisplayName("회원 정보를 로드한다.")
     public void loadUserInfo() throws Exception {
         //given
-        MemberDetails memberDetails = MemberRequestFactory.makeMemberDetails();
+        MemberDetails memberDetails = MemberFactory.makeMemberDetails();
 
         //when
         MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
@@ -74,7 +70,7 @@ class MemberServiceIntegrationTest {
     public void updateMember() throws Exception {
         //given
         Member member = testDB.findGeneralMember();
-        MemberUpdateRequestDto requestDto = MemberRequestFactory.makeUpdateRequestDto("철수");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
 
         //when
         MemberUpdateResponseDto ActualResult = memberService.updateMember(member.getId(), requestDto);

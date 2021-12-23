@@ -14,11 +14,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.config.jwt.JwtTokenHandler;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.tools.member.MemberRequestFactory;
-import project.SangHyun.member.tools.sign.SignRequestFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.member.dto.request.*;
 
@@ -57,7 +55,7 @@ class SignControllerIntegrationTest {
     @DisplayName("회원가입을 진행한다.")
     public void register_success() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignRequestFactory.makeRegisterRequestDto();
+        MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -71,7 +69,7 @@ class SignControllerIntegrationTest {
     @DisplayName("중복이메일이 존재해 회원가입이 실패한다.")
     public void register_fail1() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignRequestFactory.makeDuplicateEmailRequestDto();
+        MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateEmailRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -85,7 +83,7 @@ class SignControllerIntegrationTest {
     @DisplayName("중복닉네임이 존재해 회원가입이 실패한다.")
     public void register_fail2() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignRequestFactory.makeDuplicateNicknameRequestDto();
+        MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateNicknameRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -99,7 +97,7 @@ class SignControllerIntegrationTest {
     @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("VERIFY");
+        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("VERIFY");
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -113,7 +111,7 @@ class SignControllerIntegrationTest {
     @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("PASSWORD");
+        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("PASSWORD");
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -128,7 +126,7 @@ class SignControllerIntegrationTest {
     public void verifyMail_register() throws Exception {
         //given
         String authCode = makeAuthCode("xptmxm2!", "VERIFY");
-        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
 
         //when, then
         mockMvc.perform(post("/sign/verify")
@@ -150,7 +148,7 @@ class SignControllerIntegrationTest {
     public void verifyMail_pw() throws Exception {
         //given
         String authCode = makeAuthCode("xptmxm1!", "PASSWORD");
-        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
 
         //when, then
         mockMvc.perform(post("/sign/verify")
@@ -165,7 +163,7 @@ class SignControllerIntegrationTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = SignRequestFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
 
         //when, then
         mockMvc.perform(post("/sign/password")
@@ -179,7 +177,7 @@ class SignControllerIntegrationTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignRequestFactory.makeAuthMemberLoginRequestDto();
+        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/login")
@@ -193,9 +191,9 @@ class SignControllerIntegrationTest {
     @DisplayName("RefreshToken을 이용해 JWT 토큰들을 재발급한다.")
     public void reIssue() throws Exception {
         //given
-        Member member = SignRequestFactory.makeAuthTestMember();
+        Member member = SignFactory.makeAuthTestMember();
         String refreshToken = makeRefreshToken(member);
-        TokenRequestDto requestDto = SignRequestFactory.makeTokenRequestDto(refreshToken);
+        TokenRequestDto requestDto = SignFactory.makeTokenRequestDto(refreshToken);
 
         //when, then
         mockMvc.perform(post("/sign/reissue")

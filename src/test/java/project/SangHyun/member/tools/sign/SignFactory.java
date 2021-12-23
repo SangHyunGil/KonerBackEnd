@@ -1,11 +1,21 @@
 package project.SangHyun.member.tools.sign;
 
 import org.springframework.test.util.ReflectionTestUtils;
+import project.SangHyun.BasicFactory;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.*;
+import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
+import project.SangHyun.member.dto.response.MemberLoginResponseDto;
+import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.enums.MemberRole;
+import project.SangHyun.member.service.impl.JwtTokens;
 
-public class SignRequestFactory {
+import java.util.ArrayList;
+
+public class SignFactory extends BasicFactory {
+
+    // Request
     public static MemberRegisterRequestDto makeRegisterRequestDto() {
         return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과");
     }
@@ -53,10 +63,20 @@ public class SignRequestFactory {
         return member;
     }
 
-    public static Member makeNotAuthTestMember() {
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "승범", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        return member;
+    // Response
+    public static MemberRegisterResponseDto makeRegisterResponseDto(Member member) {
+        return MemberRegisterResponseDto.create(member);
+    }
+
+    public static MemberLoginResponseDto makeLoginResponseDto(Member member) {
+        return MemberLoginResponseDto.create(member, new ArrayList<>(), new JwtTokens("accessToken", "refreshToken"));
+    }
+
+    public static TokenResponseDto makeTokenResponseDto(Member member) {
+        return TokenResponseDto.create(member, new ArrayList<>(), new JwtTokens("newAccessToken", "newRefreshToken"));
+    }
+
+    public static MemberChangePwResponseDto makeChangePwResponseDto(Member member) {
+        return MemberChangePwResponseDto.create(member);
     }
 }

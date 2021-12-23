@@ -10,14 +10,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.ResponseFactory;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.enums.MemberRole;
-import project.SangHyun.member.tools.member.MemberRequestFactory;
-import project.SangHyun.member.tools.member.MemberResponseFactory;
+import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 import project.SangHyun.member.service.MemberService;
@@ -28,12 +24,9 @@ import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
 import project.SangHyun.member.controller.MemberController;
 
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,9 +52,9 @@ class MemberControllerTest {
     public void getMemberInfo() throws Exception {
         //given
         String accessToken = "accessToken";
-        Member member = MemberRequestFactory.makeTestMember();
-        MemberInfoResponseDto responseDto = MemberResponseFactory.makeInfoResponseDto(member);
-        SingleResult<MemberInfoResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
+        Member member = MemberFactory.makeTestMember();
+        MemberInfoResponseDto responseDto = MemberFactory.makeInfoResponseDto(member);
+        SingleResult<MemberInfoResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.getMemberInfo(any())).willReturn(responseDto);
@@ -80,9 +73,9 @@ class MemberControllerTest {
     public void getUserProfile() throws Exception {
         //given
         String accessToken = "accessToken";
-        Member member = MemberRequestFactory.makeTestMember();
-        MemberProfileResponseDto responseDto = MemberResponseFactory.makeProfileResponseDto(member);
-        SingleResult<MemberProfileResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
+        Member member = MemberFactory.makeTestMember();
+        MemberProfileResponseDto responseDto = MemberFactory.makeProfileResponseDto(member);
+        SingleResult<MemberProfileResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.getProfile(any())).willReturn(responseDto);
@@ -102,10 +95,10 @@ class MemberControllerTest {
     public void updateMember() throws Exception {
         //given
         String accessToken = "accessToken";
-        MemberUpdateRequestDto requestDto = MemberRequestFactory.makeUpdateRequestDto("상현");
-        Member member = MemberRequestFactory.makeTestMember();
-        MemberUpdateResponseDto responseDto = MemberResponseFactory.makeUpdateResponseDto(member);
-        SingleResult<MemberUpdateResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("상현");
+        Member member = MemberFactory.makeTestMember();
+        MemberUpdateResponseDto responseDto = MemberFactory.makeUpdateResponseDto(member);
+        SingleResult<MemberUpdateResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.updateMember(any(), any())).willReturn(responseDto);
@@ -126,9 +119,9 @@ class MemberControllerTest {
     public void deleteMember() throws Exception {
         //given
         String accessToken = "accessToken";
-        Member member = MemberRequestFactory.makeTestMember();
-        MemberDeleteResponseDto responseDto = MemberResponseFactory.makeDeleteResponseDto(member);
-        SingleResult<MemberDeleteResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
+        Member member = MemberFactory.makeTestMember();
+        MemberDeleteResponseDto responseDto = MemberFactory.makeDeleteResponseDto(member);
+        SingleResult<MemberDeleteResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.deleteMember(any())).willReturn(responseDto);

@@ -14,13 +14,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.tools.member.MemberRequestFactory;
-import project.SangHyun.member.tools.sign.SignRequestFactory;
+import project.SangHyun.member.tools.member.MemberFactory;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -107,7 +105,7 @@ class MemberControllerIntegrationTest {
         //given
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        MemberUpdateRequestDto requestDto = MemberRequestFactory.makeUpdateRequestDto("철수");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
 
         //when, then
         mockMvc.perform(put("/users/{id}", member.getId())
@@ -125,7 +123,7 @@ class MemberControllerIntegrationTest {
         //given
         Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        MemberUpdateRequestDto requestDto = MemberRequestFactory.makeUpdateRequestDto("적절한닉네임");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("적절한닉네임");
 
         //when, then
         mockMvc.perform(put("/users/{id}", member.getId())
@@ -144,7 +142,7 @@ class MemberControllerIntegrationTest {
         Member memberA = testDB.findGeneralMember();
         Member memberB = testDB.findAnotherGeneralMember();
         String accessToken = accessTokenHelper.createToken(memberB.getEmail());
-        MemberUpdateRequestDto requestDto = MemberRequestFactory.makeUpdateRequestDto("철수");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
 
         //when, then
         mockMvc.perform(put("/users/{id}", memberA.getId())
