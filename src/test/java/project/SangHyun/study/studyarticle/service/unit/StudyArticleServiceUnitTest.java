@@ -57,7 +57,7 @@ class StudyArticleServiceUnitTest {
         given(studyArticleRepository.save(any())).willReturn(studyArticle);
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyId, studyBoardId, requestDto);
+        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoardId, requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getArticleId(), ActualResult.getArticleId());
@@ -84,7 +84,7 @@ class StudyArticleServiceUnitTest {
 
 
         //when
-        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(studyId, studyBoardId);
+        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(studyBoardId);
 
         //then
         Assertions.assertEquals(1L, ActualResult.size());
@@ -107,7 +107,7 @@ class StudyArticleServiceUnitTest {
         given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
 
         //when
-        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyId, studyBoardId);
+        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyBoardId);
 
         //then
         Assertions.assertEquals("테스트 글", ActualResult.getTitle());
@@ -132,7 +132,7 @@ class StudyArticleServiceUnitTest {
         given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
 
         //when
-        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(studyId, studyBoardId, requestDto);
+        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(studyBoardId, requestDto);
 
         //then
         Assertions.assertEquals("테스트 글 수정", ActualResult.getTitle());
@@ -156,7 +156,7 @@ class StudyArticleServiceUnitTest {
 
         //when
         given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
-        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(studyId, studyBoardId);
+        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(studyBoardId);
 
         //then
         Assertions.assertEquals("테스트 글", ActualResult.getTitle());
@@ -178,7 +178,7 @@ class StudyArticleServiceUnitTest {
 
         //when
         Assertions.assertEquals(0, studyArticle.getViews());
-        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyId, studyArticleId);
+        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyArticleId);
 
         //then
         Assertions.assertEquals(1,ActualResult.getViews());

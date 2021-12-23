@@ -16,6 +16,9 @@ import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHandler;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.tools.member.MemberRequestFactory;
+import project.SangHyun.member.tools.sign.SignRequestFactory;
 import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.member.dto.request.*;
 
@@ -54,7 +57,7 @@ class SignControllerIntegrationTest {
     @DisplayName("회원가입을 진행한다.")
     public void register_success() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터4", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeRegisterRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -68,7 +71,7 @@ class SignControllerIntegrationTest {
     @DisplayName("중복이메일이 존재해 회원가입이 실패한다.")
     public void register_fail1() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm1!", "테스터3", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeDuplicateEmailRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -82,7 +85,7 @@ class SignControllerIntegrationTest {
     @DisplayName("중복닉네임이 존재해 회원가입이 실패한다.")
     public void register_fail2() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm1!", "테스터", "컴퓨터공학부");
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeDuplicateNicknameRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/register")
@@ -96,7 +99,7 @@ class SignControllerIntegrationTest {
     @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("xptmxm2!", "VERIFY");
+        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("VERIFY");
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -110,7 +113,7 @@ class SignControllerIntegrationTest {
     @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("xptmxm1!", "PASSWORD");
+        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("PASSWORD");
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -124,10 +127,8 @@ class SignControllerIntegrationTest {
     @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration("VERIFY"+"xptmxm2!", authCode, 60 * 5L);
-        redisService.getData("VERIFY"+"xptmxm2!");
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
+        String authCode = makeAuthCode("xptmxm2!", "VERIFY");
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
 
         //when, then
         mockMvc.perform(post("/sign/verify")
@@ -138,14 +139,18 @@ class SignControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
+    private String makeAuthCode(String s, String verify) {
+        String authCode = UUID.randomUUID().toString();
+        redisService.setDataWithExpiration(verify + s, authCode, 60 * 5L);
+        return authCode;
+    }
+
     @Test
     @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration("PASSWORD"+"xptmxm1!", authCode, 60 * 5L);
-
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
+        String authCode = makeAuthCode("xptmxm1!", "PASSWORD");
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
 
         //when, then
         mockMvc.perform(post("/sign/verify")
@@ -160,7 +165,7 @@ class SignControllerIntegrationTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("xptmxm1!", "xptmxm1!changePassword");
+        MemberChangePwRequestDto requestDto = SignRequestFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
 
         //when, then
         mockMvc.perform(post("/sign/password")
@@ -174,7 +179,7 @@ class SignControllerIntegrationTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm1!", "xptmxm1!");
+        MemberLoginRequestDto requestDto = SignRequestFactory.makeAuthMemberLoginRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/login")
@@ -188,10 +193,9 @@ class SignControllerIntegrationTest {
     @DisplayName("RefreshToken을 이용해 JWT 토큰들을 재발급한다.")
     public void reIssue() throws Exception {
         //given
-        String refreshToken = refreshTokenHelper.createToken("xptmxm1!");
-        redisService.setDataWithExpiration(refreshToken, "xptmxm1!", refreshTokenHelper.getValidTime());
-
-        TokenRequestDto requestDto = new TokenRequestDto(refreshToken);
+        Member member = SignRequestFactory.makeAuthTestMember();
+        String refreshToken = makeRefreshToken(member);
+        TokenRequestDto requestDto = SignRequestFactory.makeTokenRequestDto(refreshToken);
 
         //when, then
         mockMvc.perform(post("/sign/reissue")
@@ -201,4 +205,9 @@ class SignControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
+    private String makeRefreshToken(Member member) {
+        String refreshToken = refreshTokenHelper.createToken(member.getEmail());
+        redisService.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
+        return refreshToken;
+    }
 }

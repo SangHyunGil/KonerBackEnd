@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyRole;
@@ -38,6 +39,50 @@ public class TestDB {
         initStudy();
     }
 
+    @Transactional(readOnly = true)
+    public Member findGeneralMember() {
+        return memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findAnotherGeneralMember() {
+        return memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findNotAuthMember() {
+        return memberRepository.findByEmail("xptmxm2!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findAdminMember() {
+        return memberRepository.findByEmail("xptmxm4!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findNotStudyMember() {
+        return memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findStudyCreatorMember() {
+        return memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findStudyAdminMember() {
+        return memberRepository.findByEmail("xptmxm5!").orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Study findStudy() {
+        return studyRepository.findStudyByTitle("백엔드 모집").get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyBoard findAnnounceBoard() {
+        return studyRepository.findStudyByTitle("백엔드 모집").get(0).getStudyBoards().get(0);
+    }
 
     private void initMember() {
         Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴공", MemberRole.ROLE_MEMBER);

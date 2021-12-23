@@ -10,9 +10,9 @@ import project.SangHyun.study.studyarticle.dto.response.StudyArticleUpdateRespon
 import java.util.List;
 
 public interface StudyArticleService {
-    StudyArticleCreateResponseDto createArticle(Long studyId, Long boardId, StudyArticleCreateRequestDto requestDto);
-    List<StudyArticleFindResponseDto> findAllArticles(Long studyId, Long boardId);
-    StudyArticleFindResponseDto findArticle(Long studyId, Long articleId);
-    StudyArticleUpdateResponseDto updateArticle(Long studyId, Long articleId, StudyArticleUpdateRequestDto requestDto);
-    StudyArticleDeleteResponseDto deleteArticle(Long studyId, Long articleId);
+    StudyArticleCreateResponseDto createArticle(Long boardId, StudyArticleCreateRequestDto requestDto);
+    List<StudyArticleFindResponseDto> findAllArticles(Long boardId);
+    StudyArticleFindResponseDto findArticle(Long articleId);
+    StudyArticleUpdateResponseDto updateArticle(Long articleId, StudyArticleUpdateRequestDto requestDto);
+    StudyArticleDeleteResponseDto deleteArticle(Long articleId);
 }

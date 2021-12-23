@@ -1,6 +1,7 @@
 package project.SangHyun.member.controller.unit;
 
 import com.google.gson.Gson;
+import io.swagger.models.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import project.SangHyun.ResponseFactory;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.service.impl.JwtTokens;
+import project.SangHyun.member.tools.member.MemberRequestFactory;
+import project.SangHyun.member.tools.sign.SignRequestFactory;
+import project.SangHyun.member.tools.sign.SignResponseFactory;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 import project.SangHyun.member.service.SignService;
@@ -53,16 +58,10 @@ class SignControllerTest {
     @DisplayName("회원가입을 진행한다.")
     public void register() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("xptmxm1!", "xptmxm1!", "테스터", "컴퓨터공학부");
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "xptmxm1!encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeRegisterRequestDto();
+        Member member = SignRequestFactory.makeNotAuthTestMember();
         MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(member);
-
-        SingleResult<MemberRegisterResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        SingleResult<MemberRegisterResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(signService.registerMember(requestDto)).willReturn(responseDto);
@@ -79,13 +78,9 @@ class SignControllerTest {
     @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test", "VERIFY");
-
+        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("VERIFY");
         String result = "이메일 전송에 성공하였습니다.";
-
-        SingleResult<String> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(result);
+        SingleResult<String> ExpectResult = ResponseFactory.makeSingleResult(result);
 
         //mocking
         given(signService.sendEmail(requestDto)).willReturn(result);
@@ -102,13 +97,9 @@ class SignControllerTest {
     @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test", "PASSWORD");
-
+        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("PASSWORD");
         String result = "이메일 전송에 성공하였습니다.";
-
-        SingleResult<String> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(result);
+        SingleResult<String> ExpectResult = ResponseFactory.makeSingleResult(result);
 
         //mocking
         given(signService.sendEmail(requestDto)).willReturn(result);
@@ -125,13 +116,9 @@ class SignControllerTest {
     @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test", "authCode", "VERIFY");
-
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", "VERIFY");
         String result = "이메일 인증이 완료되었습니다.";
-
-        SingleResult<String> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(result);
+        SingleResult<String> ExpectResult = ResponseFactory.makeSingleResult(result);
 
         //mocking
         given(signService.verify(requestDto)).willReturn(result);
@@ -148,13 +135,9 @@ class SignControllerTest {
     @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test", "authCode", "PASSWORD");
-
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", "PASSWORD");
         String result = "이메일 인증이 완료되었습니다.";
-
-        SingleResult<String> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(result);
+        SingleResult<String> ExpectResult = ResponseFactory.makeSingleResult(result);
 
         //mocking
         given(signService.verify(requestDto)).willReturn(result);
@@ -171,16 +154,10 @@ class SignControllerTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("xptmxm1!", "xptmxm1!testChange");
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "xptmxm1!changedEncodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        MemberChangePwResponseDto responseDto = MemberChangePwResponseDto.create(member);
-
-        SingleResult<MemberChangePwResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        Member member = SignRequestFactory.makeAuthTestMember();
+        MemberChangePwRequestDto requestDto = SignRequestFactory.makeChangePwRequestDto(member.getEmail(), "change1!");
+        MemberChangePwResponseDto responseDto = SignResponseFactory.makeChangePwResponseDto(member);
+        SingleResult<MemberChangePwResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(signService.changePassword(requestDto)).willReturn(responseDto);
@@ -197,16 +174,10 @@ class SignControllerTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("xptmxm1!", "xptmxm1!");
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        MemberLoginResponseDto responseDto = MemberLoginResponseDto.create(member, List.of(), new JwtTokens("accessToken", "refreshToken"));
-
-        SingleResult<MemberLoginResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        MemberLoginRequestDto requestDto = SignRequestFactory.makeAuthMemberLoginRequestDto();
+        Member member = SignRequestFactory.makeAuthTestMember();
+        MemberLoginResponseDto responseDto = SignResponseFactory.makeLoginResponseDto(member);
+        SingleResult<MemberLoginResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(signService.loginMember(requestDto)).willReturn(responseDto);
@@ -223,16 +194,10 @@ class SignControllerTest {
     @DisplayName("RefreshToken을 이용해 JWT 토큰들을 재발급한다.")
     public void reIssue() throws Exception {
         //given
-        TokenRequestDto requestDto = new TokenRequestDto("refreshToken");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "xptmxm1!encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        TokenResponseDto responseDto = TokenResponseDto.create(member, List.of(), new JwtTokens("newAccessToken", "newRefreshToken"));
-
-        SingleResult<TokenResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        TokenRequestDto requestDto = SignRequestFactory.makeTokenRequestDto("refreshToken");
+        Member member = SignRequestFactory.makeAuthTestMember();
+        TokenResponseDto responseDto = SignResponseFactory.makeTokenResponseDto(member);
+        SingleResult<TokenResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(signService.tokenReIssue(requestDto)).willReturn(responseDto);

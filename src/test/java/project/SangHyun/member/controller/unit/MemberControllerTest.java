@@ -13,8 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import project.SangHyun.ResponseFactory;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.enums.MemberRole;
+import project.SangHyun.member.tools.member.MemberRequestFactory;
+import project.SangHyun.member.tools.member.MemberResponseFactory;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 import project.SangHyun.member.service.MemberService;
@@ -56,15 +59,9 @@ class MemberControllerTest {
     public void getMemberInfo() throws Exception {
         //given
         String accessToken = "accessToken";
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "xptmxm1!encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        MemberInfoResponseDto responseDto = MemberInfoResponseDto.create(member, List.of());
-
-        SingleResult<MemberInfoResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        Member member = MemberRequestFactory.makeTestMember();
+        MemberInfoResponseDto responseDto = MemberResponseFactory.makeInfoResponseDto(member);
+        SingleResult<MemberInfoResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.getMemberInfo(any())).willReturn(responseDto);
@@ -74,10 +71,7 @@ class MemberControllerTest {
         mockMvc.perform(post("/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L))
-                .andExpect(jsonPath("$.data.email").value("xptmxm1!"))
-                .andExpect(jsonPath("$.data.nickname").value("테스터"))
-                .andExpect(jsonPath("$.data.department").value("컴퓨터공학부"));
+                .andExpect(jsonPath("$.data.memberId").value(1L));
     }
 
 
@@ -86,15 +80,9 @@ class MemberControllerTest {
     public void getUserProfile() throws Exception {
         //given
         String accessToken = "accessToken";
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "xptmxm1!encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        MemberProfileResponseDto responseDto = MemberProfileResponseDto.create(member);
-
-        SingleResult<MemberProfileResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        Member member = MemberRequestFactory.makeTestMember();
+        MemberProfileResponseDto responseDto = MemberResponseFactory.makeProfileResponseDto(member);
+        SingleResult<MemberProfileResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.getProfile(any())).willReturn(responseDto);
@@ -106,10 +94,7 @@ class MemberControllerTest {
                         .with(securityContext(SecurityContextHolder.getContext())))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L))
-                .andExpect(jsonPath("$.data.email").value("xptmxm1!"))
-                .andExpect(jsonPath("$.data.nickname").value("테스터"))
-                .andExpect(jsonPath("$.data.department").value("컴퓨터공학부"));
+                .andExpect(jsonPath("$.data.memberId").value(1L));
     }
 
     @Test
@@ -117,16 +102,10 @@ class MemberControllerTest {
     public void updateMember() throws Exception {
         //given
         String accessToken = "accessToken";
-        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("xptmxm1!", "테스터수정", "기계공학부");
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "xptmxm1!encodedPW", "테스터수정", "기계공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        MemberUpdateResponseDto responseDto = MemberUpdateResponseDto.create(member);
-
-        SingleResult<MemberUpdateResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        MemberUpdateRequestDto requestDto = MemberRequestFactory.makeUpdateRequestDto("상현");
+        Member member = MemberRequestFactory.makeTestMember();
+        MemberUpdateResponseDto responseDto = MemberResponseFactory.makeUpdateResponseDto(member);
+        SingleResult<MemberUpdateResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.updateMember(any(), any())).willReturn(responseDto);
@@ -139,10 +118,7 @@ class MemberControllerTest {
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L))
-                .andExpect(jsonPath("$.data.email").value("xptmxm1!"))
-                .andExpect(jsonPath("$.data.nickname").value("테스터수정"))
-                .andExpect(jsonPath("$.data.department").value("기계공학부"));
+                .andExpect(jsonPath("$.data.nickname").value("상현"));
     }
 
     @Test
@@ -150,15 +126,9 @@ class MemberControllerTest {
     public void deleteMember() throws Exception {
         //given
         String accessToken = "accessToken";
-
-        Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "xptmxm1!encodedPW", "테스터수정", "기계공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-        MemberDeleteResponseDto responseDto = MemberDeleteResponseDto.create(member);
-
-        SingleResult<MemberDeleteResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        Member member = MemberRequestFactory.makeTestMember();
+        MemberDeleteResponseDto responseDto = MemberResponseFactory.makeDeleteResponseDto(member);
+        SingleResult<MemberDeleteResponseDto> ExpectResult = ResponseFactory.makeSingleResult(responseDto);
 
         //mocking
         given(memberService.deleteMember(any())).willReturn(responseDto);
@@ -168,8 +138,6 @@ class MemberControllerTest {
         mockMvc.perform(delete("/users/{id}", 1)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L))
-                .andExpect(jsonPath("$.data.email").value("xptmxm1!"))
-                .andExpect(jsonPath("$.data.nickname").value("테스터수정"));
+                .andExpect(jsonPath("$.data.memberId").value(1L));
     }
 }

@@ -29,34 +29,34 @@ public class StudyArticleController {
     @ApiOperation(value = "스터디 게시글 모두 찾기", notes = "스터디에 포함된 게시글을 모두 찾는다.")
     @GetMapping
     public MultipleResult<StudyArticleFindResponseDto> findStudyArticles(@PathVariable Long studyId, @PathVariable Long boardId) {
-        return responseService.getMultipleResult(studyArticleService.findAllArticles(studyId, boardId));
+        return responseService.getMultipleResult(studyArticleService.findAllArticles(boardId));
     }
 
     @ApiOperation(value = "스터디 게시글 생성", notes = "스터디에 포함된 게시글을 생성한다.")
     @PostMapping
     public SingleResult<StudyArticleCreateResponseDto> createStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId,
                                                                           @Valid @RequestBody StudyArticleCreateRequestDto requestDto) {
-        return responseService.getSingleResult(studyArticleService.createArticle(studyId, boardId, requestDto));
+        return responseService.getSingleResult(studyArticleService.createArticle(boardId, requestDto));
     }
 
     @ApiOperation(value = "스터디 게시글 세부사항 찾기", notes = "스터디에 포함된 게시글의 세부사항을 찾는다.")
     @GetMapping("/{articleId}")
     public SingleResult<StudyArticleFindResponseDto> findStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId,
                                                                       @PathVariable Long articleId) {
-        return responseService.getSingleResult(studyArticleService.findArticle(studyId, articleId));
+        return responseService.getSingleResult(studyArticleService.findArticle(articleId));
     }
 
     @ApiOperation(value = "스터디 게시글 수정", notes = "스터디에 포함된 게시글을 수정한다.")
     @PutMapping("/{articleId}")
     public SingleResult<StudyArticleUpdateResponseDto> updateStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable Long articleId,
                                                                           @Valid @RequestBody StudyArticleUpdateRequestDto requestDto) {
-        return responseService.getSingleResult(studyArticleService.updateArticle(studyId, articleId, requestDto));
+        return responseService.getSingleResult(studyArticleService.updateArticle(articleId, requestDto));
     }
 
     @ApiOperation(value = "스터디 게시글 삭제", notes = "스터디에 포함된 게시글을 삭제한다.")
     @DeleteMapping("/{articleId}")
     public SingleResult<StudyArticleDeleteResponseDto> deleteStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId,
                                                                           @PathVariable Long articleId) {
-        return responseService.getSingleResult(studyArticleService.deleteArticle(studyId, articleId));
+        return responseService.getSingleResult(studyArticleService.deleteArticle(articleId));
     }
 }

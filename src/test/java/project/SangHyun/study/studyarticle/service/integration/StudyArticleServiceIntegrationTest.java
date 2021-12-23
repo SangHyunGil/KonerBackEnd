@@ -62,10 +62,10 @@ class StudyArticleServiceIntegrationTest {
         StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 내용");
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(study.getId(), studyBoard.getId(), requestDto);
+        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
-        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(study.getId(), studyBoard.getId()).stream()
+        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(studyBoard.getId()).stream()
                 .filter(studyArticle -> studyArticle.getTitle().equals("테스트 글"))
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
@@ -82,7 +82,7 @@ class StudyArticleServiceIntegrationTest {
         StudyBoard studyBoard = study.getStudyBoards().get(0);
 
         //when
-        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(study.getId(), studyBoard.getId());
+        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(studyBoard.getId());
 
         //then
         Assertions.assertEquals(3, ActualResult.size());;
@@ -99,11 +99,11 @@ class StudyArticleServiceIntegrationTest {
         StudyArticleUpdateRequestDto updateDto = new StudyArticleUpdateRequestDto("테스트 글 수정", "테스트 내용 수정");
 
         //when
-        StudyArticleCreateResponseDto article = studyArticleService.createArticle(study.getId(), studyBoard.getId(), createDto);
-        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(study.getId(), article.getArticleId(), updateDto);
+        StudyArticleCreateResponseDto article = studyArticleService.createArticle(studyBoard.getId(), createDto);
+        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(article.getArticleId(), updateDto);
 
         //then
-        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(study.getId(), studyBoard.getId()).stream()
+        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(studyBoard.getId()).stream()
                 .filter(studyArticle -> studyArticle.getTitle().equals("테스트 글 수정"))
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
@@ -125,11 +125,11 @@ class StudyArticleServiceIntegrationTest {
         //when
         List<StudyArticle> allArticles = studyArticleRepository.findAllArticles(studyBoard.getId());
         Long id = allArticles.get(0).getId();
-        studyArticleService.deleteArticle(study.getId(), id);
-        List<StudyArticleFindResponseDto> allArticles1 = studyArticleService.findAllArticles(study.getId(), studyBoard.getId());
+        studyArticleService.deleteArticle(id);
+        List<StudyArticleFindResponseDto> allArticles1 = studyArticleService.findAllArticles(studyBoard.getId());
 
         //then
-        Assertions.assertEquals(1, allArticles1.size());
+        Assertions.assertEquals(2, allArticles1.size());
     }
 
     @Test
@@ -142,9 +142,9 @@ class StudyArticleServiceIntegrationTest {
 
         //when
         Assertions.assertEquals(0, studyArticle.getViews());
-        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(study.getId(), studyArticle.getId());
+        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
 
-        //then
+        //then`
         Assertions.assertEquals(1,ActualResult.getViews());
     }
 }

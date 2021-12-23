@@ -76,7 +76,7 @@ public class StudyArticleControllerUnitTest {
         ExpectResult.setData(responseDtos);
 
         //mocking
-        given(studyArticleService.findAllArticles(studyId, boardId)).willReturn(responseDtos);
+        given(studyArticleService.findAllArticles(boardId)).willReturn(responseDtos);
         given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
         //when, then
         mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", studyId, boardId)
@@ -103,7 +103,7 @@ public class StudyArticleControllerUnitTest {
         ExpectResult.setData(responseDto);
 
         //mocking
-        given(studyArticleService.findArticle(studyId, boardId)).willReturn(responseDto);
+        given(studyArticleService.findArticle(boardId)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
         //when, then
         mockMvc.perform(get("/study/{studyId}/board/{boardId}/article/{articleId}", studyId, boardId, studyArticleId)
@@ -132,7 +132,7 @@ public class StudyArticleControllerUnitTest {
         StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(memberId, "테스트 글", "테스트 글입니다.");
 
         //mocking
-        given(studyArticleService.createArticle(studyId, boardId, requestDto)).willReturn(responseDto);
+        given(studyArticleService.createArticle(boardId, requestDto)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -165,7 +165,7 @@ public class StudyArticleControllerUnitTest {
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("테스트 수정 글", "테스트 수정 글입니다.");
 
         //mocking
-        given(studyArticleService.updateArticle(studyId, boardId, requestDto)).willReturn(responseDto);
+        given(studyArticleService.updateArticle(boardId, requestDto)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -196,7 +196,7 @@ public class StudyArticleControllerUnitTest {
         ExpectResult.setData(responseDto);
 
         //mocking
-        given(studyArticleService.deleteArticle(studyId, boardId)).willReturn(responseDto);
+        given(studyArticleService.deleteArticle(boardId)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then

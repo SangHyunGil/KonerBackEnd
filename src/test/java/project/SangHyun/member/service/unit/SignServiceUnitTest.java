@@ -8,13 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.advice.exception.*;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.impl.JwtTokens;
+import project.SangHyun.member.tools.sign.SignRequestFactory;
+import project.SangHyun.member.tools.sign.SignResponseFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.utils.service.EmailService;
 import project.SangHyun.member.service.impl.SignServiceImpl;
@@ -60,13 +59,9 @@ class SignServiceUnitTest {
     @DisplayName("회원 가입을 진행한다.")
     public void register() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test", "test", "테스터", "컴퓨터공학과");
-
-        Long memberId = 1L;
-        Member member = requestDto.toEntity(passwordEncoder);
-        ReflectionTestUtils.setField(member, "id", memberId);
-
-        MemberRegisterResponseDto ExpectResult = MemberRegisterResponseDto.create(member);
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeRegisterRequestDto();
+        Member member = SignRequestFactory.makeAuthTestMember();
+        MemberRegisterResponseDto ExpectResult = SignResponseFactory.makeRegisterResponseDto(member);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
@@ -85,11 +80,8 @@ class SignServiceUnitTest {
     @DisplayName("이메일중복으로 인해 회원 가입에 실패한다.")
     public void register_fail1() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test", "test", "테스터", "컴퓨터공학과");
-
-        Long memberId = 1L;
-        Member member = requestDto.toEntity(passwordEncoder);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeRegisterRequestDto();
+        Member member = SignRequestFactory.makeAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -102,11 +94,8 @@ class SignServiceUnitTest {
     @DisplayName("닉네임중복으로 인해 회원 가입에 실패한다.")
     public void register_fail2() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto("test", "test", "테스터", "컴퓨터공학과");
-
-        Long memberId = 1L;
-        Member member = requestDto.toEntity(passwordEncoder);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberRegisterRequestDto requestDto = SignRequestFactory.makeRegisterRequestDto();
+        Member member = SignRequestFactory.makeAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
@@ -120,13 +109,9 @@ class SignServiceUnitTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "test");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
-
-        MemberLoginResponseDto ExpectResult = MemberLoginResponseDto.create(member, new ArrayList<>(), new JwtTokens("accessToken", "refreshToken"));
+        MemberLoginRequestDto requestDto = SignRequestFactory.makeAuthMemberLoginRequestDto();
+        Member member = SignRequestFactory.makeAuthTestMember();
+        MemberLoginResponseDto ExpectResult = SignResponseFactory.makeLoginResponseDto(member);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -147,11 +132,8 @@ class SignServiceUnitTest {
     @DisplayName("인증이 미완료된 회원은 로그인에 실패한다.")
     public void login_fail1() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "test");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberLoginRequestDto requestDto = SignRequestFactory.makeAuthMemberLoginRequestDto();
+        Member member = SignRequestFactory.makeNotAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -165,11 +147,8 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호가 틀린 회원은 로그인에 실패한다.")
     public void login_fail2() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = new MemberLoginRequestDto("test", "test");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberLoginRequestDto requestDto = SignRequestFactory.makeAuthMemberLoginRequestDto();
+        Member member = SignRequestFactory.makeNotAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -183,11 +162,8 @@ class SignServiceUnitTest {
     @DisplayName("회원가입 후 인증을 위한 이메일을 전송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test", "VERIFY");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("VERIFY");
+        Member member = SignRequestFactory.makeNotAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -205,11 +181,8 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호 변경을 위한 이메일을 전송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = new MemberEmailAuthRequestDto("test", "PASSWORD");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        MemberEmailAuthRequestDto requestDto = SignRequestFactory.makeEmailAuthRequestDto("PASSWORD");
+        Member member = SignRequestFactory.makeNotAuthTestMember();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -227,11 +200,8 @@ class SignServiceUnitTest {
     @DisplayName("회원가입 후 인증에 대한 메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test", "authCode", "VERIFY");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        Member member = SignRequestFactory.makeNotAuthTestMember();
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto(member.getEmail(), "authCode", "VERIFY");
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -249,7 +219,7 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호 변경에 대한 메일을 검증한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test", "authCode", "PASSWORD");
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", "PASSWORD");
 
         //mocking
         given(redisService.getData(any())).willReturn("authCode");
@@ -266,7 +236,7 @@ class SignServiceUnitTest {
     @DisplayName("Redis에 저장된 값과 검증 값과 달라 이메일 인증에 실패한다.")
     public void verify_fail() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = new VerifyEmailRequestDto("test", "authCode", "PASSWORD");
+        VerifyEmailRequestDto requestDto = SignRequestFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode","PASSWORD");
 
         //mocking
         given(redisService.getData(any())).willReturn("different");
@@ -279,11 +249,8 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = new MemberChangePwRequestDto("test", "change");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        Member member = SignRequestFactory.makeAuthTestMember();
+        MemberChangePwRequestDto requestDto = SignRequestFactory.makeChangePwRequestDto(member.getEmail(), "change");
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(member));
@@ -301,13 +268,9 @@ class SignServiceUnitTest {
     @DisplayName("RefreshToken을 이용해 토큰을 재발행한다.")
     public void reIssue() throws Exception {
         //given
-        TokenRequestDto requestDto = new TokenRequestDto("refreshToken");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
-
-        TokenResponseDto ExpectResult = TokenResponseDto.create(member, new ArrayList<>(), new JwtTokens("newAccessToken", "newRefreshToken"));
+        TokenRequestDto requestDto = SignRequestFactory.makeTokenRequestDto("refreshToken");
+        Member member = SignRequestFactory.makeAuthTestMember();
+        TokenResponseDto ExpectResult = SignResponseFactory.makeTokenResponseDto(member);
 
         //mocking
         given(redisService.getData(any())).willReturn("test");
@@ -328,11 +291,8 @@ class SignServiceUnitTest {
     @DisplayName("잘못된 RefreshToken에 의해 토큰 재발행에 실패한다.")
     public void reIssue_fail() throws Exception {
         //given
-        TokenRequestDto requestDto = new TokenRequestDto("refreshToken");
-
-        Long memberId = 1L;
-        Member member = new Member("test", "encodedPW", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        TokenRequestDto requestDto = SignRequestFactory.makeTokenRequestDto("refreshToken");
+        Member member = SignRequestFactory.makeAuthTestMember();
 
         //mocking
         given(redisService.getData(any())).willReturn("wrongToken!!!!");
