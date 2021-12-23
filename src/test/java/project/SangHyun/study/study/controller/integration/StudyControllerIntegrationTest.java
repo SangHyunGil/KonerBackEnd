@@ -42,7 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Transactional
 class StudyControllerIntegrationTest {
-
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -119,44 +118,6 @@ class StudyControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(post("/study")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().is3xxRedirection());
-    }
-
-    @Test
-    @DisplayName("스터디에 참여한다.")
-    public void join() throws Exception {
-        //given
-        Study study = testDB.findBackEndStudy();
-        Member member = testDB.findGeneralMember();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
-
-        //when, then
-        mockMvc.perform(post("/study/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(member.getId()));
-    }
-
-    @Test
-    @DisplayName("인증이 미완료된 회원은 스터디에 참여할 수 없다.")
-    public void join_fail() throws Exception {
-        //given
-        String accessToken = accessTokenHelper.createToken("xptmxm2!");
-        Member member = memberRepository.findByEmail("xptmxm2!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
-
-        //when, then
-        mockMvc.perform(post("/study/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -278,19 +239,4 @@ class StudyControllerIntegrationTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
-
-    @Test
-    @DisplayName("스터디에 참여한 스터디원들의 정보를 가져온다.")
-    public void findStudyMember() throws Exception {
-        //given
-        Study study = testDB.findBackEndStudy();
-        Member member = testDB.findStudyGeneralMember();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
-
-        //when, then
-        mockMvc.perform(get("/study/{studyId}/member", study.getId())
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
-    }
-
 }

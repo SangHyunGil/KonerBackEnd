@@ -56,8 +56,6 @@ class StudyControllerUnitTest {
     @Mock
     StudyService studyService;
     @Mock
-    StudyJoinService studyJoinService;
-    @Mock
     ResponseServiceImpl responseService;
 
     @BeforeEach
@@ -124,60 +122,5 @@ class StudyControllerUnitTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyId").value(ExpectResult.getData().getStudyId()));
-    }
-
-    @Test
-    @DisplayName("스터디에 참여한다.")
-    public void join() throws Exception {
-        //given
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
-        StudyJoin studyJoin = StudyFactory.makeTestStudyJoin(member, study);
-        StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(studyJoin);
-        SingleResult<StudyJoinResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
-
-        //mocking
-        given(studyJoinService.joinStudy(requestDto)).willReturn(responseDto);
-        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/study/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
-                .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
-    }
-
-    @Test
-    @DisplayName("스터디에 참여한 스터디원들의 정보를 로드한다.")
-    public void findStudyMembers() throws Exception {
-        //given
-        Study study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(study.getId(), member.getId());
-
-        Long studyId = 1L;
-        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.CREATOR);
-        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.MEMBER);
-        StudyFindMembersResponseDto responseDto1 = StudyFindMembersResponseDto.create(studyMember1);
-        StudyFindMembersResponseDto responseDto2 = StudyFindMembersResponseDto.create(studyMember2);
-        List<StudyFindMembersResponseDto> responseDtos = new ArrayList<>(Arrays.asList(responseDto1, responseDto2));
-
-        MultipleResult<StudyFindMembersResponseDto> ExpectResult = new MultipleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDtos);
-
-        //mocking
-        given(studyJoinService.findStudyMembers(studyId)).willReturn(responseDtos);
-        given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(get("/study/{studyId}/member", studyId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
     }
 }
