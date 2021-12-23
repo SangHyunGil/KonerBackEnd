@@ -15,6 +15,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.dto.response.StudyBoardFindResponseDto;
+import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.member.repository.MemberRepository;
@@ -35,7 +36,6 @@ import static org.mockito.ArgumentMatchers.any;
 @Transactional
 @ActiveProfiles("test")
 class StudyBoardServiceIntegrationTest {
-
     @Autowired
     StudyBoardServiceImpl studyBoardService;
     @Autowired
@@ -56,7 +56,7 @@ class StudyBoardServiceIntegrationTest {
     @DisplayName("스터디에 속한 게시판을 모두 로드한다.")
     public void loadBoard() throws Exception {
         //given
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        Study study = testDB.findBackEndStudy();
 
         //when
         List<StudyBoardFindResponseDto> ActualResult = studyBoardService.findAllBoards(study.getId());
@@ -69,8 +69,8 @@ class StudyBoardServiceIntegrationTest {
     @DisplayName("스터디에 속한 게시판을 생성한다.")
     public void createBoard() throws Exception {
         //given
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoardCreateRequestDto requestDto = new StudyBoardCreateRequestDto("테스트 게시판");
+        Study study = testDB.findBackEndStudy();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
 
         //when
         StudyBoardCreateResponseDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto);
@@ -83,10 +83,9 @@ class StudyBoardServiceIntegrationTest {
     @DisplayName("스터디에 속한 게시판을 수정한다.")
     public void updateBoard() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoard studyBoard = study.getStudyBoards().get(0);
-        StudyBoardUpdateRequestDto requestDto = new StudyBoardUpdateRequestDto("테스트 게시판 수정");
+        Study study = testDB.findBackEndStudy();
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
+        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateDto("테스트 게시판 수정");
 
         //when
         StudyBoardUpdateResponseDto ActualResult = studyBoardService.updateBoard(study.getId(), studyBoard.getId(), requestDto);
@@ -99,9 +98,9 @@ class StudyBoardServiceIntegrationTest {
     @DisplayName("스터디에 속한 게시판을 삭제한다.")
     public void deleteBoard() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoard studyBoard = study.getStudyBoards().get(0);
+        Study study = testDB.findBackEndStudy();
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
+
         //when
         StudyBoardDeleteResponseDto ActualResult = studyBoardService.deleteBoard(study.getId(), studyBoard.getId());
 

@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.service.StudyService;
+import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyboard.service.StudyBoardService;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
@@ -45,38 +46,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class StudyControllerUnitTest {
+    String accessToken;
+    Member member;
+    Study study;
+
     MockMvc mockMvc;
     @InjectMocks
     StudyController studyController;
     @Mock
     StudyService studyService;
     @Mock
-    StudyJoinService studyJoinService;
-    @Mock
     ResponseServiceImpl responseService;
 
     @BeforeEach
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(studyController).build();
+
+        accessToken = "accessToken";
+        member = StudyFactory.makeTestAuthMember();
+        study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
     @DisplayName("스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        Long studyId = 1L;
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, new Member(1L), new ArrayList<>(), new ArrayList<>());
-        ReflectionTestUtils.setField(study, "id", studyId);
-        List<StudyFindResponseDto> responseDtos = List.of(StudyFindResponseDto.create(study));
-
-        MultipleResult<StudyFindResponseDto> ExpectResult = new MultipleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDtos);
+        List<StudyFindResponseDto> responseDtos = StudyFactory.makeFindAllResponseDto(study);
+        MultipleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeMultipleResult(responseDtos);
 
         //mocking
         given(studyService.findAllStudies()).willReturn(responseDtos);
         given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
-
 
         //when, then
         mockMvc.perform(get("/study"))
@@ -88,14 +88,8 @@ class StudyControllerUnitTest {
     @DisplayName("스터디에 대한 세부정보를 로드한다.")
     public void loadStudyDetail() throws Exception {
         //given
-        Long studyId = 1L;
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, new Member(1L), new ArrayList<>(), new ArrayList<>());
-        ReflectionTestUtils.setField(study, "id", studyId);
-        StudyFindResponseDto responseDto = StudyFindResponseDto.create(study);
-
-        SingleResult<StudyFindResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        StudyFindResponseDto responseDto = StudyFactory.makeFindResponseDto(study);
+        SingleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
         given(studyService.findStudy(1L)).willReturn(responseDto);
@@ -111,17 +105,10 @@ class StudyControllerUnitTest {
     @DisplayName("스터디를 생성한다.")
     public void createStudy() throws Exception {
         //given
-        String accessToken = "accessToken";
-        StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 모집", "백엔드", "백엔드 모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
-
-        Long studyId = 1L;
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, new Member(1L), new ArrayList<>(), new ArrayList<>());
-        ReflectionTestUtils.setField(study, "id", studyId);
-        StudyCreateResponseDto responseDto = StudyCreateResponseDto.create(study);
-
-        SingleResult<StudyCreateResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
+        Study createdStudy = requestDto.toEntity();
+        StudyCreateResponseDto responseDto = StudyCreateResponseDto.create(createdStudy);
+        SingleResult<StudyCreateResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
         given(studyService.createStudy(requestDto)).willReturn(responseDto);
@@ -135,67 +122,5 @@ class StudyControllerUnitTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyId").value(ExpectResult.getData().getStudyId()));
-    }
-
-    @Test
-    @DisplayName("스터디에 참여한다.")
-    public void join() throws Exception {
-        //given
-        String accessToken = "accessToken";
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(1L, 1L);
-
-        Long studyJoinId = 1L;
-        StudyJoin studyJoin = new StudyJoin(new Member(1L), new Study(1L), StudyRole.CREATOR);
-        ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
-        StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(studyJoin);
-
-        SingleResult<StudyJoinResponseDto> ExpectResult = new SingleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDto);
-
-        //mocking
-        given(studyJoinService.joinStudy(requestDto)).willReturn(responseDto);
-        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/study/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
-                .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
-    }
-
-    @Test
-    @DisplayName("스터디에 참여한 스터디원들의 정보를 로드한다.")
-    public void findStudyMembers() throws Exception {
-        //given
-        String accessToken = "accessToken";
-        StudyJoinRequestDto requestDto = new StudyJoinRequestDto(1L, 1L);
-
-        Long studyId = 1L;
-        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.CREATOR);
-        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto(1L, "테스터1", StudyRole.MEMBER);
-        StudyFindMembersResponseDto responseDto1 = StudyFindMembersResponseDto.create(studyMember1);
-        StudyFindMembersResponseDto responseDto2 = StudyFindMembersResponseDto.create(studyMember2);
-        List<StudyFindMembersResponseDto> responseDtos = new ArrayList<>(Arrays.asList(responseDto1, responseDto2));
-
-        MultipleResult<StudyFindMembersResponseDto> ExpectResult = new MultipleResult<>();
-        ExpectResult.setCode(0); ExpectResult.setSuccess(true); ExpectResult.setMsg("성공");
-        ExpectResult.setData(responseDtos);
-
-        //mocking
-        given(studyJoinService.findStudyMembers(studyId)).willReturn(responseDtos);
-        given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(get("/study/{studyId}/member", studyId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
     }
 }

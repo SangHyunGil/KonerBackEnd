@@ -10,15 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
-import project.SangHyun.advice.exception.StudyHasNoProperRoleException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
+import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -58,13 +53,12 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디를 생성한다.")
     public void createStudy() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
-        StudyCreateRequestDto requestDto = new StudyCreateRequestDto(member.getId(), "테스트 스터디", "백엔드",
-                null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
+        Member member = testDB.findGeneralMember();
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
 
         //when
         StudyCreateResponseDto ActualResult = studyService.createStudy(requestDto);
-        Study study = studyRepository.findStudyByTitle("테스트").get(0);
+        Study study = studyRepository.findStudyByTitle("프론트엔드 모집").get(0);
 
         //then
         Assertions.assertEquals(study.getId(), ActualResult.getStudyId());
@@ -86,7 +80,7 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디에 대한 세부정보를 로드한다.")
     public void loadStudyDetail() throws Exception {
         //given
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        Study study = testDB.findBackEndStudy();
 
         //when
         StudyFindResponseDto ActualResult = studyService.findStudy(study.getId());
@@ -99,10 +93,8 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyUpdateRequestDto updateRequestDto = new StudyUpdateRequestDto("프론트엔드 스터디", "프론트엔드",
-                null, 2L, StudyState.STUDYING, RecruitState.PROCEED);
+        Study study = testDB.findBackEndStudy();
+        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateDto("프론트엔드 스터디", "프론트 엔드");
 
         //when
         StudyUpdateResponseDto ActualResult = studyService.updateStudy(study.getId(), updateRequestDto);
@@ -115,8 +107,7 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디의 정보를 삭제한다.")
     public void deleteStudy() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
+        Study study = testDB.findBackEndStudy();
 
         //when
         StudyDeleteResponseDto ActualResult = studyService.deleteStudy(study.getId());

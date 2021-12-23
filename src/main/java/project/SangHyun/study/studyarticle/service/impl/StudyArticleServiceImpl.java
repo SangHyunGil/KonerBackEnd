@@ -26,17 +26,16 @@ import java.util.stream.Collectors;
 public class StudyArticleServiceImpl implements StudyArticleService {
 
     private final StudyArticleRepository studyArticleRepository;
-    private final StudyJoinRepository studyJoinRepository;
 
     @Override
     @Transactional
-    public StudyArticleCreateResponseDto createArticle(Long studyId, Long boardId, StudyArticleCreateRequestDto requestDto) {
+    public StudyArticleCreateResponseDto createArticle(Long boardId, StudyArticleCreateRequestDto requestDto) {
         StudyArticle studyBoard = studyArticleRepository.save(requestDto.toEntity(boardId));
         return StudyArticleCreateResponseDto.create(studyBoard);
     }
 
     @Override
-    public List<StudyArticleFindResponseDto> findAllArticles(Long studyId, Long boardId) {
+    public List<StudyArticleFindResponseDto> findAllArticles(Long boardId) {
         List<StudyArticle> studyBoards = studyArticleRepository.findAllArticles(boardId);
         return studyBoards.stream()
                 .map(studyBoard -> StudyArticleFindResponseDto.create(studyBoard))
@@ -44,14 +43,15 @@ public class StudyArticleServiceImpl implements StudyArticleService {
     }
 
     @Override
-    public StudyArticleFindResponseDto findArticle(Long studyId, Long articleId) {
+    public StudyArticleFindResponseDto findArticle(Long articleId) {
         StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(StudyArticleNotFoundException::new);
+        studyArticle.updateViews();
         return StudyArticleFindResponseDto.create(studyArticle);
     }
 
     @Override
     @Transactional
-    public StudyArticleUpdateResponseDto updateArticle(Long studyId, Long articleId, StudyArticleUpdateRequestDto requestDto) {
+    public StudyArticleUpdateResponseDto updateArticle(Long articleId, StudyArticleUpdateRequestDto requestDto) {
         StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(StudyArticleNotFoundException::new);
         studyArticle.updateArticleInfo(requestDto);
         return StudyArticleUpdateResponseDto.create(studyArticle);
@@ -59,7 +59,7 @@ public class StudyArticleServiceImpl implements StudyArticleService {
 
     @Override
     @Transactional
-    public StudyArticleDeleteResponseDto deleteArticle(Long studyId, Long articleId) {
+    public StudyArticleDeleteResponseDto deleteArticle(Long articleId) {
         StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(StudyArticleNotFoundException::new);
         studyArticleRepository.delete(studyArticle);
         return StudyArticleDeleteResponseDto.create(studyArticle);

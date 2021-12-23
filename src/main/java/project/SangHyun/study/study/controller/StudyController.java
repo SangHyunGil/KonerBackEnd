@@ -29,7 +29,6 @@ import javax.validation.Valid;
 public class StudyController {
 
     private final StudyService studyService;
-    private final StudyJoinService studyJoinService;
     private final ResponseServiceImpl responseService;
 
     @ApiOperation(value = "스터디 정보 로드", notes = "모든 스터디 정보를 얻어온다.")
@@ -50,12 +49,6 @@ public class StudyController {
         return responseService.getSingleResult(studyService.createStudy(requestDto));
     }
 
-    @ApiOperation(value = "스터디 참여", notes = "스터디에 참여한다.")
-    @PostMapping("/join")
-    public SingleResult<StudyJoinResponseDto> join(@RequestBody StudyJoinRequestDto requestDto) {
-        return responseService.getSingleResult(studyJoinService.joinStudy(requestDto));
-    }
-
     @ApiOperation(value = "스터디 정보 업데이트", notes = "스터디 정보를 업데이트한다.")
     @PutMapping("/{studyId}")
     public SingleResult<StudyUpdateResponseDto> updateStudy(@PathVariable Long studyId,
@@ -67,11 +60,5 @@ public class StudyController {
     @DeleteMapping("/{studyId}")
     public SingleResult<StudyDeleteResponseDto> deleteStudy(@PathVariable Long studyId) {
         return responseService.getSingleResult(studyService.deleteStudy(studyId));
-    }
-
-    @ApiOperation(value = "스터디원 정보 로드", notes = "스터디에 참여한 스터디원의 정보를 로드한다.")
-    @GetMapping("/{studyId}/member")
-    public MultipleResult<StudyFindMembersResponseDto> findStudyMembers(@PathVariable Long studyId) {
-        return responseService.getMultipleResult(studyJoinService.findStudyMembers(studyId));
     }
 }

@@ -24,4 +24,12 @@ public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepos
                 .where(studyArticle.studyBoard.id.eq(boardId))
                 .fetch();
     }
+
+    @Override
+    public List<StudyArticle> findArticleByTitle(String title) {
+        return jpaQueryFactory
+                .selectFrom(studyArticle)
+                .where(studyArticle.title.contains(title))
+                .fetch();
+    }
 }

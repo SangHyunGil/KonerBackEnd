@@ -15,6 +15,7 @@ import project.SangHyun.advice.exception.StudyArticleNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
@@ -56,17 +57,16 @@ class StudyArticleServiceIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 생성한다.")
     public void createArticle() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoard studyBoard = study.getStudyBoards().get(0);
-        StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 내용");
+        Member member = testDB.findStudyGeneralMember();
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
+        StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateDto(member);
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(study.getId(), studyBoard.getId(), requestDto);
+        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
-        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(study.getId(), studyBoard.getId()).stream()
-                .filter(studyArticle -> studyArticle.getTitle().equals("테스트 글"))
+        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(studyBoard.getId()).stream()
+                .filter(studyArticle -> studyArticle.getTitle().equals(requestDto.getTitle()))
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
 
@@ -77,12 +77,10 @@ class StudyArticleServiceIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 모든 게시글을 로드한다.")
     public void loadArticles() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoard studyBoard = study.getStudyBoards().get(0);
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
 
         //when
-        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(study.getId(), studyBoard.getId());
+        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(studyBoard.getId());
 
         //then
         Assertions.assertEquals(3, ActualResult.size());;
@@ -92,49 +90,46 @@ class StudyArticleServiceIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 수정한다.")
     public void updateArticle() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoard studyBoard = study.getStudyBoards().get(0);
-        StudyArticleCreateRequestDto createDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 내용");
-        StudyArticleUpdateRequestDto updateDto = new StudyArticleUpdateRequestDto("테스트 글 수정", "테스트 내용 수정");
+        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticleUpdateRequestDto updateDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 내용 수정");
 
         //when
-        StudyArticleCreateResponseDto article = studyArticleService.createArticle(study.getId(), studyBoard.getId(), createDto);
-        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(study.getId(), article.getArticleId(), updateDto);
+        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(studyArticle.getId(), updateDto);
 
         //then
-        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(study.getId(), studyBoard.getId()).stream()
-                .filter(studyArticle -> studyArticle.getTitle().equals("테스트 글 수정"))
+        StudyArticle ExpectResult = studyArticleRepository.findArticleByTitle("테스트 글 수정").stream()
+                .filter(sa -> sa.getTitle().equals("테스트 글 수정"))
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
-        Assertions.assertEquals(ExpectResult.getArticleId(), ActualResult.getArticleId());
-        Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
-        Assertions.assertEquals(ExpectResult.getContent(), ActualResult.getContent());
-        Assertions.assertEquals(ExpectResult.getBoardId(), ActualResult.getBoardId());
+        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getArticleId());
     }
 
     @Test
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 삭제한다.")
     public void deleteArticle() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
-        Study study = studyRepository.findStudyByTitle("백엔드").get(0);
-        StudyBoard studyBoard = study.getStudyBoards().get(0);
-        StudyArticleCreateRequestDto requestDto = new StudyArticleCreateRequestDto(member.getId(), "테스트 글", "테스트 내용");
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
+        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
 
-
-        List<StudyArticle> allArticles22 = studyArticleRepository.findAllArticles(studyBoard.getId());
-
-        System.out.println("allArticles22.get(0).getId() = " + allArticles22.get(0).getId() + " " + allArticles22.size());
         //when
-        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(study.getId(), allArticles22.get(0).getId());
+        studyArticleService.deleteArticle(studyArticle.getId());
+        List<StudyArticleFindResponseDto> allArticles1 = studyArticleService.findAllArticles(studyBoard.getId());
 
-        List<StudyArticle> allArticles = studyArticleRepository.findAllArticles(studyBoard.getId());
-        Long id = allArticles.get(0).getId();
-        System.out.println("id = " + id + " " + allArticles.size());
-        studyArticleService.deleteArticle(study.getId(), id);
-        List<StudyArticleFindResponseDto> allArticles1 = studyArticleService.findAllArticles(study.getId(), studyBoard.getId());
         //then
-        Assertions.assertEquals(1, allArticles1.size());
+        Assertions.assertEquals(2, allArticles1.size());
+    }
+
+    @Test
+    @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 보면 조회수가 증가한다.")
+    public void updateViews() throws Exception {
+        //given
+        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+
+        //when
+        Assertions.assertEquals(0, studyArticle.getViews());
+        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
+
+        //then`
+        Assertions.assertEquals(1,ActualResult.getViews());
     }
 }

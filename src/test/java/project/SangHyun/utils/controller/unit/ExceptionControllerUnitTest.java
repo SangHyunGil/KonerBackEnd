@@ -24,6 +24,7 @@ class ExceptionControllerUnitTest {
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(exceptionController).build();
     }
+
     @Test
     @DisplayName("인증에 실패한다.")
     public void auth_fail() throws Exception {
