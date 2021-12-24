@@ -124,7 +124,6 @@ public class SignServiceImpl implements SignService {
     private String getRedisKey(String email, String redisKey) {
         String prefix = redisKey.equals(RedisKey.VERIFY.getKey()) ? RedisKey.VERIFY.getKey() : RedisKey.PASSWORD.getKey();
         String key = prefix + email;
-
         return key;
     }
 
@@ -133,6 +132,7 @@ public class SignServiceImpl implements SignService {
     public String verify(VerifyEmailRequestDto requestDto) {
         String redisKey = getRedisKey(requestDto.getEmail(), requestDto.getRedisKey());
         compareWithRedisValue(redisKey, requestDto.getAuthCode());
+
         if (isVerifyEmail(requestDto)) {
             Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
             member.changeRole(MemberRole.ROLE_MEMBER);

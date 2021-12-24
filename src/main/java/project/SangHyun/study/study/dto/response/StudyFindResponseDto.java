@@ -21,7 +21,7 @@ public class StudyFindResponseDto {
     private Long studyId;
 
     @ApiModelProperty(value = "회원 ID(PK)")
-    private Long memberId;
+    private MemberProfile creator;
 
     @ApiModelProperty(value = "제목")
     private String title;
@@ -39,7 +39,7 @@ public class StudyFindResponseDto {
     private Long headCount;
 
     @ApiModelProperty(value = "스터디 참여인원들")
-    private List<String> studyMembers;
+    private List<MemberProfile> studyMembers;
 
     @ApiModelProperty(value = "스터디 상태")
     private StudyState studyState;
@@ -48,11 +48,12 @@ public class StudyFindResponseDto {
     private RecruitState recruitState;
 
     public static StudyFindResponseDto create(Study study) {
-        List<String> studyMembers = study.getStudyJoins().stream()
-                .map(studyJoin -> studyJoin.getMember().getNickname())
+        List<MemberProfile> studyMembers = study.getStudyJoins().stream()
+                .map(studyJoin -> new MemberProfile(studyJoin.getMember().getNickname(), studyJoin.getMember().getProfileImgUrl()))
                 .collect(Collectors.toList());
 
-        return new StudyFindResponseDto(study.getId(), study.getMember().getId(),
+        return new StudyFindResponseDto(study.getId(),
+                new MemberProfile(study.getMember().getNickname(), study.getMember().getProfileImgUrl()),
                 study.getTitle(), study.getTopic(), study.getContent(),
                 (long) studyMembers.size(), study.getHeadCount(), studyMembers,
                 study.getStudyState(), study.getRecruitState());
