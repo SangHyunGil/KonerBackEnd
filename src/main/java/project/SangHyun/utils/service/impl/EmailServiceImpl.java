@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService {
         RedisKey redisKey = RedisKey.distinguish(key);
         smm.setTo(email + UNIVERSITY_EMAIL);
         smm.setSubject(getTitle(redisKey));
-        smm.setText("http://localhost:3000/signup/verify?email=" + email + "&authCode=" + redisKey.getKey());
+        smm.setText("http://localhost:3000/signup/verify?email=" + email + "&authCode=" + value + "&redisKey=" + redisKey.getKey());
 
         return smm;
     }
