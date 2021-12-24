@@ -41,7 +41,7 @@ public class StudyFactory extends BasicFactory {
 
     public static StudyUpdateRequestDto makeUpdateDto(String title, String topic) {
         return new StudyUpdateRequestDto(title, topic,
-                "변경", 2L, StudyState.STUDYING, RecruitState.PROCEED);
+                "변경", 2L, multipartFile, StudyState.STUDYING, RecruitState.PROCEED);
     }
 
     // Response

@@ -53,7 +53,7 @@ public class StudyController {
     @ApiOperation(value = "스터디 정보 업데이트", notes = "스터디 정보를 업데이트한다.")
     @PutMapping("/{studyId}")
     public SingleResult<StudyUpdateResponseDto> updateStudy(@PathVariable Long studyId,
-                                                            @Valid @RequestBody StudyUpdateRequestDto requestDto) {
+                                                            @Valid @ModelAttribute StudyUpdateRequestDto requestDto) throws IOException {
         return responseService.getSingleResult(studyService.updateStudy(studyId, requestDto));
     }
 

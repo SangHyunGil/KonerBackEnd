@@ -48,9 +48,9 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto) {
+    public StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto) throws IOException {
         Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
-        return StudyUpdateResponseDto.create(study.updateStudyInfo(requestDto));
+        return StudyUpdateResponseDto.create(study.updateStudyInfo(requestDto, fileStoreHelper.storeFile(requestDto.getProfileImg())));
     }
 
     @Override

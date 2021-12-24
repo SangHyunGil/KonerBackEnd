@@ -58,13 +58,14 @@ public class Study extends EntityDate {
         this.studyBoards = studyBoards;
     }
 
-    public Study updateStudyInfo(StudyUpdateRequestDto requestDto) {
+    public Study updateStudyInfo(StudyUpdateRequestDto requestDto, String profileImgUrl) {
         this.title = requestDto.getTitle();
         this.topic = requestDto.getTopic();
         this.content = requestDto.getContent();
         this.studyState = requestDto.getStudyState();
         this.recruitState = requestDto.getRecruitState();
         this.headCount = requestDto.getHeadCount();
+        this.profileImgUrl = profileImgUrl;
         return this;
     }
 

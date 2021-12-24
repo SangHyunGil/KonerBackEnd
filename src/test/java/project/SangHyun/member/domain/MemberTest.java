@@ -10,11 +10,16 @@ import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.utils.helper.FileStoreHelper;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MemberTest {
+    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";
+    FileStoreHelper fileStoreHelper = new FileStoreHelper(filePathDir);
+
     @Test
     @DisplayName("회원의 정보를 수정한다.")
     public void updateMember() throws Exception {
@@ -26,7 +31,7 @@ public class MemberTest {
         MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부", multipartFile);
 
         //when
-        Member updateMember = member.updateMemberInfo(requestDto, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
+        Member updateMember = member.updateMemberInfo(requestDto, fileStoreHelper.storeFile(multipartFile));
 
         //then
         Assertions.assertEquals(requestDto.getNickname(), updateMember.getNickname());

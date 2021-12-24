@@ -11,6 +11,6 @@ public interface StudyService {
     StudyCreateResponseDto createStudy(StudyCreateRequestDto requestDto) throws IOException;
     List<StudyFindResponseDto> findAllStudies();
     StudyFindResponseDto findStudy(Long studyId);
-    StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto);
+    StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto) throws IOException;
     StudyDeleteResponseDto deleteStudy(Long studyId);
 }
