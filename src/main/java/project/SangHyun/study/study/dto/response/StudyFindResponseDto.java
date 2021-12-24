@@ -32,6 +32,9 @@ public class StudyFindResponseDto {
     @ApiModelProperty(value = "스터디 내용")
     private String content;
 
+    @ApiModelProperty(value = "스터디 일정")
+    private String schedule;
+
     @ApiModelProperty(value = "스터디 참여수")
     private Long joinCount;
 
@@ -54,7 +57,7 @@ public class StudyFindResponseDto {
 
         return new StudyFindResponseDto(study.getId(),
                 new MemberProfile(study.getMember().getNickname(), study.getMember().getProfileImgUrl()),
-                study.getTitle(), study.getTopic(), study.getContent(),
+                study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
                 (long) studyMembers.size(), study.getHeadCount(), studyMembers,
                 study.getStudyState(), study.getRecruitState());
     }

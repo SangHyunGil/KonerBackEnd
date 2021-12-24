@@ -35,13 +35,13 @@ public class StudyFactory extends BasicFactory {
     // Request
     public static StudyCreateRequestDto makeCreateDto(Member member) {
         return new StudyCreateRequestDto(member.getId(), "프론트엔드 모집", "프론트엔드",
-                "테스트", 2L, multipartFile,
+                "테스트", "2021-12-25", 2L, multipartFile,
                 StudyState.STUDYING, RecruitState.PROCEED);
     }
 
     public static StudyUpdateRequestDto makeUpdateDto(String title, String topic) {
         return new StudyUpdateRequestDto(title, topic,
-                "변경", 2L, multipartFile, StudyState.STUDYING, RecruitState.PROCEED);
+                "변경", "2021-12-25", 2L, multipartFile, StudyState.STUDYING, RecruitState.PROCEED);
     }
 
     // Response

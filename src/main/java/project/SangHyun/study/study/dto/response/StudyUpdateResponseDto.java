@@ -29,6 +29,9 @@ public class StudyUpdateResponseDto {
     @ApiModelProperty(value = "스터디 내용")
     private String content;
 
+    @ApiModelProperty(value = "스터디 내용")
+    private String schedule;
+
     @ApiModelProperty(value = "스터디 정원")
     private Long headCount;
 
@@ -40,7 +43,7 @@ public class StudyUpdateResponseDto {
 
     public static StudyUpdateResponseDto create(Study study) {
         return new StudyUpdateResponseDto(study.getId(), study.getMember().getId(),
-                study.getTitle(), study.getTopic(), study.getContent(), study.getHeadCount(),
-                study.getStudyState(), study.getRecruitState());
+                study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
+                study.getHeadCount(), study.getStudyState(), study.getRecruitState());
     }
 }

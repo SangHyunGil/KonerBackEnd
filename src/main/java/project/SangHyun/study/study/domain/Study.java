@@ -32,6 +32,7 @@ public class Study extends EntityDate {
     @Enumerated(EnumType.STRING)
     private RecruitState recruitState;
     private Long headCount;
+    private String schedule;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -45,7 +46,7 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, String topic, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, String topic, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, Long headCount, String schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
         this.topic = topic;
         this.content = content;
@@ -53,6 +54,7 @@ public class Study extends EntityDate {
         this.studyState = studyState;
         this.recruitState = recruitState;
         this.headCount = headCount;
+        this.schedule = schedule;
         this.member = member;
         this.studyJoins = studyJoins;
         this.studyBoards = studyBoards;
@@ -62,6 +64,7 @@ public class Study extends EntityDate {
         this.title = requestDto.getTitle();
         this.topic = requestDto.getTopic();
         this.content = requestDto.getContent();
+        this.schedule = requestDto.getSchedule();
         this.studyState = requestDto.getStudyState();
         this.recruitState = requestDto.getRecruitState();
         this.headCount = requestDto.getHeadCount();

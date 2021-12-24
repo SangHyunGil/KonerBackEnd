@@ -29,6 +29,9 @@ public class StudyUpdateRequestDto {
     @NotBlank(message = "스터디 내용을 입력해주세요.")
     private String content;
 
+    @ApiModelProperty(value = "스터디 일정", notes = "스터디 일정을 입력해주세요.", required = true, example = "~2021-12-25")
+    private String schedule;
+
     @ApiModelProperty(value = "스터디 인원수", notes = "스터디 인원수를 입력해주세요.", required = true, example = "1")
     @Min(value = 1, message = "스터디 인원수는 1 이상이어야 합니다.")
     private Long headCount;

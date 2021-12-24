@@ -43,6 +43,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -123,6 +124,7 @@ class StudyControllerUnitTest {
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("memberId", String.valueOf(requestDto.getMemberId()))
                         .param("title", requestDto.getTitle())
+                        .param("schedule", requestDto.getSchedule())
                         .param("content", requestDto.getContent())
                         .param("topic", requestDto.getTopic())
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
@@ -134,6 +136,7 @@ class StudyControllerUnitTest {
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyId").value(ExpectResult.getData().getStudyId()));
     }
