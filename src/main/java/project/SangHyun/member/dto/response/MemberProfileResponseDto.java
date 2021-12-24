@@ -24,8 +24,11 @@ public class MemberProfileResponseDto {
     @ApiModelProperty(value = "학과")
     private String department;
 
+    @ApiModelProperty(value = "프로필 사진")
+    private String profileImgUrl;
+
     public static MemberProfileResponseDto create(Member member) {
         return new MemberProfileResponseDto(member.getId(), member.getEmail(),
-                member.getNickname(), member.getDepartment());
+                member.getNickname(), member.getDepartment(), member.getProfileImgUrl());
     }
 }
