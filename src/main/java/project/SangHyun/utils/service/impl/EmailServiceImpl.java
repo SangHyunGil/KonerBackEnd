@@ -1,6 +1,7 @@
 package project.SangHyun.utils.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -11,6 +12,7 @@ import project.SangHyun.utils.service.EmailService;
 
 import java.util.Arrays;
 
+@Slf4j
 @Service
 @EnableAsync
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public SimpleMailMessage makeMail(String email, String value, String key) {
         SimpleMailMessage smm = new SimpleMailMessage();
-        RedisKey redisKey = distinguishKey(key);
+        RedisKey redisKey = RedisKey.distinguish(key);
         smm.setTo(email + UNIVERSITY_EMAIL);
         smm.setSubject(getTitle(redisKey));
         smm.setText("http://localhost:3000/signup/verify?email=" + email + "&authCode=" + redisKey.getKey());
@@ -38,12 +40,5 @@ public class EmailServiceImpl implements EmailService {
 
     private String getTitle(RedisKey redis) {
         return redis.equals(RedisKey.VERIFY) ? "회원가입 인증 요청" : "비밀번호 변경 요청";
-    }
-
-    public RedisKey distinguishKey(String key) {
-        return Arrays.stream(RedisKey.values())
-                .filter(redisKey -> redisKey.equals(key))
-                .findAny()
-                .orElse(RedisKey.UNKNOWN);
     }
 }
