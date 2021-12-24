@@ -8,6 +8,7 @@ import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
@@ -49,7 +50,7 @@ public class BasicFactory {
         Long studyId = 1L;
         Study study = new Study("프론트엔드 스터디", "프론트엔드",null,
                 "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING,
-                RecruitState.PROCEED, 2L, "2021-12-25", member, studyJoins, studyBoards);
+                RecruitState.PROCEED, 2L, "2021-12-25", StudyMethod.FACE, member, studyJoins, studyBoards);
         ReflectionTestUtils.setField(study, "id", studyId);
         return study;
     }

@@ -5,6 +5,7 @@ import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -31,6 +32,8 @@ public class Study extends EntityDate {
     private StudyState studyState;
     @Enumerated(EnumType.STRING)
     private RecruitState recruitState;
+    @Enumerated(EnumType.STRING)
+    private StudyMethod studyMethod;
     private Long headCount;
     private String schedule;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,7 +49,7 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, String topic, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, Long headCount, String schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, String topic, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, Long headCount, String schedule, StudyMethod studyMethod, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
         this.topic = topic;
         this.content = content;
@@ -55,6 +58,7 @@ public class Study extends EntityDate {
         this.recruitState = recruitState;
         this.headCount = headCount;
         this.schedule = schedule;
+        this.studyMethod = studyMethod;
         this.member = member;
         this.studyJoins = studyJoins;
         this.studyBoards = studyBoards;

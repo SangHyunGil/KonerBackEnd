@@ -20,6 +20,7 @@ import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -61,7 +62,7 @@ class StudyJoinRepositoryTest {
         memberRepository.save(memberB);
 
         Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
-                StudyState.STUDYING, RecruitState.PROCEED, 3L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+                StudyState.STUDYING, RecruitState.PROCEED, 3L, "2021-12-25", StudyMethod.FACE, memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
         study.join(studyJoin);

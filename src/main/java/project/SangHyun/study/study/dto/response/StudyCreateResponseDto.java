@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
 
 @Data
@@ -39,6 +40,9 @@ public class StudyCreateResponseDto {
     @ApiModelProperty(value = "프로필 이미지", notes = "프로필 이미지를 업로드해주세요.", required = true, example = "")
     private String profileImg;
 
+    @ApiModelProperty(value = "스터디 방법")
+    private StudyMethod studyMethod;
+
     @ApiModelProperty(value = "스터디 상태")
     private StudyState studyState;
 
@@ -48,6 +52,6 @@ public class StudyCreateResponseDto {
     public static StudyCreateResponseDto create(Study study) {
         return new StudyCreateResponseDto(study.getId(), study.getMember().getId(),
                 study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
-                study.getHeadCount(),  study.getProfileImgUrl(), study.getStudyState(), study.getRecruitState());
+                study.getHeadCount(),  study.getProfileImgUrl(), study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

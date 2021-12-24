@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.member.repository.MemberRepository;
@@ -115,7 +116,7 @@ public class TestDB {
         Member memberC = new Member("xptmxm0!", passwordEncoder.encode("xptmxm0!"), "예림", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberC);
 
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 4L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 4L, "2021-12-25", StudyMethod.FACE, memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
         study.join(studyJoin);

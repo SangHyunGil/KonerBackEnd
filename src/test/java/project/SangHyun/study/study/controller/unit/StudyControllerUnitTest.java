@@ -128,6 +128,7 @@ class StudyControllerUnitTest {
                         .param("content", requestDto.getContent())
                         .param("topic", requestDto.getTopic())
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
+                        .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
                         .param("recruitState", String.valueOf(requestDto.getRecruitState()))
                         .with(requestPostProcessor -> {
