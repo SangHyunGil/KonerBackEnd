@@ -7,9 +7,11 @@ import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
 
+import java.io.IOException;
+
 public interface MemberService {
     MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails);
     MemberProfileResponseDto getProfile(Long memberId);
-    MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto);
+    MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto) throws IOException;
     MemberDeleteResponseDto deleteMember(Long memberId);
 }

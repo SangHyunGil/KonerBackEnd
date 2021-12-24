@@ -43,11 +43,11 @@ public class Member extends EntityDate {
         this.memberRole = memberRole;
     }
 
-    public Member updateMemberInfo(MemberUpdateRequestDto requestDto) {
+    public Member updateMemberInfo(MemberUpdateRequestDto requestDto, String profileImgUrl) {
         this.email = requestDto.getEmail();
         this.nickname = requestDto.getNickname();
         this.department = requestDto.getDepartment();
-
+        this.profileImgUrl = profileImgUrl;
         return this;
     }
 

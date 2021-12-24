@@ -75,6 +75,7 @@ class SignServiceUnitTest {
         given(memberRepository.findByNickname(any())).willReturn(Optional.empty());
         given(passwordEncoder.encode(any())).willReturn("encodedPW");
         given(memberRepository.save(any())).willReturn(createdMember);
+        given(fileStoreHelper.storeFile(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
         
         //when
         MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);

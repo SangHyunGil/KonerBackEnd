@@ -3,10 +3,16 @@ package project.SangHyun.member.domain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.tools.member.MemberFactory;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MemberTest {
     @Test
@@ -14,11 +20,13 @@ public class MemberTest {
     public void updateMember() throws Exception {
         //given
         Member member = MemberFactory.makeTestAuthMember();
+        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+        MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
-        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부");
+        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부", multipartFile);
 
         //when
-        Member updateMember = member.updateMemberInfo(requestDto);
+        Member updateMember = member.updateMemberInfo(requestDto, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
 
         //then
         Assertions.assertEquals(requestDto.getNickname(), updateMember.getNickname());
