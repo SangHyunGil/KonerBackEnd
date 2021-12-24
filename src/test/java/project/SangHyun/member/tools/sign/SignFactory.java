@@ -17,15 +17,15 @@ public class SignFactory extends BasicFactory {
 
     // Request
     public static MemberRegisterRequestDto makeRegisterRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과");
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과", null);
     }
 
     public static MemberRegisterRequestDto makeDuplicateEmailRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과");
+        return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과", null);
     }
 
     public static MemberRegisterRequestDto makeDuplicateNicknameRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", "컴퓨터공학과");
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", "컴퓨터공학과", null);
     }
 
     public static MemberLoginRequestDto makeAuthMemberLoginRequestDto() {

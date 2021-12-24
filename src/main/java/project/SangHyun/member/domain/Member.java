@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.enums.MemberRole;
@@ -23,6 +25,7 @@ public class Member extends EntityDate {
     private String password;
     private String nickname;
     private String department;
+    private String profileImgUrl;
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 

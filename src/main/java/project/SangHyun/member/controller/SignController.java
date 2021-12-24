@@ -30,42 +30,36 @@ public class SignController {
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
     public SingleResult<MemberRegisterResponseDto> register(@Valid @RequestBody MemberRegisterRequestDto requestDto) {
-        MemberRegisterResponseDto responseDto = signService.registerMember(requestDto);
-        return responseService.getSingleResult(responseDto);
+        return responseService.getSingleResult(signService.registerMember(requestDto));
     }
 
     @ApiOperation(value = "검증 메일 발송", notes = "검증을 위해 메일을 발송한다.")
     @PostMapping("/email")
     public SingleResult<String> sendEmail(@RequestBody MemberEmailAuthRequestDto requestDto) {
-        String result = signService.sendEmail(requestDto);
-        return responseService.getSingleResult(result);
+        return responseService.getSingleResult(signService.sendEmail(requestDto));
     }
 
     @ApiOperation(value = "이메일 인증", notes = "이메일 인증을 진행한다.")
     @PostMapping("/verify")
     public SingleResult<String> verify(@RequestBody VerifyEmailRequestDto requestDto) {
-        String result = signService.verify(requestDto);
-        return responseService.getSingleResult(result);
+        return responseService.getSingleResult(signService.verify(requestDto));
     }
 
     @ApiOperation(value = "비밀번호 변경", notes = "비밀번호 변경을 진행한다.")
     @PostMapping("/password")
     public SingleResult<MemberChangePwResponseDto> changePassword(@Valid @RequestBody MemberChangePwRequestDto requestDto) {
-        MemberChangePwResponseDto responseDto = signService.changePassword(requestDto);
-        return responseService.getSingleResult(responseDto);
+        return responseService.getSingleResult(signService.changePassword(requestDto));
     }
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
     public SingleResult<MemberLoginResponseDto> login(@Valid @RequestBody MemberLoginRequestDto requestDto) {
-        MemberLoginResponseDto responseDto = signService.loginMember(requestDto);
-        return responseService.getSingleResult(responseDto);
+        return responseService.getSingleResult(signService.loginMember(requestDto));
     }
 
     @ApiOperation(value = "토큰 재발급", notes = "Refresh Token을 통해 토큰을 재발급받는다.")
     @PostMapping("/reissue")
     public SingleResult<TokenResponseDto> reIssue(@RequestBody TokenRequestDto requestDto) {
-        TokenResponseDto responseDto = signService.tokenReIssue(requestDto);
-        return responseService.getSingleResult(responseDto);
+        return responseService.getSingleResult(signService.tokenReIssue(requestDto));
     }
 }

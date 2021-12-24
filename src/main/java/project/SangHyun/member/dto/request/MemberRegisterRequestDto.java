@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.enums.MemberRole;
 
@@ -39,13 +40,11 @@ public class MemberRegisterRequestDto {
     @ApiModelProperty(value = "학과", notes = "학과 중 하나를 선택해주세요.", required = true, example = "컴퓨터공학과")
     private String department;
 
+    @ApiModelProperty(value = "프로필 이미지", notes = "프로필 이미지를 업로드해주세요.", required = true, example = "")
+    private MultipartFile profileImg;
+
     public Member toEntity(PasswordEncoder passwordEncoder) {
-        return Member.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .nickname(nickname)
-                .department(department)
-                .memberRole(MemberRole.ROLE_NOT_PERMITTED)
-                .build();
+        return new Member(email, passwordEncoder.encode(password), nickname,
+                department, MemberRole.ROLE_NOT_PERMITTED);
     }
 }
