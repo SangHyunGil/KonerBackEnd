@@ -2,6 +2,8 @@ package project.SangHyun.config.redis;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 public enum RedisKey {
     REFRESH("REFRESH"), VERIFY("VERIFY"),
@@ -11,5 +13,12 @@ public enum RedisKey {
 
     RedisKey(String key) {
         this.key = key;
+    }
+
+    public static RedisKey distinguish(String key) {
+        return Arrays.stream(values())
+                .filter(redisKey -> redisKey.getKey().equals(key))
+                .findFirst()
+                .orElse(RedisKey.UNKNOWN);
     }
 }
