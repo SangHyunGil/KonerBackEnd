@@ -3,10 +3,7 @@ package project.SangHyun.member.controller;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
@@ -17,6 +14,7 @@ import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -29,7 +27,7 @@ public class SignController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
-    public SingleResult<MemberRegisterResponseDto> register(@Valid @RequestBody MemberRegisterRequestDto requestDto) {
+    public SingleResult<MemberRegisterResponseDto> register(@Valid @ModelAttribute MemberRegisterRequestDto requestDto) throws IOException {
         return responseService.getSingleResult(signService.registerMember(requestDto));
     }
 

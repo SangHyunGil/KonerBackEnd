@@ -23,8 +23,7 @@ import project.SangHyun.member.dto.request.*;
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -58,10 +57,17 @@ class SignControllerIntegrationTest {
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
 
         //when, then
-        mockMvc.perform(post("/sign/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("utf-8")
-                .content(new Gson().toJson(requestDto)))
+        mockMvc.perform(multipart("/sign/register")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("password", requestDto.getPassword())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
     }
 
@@ -72,10 +78,17 @@ class SignControllerIntegrationTest {
         MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateEmailRequestDto();
 
         //when, then
-        mockMvc.perform(post("/sign/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto)))
+        mockMvc.perform(multipart("/sign/register")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("password", requestDto.getPassword())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().is5xxServerError());
     }
 
@@ -86,10 +99,17 @@ class SignControllerIntegrationTest {
         MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateNicknameRequestDto();
 
         //when, then
-        mockMvc.perform(post("/sign/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto)))
+        mockMvc.perform(multipart("/sign/register")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("password", requestDto.getPassword())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().is5xxServerError());
     }
 

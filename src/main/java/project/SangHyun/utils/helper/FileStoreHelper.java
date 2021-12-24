@@ -1,7 +1,6 @@
 package project.SangHyun.utils.helper;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-@Slf4j
 @Component
 public class FileStoreHelper {
     private final String filePath;
@@ -19,15 +17,19 @@ public class FileStoreHelper {
         this.filePath = filePath;
     }
 
+    public void deleteFile(String deleteFilePath) throws IOException {
+        FileUtils.forceDelete(new File(deleteFilePath));
+    }
+
     public String storeFile(MultipartFile multipartFile) throws IOException {
-        String path = createPath(filePath, multipartFile);
-        log.info("path = {}", path);
+        String storeFileName = createStoreFileName(multipartFile);
+        String path = createPath(filePath, storeFileName);
         multipartFile.transferTo(new File(path));
         return path;
     }
 
-    private String createPath(String filePath, MultipartFile multipartFile) {
-        return filePath + createStoreFileName(multipartFile);
+    private String createPath(String filePath, String storeFileName) {
+        return filePath + storeFileName;
     }
 
     private String createStoreFileName(MultipartFile multipartFile) {

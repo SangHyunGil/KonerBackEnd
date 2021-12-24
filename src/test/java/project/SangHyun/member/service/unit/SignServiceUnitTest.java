@@ -14,6 +14,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
+import project.SangHyun.utils.helper.FileStoreHelper;
 import project.SangHyun.utils.service.EmailService;
 import project.SangHyun.member.service.impl.SignServiceImpl;
 import project.SangHyun.utils.service.RedisService;
@@ -50,10 +51,12 @@ class SignServiceUnitTest {
     EmailService emailService;
     @Mock
     StudyJoinRepository studyJoinRepository;
+    @Mock
+    FileStoreHelper fileStoreHelper;
 
     @BeforeEach
     public void init() {
-        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, passwordEncoder, memberRepository, studyJoinRepository, redisService, emailService);
+        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, passwordEncoder, memberRepository, studyJoinRepository, redisService, emailService, fileStoreHelper);
 
         authMember = SignFactory.makeAuthTestMember();
         notAuthMember = SignFactory.makeTestNotAuthMember();
@@ -64,7 +67,7 @@ class SignServiceUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member createdMember = requestDto.toEntity(passwordEncoder);
+        Member createdMember = requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), null);
         MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
 
         //mocking

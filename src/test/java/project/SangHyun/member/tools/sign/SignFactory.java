@@ -1,6 +1,9 @@
 package project.SangHyun.member.tools.sign;
 
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.*;
@@ -11,21 +14,35 @@ import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.service.impl.JwtTokens;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SignFactory extends BasicFactory {
+    private static FileInputStream fileInputStream;
+    private static MultipartFile multipartFile;
+
+    static {
+        try {
+            fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+            multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Request
     public static MemberRegisterRequestDto makeRegisterRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과", null);
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과", multipartFile);
     }
 
     public static MemberRegisterRequestDto makeDuplicateEmailRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과", null);
+        return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과", multipartFile);
     }
 
     public static MemberRegisterRequestDto makeDuplicateNicknameRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", "컴퓨터공학과", null);
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", "컴퓨터공학과", multipartFile);
     }
 
     public static MemberLoginRequestDto makeAuthMemberLoginRequestDto() {
@@ -58,7 +75,7 @@ public class SignFactory extends BasicFactory {
 
     public static Member makeAuthTestMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "승범", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm1!", "encodedPW", "승범", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }

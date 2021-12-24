@@ -5,10 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,8 +26,11 @@ import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.controller.SignController;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,18 +61,27 @@ class SignControllerTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member createdMember = requestDto.toEntity(passwordEncoder);
+        Member createdMember = requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\git.png");
         MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(createdMember);
         SingleResult<MemberRegisterResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(signService.registerMember(requestDto)).willReturn(responseDto);
+        given(signService.registerMember(any())).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/sign/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(requestDto)))
+        mockMvc.perform(multipart("/sign/register")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("password", requestDto.getPassword())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 

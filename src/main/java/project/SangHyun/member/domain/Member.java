@@ -34,11 +34,12 @@ public class Member extends EntityDate {
     }
 
     @Builder
-    public Member(String email, String password, String nickname, String department, MemberRole memberRole) {
+    public Member(String email, String password, String nickname, String department, String profileImgUrl, MemberRole memberRole) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.department = department;
+        this.profileImgUrl = profileImgUrl;
         this.memberRole = memberRole;
     }
 

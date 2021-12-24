@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.NotNull;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +24,7 @@ class FileStoreHelperTest {
 
     @Test
     @DisplayName("어떠한 파일 한 개를 저장한다.")
-    public void createPath() throws Exception {
+    public void storeFile() throws Exception {
         //given
         FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
         MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
@@ -35,5 +34,17 @@ class FileStoreHelperTest {
 
         //then
         Assertions.assertNotNull(profileImgUrl);
+    }
+
+    @Test
+    @DisplayName("어떠한 파일 한 개를 삭제한다.")
+    public void deleteFile() throws Exception {
+        //given
+        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
+        MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
+        String profileImgUrl = fileStoreHelper.storeFile(multipartFile);
+
+        //when, then
+        Assertions.assertDoesNotThrow(() -> fileStoreHelper.deleteFile(profileImgUrl));
     }
 }

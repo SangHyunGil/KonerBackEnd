@@ -19,9 +19,11 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
+import project.SangHyun.utils.helper.FileStoreHelper;
 import project.SangHyun.utils.service.EmailService;
 import project.SangHyun.utils.service.RedisService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,12 +43,15 @@ public class SignServiceImpl implements SignService {
 
     private final RedisService redisService;
     private final EmailService emailService;
+    private final FileStoreHelper fileStoreHelper;
 
     @Override
     @Transactional
-    public MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) {
+    public MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) throws IOException {
         validateDuplicated(requestDto.getEmail(), requestDto.getNickname());
-        Member member = memberRepository.save(requestDto.toEntity(passwordEncoder));
+        Member member = memberRepository.save(
+                requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), fileStoreHelper.storeFile(requestDto.getProfileImg()))
+        );
         return MemberRegisterResponseDto.create(member);
     }
 

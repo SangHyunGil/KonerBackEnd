@@ -6,8 +6,10 @@ import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 
+import java.io.IOException;
+
 public interface SignService {
-    MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto);
+    MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) throws IOException;
     MemberLoginResponseDto loginMember(MemberLoginRequestDto requestDto);
     String sendEmail(MemberEmailAuthRequestDto requestDto);
     String verify(VerifyEmailRequestDto requestDto);
