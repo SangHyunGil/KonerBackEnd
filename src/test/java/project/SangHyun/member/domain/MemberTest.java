@@ -3,23 +3,30 @@ package project.SangHyun.member.domain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.enums.MemberRole;
+import project.SangHyun.member.tools.member.MemberFactory;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MemberTest {
     @Test
     @DisplayName("회원의 정보를 수정한다.")
     public void updateMember() throws Exception {
         //given
-        Long memberId = 1L;
-        Member member = new Member("test", "test", "테스터", "컴퓨터공학부", MemberRole.ROLE_MEMBER);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        Member member = MemberFactory.makeTestAuthMember();
+        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+        MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
-        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부");
+        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부", multipartFile);
 
         //when
-        Member updateMember = member.updateMemberInfo(requestDto);
+        Member updateMember = member.updateMemberInfo(requestDto, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
 
         //then
         Assertions.assertEquals(requestDto.getNickname(), updateMember.getNickname());
@@ -29,9 +36,7 @@ public class MemberTest {
     @DisplayName("회원의 권한을 수정한다.")
     public void changeRole() throws Exception {
         //given
-        Long memberId = 1L;
-        Member member = new Member("test", "test", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        Member member = MemberFactory.makeTestAuthMember();
 
         //when
         member.changeRole(MemberRole.ROLE_MEMBER);
@@ -44,9 +49,7 @@ public class MemberTest {
     @DisplayName("회원의 비밀번호를 수정한다.")
     public void changePassword() throws Exception {
         //given
-        Long memberId = 1L;
-        Member member = new Member("test", "test", "테스터", "컴퓨터공학부", MemberRole.ROLE_NOT_PERMITTED);
-        ReflectionTestUtils.setField(member, "id", memberId);
+        Member member = MemberFactory.makeTestAuthMember();
 
         //when
         member.changePassword("changed");

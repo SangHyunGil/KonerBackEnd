@@ -108,10 +108,16 @@ class MemberControllerTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/users/{id}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/users/{id}", 1)
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("PUT");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.nickname").value("상현"));

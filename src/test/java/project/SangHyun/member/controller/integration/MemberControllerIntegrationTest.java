@@ -108,10 +108,16 @@ class MemberControllerIntegrationTest {
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
 
         //when, then
-        mockMvc.perform(put("/users/{id}", member.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/users/{id}", member.getId())
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("PUT");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.nickname").value("철수"));
@@ -126,10 +132,16 @@ class MemberControllerIntegrationTest {
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("적절한닉네임");
 
         //when, then
-        mockMvc.perform(put("/users/{id}", member.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/users/{id}", member.getId())
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("PUT");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.nickname").value("적절한닉네임"));

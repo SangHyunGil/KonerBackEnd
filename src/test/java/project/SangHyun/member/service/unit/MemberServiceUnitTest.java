@@ -20,6 +20,7 @@ import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
+import project.SangHyun.utils.helper.FileStoreHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,8 @@ class MemberServiceUnitTest {
     MemberRepository memberRepository;
     @Mock
     StudyJoinRepository studyJoinRepository;
+    @Mock
+    FileStoreHelper fileStoreHelper;
 
     @BeforeEach
     public void init() {
@@ -88,6 +91,7 @@ class MemberServiceUnitTest {
 
         //mocking
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
+        given(fileStoreHelper.storeFile(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
 
         //when
         MemberUpdateResponseDto ActualResult = memberService.updateMember(authMember.getId(), requestDto);

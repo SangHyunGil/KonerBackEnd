@@ -49,7 +49,7 @@ class SignServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("회원 정보를 로드한다.")
+    @DisplayName("회원 가입을 진행한다.")
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();

@@ -16,7 +16,9 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.MemberService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
+import project.SangHyun.utils.helper.FileStoreHelper;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -27,6 +29,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final StudyJoinRepository studyJoinRepository;
+    private final FileStoreHelper fileStoreHelper;
 
     /**
      * AccessToken으로 유저 정보 조회
@@ -59,9 +62,9 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     @Transactional
-    public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto) {
+    public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto) throws IOException {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        return MemberUpdateResponseDto.create(member.updateMemberInfo(requestDto));
+        return MemberUpdateResponseDto.create(member.updateMemberInfo(requestDto, fileStoreHelper.storeFile(requestDto.getProfileImg())));
     }
 
     @Override

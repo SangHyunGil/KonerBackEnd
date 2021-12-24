@@ -17,6 +17,7 @@ import project.SangHyun.response.service.ResponseServiceImpl;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -42,7 +43,7 @@ public class MemberController {
     @ApiOperation(value = "회원 정보 수정", notes = "회원에 대한 정보를 수정한다.")
     @PutMapping("/{memberId}")
     public SingleResult<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId,
-                                                              @Valid @RequestBody MemberUpdateRequestDto requestDto) {
+                                                              @Valid @ModelAttribute MemberUpdateRequestDto requestDto) throws IOException {
         return responseService.getSingleResult(memberService.updateMember(memberId, requestDto));
     }
 
