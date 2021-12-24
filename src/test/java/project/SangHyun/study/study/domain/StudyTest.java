@@ -24,8 +24,8 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", "백엔드", "백엔드 스터디 모집합니다!", StudyState.STUDYING, RecruitState.PROCEED,
-                2L, member, studyJoins, studyBoards);
+        Study study = new Study("백엔드 스터디", "백엔드", "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+                StudyState.STUDYING, RecruitState.PROCEED,2L, member, studyJoins, studyBoards);
 
         StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", "프론트엔드", "음..", 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
@@ -43,10 +43,10 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", "백엔드", "백엔드 스터디 모집합니다!", StudyState.STUDYING, RecruitState.PROCEED,
-                2L, member, studyJoins, studyBoards);
-
+        Study study = new Study("백엔드 스터디", "백엔드", "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+                StudyState.STUDYING, RecruitState.PROCEED,2L, member, studyJoins, studyBoards);
         StudyJoin studyJoin = new StudyJoin(1L);
+
         //when
         study.join(studyJoin);
 
@@ -61,8 +61,8 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", "백엔드", "백엔드 스터디 모집합니다!", StudyState.STUDYING, RecruitState.PROCEED,
-                2L, member, studyJoins, studyBoards);
+        Study study = new Study("백엔드 스터디", "백엔드", "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+                StudyState.STUDYING, RecruitState.PROCEED,2L, member, studyJoins, studyBoards);
 
         StudyBoard studyBoard = new StudyBoard(1L);
         //when

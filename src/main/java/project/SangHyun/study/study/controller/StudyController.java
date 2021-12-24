@@ -20,6 +20,7 @@ import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @Slf4j
@@ -45,7 +46,7 @@ public class StudyController {
 
     @ApiOperation(value = "스터디 생성", notes = "스터디를 생성한다.")
     @PostMapping
-    public SingleResult<StudyCreateResponseDto> createStudy(@Valid @RequestBody StudyCreateRequestDto requestDto) {
+    public SingleResult<StudyCreateResponseDto> createStudy(@Valid @ModelAttribute StudyCreateRequestDto requestDto) throws IOException {
         return responseService.getSingleResult(studyService.createStudy(requestDto));
     }
 

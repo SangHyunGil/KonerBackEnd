@@ -26,6 +26,7 @@ public class Study extends EntityDate {
     private String title;
     private String topic;
     private String content;
+    private String profileImgUrl;
     @Enumerated(EnumType.STRING)
     private StudyState studyState;
     @Enumerated(EnumType.STRING)
@@ -44,10 +45,11 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, String topic, String content, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, String topic, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, Long headCount, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
         this.topic = topic;
         this.content = content;
+        this.profileImgUrl = profileImgUrl;
         this.studyState = studyState;
         this.recruitState = recruitState;
         this.headCount = headCount;
@@ -63,7 +65,6 @@ public class Study extends EntityDate {
         this.studyState = requestDto.getStudyState();
         this.recruitState = requestDto.getRecruitState();
         this.headCount = requestDto.getHeadCount();
-
         return this;
     }
 

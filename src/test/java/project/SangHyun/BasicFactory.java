@@ -47,8 +47,9 @@ public class BasicFactory {
 
     public static Study makeTestStudy(Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         Long studyId = 1L;
-        Study study = new Study("프론트엔드 스터디", "프론트엔드",
-                null, StudyState.STUDYING, RecruitState.PROCEED, 2L, member, studyJoins, studyBoards);
+        Study study = new Study("프론트엔드 스터디", "프론트엔드",null,
+                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING,
+                RecruitState.PROCEED, 2L, member, studyJoins, studyBoards);
         ReflectionTestUtils.setField(study, "id", studyId);
         return study;
     }

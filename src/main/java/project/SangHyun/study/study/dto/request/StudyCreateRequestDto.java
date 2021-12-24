@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
@@ -41,13 +42,16 @@ public class StudyCreateRequestDto {
     @Min(value = 1, message = "스터디 인원수는 1 이상이어야 합니다.")
     private Long headCount;
 
+    @ApiModelProperty(value = "프로필 이미지", notes = "프로필 이미지를 업로드해주세요.", required = true, example = "")
+    private MultipartFile profileImg;
+
     @ApiModelProperty(value = "스터디 상태", notes = "스터디 상태를 입력해주세요.", required = true, example = "공부 중")
     private StudyState studyState;
 
     @ApiModelProperty(value = "스터디 모집 상태", notes = "스터디 모집 상태를 입력해주세요.", required = true, example = "모집 중")
     private RecruitState recruitState;
 
-    public Study toEntity() {
+    public Study toEntity(String profileImg) {
         Study study = Study.builder()
                 .title(title)
                 .topic(topic)
@@ -57,6 +61,7 @@ public class StudyCreateRequestDto {
                 .studyJoins(new ArrayList<>())
                 .studyBoards(new ArrayList<>())
                 .recruitState(recruitState)
+                .profileImgUrl(profileImg)
                 .headCount(headCount)
                 .build();
 

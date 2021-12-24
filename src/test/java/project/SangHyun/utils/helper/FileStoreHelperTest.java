@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 class FileStoreHelperTest {
-    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/StudyProfile").getAbsolutePath() + "/";
+    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";
     FileStoreHelper fileStoreHelper = new FileStoreHelper(filePathDir);
 
     @BeforeEach

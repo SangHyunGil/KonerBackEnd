@@ -98,10 +98,20 @@ class StudyControllerIntegrationTest {
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
 
         //when, then
-        mockMvc.perform(post("/study")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/study")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("memberId", String.valueOf(requestDto.getMemberId()))
+                        .param("title", requestDto.getTitle())
+                        .param("content", requestDto.getContent())
+                        .param("topic", requestDto.getTopic())
+                        .param("headCount", String.valueOf(requestDto.getHeadCount()))
+                        .param("studyState", String.valueOf(requestDto.getStudyState()))
+                        .param("recruitState", String.valueOf(requestDto.getRecruitState()))
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("프론트엔드 모집"))
