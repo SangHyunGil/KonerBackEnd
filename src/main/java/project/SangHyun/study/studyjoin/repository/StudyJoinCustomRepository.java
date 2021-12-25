@@ -1,5 +1,6 @@
 package project.SangHyun.study.studyjoin.repository;
 
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
@@ -13,4 +14,5 @@ public interface StudyJoinCustomRepository {
     Boolean exist(Long studyId, Long memberId);
     Optional<StudyJoin> findStudyRole(Long memberId, Long studyId);
     List<StudyMembersInfoDto> findStudyMembers(Long studyId);
+    Optional<StudyJoin> findApplyStudy(Long studyId, Long memberId);
 }

@@ -20,10 +20,10 @@ public class StudyJoinController {
     private final StudyJoinService studyJoinService;
     private final ResponseServiceImpl responseService;
 
-    @ApiOperation(value = "스터디 참여", notes = "스터디에 참여한다.")
+    @ApiOperation(value = "스터디 참가 신청", notes = "스터디 참가를 신청한다.")
     @PostMapping("/join")
-    public SingleResult<StudyJoinResponseDto> join(@RequestBody StudyJoinRequestDto requestDto) {
-        return responseService.getSingleResult(studyJoinService.joinStudy(requestDto));
+    public SingleResult<StudyJoinResponseDto> applyJoin(@RequestBody StudyJoinRequestDto requestDto) {
+        return responseService.getSingleResult(studyJoinService.applyJoin(requestDto));
     }
 
     @ApiOperation(value = "스터디원 정보 로드", notes = "스터디에 참여한 스터디원의 정보를 로드한다.")

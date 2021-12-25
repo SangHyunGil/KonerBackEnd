@@ -6,16 +6,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.AlreadyJoinStudyMember;
 import project.SangHyun.advice.exception.ExceedMaximumStudyMember;
+import project.SangHyun.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.advice.exception.StudyNotFoundException;
-import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 
 import java.util.List;
@@ -30,8 +30,9 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     private final StudyJoinRepository studyJoinRepository;
     private final StudyRepository studyRepository;
 
+    @Override
     @Transactional
-    public StudyJoinResponseDto joinStudy(StudyJoinRequestDto requestDto) {
+    public StudyJoinResponseDto applyJoin(StudyJoinRequestDto requestDto) {
         validateJoinCondition(requestDto);
         StudyJoin studyJoin = studyJoinRepository.save(requestDto.toEntity());
         return StudyJoinResponseDto.create(studyJoin);
@@ -43,6 +44,15 @@ public class StudyJoinServiceImpl implements StudyJoinService {
             throw new AlreadyJoinStudyMember();
         if (study.getHeadCount() <= studyJoinRepository.findStudyJoinCount(requestDto.getStudyId()))
             throw new ExceedMaximumStudyMember();
+    }
+
+    @Override
+    public StudyJoinResponseDto acceptJoin(StudyJoinRequestDto requestDto) {
+        validateJoinCondition(requestDto);
+        StudyJoin studyJoin = studyJoinRepository.findApplyStudy(requestDto.getStudyId(), requestDto.getMemberId())
+                .orElseThrow(StudyJoinNotFoundException::new);
+        studyJoin.acceptMember();
+        return StudyJoinResponseDto.create(studyJoin);
     }
 
     @Override

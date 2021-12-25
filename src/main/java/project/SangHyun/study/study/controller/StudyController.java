@@ -14,10 +14,6 @@ import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.service.StudyService;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
-import project.SangHyun.study.studyjoin.service.StudyJoinService;
 
 import javax.validation.Valid;
 import java.io.IOException;

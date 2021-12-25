@@ -66,6 +66,10 @@ public class TestDB {
         return memberRepository.findByEmail("xptmxm1!").orElseThrow(MemberNotFoundException::new);
     }
 
+    public Member findStudyApplyMember() {
+        return memberRepository.findByEmail("xptmxm10!").orElseThrow(MemberNotFoundException::new);
+    }
+
     public Member findStudyGeneralMember() {
         return memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new);
     }
@@ -83,6 +87,11 @@ public class TestDB {
     @Transactional(readOnly = true)
     public Study findBackEndStudy() {
         return studyRepository.findStudyByTitle("백엔드 모집").get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public Study findZeroHeadCountStudy() {
+        return studyRepository.findStudyByTitle("임시용").get(0);
     }
 
     @Transactional(readOnly = true)
@@ -116,6 +125,11 @@ public class TestDB {
         Member memberC = new Member("xptmxm0!", passwordEncoder.encode("xptmxm0!"), "예림", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberC);
 
+        Member memberD = new Member("xptmxm10!", passwordEncoder.encode("xptmxm10!"), "동욱", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        memberRepository.save(memberD);
+
+        Study emptyStudy = new Study("임시용", "임시용", "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 0L, "2021-12-25", StudyMethod.FACE, memberB, new ArrayList<>(), new ArrayList<>());
+
         Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 4L, "2021-12-25", StudyMethod.FACE, memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
@@ -127,6 +141,9 @@ public class TestDB {
         StudyJoin studyJoin3 = new StudyJoin(memberC, study, StudyRole.MEMBER);
         study.join(studyJoin3);
 
+        StudyJoin studyJoin4 = new StudyJoin(memberD, study, StudyRole.APPLY);
+        study.join(studyJoin4);
+
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
         StudyBoard studyBoard3 = new StudyBoard("알고리즘", study);
@@ -135,6 +152,7 @@ public class TestDB {
         study.addBoard(studyBoard3);
 
         studyRepository.save(study);
+        studyRepository.save(emptyStudy);
 
         StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);

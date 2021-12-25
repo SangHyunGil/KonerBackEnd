@@ -55,9 +55,16 @@ public class BasicFactory {
         return study;
     }
 
-    public static StudyJoin makeTestStudyJoin(Member member, Study study) {
+    public static StudyJoin makeTestStudyJoinCreator(Member member, Study study) {
         Long studyJoinId = 1L;
         StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
+        ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
+        return studyJoin;
+    }
+
+    public static StudyJoin makeTestStudyJoinApply(Member member, Study study) {
+        Long studyJoinId = 1L;
+        StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.APPLY);
         ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
         return studyJoin;
     }

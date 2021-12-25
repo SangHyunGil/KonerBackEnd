@@ -64,7 +64,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeCreateDto(study, member);
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
         mockMvc.perform(post("/study/join")
@@ -83,7 +83,7 @@ class StudyControllerIntegrationTest {
         Member member = testDB.findNotAuthMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeCreateDto(study, member);
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
         mockMvc.perform(post("/study/join")

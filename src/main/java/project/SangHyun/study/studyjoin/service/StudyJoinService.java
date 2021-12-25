@@ -7,6 +7,7 @@ import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import java.util.List;
 
 public interface StudyJoinService {
-    StudyJoinResponseDto joinStudy(StudyJoinRequestDto requestDto);
+    StudyJoinResponseDto applyJoin(StudyJoinRequestDto requestDto);
+    StudyJoinResponseDto acceptJoin(StudyJoinRequestDto requestDto);
     List<StudyFindMembersResponseDto> findStudyMembers(Long studyId);
 }
