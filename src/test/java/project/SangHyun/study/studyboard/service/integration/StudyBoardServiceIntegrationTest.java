@@ -107,5 +107,6 @@ class StudyBoardServiceIntegrationTest {
         //then
         Assertions.assertEquals(studyBoard.getId(), ActualResult.getStudyBoardId());
         Assertions.assertEquals(studyBoard.getTitle(), ActualResult.getTitle());
+        Assertions.assertEquals(2, studyBoardService.findAllBoards(study.getId()).size());
     }
 }

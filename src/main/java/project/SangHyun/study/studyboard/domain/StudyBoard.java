@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.studyarticle.domain.StudyArticle;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,6 +26,9 @@ public class StudyBoard extends EntityDate {
     @JoinColumn(name = "study_id")
     private Study study;
 
+    @OneToMany(mappedBy = "studyBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<StudyArticle> studyArticles = new ArrayList<>();
+
     public StudyBoard(Long id) {
         this.id = id;
     }
@@ -31,6 +37,11 @@ public class StudyBoard extends EntityDate {
     public StudyBoard(String title, Study study) {
         this.title = title;
         this.study = study;
+    }
+
+    public void addArticle(StudyArticle studyArticles) {
+        this.studyArticles.add(studyArticles);
+        studyArticles.setStudyBoard(this);
     }
 
     public void changeTitle(String title) {

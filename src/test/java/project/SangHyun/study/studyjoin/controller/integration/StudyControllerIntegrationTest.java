@@ -59,7 +59,7 @@ class StudyControllerIntegrationTest {
 
     @Test
     @DisplayName("스터디에 참여한다.")
-    public void join() throws Exception {
+    public void applyJoin() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
@@ -67,7 +67,7 @@ class StudyControllerIntegrationTest {
         StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(post("/study/join")
+        mockMvc.perform(post("/study/" + study.getId() + "/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -78,7 +78,7 @@ class StudyControllerIntegrationTest {
 
     @Test
     @DisplayName("인증이 미완료된 회원은 스터디에 참여할 수 없다.")
-    public void join_fail() throws Exception {
+    public void applyJoin_fail() throws Exception {
         //given
         Member member = testDB.findNotAuthMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
@@ -86,7 +86,158 @@ class StudyControllerIntegrationTest {
         StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(post("/study/join")
+        mockMvc.perform(post("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("스터디 생성자는 스터디 참가를 수락할 수 있다.")
+    public void acceptJoin() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member creator = testDB.findStudyCreatorMember();
+        Member applyMember = testDB.findStudyApplyMember();
+        String accessToken = accessTokenHelper.createToken(creator.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
+
+        //when, then
+        mockMvc.perform(put("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
+    }
+
+    @Test
+    @DisplayName("웹 관리자는 스터디 참가를 수락할 수 있다.")
+    public void acceptJoin2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member adminMember = testDB.findAdminMember();
+        Member applyMember = testDB.findStudyApplyMember();
+        String accessToken = accessTokenHelper.createToken(adminMember.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
+
+        //when, then
+        mockMvc.perform(put("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
+    }
+
+    @Test
+    @DisplayName("스터디 일반 회원은 스터디 참가에 실패한다.")
+    public void acceptJoin_fail() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyGeneralMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
+
+        //when, then
+        mockMvc.perform(put("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("스터디에 참여하지 않은 회원은 스터디 참가에 실패한다.")
+    public void acceptJoin_fail2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findNotStudyMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
+
+        //when, then
+        mockMvc.perform(put("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("스터디 생성자는 스터디 참가를 거절할 수 있다.")
+    public void rejectJoin() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member creator = testDB.findStudyCreatorMember();
+        Member applyMember = testDB.findStudyApplyMember();
+        String accessToken = accessTokenHelper.createToken(creator.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
+
+        //when, then
+        mockMvc.perform(delete("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("웹 관리자는 스터디 참가를 거절할 수 있다.")
+    public void rejectJoin2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member adminMember = testDB.findAdminMember();
+        Member applyMember = testDB.findStudyApplyMember();
+        String accessToken = accessTokenHelper.createToken(adminMember.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
+
+        //when, then
+        mockMvc.perform(delete("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
+    }
+
+    @Test
+    @DisplayName("스터디 일반 회원은 스터디 거절에 실패한다.")
+    public void rejectJoin_fail() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyGeneralMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
+
+        //when, then
+        mockMvc.perform(delete("/study/" + study.getId() + "/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("스터디에 참여하지 않은 회원은 스터디 거절에 실패한다.")
+    public void rejectJoin_fail2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findNotStudyMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
+
+        //when, then
+        mockMvc.perform(delete("/study/" + study.getId() + "/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))

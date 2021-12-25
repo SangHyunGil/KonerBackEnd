@@ -32,8 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,14 +56,14 @@ class StudyJoinControllerUnitTest {
         mockMvc = MockMvcBuilders.standaloneSetup(studyJoinController).build();
 
         accessToken = "accessToken";
-        member = StudyFactory.makeTestAuthMember();
+        member = StudyFactory.makeTestAdminMember();
         study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         studyJoin = StudyJoinFactory.makeTestStudyJoinCreator(member, study);
     }
 
     @Test
-    @DisplayName("스터디에 참여한다.")
-    public void join() throws Exception {
+    @DisplayName("스터디 참가를 신청한다.")
+    public void applyJoin() throws Exception {
         //given
         StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
         StudyJoin createdStudyJoin = requestDto.toEntity();
@@ -76,7 +75,55 @@ class StudyJoinControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/join")
+        mockMvc.perform(post("/study/"+study.getId()+"/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
+                .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
+    }
+
+    @Test
+    @DisplayName("스터디 참가를 수락한다.")
+    public void acceptJoin() throws Exception {
+        //given
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
+        StudyJoin createdStudyJoin = requestDto.toEntity();
+        StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(createdStudyJoin);
+        SingleResult<StudyJoinResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
+
+        //mocking
+        given(studyJoinService.acceptJoin(requestDto)).willReturn(responseDto);
+        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+
+        //when, then
+        mockMvc.perform(put("/study/"+study.getId()+"/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
+                .andExpect(jsonPath("$.data.memberId").value(ExpectResult.getData().getMemberId()));
+    }
+
+    @Test
+    @DisplayName("스터디 참가를 거절한다.")
+    public void rejectJoin() throws Exception {
+        //given
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
+        StudyJoin createdStudyJoin = requestDto.toEntity();
+        StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(createdStudyJoin);
+        SingleResult<StudyJoinResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
+
+        //mocking
+        given(studyJoinService.rejectJoin(requestDto)).willReturn(responseDto);
+        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+
+        //when, then
+        mockMvc.perform(delete("/study/"+study.getId()+"/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))

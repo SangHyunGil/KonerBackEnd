@@ -32,16 +32,23 @@ public class BasicFactory {
         return multipleResult;
     }
 
+    public static Member makeTestAdminMember() {
+        Long memberId = 1L;
+        Member member = new Member("xptmxm1!", "encodedPW", "상현", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN);
+        ReflectionTestUtils.setField(member, "id", memberId);
+        return member;
+    }
+
     public static Member makeTestAuthMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "상현", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm2!", "encodedPW", "유나", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestNotAuthMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm2!", "encodedPW", "유나", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED);
+        Member member = new Member("xptmxm3!", "encodedPW", "동욱", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED);
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }

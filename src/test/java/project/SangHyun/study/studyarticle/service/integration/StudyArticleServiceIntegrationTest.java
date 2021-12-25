@@ -113,10 +113,9 @@ class StudyArticleServiceIntegrationTest {
 
         //when
         studyArticleService.deleteArticle(studyArticle.getId());
-        List<StudyArticleFindResponseDto> allArticles1 = studyArticleService.findAllArticles(studyBoard.getId());
 
         //then
-        Assertions.assertEquals(2, allArticles1.size());
+        Assertions.assertEquals(2, studyArticleService.findAllArticles(studyBoard.getId()).size());
     }
 
     @Test

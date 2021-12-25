@@ -45,18 +45,18 @@ public class TestData {
         private final PasswordEncoder passwordEncoder;
 
         private void initMember() {
-            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\1.png", MemberRole.ROLE_MEMBER);
+            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\Study\\1.png", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberA);
 
-            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\1.png", MemberRole.ROLE_NOT_PERMITTED);
+            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\Study\\1.png", MemberRole.ROLE_NOT_PERMITTED);
             memberRepository.save(memberB);
         }
 
         private void initStudy() {
-            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\1.png", MemberRole.ROLE_MEMBER);
+            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\Study\\1.png", MemberRole.ROLE_MEMBER);
             memberRepository.save(member);
 
-            Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 3L, "2021-12-25", StudyMethod.FACE, member, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Desktop\\SH\\spring\\Study\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 3L, "2021-12-25", StudyMethod.FACE, member, new ArrayList<>(), new ArrayList<>());
 
             StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
             study.join(studyJoin);
@@ -64,19 +64,20 @@ public class TestData {
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
             StudyBoard studyBoard3 = new StudyBoard("알고리즘", study);
-            study.addBoard(studyBoard1);
-            study.addBoard(studyBoard2);
-            study.addBoard(studyBoard3);
-
-            studyRepository.save(study);
 
             StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, member, studyBoard1);
 
-            studyArticleRepository.save(studyArticle1);
-            studyArticleRepository.save(studyArticle2);
-            studyArticleRepository.save(studyArticle3);
+            studyBoard1.addArticle(studyArticle1);
+            studyBoard1.addArticle(studyArticle2);
+            studyBoard1.addArticle(studyArticle3);
+
+            study.addBoard(studyBoard1);
+            study.addBoard(studyBoard2);
+            study.addBoard(studyBoard3);
+
+            studyRepository.save(study);
         }
     }
 }
