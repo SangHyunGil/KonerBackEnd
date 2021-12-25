@@ -15,6 +15,10 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
+import project.SangHyun.study.studyboard.domain.StudyBoard;
+import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.impl.StudyServiceImpl;
@@ -24,6 +28,7 @@ import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -43,6 +48,8 @@ class StudyServiceIntegrationTest {
     StudyJoinRepository studyJoinRepository;
     @Autowired
     TestDB testDB;
+    @Autowired
+    EntityManager em;
 
     @BeforeEach
     void beforeEach() {
@@ -73,7 +80,7 @@ class StudyServiceIntegrationTest {
         List<StudyFindResponseDto> ActualResult = studyService.findAllStudies();
 
         //then
-        Assertions.assertEquals(1, ActualResult.size());
+        Assertions.assertEquals(2, ActualResult.size());
     }
 
     @Test
@@ -105,7 +112,7 @@ class StudyServiceIntegrationTest {
 
     @Test
     @DisplayName("스터디의 정보를 삭제한다.")
-    public void deleteStudy() throws Exception {
+    public void deleteStudy() {
         //given
         Study study = testDB.findBackEndStudy();
 
@@ -114,5 +121,6 @@ class StudyServiceIntegrationTest {
 
         //then
         Assertions.assertEquals("백엔드 모집", ActualResult.getTitle());
+        Assertions.assertEquals(1, studyRepository.findAll().size());
     }
 }

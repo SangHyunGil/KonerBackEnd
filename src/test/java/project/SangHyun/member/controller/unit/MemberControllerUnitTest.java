@@ -120,7 +120,7 @@ class MemberControllerUnitTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.nickname").value("상현"));
+                .andExpect(jsonPath("$.data.nickname").value("유나"));
     }
 
     @Test

@@ -46,4 +46,8 @@ public class StudyArticle extends EntityDate {
     public void updateViews() {
         this.views += 1;
     }
+
+    public void setStudyBoard(StudyBoard studyBoard) {
+        this.studyBoard = studyBoard;
+    }
 }

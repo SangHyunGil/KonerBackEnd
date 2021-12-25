@@ -10,4 +10,5 @@ public interface StudyJoinService {
     StudyJoinResponseDto applyJoin(StudyJoinRequestDto requestDto);
     StudyJoinResponseDto acceptJoin(StudyJoinRequestDto requestDto);
     List<StudyFindMembersResponseDto> findStudyMembers(Long studyId);
+    StudyJoinResponseDto rejectJoin(StudyJoinRequestDto requestDto);
 }

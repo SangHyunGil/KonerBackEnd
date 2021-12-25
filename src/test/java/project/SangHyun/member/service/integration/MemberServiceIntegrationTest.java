@@ -91,7 +91,7 @@ class MemberServiceIntegrationTest {
         List<Member> members = memberRepository.findAll();
 
         //then
-        Assertions.assertEquals(5, members.size());
+        Assertions.assertEquals(6, members.size());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
     }
 }

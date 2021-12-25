@@ -47,11 +47,23 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     }
 
     @Override
+    @Transactional
     public StudyJoinResponseDto acceptJoin(StudyJoinRequestDto requestDto) {
         validateJoinCondition(requestDto);
         StudyJoin studyJoin = studyJoinRepository.findApplyStudy(requestDto.getStudyId(), requestDto.getMemberId())
                 .orElseThrow(StudyJoinNotFoundException::new);
         studyJoin.acceptMember();
+        return StudyJoinResponseDto.create(studyJoin);
+    }
+
+    @Override
+    @Transactional
+    public StudyJoinResponseDto rejectJoin(StudyJoinRequestDto requestDto) {
+        validateJoinCondition(requestDto);
+        StudyJoin studyJoin = studyJoinRepository.findApplyStudy(requestDto.getStudyId(), requestDto.getMemberId())
+                .orElseThrow(StudyJoinNotFoundException::new);
+        studyJoin.getStudy().getStudyJoins().remove(studyJoin); // cascade
+        studyJoinRepository.delete(studyJoin);
         return StudyJoinResponseDto.create(studyJoin);
     }
 
