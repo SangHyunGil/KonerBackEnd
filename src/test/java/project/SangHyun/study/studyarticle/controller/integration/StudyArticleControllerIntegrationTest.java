@@ -14,12 +14,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
-import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -28,7 +26,6 @@ import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequest
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -55,7 +52,7 @@ class StudyArticleControllerIntegrationTest {
     @Autowired
     StudyJoinRepository studyJoinRepository;
     @Autowired
-    RedisService redisService;
+    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired

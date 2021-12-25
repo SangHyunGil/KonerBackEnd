@@ -10,6 +10,7 @@ import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -55,7 +56,7 @@ public class TestData {
             Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\1.png", MemberRole.ROLE_MEMBER);
             memberRepository.save(member);
 
-            Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", StudyState.STUDYING, RecruitState.PROCEED, 3L, member, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 3L, "2021-12-25", StudyMethod.FACE, member, new ArrayList<>(), new ArrayList<>());
 
             StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
             study.join(studyJoin);

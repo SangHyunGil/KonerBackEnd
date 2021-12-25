@@ -1,4 +1,4 @@
-package project.SangHyun.utils.service.integration;
+package project.SangHyun.helper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.utils.service.impl.RedisServiceImpl;
+import project.SangHyun.helper.RedisHelper;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 class RedisServiceIntegrationImplTest {
 
     @Autowired
-    RedisServiceImpl redisService;
+    RedisHelper redisService;
     @Autowired
     TestDB testDB;
 

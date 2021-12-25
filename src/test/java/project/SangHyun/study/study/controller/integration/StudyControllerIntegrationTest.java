@@ -14,26 +14,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +44,7 @@ class StudyControllerIntegrationTest {
     @Autowired
     MemberRepository memberRepository;
     @Autowired
-    RedisService redisService;
+    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired
@@ -98,10 +91,22 @@ class StudyControllerIntegrationTest {
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
 
         //when, then
-        mockMvc.perform(post("/study")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/study")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("memberId", String.valueOf(requestDto.getMemberId()))
+                        .param("title", requestDto.getTitle())
+                        .param("content", requestDto.getContent())
+                        .param("schedule", requestDto.getSchedule())
+                        .param("topic", requestDto.getTopic())
+                        .param("headCount", String.valueOf(requestDto.getHeadCount()))
+                        .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
+                        .param("studyState", String.valueOf(requestDto.getStudyState()))
+                        .param("recruitState", String.valueOf(requestDto.getRecruitState()))
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("프론트엔드 모집"))
@@ -150,10 +155,21 @@ class StudyControllerIntegrationTest {
         StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateDto("모바일 모집", "모바일");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}", study.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/study/{studyId}", study.getId())
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("title", requestDto.getTitle())
+                        .param("content", requestDto.getContent())
+                        .param("schedule", requestDto.getSchedule())
+                        .param("topic", requestDto.getTopic())
+                        .param("headCount", String.valueOf(requestDto.getHeadCount()))
+                        .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
+                        .param("studyState", String.valueOf(requestDto.getStudyState()))
+                        .param("recruitState", String.valueOf(requestDto.getRecruitState()))
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("PUT");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("모바일 모집"));
@@ -169,10 +185,21 @@ class StudyControllerIntegrationTest {
         StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateDto("모바일 모집", "모바일");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}", study.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(multipart("/study/{studyId}", study.getId())
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("title", requestDto.getTitle())
+                        .param("content", requestDto.getContent())
+                        .param("schedule", requestDto.getSchedule())
+                        .param("topic", requestDto.getTopic())
+                        .param("headCount", String.valueOf(requestDto.getHeadCount()))
+                        .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
+                        .param("studyState", String.valueOf(requestDto.getStudyState()))
+                        .param("recruitState", String.valueOf(requestDto.getRecruitState()))
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("PUT");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("모바일 모집"));
@@ -231,8 +258,6 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-
-        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("모바일 모집", "모바일", "모집합니다.", 2L, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when, then
         mockMvc.perform(delete("/study/{studyId}", study.getId())

@@ -159,6 +159,12 @@ public class ExceptionAdvice {
     @ExceptionHandler(ResourceNotOwnerException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result ResourceNotOwnerException() {
-        return responseService.getFailureResult(-121, "해당 자원에 대한 권한이 없습니다.");
+        return responseService.getFailureResult(-122, "해당 자원에 대한 권한이 없습니다.");
+    }
+
+    @ExceptionHandler(StudyJoinNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result StudyJoinNotFoundException() {
+        return responseService.getFailureResult(-123, "스터디 참여 정보가 존재하지 않습니다.");
     }
 }

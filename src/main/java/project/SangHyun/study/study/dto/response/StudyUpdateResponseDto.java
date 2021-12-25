@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
 
 @Data
@@ -29,8 +30,14 @@ public class StudyUpdateResponseDto {
     @ApiModelProperty(value = "스터디 내용")
     private String content;
 
+    @ApiModelProperty(value = "스터디 내용")
+    private String schedule;
+
     @ApiModelProperty(value = "스터디 정원")
     private Long headCount;
+
+    @ApiModelProperty(value = "스터디 방식", notes = "스터디 방식을 입력해주세요.", required = true, example = "대면")
+    private StudyMethod studyMethod;
 
     @ApiModelProperty(value = "스터디 상태")
     private StudyState studyState;
@@ -40,7 +47,7 @@ public class StudyUpdateResponseDto {
 
     public static StudyUpdateResponseDto create(Study study) {
         return new StudyUpdateResponseDto(study.getId(), study.getMember().getId(),
-                study.getTitle(), study.getTopic(), study.getContent(), study.getHeadCount(),
-                study.getStudyState(), study.getRecruitState());
+                study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
+                study.getHeadCount(), study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

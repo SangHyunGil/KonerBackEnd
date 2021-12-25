@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
+import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
 
 import java.util.List;
@@ -32,6 +33,9 @@ public class StudyFindResponseDto {
     @ApiModelProperty(value = "스터디 내용")
     private String content;
 
+    @ApiModelProperty(value = "스터디 일정")
+    private String schedule;
+
     @ApiModelProperty(value = "스터디 참여수")
     private Long joinCount;
 
@@ -40,6 +44,9 @@ public class StudyFindResponseDto {
 
     @ApiModelProperty(value = "스터디 참여인원들")
     private List<MemberProfile> studyMembers;
+
+    @ApiModelProperty(value = "스터디 방법")
+    private StudyMethod studyMethod;
 
     @ApiModelProperty(value = "스터디 상태")
     private StudyState studyState;
@@ -54,8 +61,8 @@ public class StudyFindResponseDto {
 
         return new StudyFindResponseDto(study.getId(),
                 new MemberProfile(study.getMember().getNickname(), study.getMember().getProfileImgUrl()),
-                study.getTitle(), study.getTopic(), study.getContent(),
-                (long) studyMembers.size(), study.getHeadCount(), studyMembers,
+                study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
+                (long) studyMembers.size(), study.getHeadCount(), studyMembers, study.getStudyMethod(),
                 study.getStudyState(), study.getRecruitState());
     }
 }

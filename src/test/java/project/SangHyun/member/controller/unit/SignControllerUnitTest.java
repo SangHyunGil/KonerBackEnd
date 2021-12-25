@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class SignControllerTest {
+class SignControllerUnitTest {
     Member authMember;
     Member notAuthMember;
 
@@ -81,7 +81,6 @@ class SignControllerTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 

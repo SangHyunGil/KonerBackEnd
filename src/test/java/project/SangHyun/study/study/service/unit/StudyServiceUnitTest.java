@@ -9,22 +9,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.*;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.impl.StudyServiceImpl;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +37,8 @@ class StudyServiceUnitTest {
     StudyServiceImpl studyService;
     @Mock
     StudyRepository studyRepository;
+    @Mock
+    FileStoreHelper fileStoreHelper;
 
     @BeforeEach
     public void init() {
@@ -54,7 +51,7 @@ class StudyServiceUnitTest {
     public void createStudy() throws Exception {
         //given
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
-        Study createdStudy = requestDto.toEntity();
+        Study createdStudy = requestDto.toEntity(fileStoreHelper.storeFile(requestDto.getProfileImg()));
         StudyCreateResponseDto ExpectResult = StudyFactory.makeCreateResponseDto(createdStudy);
 
         //mocking

@@ -3,14 +3,19 @@ package project.SangHyun.study.studyjoin.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.studyjoin.domain.QStudyJoin;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
+
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
+import static project.SangHyun.study.studyjoin.domain.QStudyJoin.*;
 import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
 
 @RequiredArgsConstructor
@@ -23,7 +28,8 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
         return jpaQueryFactory
                 .select(study)
                 .from(studyJoin)
-                .where(studyJoin.study.id.eq(studyId))
+                .where(studyJoin.study.id.eq(studyId),
+                        studyJoin.studyRole.ne(StudyRole.APPLY))
                 .fetchCount();
     }
 
@@ -34,19 +40,21 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
                         studyJoin.study.id, studyJoin.studyRole))
                 .from(studyJoin)
                 .join(studyJoin.study, study)
-                .where(studyJoin.member.id.eq(memberId))
+                .where(studyJoin.member.id.eq(memberId),
+                        studyJoin.studyRole.ne(StudyRole.APPLY))
                 .fetch();
     }
 
     @Override
     public Boolean exist(Long studyId, Long memberId) {
-        StudyJoin studyJoin = jpaQueryFactory
-                .selectFrom(QStudyJoin.studyJoin)
-                .where(QStudyJoin.studyJoin.study.id.eq(studyId),
-                        QStudyJoin.studyJoin.member.id.eq(memberId))
+        StudyJoin findStudyJoin = jpaQueryFactory
+                .selectFrom(studyJoin)
+                .where(studyJoin.study.id.eq(studyId),
+                        studyJoin.member.id.eq(memberId),
+                        studyJoin.studyRole.ne(StudyRole.APPLY))
                 .fetchFirst();
 
-        return studyJoin != null;
+        return findStudyJoin != null;
     }
 
     @Override
@@ -65,7 +73,17 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
                         member.id, member.nickname, studyJoin.studyRole))
                 .from(studyJoin)
                 .innerJoin(studyJoin.member, member)
-                .where(studyJoin.study.id.eq(studyId))
+                .where(studyJoin.study.id.eq(studyId),
+                        studyJoin.studyRole.ne(StudyRole.APPLY))
                 .fetch();
+    }
+
+    @Override
+    public Optional<StudyJoin> findApplyStudy(Long studyId, Long memberId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(studyJoin)
+                .where(studyJoin.study.id.eq(studyId),
+                        studyJoin.member.id.eq(memberId))
+                .fetchFirst());
     }
 }

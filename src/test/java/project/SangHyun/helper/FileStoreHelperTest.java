@@ -1,4 +1,4 @@
-package project.SangHyun.utils.helper;
+package project.SangHyun.helper;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 class FileStoreHelperTest {
-    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/StudyProfile").getAbsolutePath() + "/";
+    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";
     FileStoreHelper fileStoreHelper = new FileStoreHelper(filePathDir);
 
     @BeforeEach

@@ -14,12 +14,9 @@ import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.service.StudyService;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
-import project.SangHyun.study.studyjoin.service.StudyJoinService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @Slf4j
@@ -45,14 +42,14 @@ public class StudyController {
 
     @ApiOperation(value = "스터디 생성", notes = "스터디를 생성한다.")
     @PostMapping
-    public SingleResult<StudyCreateResponseDto> createStudy(@Valid @RequestBody StudyCreateRequestDto requestDto) {
+    public SingleResult<StudyCreateResponseDto> createStudy(@Valid @ModelAttribute StudyCreateRequestDto requestDto) throws IOException {
         return responseService.getSingleResult(studyService.createStudy(requestDto));
     }
 
     @ApiOperation(value = "스터디 정보 업데이트", notes = "스터디 정보를 업데이트한다.")
     @PutMapping("/{studyId}")
     public SingleResult<StudyUpdateResponseDto> updateStudy(@PathVariable Long studyId,
-                                                            @Valid @RequestBody StudyUpdateRequestDto requestDto) {
+                                                            @Valid @ModelAttribute StudyUpdateRequestDto requestDto) throws IOException {
         return responseService.getSingleResult(studyService.updateStudy(studyId, requestDto));
     }
 

@@ -45,4 +45,8 @@ public class StudyJoin extends EntityDate {
     public void setStudy(Study study) {
         this.study = study;
     }
+
+    public void acceptMember() {
+        this.studyRole = StudyRole.MEMBER;
+    }
 }

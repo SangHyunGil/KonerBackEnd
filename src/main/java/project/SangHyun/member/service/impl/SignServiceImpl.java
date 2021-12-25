@@ -19,9 +19,9 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-import project.SangHyun.utils.helper.FileStoreHelper;
-import project.SangHyun.utils.service.EmailService;
-import project.SangHyun.utils.service.RedisService;
+import project.SangHyun.helper.EmailHelper;
+import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.helper.RedisHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,15 +35,16 @@ public class SignServiceImpl implements SignService {
 
     private final JwtTokenHelper accessTokenHelper;
     private final JwtTokenHelper refreshTokenHelper;
+    private final FileStoreHelper fileStoreHelper;
 
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
     private final StudyJoinRepository studyJoinRepository;
 
-    private final RedisService redisService;
-    private final EmailService emailService;
-    private final FileStoreHelper fileStoreHelper;
+    private final RedisHelper redisHelper;
+    private final EmailHelper emailHelper;
+
 
     @Override
     @Transactional
@@ -67,9 +68,9 @@ public class SignServiceImpl implements SignService {
     public MemberLoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         validateLoginInfo(requestDto, member);
-        List<StudyInfoDto> studyInfos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
+        List<StudyInfoDto> studyJoinInfos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
-        return MemberLoginResponseDto.create(member, studyInfos, jwtTokens);
+        return MemberLoginResponseDto.create(member, studyJoinInfos, jwtTokens);
     }
 
     private void validateLoginInfo(MemberLoginRequestDto requestDto, Member member) {
@@ -79,10 +80,10 @@ public class SignServiceImpl implements SignService {
             throw new EmailNotAuthenticatedException();
     }
 
-    private JwtTokens makeJwtTokens(String email) {
-        String accessToken = accessTokenHelper.createToken(email);
-        String refreshToken = refreshTokenHelper.createToken(email);
-        redisService.setDataWithExpiration(refreshToken, email, refreshTokenHelper.getValidTime());
+    private JwtTokens makeJwtTokens(String subject) {
+        String accessToken = accessTokenHelper.createToken(subject);
+        String refreshToken = refreshTokenHelper.createToken(subject);
+        redisHelper.setDataWithExpiration(refreshToken, subject, refreshTokenHelper.getValidTime());
         return new JwtTokens(accessToken, refreshToken);
     }
 
@@ -90,7 +91,7 @@ public class SignServiceImpl implements SignService {
     @Transactional
     public TokenResponseDto tokenReIssue(TokenRequestDto requestDto) {
         String email = refreshTokenHelper.extractSubject(requestDto.getRefreshToken());
-        compareWithRedisValue(requestDto.getRefreshToken(), email);
+        compareWithRedisStoredValue(requestDto.getRefreshToken(), email);
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
         List<StudyInfoDto> studyInfos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
@@ -98,8 +99,8 @@ public class SignServiceImpl implements SignService {
     }
 
     // 요청이 실사용자에 의한 것인지 검증하기 위해 Redis에 저장된 값과 비교
-    private void compareWithRedisValue(String redisKey, String expectValue) {
-        String redisValue = redisService.getData(redisKey);
+    private void compareWithRedisStoredValue(String redisKey, String expectValue) {
+        String redisValue = redisHelper.getData(redisKey);
         if (redisValue == null || !redisValue.equals(expectValue))
             throw new RedisValueDifferentException();
     }
@@ -108,16 +109,15 @@ public class SignServiceImpl implements SignService {
     @Transactional
     public String sendEmail(MemberEmailAuthRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-        String authCode = makeAuthCode(requestDto);
-        emailService.send(member.getEmail(), authCode, requestDto.getRedisKey());
-
+        String authCode = makeAuthCodeAndStoreInRedis(requestDto);
+        emailHelper.send(member.getEmail(), authCode, requestDto.getRedisKey());
         return "이메일 전송에 성공하였습니다.";
     }
 
-    private String makeAuthCode(MemberEmailAuthRequestDto requestDto) {
+    private String makeAuthCodeAndStoreInRedis(MemberEmailAuthRequestDto requestDto) {
         String key = getRedisKey(requestDto.getEmail(), requestDto.getRedisKey());
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration(key, authCode, 60 * 5L);
+        redisHelper.setDataWithExpiration(key, authCode, 60 * 5L);
         return authCode;
     }
 
@@ -131,19 +131,17 @@ public class SignServiceImpl implements SignService {
     @Transactional
     public String verify(VerifyEmailRequestDto requestDto) {
         String redisKey = getRedisKey(requestDto.getEmail(), requestDto.getRedisKey());
-        compareWithRedisValue(redisKey, requestDto.getAuthCode());
-
+        compareWithRedisStoredValue(redisKey, requestDto.getAuthCode());
         if (isVerifyEmail(requestDto)) {
             Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
             member.changeRole(MemberRole.ROLE_MEMBER);
         }
-        redisService.deleteData(RedisKey.VERIFY.getKey()+requestDto.getEmail());
-
+        redisHelper.deleteData(RedisKey.VERIFY.getKey()+requestDto.getEmail());
         return "이메일 인증이 완료되었습니다.";
     }
 
     private boolean isVerifyEmail(VerifyEmailRequestDto requestDto) {
-        return requestDto.getRedisKey().equals("VERIFY");
+        return RedisKey.isVerifying(requestDto.getRedisKey());
     }
 
     @Override
@@ -151,8 +149,7 @@ public class SignServiceImpl implements SignService {
     public MemberChangePwResponseDto changePassword(MemberChangePwRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
-        redisService.deleteData(RedisKey.PASSWORD.getKey()+requestDto.getEmail());
-
+        redisHelper.deleteData(getRedisKey(requestDto.getEmail(), RedisKey.PASSWORD.getKey()));
         return MemberChangePwResponseDto.create(member);
     }
 }

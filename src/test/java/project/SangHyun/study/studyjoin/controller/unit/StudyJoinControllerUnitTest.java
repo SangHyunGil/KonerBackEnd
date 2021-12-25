@@ -15,13 +15,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.response.domain.MultipleResult;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
-import project.SangHyun.study.study.controller.StudyController;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
-import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyjoin.controller.StudyJoinController;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -64,20 +59,20 @@ class StudyJoinControllerUnitTest {
         accessToken = "accessToken";
         member = StudyFactory.makeTestAuthMember();
         study = StudyFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
-        studyJoin = StudyJoinFactory.makeTestStudyJoin(member, study);
+        studyJoin = StudyJoinFactory.makeTestStudyJoinCreator(member, study);
     }
 
     @Test
     @DisplayName("스터디에 참여한다.")
     public void join() throws Exception {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeCreateDto(study, member);
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
         StudyJoin createdStudyJoin = requestDto.toEntity();
         StudyJoinResponseDto responseDto = StudyJoinResponseDto.create(createdStudyJoin);
         SingleResult<StudyJoinResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyJoinService.joinStudy(requestDto)).willReturn(responseDto);
+        given(studyJoinService.applyJoin(requestDto)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then

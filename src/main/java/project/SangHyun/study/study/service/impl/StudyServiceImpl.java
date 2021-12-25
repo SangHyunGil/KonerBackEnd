@@ -11,7 +11,9 @@ import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.*;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.StudyService;
+import project.SangHyun.helper.FileStoreHelper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,13 +22,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class StudyServiceImpl implements StudyService {
-
     private final StudyRepository studyRepository;
+    private final FileStoreHelper fileStoreHelper;
 
     @Override
     @Transactional
-    public StudyCreateResponseDto createStudy(StudyCreateRequestDto requestDto) {
-        Study study = studyRepository.save(requestDto.toEntity());
+    public StudyCreateResponseDto createStudy(StudyCreateRequestDto requestDto) throws IOException {
+        Study study = studyRepository.save(requestDto.toEntity(fileStoreHelper.storeFile(requestDto.getProfileImg())));
         return StudyCreateResponseDto.create(study);
     }
 
@@ -46,9 +48,9 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto) {
+    public StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto) throws IOException {
         Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
-        return StudyUpdateResponseDto.create(study.updateStudyInfo(requestDto));
+        return StudyUpdateResponseDto.create(study.updateStudyInfo(requestDto, fileStoreHelper.storeFile(requestDto.getProfileImg())));
     }
 
     @Override

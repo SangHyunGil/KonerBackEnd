@@ -16,7 +16,7 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.MemberService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-import project.SangHyun.utils.helper.FileStoreHelper;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,11 +31,6 @@ public class MemberServiceImpl implements MemberService {
     private final StudyJoinRepository studyJoinRepository;
     private final FileStoreHelper fileStoreHelper;
 
-    /**
-     * AccessToken으로 유저 정보 조회
-     * @param memberDetails
-     * @return
-     */
     @Override
     public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = memberRepository.findByEmail(memberDetails.getUsername()).orElseThrow(MemberNotFoundException::new);
@@ -43,23 +38,12 @@ public class MemberServiceImpl implements MemberService {
         return MemberInfoResponseDto.create(member, studyInfoDtos);
     }
 
-    /**
-     * ID(PK)로 유저 정보 조회
-     * @param memberId
-     * @return
-     */
     @Override
     public MemberProfileResponseDto getProfile(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         return MemberProfileResponseDto.create(member);
     }
 
-    /**
-     * 유저 정보 수정
-     * @param memberId
-     * @param requestDto
-     * @return
-     */
     @Override
     @Transactional
     public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto) throws IOException {

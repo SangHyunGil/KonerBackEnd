@@ -9,12 +9,12 @@ import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 
 public class StudyJoinFactory extends BasicFactory {
     // Request
-    public static StudyJoinRequestDto makeCreateDto(Study study, Member member) {
+    public static StudyJoinRequestDto makeRequestDto(Study study, Member member) {
         return new StudyJoinRequestDto(study.getId(), member.getId());
     }
 
     // Response
-    public static StudyJoinResponseDto makeCreateResponseDto(StudyJoin studyJoin) {
+    public static StudyJoinResponseDto makeResponseDto(StudyJoin studyJoin) {
         return StudyJoinResponseDto.create(studyJoin);
     }
 }
