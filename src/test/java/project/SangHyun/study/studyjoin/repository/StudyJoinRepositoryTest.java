@@ -10,11 +10,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import project.SangHyun.TestDB;
-import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
@@ -28,15 +23,10 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-import project.SangHyun.utils.service.RedisService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

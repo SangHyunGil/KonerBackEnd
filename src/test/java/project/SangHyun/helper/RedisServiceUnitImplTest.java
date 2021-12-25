@@ -1,4 +1,4 @@
-package project.SangHyun.utils.service.unit;
+package project.SangHyun.helper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import project.SangHyun.utils.service.impl.RedisServiceImpl;
+import project.SangHyun.helper.RedisHelper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 class RedisServiceUnitImplTest {
 
     @InjectMocks
-    RedisServiceImpl redisService;
+    RedisHelper redisService;
     @Mock
     RedisTemplate redisTemplate;
     @Mock

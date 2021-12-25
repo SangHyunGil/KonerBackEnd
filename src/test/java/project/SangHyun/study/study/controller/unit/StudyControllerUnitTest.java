@@ -1,6 +1,5 @@
 package project.SangHyun.study.study.controller.unit;
 
-import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,34 +8,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.study.studyboard.service.StudyBoardService;
-import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
-import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
-import project.SangHyun.study.studyjoin.service.StudyJoinService;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.response.domain.MultipleResult;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.study.controller.StudyController;
-import project.SangHyun.utils.helper.FileStoreHelper;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;

@@ -11,7 +11,7 @@ import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.*;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.StudyService;
-import project.SangHyun.utils.helper.FileStoreHelper;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.io.IOException;
 import java.util.List;

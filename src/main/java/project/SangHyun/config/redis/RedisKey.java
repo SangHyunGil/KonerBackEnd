@@ -21,4 +21,8 @@ public enum RedisKey {
                 .findFirst()
                 .orElse(RedisKey.UNKNOWN);
     }
+
+    public static boolean isVerifying(String redisKey) {
+        return redisKey.equals(VERIFY.getKey());
+    }
 }

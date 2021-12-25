@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.advice.exception.*;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.impl.SignServiceImpl;
 import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
@@ -35,7 +35,7 @@ class SignServiceIntegrationTest {
     @Autowired
     JwtTokenHelper refreshTokenHelper;
     @Autowired
-    RedisService redisService;
+    RedisHelper redisHelper;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
@@ -156,7 +156,7 @@ class SignServiceIntegrationTest {
 
     private String makeAuthCode(String s, String verify) {
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration(verify + s, authCode, 60 * 5L);
+        redisHelper.setDataWithExpiration(verify + s, authCode, 60 * 5L);
         return authCode;
     }
 
@@ -215,7 +215,7 @@ class SignServiceIntegrationTest {
 
     private String makeRefreshToken(Member member) {
         String refreshToken = refreshTokenHelper.createToken(member.getEmail());
-        redisService.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
+        redisHelper.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
         return refreshToken;
     }
 

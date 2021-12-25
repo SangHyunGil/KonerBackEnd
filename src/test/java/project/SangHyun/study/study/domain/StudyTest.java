@@ -10,18 +10,15 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyMethod;
-import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.utils.helper.FileStoreHelper;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class StudyTest {
     String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";

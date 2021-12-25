@@ -5,16 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.tools.member.MemberFactory;
-import project.SangHyun.utils.helper.FileStoreHelper;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 public class MemberTest {
     String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";

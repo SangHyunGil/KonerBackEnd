@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.member.dto.request.*;
 
 import java.util.UUID;
@@ -38,7 +38,7 @@ class SignControllerIntegrationTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    RedisService redisService;
+    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper refreshTokenHelper;
     @Autowired
@@ -159,7 +159,7 @@ class SignControllerIntegrationTest {
 
     private String makeAuthCode(String s, String verify) {
         String authCode = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration(verify + s, authCode, 60 * 5L);
+        redisHelper.setDataWithExpiration(verify + s, authCode, 60 * 5L);
         return authCode;
     }
 
@@ -225,7 +225,7 @@ class SignControllerIntegrationTest {
 
     private String makeRefreshToken(Member member) {
         String refreshToken = refreshTokenHelper.createToken(member.getEmail());
-        redisService.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
+        redisHelper.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
         return refreshToken;
     }
 }

@@ -16,7 +16,7 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.MemberService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-import project.SangHyun.utils.helper.FileStoreHelper;
+import project.SangHyun.helper.FileStoreHelper;
 
 import java.io.IOException;
 import java.util.List;

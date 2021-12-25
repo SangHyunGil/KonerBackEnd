@@ -14,26 +14,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.utils.service.RedisService;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +44,7 @@ class StudyControllerIntegrationTest {
     @Autowired
     MemberRepository memberRepository;
     @Autowired
-    RedisService redisService;
+    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired

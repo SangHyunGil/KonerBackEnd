@@ -1,4 +1,4 @@
-package project.SangHyun.utils.helper;
+package project.SangHyun.helper;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Assertions;
