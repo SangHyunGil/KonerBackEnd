@@ -85,4 +85,8 @@ public class Study extends EntityDate {
         this.studyBoards.add(studyBoard);
         studyBoard.setStudy(this);
     }
+
+    public void deleteStudyJoin(StudyJoin studyJoin) {
+        this.studyJoins.remove(studyJoin);
+    }
 }

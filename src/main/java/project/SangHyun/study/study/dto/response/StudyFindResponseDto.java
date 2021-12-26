@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyMethod;
+import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 
 import java.util.List;
@@ -56,11 +57,11 @@ public class StudyFindResponseDto {
 
     public static StudyFindResponseDto create(Study study) {
         List<MemberProfile> studyMembers = study.getStudyJoins().stream()
-                .map(studyJoin -> new MemberProfile(studyJoin.getMember().getNickname(), studyJoin.getMember().getProfileImgUrl()))
+                .map(studyJoin -> new MemberProfile(studyJoin.getMember().getNickname(), studyJoin.getStudyRole(), studyJoin.getMember().getProfileImgUrl()))
                 .collect(Collectors.toList());
 
         return new StudyFindResponseDto(study.getId(),
-                new MemberProfile(study.getMember().getNickname(), study.getMember().getProfileImgUrl()),
+                new MemberProfile(study.getMember().getNickname(), StudyRole.CREATOR, study.getMember().getProfileImgUrl()),
                 study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
                 (long) studyMembers.size(), study.getHeadCount(), studyMembers, study.getStudyMethod(),
                 study.getStudyState(), study.getRecruitState());

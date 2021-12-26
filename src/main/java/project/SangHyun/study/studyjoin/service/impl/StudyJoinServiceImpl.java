@@ -62,7 +62,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         validateJoinCondition(requestDto);
         StudyJoin studyJoin = studyJoinRepository.findApplyStudy(requestDto.getStudyId(), requestDto.getMemberId())
                 .orElseThrow(StudyJoinNotFoundException::new);
-        studyJoin.getStudy().getStudyJoins().remove(studyJoin); // cascade
+        studyJoin.deleteInStudyCollections();
         studyJoinRepository.delete(studyJoin);
         return StudyJoinResponseDto.create(studyJoin);
     }

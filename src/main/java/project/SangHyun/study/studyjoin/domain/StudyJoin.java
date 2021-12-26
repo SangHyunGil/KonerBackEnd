@@ -49,4 +49,8 @@ public class StudyJoin extends EntityDate {
     public void acceptMember() {
         this.studyRole = StudyRole.MEMBER;
     }
+
+    public void deleteInStudyCollections() {
+        this.study.deleteStudyJoin(this);
+    }
 }
