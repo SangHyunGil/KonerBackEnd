@@ -52,6 +52,7 @@ public class StudyBoardServiceImpl implements StudyBoardService {
     @Transactional
     public StudyBoardDeleteResponseDto deleteBoard(Long studyId, Long studyBoardId) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(StudyBoardNotFoundException::new);
+        studyBoard.deleteInStudyCollections();
         studyBoardRepository.delete(studyBoard);
         return StudyBoardDeleteResponseDto.create(studyBoard);
     }

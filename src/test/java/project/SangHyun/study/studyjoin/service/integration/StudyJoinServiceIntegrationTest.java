@@ -60,6 +60,7 @@ class StudyJoinServiceIntegrationTest {
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(requestDto);
+        System.out.println("ActualResult = " + ActualResult.getStudyInfos());
 
         //then
         Assertions.assertEquals(1, ActualResult.getStudyInfos().size());

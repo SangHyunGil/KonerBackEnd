@@ -50,4 +50,8 @@ public class StudyArticle extends EntityDate {
     public void setStudyBoard(StudyBoard studyBoard) {
         this.studyBoard = studyBoard;
     }
+
+    public void deleteInStudyBoardCollections() {
+        this.studyBoard.getStudyArticles().remove(this);
+    }
 }

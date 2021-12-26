@@ -61,6 +61,7 @@ public class StudyArticleServiceImpl implements StudyArticleService {
     @Transactional
     public StudyArticleDeleteResponseDto deleteArticle(Long articleId) {
         StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(StudyArticleNotFoundException::new);
+        studyArticle.deleteInStudyBoardCollections();
         studyArticleRepository.delete(studyArticle);
         return StudyArticleDeleteResponseDto.create(studyArticle);
     }
