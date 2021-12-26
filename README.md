@@ -10,7 +10,6 @@ https://github.com/SangHyunGil/DemoProjectFront
 - Gradle : 7.2
 - Mysql : 8.0
 - Querydsl : 4.4.0
-
-<p align="center>
-    <img src = "https://github.com/SangHyunGil/Blog/blob/master/img/project/cascade/1.PNG?raw=true>
+<p align = "center">
+    <img src = "https://github.com/SangHyunGil/Blog/blob/master/img/project/cascade/1.PNG?raw=true">
 </p>
