@@ -18,6 +18,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
+import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import java.io.FileInputStream;
@@ -151,6 +152,14 @@ public class TestDB {
         StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
+
+        StudyComment studyComment1 = new StudyComment(memberA, studyArticle1, null, "공지사항 댓글1입니다.");
+        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글1입니다.");
+        StudyComment studyComment3 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글1입니다.");
+
+        studyArticle1.addComment(studyComment1);
+        studyArticle1.addComment(studyComment2);
+        studyArticle1.addComment(studyComment3);
 
         studyBoard1.addArticle(studyArticle1);
         studyBoard1.addArticle(studyArticle2);

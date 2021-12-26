@@ -13,6 +13,7 @@ import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
+import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import java.util.List;
@@ -87,6 +88,20 @@ public class BasicFactory {
         Long studyArticleId = 1L;
         StudyArticle studyArticle = new StudyArticle("테스트 글", "테스트 내용", 0L, member, studyBoard);
         ReflectionTestUtils.setField(studyArticle, "id", studyArticleId);
+        return studyArticle;
+    }
+
+    public static StudyArticle makeTestStudyComment(Member member, StudyArticle studyArticle) {
+        Long studyCommentId = 1L;
+        StudyComment studyComment = new StudyComment(member, studyArticle, null, "테스트 댓글입니다.");
+        ReflectionTestUtils.setField(studyComment, "id", studyCommentId);
+        return studyArticle;
+    }
+
+    public static StudyArticle makeTestStudyReplyComment(Member member, StudyArticle studyArticle, StudyComment studyComment) {
+        Long studyReplyCommentId = 2L;
+        StudyComment studyReplyComment = new StudyComment(member, studyArticle, studyComment, "테스트 댓글입니다.");
+        ReflectionTestUtils.setField(studyComment, "id", studyReplyCommentId);
         return studyArticle;
     }
 }

@@ -8,8 +8,10 @@ import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
+import project.SangHyun.study.studycomment.domain.StudyComment;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,6 +30,8 @@ public class StudyArticle extends EntityDate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private StudyBoard studyBoard;
+    @OneToMany(mappedBy = "studyArticle")
+    private List<StudyComment> studyComments;
 
     @Builder
     public StudyArticle(String title, String content, Long views, Member member, StudyBoard studyBoard) {
@@ -47,11 +51,16 @@ public class StudyArticle extends EntityDate {
         this.views += 1;
     }
 
-    public void setStudyBoard(StudyBoard studyBoard) {
+    public void belongTo(StudyBoard studyBoard) {
         this.studyBoard = studyBoard;
     }
 
     public void deleteInStudyBoardCollections() {
         this.studyBoard.getStudyArticles().remove(this);
+    }
+
+    public void addComment(StudyComment studyComment) {
+        this.studyComments.add(studyComment);
+        studyComment.belongTo(this);
     }
 }
