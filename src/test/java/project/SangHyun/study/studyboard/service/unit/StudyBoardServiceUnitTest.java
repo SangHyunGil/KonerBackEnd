@@ -80,7 +80,6 @@ class StudyBoardServiceUnitTest {
         StudyBoardCreateResponseDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto);
 
         //then
-        Assertions.assertEquals(ExpectResult.getStudyBoardId(), ActualResult.getStudyBoardId());
         Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
     }
 

@@ -101,7 +101,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
@@ -117,7 +117,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
@@ -171,7 +171,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyCreatorMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("공지사항 수정 글", "수정 글");
@@ -191,7 +191,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("올바른 글", "수정 글");
@@ -211,7 +211,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("올바른 글", "수정 글");
@@ -231,7 +231,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("공지사항 수정 글", "수정 글");
@@ -251,7 +251,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyCreatorMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
@@ -267,7 +267,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
@@ -283,7 +283,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
@@ -300,7 +300,7 @@ class StudyArticleControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 

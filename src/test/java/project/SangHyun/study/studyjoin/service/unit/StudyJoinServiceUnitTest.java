@@ -61,16 +61,16 @@ class StudyJoinServiceUnitTest {
         StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(createdStudyJoin);
 
         //mocking
-        given(studyJoinRepository.save(any())).willReturn(createdStudyJoin);
         given(studyJoinRepository.exist(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
+        given(studyJoinRepository.save(any())).willReturn(createdStudyJoin);
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(requestDto);
 
         //then
-        Assertions.assertEquals(ExpectResult.getStudyJoinId(), ActualResult.getStudyJoinId());
+        Assertions.assertEquals(ExpectResult.getStudyInfos(), ActualResult.getStudyInfos());
     }
 
     @Test

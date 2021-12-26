@@ -26,6 +26,7 @@ public class StudyJoinResponseDto {
 
     public static StudyJoinResponseDto create(StudyJoin studyJoin) {
         List<StudyInfoDto> studyInfos = List.of(new StudyInfoDto(studyJoin.getStudy().getId(), studyJoin.getStudyRole()));
+        System.out.println("studyInfos = " + studyInfos);
         return new StudyJoinResponseDto(studyJoin.getId(), studyInfos, studyJoin.getMember().getId());
     }
 }
