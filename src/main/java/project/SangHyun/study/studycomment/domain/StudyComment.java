@@ -33,6 +33,10 @@ public class StudyComment extends EntityDate {
     private List<StudyComment> children = new ArrayList<>();
     private String content;
 
+    public StudyComment(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public StudyComment(Member member, StudyArticle studyArticle, StudyComment parent, String content) {
         this.member = member;

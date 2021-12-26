@@ -9,11 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
-import project.SangHyun.advice.exception.NotBelongStudyMemberException;
 import project.SangHyun.advice.exception.StudyArticleNotFoundException;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
@@ -24,7 +21,6 @@ import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequest
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleCreateResponseDto;
 import project.SangHyun.study.studyarticle.service.impl.StudyArticleServiceImpl;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteResponseDto;
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponseDto;
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleUpdateResponseDto;
 
@@ -90,7 +86,7 @@ class StudyArticleServiceIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 수정한다.")
     public void updateArticle() throws Exception {
         //given
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
         StudyArticleUpdateRequestDto updateDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 내용 수정");
 
         //when
@@ -109,7 +105,7 @@ class StudyArticleServiceIntegrationTest {
     public void deleteArticle() throws Exception {
         //given
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
 
         //when
         studyArticleService.deleteArticle(studyArticle.getId());
@@ -122,7 +118,7 @@ class StudyArticleServiceIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 보면 조회수가 증가한다.")
     public void updateViews() throws Exception {
         //given
-        StudyArticle studyArticle = testDB.findAnnounceTestArticle();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
 
         //when
         Assertions.assertEquals(0, studyArticle.getViews());

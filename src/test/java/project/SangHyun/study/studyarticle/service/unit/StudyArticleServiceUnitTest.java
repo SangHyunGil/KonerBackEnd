@@ -69,7 +69,7 @@ class StudyArticleServiceUnitTest {
         StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
-        Assertions.assertEquals(ExpectResult.getArticleId(), ActualResult.getArticleId());
+        Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
     }
 
     @Test

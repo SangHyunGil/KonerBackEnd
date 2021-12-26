@@ -19,10 +19,12 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
+import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Profile("test")
@@ -33,6 +35,8 @@ public class TestDB {
     StudyRepository studyRepository;
     @Autowired
     StudyArticleRepository studyArticleRepository;
+    @Autowired
+    StudyCommentRepository studyCommentRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -101,8 +105,13 @@ public class TestDB {
     }
 
     @Transactional(readOnly = true)
-    public StudyArticle findAnnounceTestArticle() {
+    public StudyArticle findAnnounceArticle() {
         return studyArticleRepository.findArticleByTitle("공지사항").get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyComment> findParentComment() {
+        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId());
     }
 
     private void initMember() {
@@ -153,9 +162,9 @@ public class TestDB {
         StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
 
-        StudyComment studyComment1 = new StudyComment(memberA, studyArticle1, null, "공지사항 댓글1입니다.");
-        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글1입니다.");
-        StudyComment studyComment3 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글1입니다.");
+        StudyComment studyComment1 = new StudyComment(memberC, studyArticle1, null, "공지사항 댓글1입니다.");
+        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.");
+        StudyComment studyComment3 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글3입니다.");
 
         studyArticle1.addComment(studyComment1);
         studyArticle1.addComment(studyComment2);

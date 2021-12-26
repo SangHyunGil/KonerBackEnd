@@ -11,6 +11,7 @@ import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequest
 import project.SangHyun.study.studycomment.domain.StudyComment;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,8 +31,8 @@ public class StudyArticle extends EntityDate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private StudyBoard studyBoard;
-    @OneToMany(mappedBy = "studyArticle")
-    private List<StudyComment> studyComments;
+    @OneToMany(mappedBy = "studyArticle", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<StudyComment> studyComments = new ArrayList<>();
 
     @Builder
     public StudyArticle(String title, String content, Long views, Member member, StudyBoard studyBoard) {
@@ -40,6 +41,10 @@ public class StudyArticle extends EntityDate {
         this.views = views;
         this.member = member;
         this.studyBoard = studyBoard;
+    }
+
+    public StudyArticle(Long id) {
+        this.id = id;
     }
 
     public void updateArticleInfo(StudyArticleUpdateRequestDto requestDto) {

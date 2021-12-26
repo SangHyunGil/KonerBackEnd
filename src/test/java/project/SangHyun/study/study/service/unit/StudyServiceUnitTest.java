@@ -61,7 +61,6 @@ class StudyServiceUnitTest {
         StudyCreateResponseDto ActualResult = studyService.createStudy(requestDto);
 
         //then
-        Assertions.assertEquals(ExpectResult.getStudyId(), ActualResult.getStudyId());
         Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
         Assertions.assertEquals(ExpectResult.getHeadCount(), 2L);
     }

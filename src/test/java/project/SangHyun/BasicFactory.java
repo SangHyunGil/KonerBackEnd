@@ -91,17 +91,17 @@ public class BasicFactory {
         return studyArticle;
     }
 
-    public static StudyArticle makeTestStudyComment(Member member, StudyArticle studyArticle) {
+    public static StudyComment makeTestStudyComment(Member member, StudyArticle studyArticle) {
         Long studyCommentId = 1L;
         StudyComment studyComment = new StudyComment(member, studyArticle, null, "테스트 댓글입니다.");
         ReflectionTestUtils.setField(studyComment, "id", studyCommentId);
-        return studyArticle;
+        return studyComment;
     }
 
-    public static StudyArticle makeTestStudyReplyComment(Member member, StudyArticle studyArticle, StudyComment studyComment) {
+    public static StudyComment makeTestStudyReplyComment(Member member, StudyArticle studyArticle, StudyComment studyComment) {
         Long studyReplyCommentId = 2L;
         StudyComment studyReplyComment = new StudyComment(member, studyArticle, studyComment, "테스트 댓글입니다.");
-        ReflectionTestUtils.setField(studyComment, "id", studyReplyCommentId);
-        return studyArticle;
+        ReflectionTestUtils.setField(studyReplyComment, "id", studyReplyCommentId);
+        return studyReplyComment;
     }
 }

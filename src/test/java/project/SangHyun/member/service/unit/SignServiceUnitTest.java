@@ -81,7 +81,7 @@ class SignServiceUnitTest {
         MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);
 
         //then
-        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());
+        Assertions.assertEquals(ExpectResult.getEmail(), ActualResult.getEmail());
     }
 
     @Test
