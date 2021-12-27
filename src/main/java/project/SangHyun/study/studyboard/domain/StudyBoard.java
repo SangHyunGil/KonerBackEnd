@@ -44,7 +44,7 @@ public class StudyBoard extends EntityDate {
         studyArticles.belongTo(this);
     }
 
-    public void changeTitle(String title) {
+    public void update(String title) {
         this.title = title;
     }
 

@@ -15,7 +15,9 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
+import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.impl.StudyCommentServiceImpl;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
@@ -83,5 +85,21 @@ public class StudyCommentServiceUnitTest {
 
         //then
         Assertions.assertEquals(2L, ActualResult.getCommentId());
+    }
+
+    @Test
+    @DisplayName("댓글을 수정한다.")
+    public void updateComment() throws Exception {
+        //given
+        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto();
+
+        //mocking
+        given(studyCommentRepository.findById(any())).willReturn(java.util.Optional.ofNullable(studyComment));
+
+        //when
+        StudyCommentUpdateResponseDto ActualResult = studyCommentService.updateComment(studyComment.getId(), requestDto);
+
+        //then
+        Assertions.assertEquals("테스트 댓글 수정입니다.", ActualResult.getContent());
     }
 }

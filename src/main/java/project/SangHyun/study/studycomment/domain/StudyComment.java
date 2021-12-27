@@ -57,4 +57,8 @@ public class StudyComment extends EntityDate {
     public void belongTo(StudyArticle studyArticle) {
         this.studyArticle = studyArticle;
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }

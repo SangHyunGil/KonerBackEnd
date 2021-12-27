@@ -38,7 +38,7 @@ class StudyTest {
         StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", "프론트엔드", "음..", "2021-12-25", 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when
-        Study ActualResult = study.updateStudyInfo(requestDto, fileStoreHelper.storeFile(multipartFile));
+        Study ActualResult = study.update(requestDto, fileStoreHelper.storeFile(multipartFile));
 
         //then
         Assertions.assertEquals("프론트엔드 모집", ActualResult.getTitle());

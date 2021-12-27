@@ -167,4 +167,10 @@ public class ExceptionAdvice {
     public Result StudyJoinNotFoundException() {
         return responseService.getFailureResult(-123, "스터디 참여 정보가 존재하지 않습니다.");
     }
+
+    @ExceptionHandler(StudyCommentNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result StudyCommentNotFoundException() {
+        return responseService.getFailureResult(-124, "스터디 게시글의 댓글 정보가 존재하지 않습니다.");
+    }
 }
