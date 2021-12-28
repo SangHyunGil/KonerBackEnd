@@ -29,7 +29,6 @@ import javax.persistence.EntityManager;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-@Rollback(value = false)
 public class StudyCommentServiceIntegrationTest {
     @Autowired
     StudyCommentService studyCommentService;
@@ -77,7 +76,7 @@ public class StudyCommentServiceIntegrationTest {
 
         //then
         Assertions.assertEquals("테스트 댓글입니다.", ActualResult.getContent());
-        Assertions.assertEquals(3, studyCommentRepository.findByMemberId(member.getId()).get(0).getChildren().size());
+        Assertions.assertEquals(2, studyCommentRepository.findByMemberId(member.getId()).get(0).getChildren().size());
     }
 
     @Test
@@ -88,8 +87,7 @@ public class StudyCommentServiceIntegrationTest {
 
         //when
         StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(announceArticle.getId());
-        System.out.println("em.contains(announceArticle) = " + em.contains(announceArticle));
-        System.out.println("em.contains(announceArticle) = " + em.contains(testDB.findParentComment()));
+        persistContextClear();
 
         //then
         Assertions.assertEquals(0, studyCommentRepository.findAll().size());
