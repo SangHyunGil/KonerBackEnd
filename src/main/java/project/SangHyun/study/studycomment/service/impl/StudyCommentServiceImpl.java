@@ -48,6 +48,7 @@ public class StudyCommentServiceImpl implements StudyCommentService {
     @Override
     public List<StudyCommentFindResponseDto> findComments(Long studyArticleId) {
         List<StudyComment> studyComments = studyCommentRepository.findAllByStudyArticleId(studyArticleId);
+        System.out.println("studyComments.get(0) + studyComments.get(1) = " + studyComments.get(0).getContent() + studyComments.get(1).getContent());
         return StudyCommentFindResponseDto.create(studyComments);
     }
 }

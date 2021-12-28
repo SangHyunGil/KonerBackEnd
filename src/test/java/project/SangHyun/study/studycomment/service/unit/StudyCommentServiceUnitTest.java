@@ -96,7 +96,7 @@ public class StudyCommentServiceUnitTest {
     @DisplayName("댓글을 수정한다.")
     public void updateComment() throws Exception {
         //given
-        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto();
+        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정입니다.");
 
         //mocking
         given(studyCommentRepository.findById(any())).willReturn(java.util.Optional.ofNullable(studyComment));

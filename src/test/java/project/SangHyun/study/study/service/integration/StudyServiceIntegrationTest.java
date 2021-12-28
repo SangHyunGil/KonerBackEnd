@@ -15,10 +15,6 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
-import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.impl.StudyServiceImpl;
@@ -61,7 +57,7 @@ class StudyServiceIntegrationTest {
     public void createStudy() throws Exception {
         //given
         Member member = testDB.findGeneralMember();
-        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
 
         //when
         StudyCreateResponseDto ActualResult = studyService.createStudy(requestDto);
@@ -101,7 +97,7 @@ class StudyServiceIntegrationTest {
     public void updateStudy() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
-        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateDto("프론트엔드 스터디", "프론트 엔드");
+        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", "프론트 엔드");
 
         //when
         StudyUpdateResponseDto ActualResult = studyService.updateStudy(study.getId(), updateRequestDto);

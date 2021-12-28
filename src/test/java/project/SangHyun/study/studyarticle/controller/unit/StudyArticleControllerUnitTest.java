@@ -43,6 +43,7 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -134,7 +135,7 @@ public class StudyArticleControllerUnitTest {
     public void updateBoard() throws Exception {
         //given
         StudyArticleUpdateRequestDto requestDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 글 수정 내용");
-        StudyArticleUpdateResponseDto responseDto = StudyArticleFactory.makeUpdateResponseDto(studyArticle);
+        StudyArticleUpdateResponseDto responseDto = StudyArticleFactory.makeUpdateResponseDto(studyArticle, "테스트 글 수정", "테스트 글 수정 내용");
         SingleResult<StudyArticleUpdateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
@@ -147,7 +148,9 @@ public class StudyArticleControllerUnitTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.title").value(ExpectResult.getData().getTitle()))
+                .andExpect(jsonPath("$.data.content").value(ExpectResult.getData().getContent()));
     }
 
     @Test

@@ -198,7 +198,7 @@ class StudyJoinServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("스터디에 참여한 스터디원의 정보를 로드한다.")
+    @DisplayName("스터디에 참여 및 지원한 스터디원의 정보를 로드한다.")
     public void findStudyMembers() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
@@ -207,7 +207,7 @@ class StudyJoinServiceIntegrationTest {
         List<StudyFindMembersResponseDto> ActualResult = studyJoinService.findStudyMembers(study.getId());
 
         //then
-        Assertions.assertEquals(4, ActualResult.size());
+        Assertions.assertEquals(5, ActualResult.size());
     }
 
 }

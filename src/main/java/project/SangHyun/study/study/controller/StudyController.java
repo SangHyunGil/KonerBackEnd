@@ -53,7 +53,7 @@ public class StudyController {
         return responseService.getSingleResult(studyService.updateStudy(studyId, requestDto));
     }
 
-    @ApiOperation(value = "스터디 정보 업데이트", notes = "스터디 정보를 업데이트한다.")
+    @ApiOperation(value = "스터디 정보 삭제", notes = "스터디 정보를 삭제한다.")
     @DeleteMapping("/{studyId}")
     public SingleResult<StudyDeleteResponseDto> deleteStudy(@PathVariable Long studyId) {
         return responseService.getSingleResult(studyService.deleteStudy(studyId));

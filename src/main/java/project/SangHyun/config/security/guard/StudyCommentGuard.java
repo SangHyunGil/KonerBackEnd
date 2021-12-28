@@ -6,15 +6,17 @@ import org.springframework.stereotype.Component;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
+import project.SangHyun.study.studycomment.domain.StudyComment;
+import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 @Component
 @RequiredArgsConstructor
-public class StudyArticleGuard {
+public class StudyCommentGuard {
     private final AuthHelper authHelper;
     private final StudyJoinRepository studyJoinRepository;
-    private final StudyArticleRepository studyArticleRepository;
+    private final StudyCommentRepository studyCommentRepository;
 
     public boolean checkJoin(Long studyId) {
         return authHelper.isAuthenticated() && isJoinMember(studyId);
@@ -32,17 +34,17 @@ public class StudyArticleGuard {
         return authHelper.isAuthenticated() && hasAuthority(studyId, articleId);
     }
 
-    private boolean hasAuthority(Long studyId, Long articleId) {
-        return (isMember() && isStudyMember(studyId) && hasResourceAuthority(studyId, articleId)) || isAdmin();
+    private boolean hasAuthority(Long studyId, Long commentId) {
+        return (isMember() && isStudyMember(studyId) && hasResourceAuthority(studyId, commentId)) || isAdmin();
     }
 
-    private boolean hasResourceAuthority(Long studyId, Long articleId) {
-        return isStudyArticleOwner(articleId) || isStudyAdminOrCreator(studyId);
+    private boolean hasResourceAuthority(Long studyId, Long commentId) {
+        return isStudyCommentOwner(commentId) || isStudyAdminOrCreator(studyId);
     }
 
-    private boolean isStudyArticleOwner(Long articleId) {
-        StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(() -> new AccessDeniedException(""));
-        return studyArticle.getMember().getId().equals(authHelper.extractMemberId());
+    private boolean isStudyCommentOwner(Long commentId) {
+        StudyComment studyComment = studyCommentRepository.findById(commentId).orElseThrow(() -> new AccessDeniedException(""));
+        return studyComment.getMember().getId().equals(authHelper.extractMemberId());
     }
 
     private boolean isStudyAdminOrCreator(Long studyId) {

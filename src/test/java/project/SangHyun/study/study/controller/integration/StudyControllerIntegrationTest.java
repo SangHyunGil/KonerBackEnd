@@ -88,7 +88,7 @@ class StudyControllerIntegrationTest {
         //given
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
 
         //when, then
         mockMvc.perform(multipart("/study")
@@ -119,7 +119,7 @@ class StudyControllerIntegrationTest {
         //given
         Member member = testDB.findNotAuthMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
 
         //when, then
         mockMvc.perform(post("/study")
@@ -152,7 +152,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findStudyCreatorMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateDto("모바일 모집", "모바일");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", "모바일");
 
         //when, then
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
@@ -182,7 +182,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateDto("모바일 모집", "모바일");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", "모바일");
 
         //when, then
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
@@ -212,7 +212,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateDto("모바일 모집", "모바일");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", "모바일");
 
         //when, then
         mockMvc.perform(put("/study/{studyId}", study.getId())

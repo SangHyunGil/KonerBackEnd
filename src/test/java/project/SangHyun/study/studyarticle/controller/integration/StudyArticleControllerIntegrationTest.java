@@ -162,7 +162,7 @@ class StudyArticleControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -226,13 +226,33 @@ class StudyArticleControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("권한이 없는 사람에 의한 게시글 수정은 실패한다.")
+    @DisplayName("스터디 회원이 아닌 사람에 의한 게시글 수정은 실패한다.")
     public void updateArticle_fail() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
         StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findGeneralMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("공지사항 수정 글", "수정 글");
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("게시글 작성자가 아닌 회원에 의한 게시글 수정은 실패한다.")
+    public void updateArticle_fail2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
+        Member member = testDB.findStudyMemberNotResourceOwner();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("공지사항 수정 글", "수정 글");
 
@@ -295,13 +315,29 @@ class StudyArticleControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("권한이 없는 사람에 의한 게시글 삭제는 실패한다.")
+    @DisplayName("스터디 회원이 아닌 사람에 의한 게시글 삭제는 실패한다.")
     public void deleteArticle_fail() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
         StudyArticle studyArticle = testDB.findAnnounceArticle();
         Member member = testDB.findStudyGeneralMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("게시글 작성자가 아닌 회원에 의한 게시글 삭제는 실패한다.")
+    public void deleteArticle_fail2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        StudyBoard studyBoard = testDB.findAnnounceBoard();
+        StudyArticle studyArticle = testDB.findAnnounceArticle();
+        Member member = testDB.findStudyMemberNotResourceOwner();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
