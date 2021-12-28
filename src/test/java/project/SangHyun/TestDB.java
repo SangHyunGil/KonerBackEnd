@@ -173,9 +173,9 @@ public class TestDB {
         studyCommentRepository.save(studyComment1);
         studyCommentRepository.save(studyComment2);
 
-        studyBoard1.addArticle(studyArticle1);
-        studyBoard1.addArticle(studyArticle2);
-        studyBoard1.addArticle(studyArticle3);
+        studyArticleRepository.save(studyArticle1);
+        studyArticleRepository.save(studyArticle2);
+        studyArticleRepository.save(studyArticle3);
 
         study.addBoard(studyBoard1);
         study.addBoard(studyBoard2);

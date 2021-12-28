@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.member.domain.Member;
@@ -30,6 +32,7 @@ public class StudyArticle extends EntityDate {
     private Member member;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyBoard studyBoard;
 
     @Builder
@@ -56,9 +59,5 @@ public class StudyArticle extends EntityDate {
 
     public void belongTo(StudyBoard studyBoard) {
         this.studyBoard = studyBoard;
-    }
-
-    public void deleteInStudyBoardCollections() {
-        this.studyBoard.getStudyArticles().remove(this);
     }
 }

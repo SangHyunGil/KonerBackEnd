@@ -80,11 +80,11 @@ public class StudyCreateRequestDto {
         return study;
     }
 
-    private void initStudyBoards(Study study) {
+    private void initStudyJoins(Study study) {
         study.join(new StudyJoin(new Member(memberId), study, StudyRole.CREATOR));
     }
 
-    private void initStudyJoins(Study study) {
+    private void initStudyBoards(Study study) {
         study.addBoard(new StudyBoard("공지사항", study));
         study.addBoard(new StudyBoard("자유게시판", study));
     }

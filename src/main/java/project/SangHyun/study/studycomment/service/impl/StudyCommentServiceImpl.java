@@ -9,9 +9,12 @@ import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequest
 import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentFindResponseDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,5 +42,11 @@ public class StudyCommentServiceImpl implements StudyCommentService {
         StudyComment comment = studyCommentRepository.findById(studyCommentId).orElseThrow(StudyCommentNotFoundException::new);
         comment.findDeletableComment().ifPresentOrElse(studyCommentRepository::delete, comment::delete);
         return StudyCommentDeleteResponseDto.create(comment);
+    }
+
+    @Override
+    public List<StudyCommentFindResponseDto> findComments(Long studyArticleId) {
+        List<StudyComment> studyComments = studyCommentRepository.findAll();
+        return StudyCommentFindResponseDto.create(studyComments);
     }
 }

@@ -23,7 +23,7 @@ public class StudyFindResponseDto {
     private Long studyId;
 
     @ApiModelProperty(value = "회원 ID(PK)")
-    private MemberProfile creator;
+    private StudyMemberProfile creator;
 
     @ApiModelProperty(value = "제목")
     private String title;
@@ -44,7 +44,7 @@ public class StudyFindResponseDto {
     private Long headCount;
 
     @ApiModelProperty(value = "스터디 참여인원들")
-    private List<MemberProfile> studyMembers;
+    private List<StudyMemberProfile> studyMembers;
 
     @ApiModelProperty(value = "스터디 방법")
     private StudyMethod studyMethod;
@@ -56,12 +56,12 @@ public class StudyFindResponseDto {
     private RecruitState recruitState;
 
     public static StudyFindResponseDto create(Study study) {
-        List<MemberProfile> studyMembers = study.getStudyJoins().stream()
-                .map(studyJoin -> new MemberProfile(studyJoin.getMember().getNickname(), studyJoin.getStudyRole(), studyJoin.getMember().getProfileImgUrl()))
+        List<StudyMemberProfile> studyMembers = study.getStudyJoins().stream()
+                .map(studyJoin -> new StudyMemberProfile(studyJoin.getMember().getNickname(), studyJoin.getStudyRole(), studyJoin.getMember().getProfileImgUrl()))
                 .collect(Collectors.toList());
 
         return new StudyFindResponseDto(study.getId(),
-                new MemberProfile(study.getMember().getNickname(), StudyRole.CREATOR, study.getMember().getProfileImgUrl()),
+                new StudyMemberProfile(study.getMember().getNickname(), StudyRole.CREATOR, study.getMember().getProfileImgUrl()),
                 study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
                 (long) studyMembers.size(), study.getHeadCount(), studyMembers, study.getStudyMethod(),
                 study.getStudyState(), study.getRecruitState());
