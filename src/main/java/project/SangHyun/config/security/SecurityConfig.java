@@ -77,11 +77,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*").access("@studyBoardGuard.checkJoinAndAuth(#studyId)")
 
                 .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article").access("@studyArticleGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article").access("@studyArticleGuard.checkJoin(#studyId)")
                 .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*").access("@studyArticleGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article/*").access("@studyArticleGuard.checkJoin(#studyId)")
+
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/{articleId}").access("@studyArticleGuard.checkJoinAndAuth(#studyId, #articleId)")
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/{articleId}").access("@studyArticleGuard.checkJoinAndAuth(#studyId, #articleId)")
-                .anyRequest().hasAnyRole("MEMBER", "ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*/comment").access("@studyCommentGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article/*/comment").access("@studyCommentGuard.checkJoin(#studyId)")
+
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
+
+                    .anyRequest().hasAnyRole("MEMBER", "ADMIN")
 
             .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())

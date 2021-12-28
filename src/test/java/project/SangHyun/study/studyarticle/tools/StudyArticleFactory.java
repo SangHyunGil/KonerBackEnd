@@ -46,8 +46,11 @@ public class StudyArticleFactory extends BasicFactory {
         return StudyArticleFindResponseDto.create(studyArticle);
     }
 
-    public static StudyArticleUpdateResponseDto makeUpdateResponseDto(StudyArticle studyArticle) {
-        return StudyArticleUpdateResponseDto.create(studyArticle);
+    public static StudyArticleUpdateResponseDto makeUpdateResponseDto(StudyArticle studyArticle, String title, String content) {
+        StudyArticleUpdateResponseDto responseDto = StudyArticleUpdateResponseDto.create(studyArticle);
+        responseDto.setTitle(title);
+        responseDto.setContent(content);
+        return responseDto;
     }
 
     public static StudyArticleDeleteResponseDto makeDeleteResponseDto(StudyArticle studyArticle) {

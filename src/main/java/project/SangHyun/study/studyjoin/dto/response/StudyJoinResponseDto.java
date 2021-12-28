@@ -19,14 +19,13 @@ public class StudyJoinResponseDto {
     private Long studyJoinId;
 
     @ApiModelProperty(value = "스터디 참여 정보")
-    private List<StudyInfoDto> studyInfos;
+    private StudyInfoDto studyInfos;
 
     @ApiModelProperty(value = "회원 ID(PK)")
     private Long memberId;
 
     public static StudyJoinResponseDto create(StudyJoin studyJoin) {
-        List<StudyInfoDto> studyInfos = List.of(new StudyInfoDto(studyJoin.getStudy().getId(), studyJoin.getStudyRole()));
-        System.out.println("studyInfos = " + studyInfos);
+        StudyInfoDto studyInfos = new StudyInfoDto(studyJoin.getStudy().getId(), studyJoin.getStudyRole());
         return new StudyJoinResponseDto(studyJoin.getId(), studyInfos, studyJoin.getMember().getId());
     }
 }

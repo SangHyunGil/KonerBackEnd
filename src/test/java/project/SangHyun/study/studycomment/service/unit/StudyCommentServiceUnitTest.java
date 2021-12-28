@@ -15,16 +15,22 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
+import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.impl.StudyCommentServiceImpl;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 public class StudyCommentServiceUnitTest {
@@ -32,6 +38,7 @@ public class StudyCommentServiceUnitTest {
     StudyArticle studyArticle;
     StudyComment studyComment;
     StudyComment studyReplyComment;
+    StudyComment studyReplyComment2;
 
     @InjectMocks
     StudyCommentServiceImpl studyCommentService;
@@ -83,5 +90,56 @@ public class StudyCommentServiceUnitTest {
 
         //then
         Assertions.assertEquals(2L, ActualResult.getCommentId());
+    }
+
+    @Test
+    @DisplayName("댓글을 수정한다.")
+    public void updateComment() throws Exception {
+        //given
+        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정입니다.");
+
+        //mocking
+        given(studyCommentRepository.findById(any())).willReturn(java.util.Optional.ofNullable(studyComment));
+
+        //when
+        StudyCommentUpdateResponseDto ActualResult = studyCommentService.updateComment(studyComment.getId(), requestDto);
+
+        //then
+        Assertions.assertEquals("테스트 댓글 수정입니다.", ActualResult.getContent());
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다.(부모가 삭제처리되지 않았다면 자신만 삭제처리된다.)")
+    public void deleteComment() throws Exception {
+        //given
+        StudyCommentDeleteResponseDto ExpectResult = StudyCommentDeleteResponseDto.create(studyReplyComment);
+
+        //mocking
+        given(studyCommentRepository.findById(any())).willReturn(Optional.ofNullable(studyReplyComment));
+        willDoNothing().given(studyCommentRepository).delete(any());
+
+        //when
+        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyReplyComment.getId());
+
+        //then
+        Assertions.assertEquals(ExpectResult.getStudyCommentId(), ActualResult.getStudyCommentId());
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다.(부모가 삭제처리되어 있다면 부모도 삭제처리된다.)")
+    public void deleteComment2() throws Exception {
+        //given
+        studyComment.delete();
+        StudyCommentDeleteResponseDto ExpectResult = StudyCommentDeleteResponseDto.create(studyReplyComment);
+
+        //mocking
+        given(studyCommentRepository.findById(any())).willReturn(Optional.ofNullable(studyReplyComment));
+        willDoNothing().given(studyCommentRepository).delete(any());
+
+        //when
+        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyReplyComment.getId());
+
+        //then
+        Assertions.assertEquals(ExpectResult.getStudyCommentId(), ActualResult.getStudyCommentId());
     }
 }

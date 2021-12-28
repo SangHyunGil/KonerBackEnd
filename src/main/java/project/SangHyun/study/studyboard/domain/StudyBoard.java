@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
@@ -21,13 +23,10 @@ public class StudyBoard extends EntityDate {
     @Column(name = "board_id")
     private Long id;
     private String title;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
-
-    @OneToMany(mappedBy = "studyBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<StudyArticle> studyArticles = new ArrayList<>();
 
     public StudyBoard(Long id) {
         this.id = id;
@@ -39,12 +38,7 @@ public class StudyBoard extends EntityDate {
         this.study = study;
     }
 
-    public void addArticle(StudyArticle studyArticles) {
-        this.studyArticles.add(studyArticles);
-        studyArticles.belongTo(this);
-    }
-
-    public void changeTitle(String title) {
+    public void update(String title) {
         this.title = title;
     }
 

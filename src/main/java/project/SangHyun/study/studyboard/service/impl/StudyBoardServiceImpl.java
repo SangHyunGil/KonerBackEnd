@@ -13,7 +13,6 @@ import project.SangHyun.study.studyboard.dto.response.StudyBoardFindResponseDto;
 import project.SangHyun.study.studyboard.dto.response.StudyBoardUpdateResponseDto;
 import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 import project.SangHyun.study.studyboard.service.StudyBoardService;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class StudyBoardServiceImpl implements StudyBoardService {
     @Transactional
     public StudyBoardUpdateResponseDto updateBoard(Long studyId, Long studyBoardId, StudyBoardUpdateRequestDto requestDto) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(StudyBoardNotFoundException::new);
-        studyBoard.changeTitle(requestDto.getTitle());
+        studyBoard.update(requestDto.getTitle());
         return StudyBoardUpdateResponseDto.create(studyBoard);
     }
 

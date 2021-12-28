@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
@@ -11,6 +13,7 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Entity
@@ -24,25 +27,29 @@ public class StudyComment extends EntityDate {
     @JoinColumn(name = "member_id")
     private Member member;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
+    @JoinColumn(name = "articlez_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyArticle studyArticle;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyComment parent;
-    @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "parent")
     private List<StudyComment> children = new ArrayList<>();
     private String content;
+    private Boolean isDeleted;
 
     public StudyComment(Long id) {
         this.id = id;
     }
 
     @Builder
-    public StudyComment(Member member, StudyArticle studyArticle, StudyComment parent, String content) {
+    public StudyComment(Member member, StudyArticle studyArticle, StudyComment parent, String content, Boolean isDeleted) {
         this.member = member;
         this.studyArticle = studyArticle;
         this.parent = parent;
         this.content = content;
+        this.isDeleted = isDeleted;
     }
 
     public void setParent(StudyComment studyComment) {
@@ -54,7 +61,40 @@ public class StudyComment extends EntityDate {
         studyComment.setParent(this);
     }
 
-    public void belongTo(StudyArticle studyArticle) {
-        this.studyArticle = studyArticle;
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public void update(String content) {
+        this.content = content;
+    }
+
+    public Optional<StudyComment> findDeletableComment() {
+        return hasChildren() ? Optional.empty() : Optional.ofNullable(findDeletableRootComment());
+    }
+
+    private Boolean hasChildren() {
+        return getChildren().size() != 0;
+    }
+
+    private StudyComment findDeletableRootComment() {
+        if (isDeletableParent()) {
+            StudyComment deletableParentComment = getParent().findDeletableRootComment();
+            if (isParentHasOnlyDeletedChildren())
+                return deletableParentComment;
+        }
+        return this;
+    }
+
+    private Boolean isDeletableParent() {
+        return getParent() != null && getParent().isDeleted();
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
+    }
+
+    private Boolean isParentHasOnlyDeletedChildren() {
+        return getParent().getChildren().size() == 1;
     }
 }

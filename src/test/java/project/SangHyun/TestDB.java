@@ -22,9 +22,7 @@ import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Profile("test")
@@ -75,6 +73,10 @@ public class TestDB {
         return memberRepository.findByEmail("xptmxm10!").orElseThrow(MemberNotFoundException::new);
     }
 
+    public Member findStudyMemberNotResourceOwner() {
+        return memberRepository.findByEmail("xptmxm11!").orElseThrow(MemberNotFoundException::new);
+    }
+
     public Member findStudyGeneralMember() {
         return memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new);
     }
@@ -110,8 +112,13 @@ public class TestDB {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyComment> findParentComment() {
-        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId());
+    public StudyComment findParentComment() {
+        return studyCommentRepository.findAllByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyComment findChildComment() {
+        return studyCommentRepository.findAllByMemberId(memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
     }
 
     private void initMember() {
@@ -138,9 +145,12 @@ public class TestDB {
         Member memberD = new Member("xptmxm10!", passwordEncoder.encode("xptmxm10!"), "동욱", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberD);
 
+        Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        memberRepository.save(memberE);
+
         Study emptyStudy = new Study("임시용", "임시용", "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 0L, "2021-12-25", StudyMethod.FACE, memberB, new ArrayList<>(), new ArrayList<>());
 
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 4L, "2021-12-25", StudyMethod.FACE, memberA, new ArrayList<>(), new ArrayList<>());
+        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 5L, "2021-12-25", StudyMethod.FACE, memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
         study.join(studyJoin);
@@ -154,6 +164,9 @@ public class TestDB {
         StudyJoin studyJoin4 = new StudyJoin(memberD, study, StudyRole.APPLY);
         study.join(studyJoin4);
 
+        StudyJoin studyJoin5 = new StudyJoin(memberE, study, StudyRole.APPLY);
+        study.join(studyJoin5);
+
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
         StudyBoard studyBoard3 = new StudyBoard("알고리즘", study);
@@ -162,17 +175,15 @@ public class TestDB {
         StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
 
-        StudyComment studyComment1 = new StudyComment(memberC, studyArticle1, null, "공지사항 댓글1입니다.");
-        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.");
-        StudyComment studyComment3 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글3입니다.");
+        StudyComment studyComment1 = new StudyComment(memberC, studyArticle1, null, "공지사항 댓글1입니다.", false);
+        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.", false);
 
-        studyArticle1.addComment(studyComment1);
-        studyArticle1.addComment(studyComment2);
-        studyArticle1.addComment(studyComment3);
+        studyCommentRepository.save(studyComment1);
+        studyCommentRepository.save(studyComment2);
 
-        studyBoard1.addArticle(studyArticle1);
-        studyBoard1.addArticle(studyArticle2);
-        studyBoard1.addArticle(studyArticle3);
+        studyArticleRepository.save(studyArticle1);
+        studyArticleRepository.save(studyArticle2);
+        studyArticleRepository.save(studyArticle3);
 
         study.addBoard(studyBoard1);
         study.addBoard(studyBoard2);

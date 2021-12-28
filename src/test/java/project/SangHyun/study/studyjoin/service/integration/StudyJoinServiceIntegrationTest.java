@@ -15,6 +15,7 @@ import project.SangHyun.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
@@ -63,7 +64,7 @@ class StudyJoinServiceIntegrationTest {
         System.out.println("ActualResult = " + ActualResult.getStudyInfos());
 
         //then
-        Assertions.assertEquals(1, ActualResult.getStudyInfos().size());
+        Assertions.assertEquals(StudyRole.APPLY, ActualResult.getStudyInfos().getStudyRole());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
     }
 
@@ -102,11 +103,10 @@ class StudyJoinServiceIntegrationTest {
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(requestDto);
-        List<StudyFindMembersResponseDto> afterStudyMembers = studyJoinService.findStudyMembers(study.getId());
 
         //then
-        Assertions.assertEquals(1, afterStudyMembers.size()-prevStudyMembers.size());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+        Assertions.assertEquals(StudyRole.MEMBER, ActualResult.getStudyInfos().getStudyRole());
     }
 
     @Test
@@ -198,7 +198,7 @@ class StudyJoinServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("스터디에 참여한 스터디원의 정보를 로드한다.")
+    @DisplayName("스터디에 참여 및 지원한 스터디원의 정보를 로드한다.")
     public void findStudyMembers() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
@@ -207,7 +207,7 @@ class StudyJoinServiceIntegrationTest {
         List<StudyFindMembersResponseDto> ActualResult = studyJoinService.findStudyMembers(study.getId());
 
         //then
-        Assertions.assertEquals(3, ActualResult.size());
+        Assertions.assertEquals(5, ActualResult.size());
     }
 
 }

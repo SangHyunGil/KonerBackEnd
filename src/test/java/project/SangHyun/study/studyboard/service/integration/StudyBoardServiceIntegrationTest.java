@@ -9,15 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.MemberNotFoundException;
-import project.SangHyun.advice.exception.StudyHasNoProperRoleException;
-import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.dto.response.StudyBoardFindResponseDto;
 import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -70,7 +65,7 @@ class StudyBoardServiceIntegrationTest {
     public void createBoard() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
 
         //when
         StudyBoardCreateResponseDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto);
@@ -85,7 +80,7 @@ class StudyBoardServiceIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateDto("테스트 게시판 수정");
+        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateRequestDto("테스트 게시판 수정");
 
         //when
         StudyBoardUpdateResponseDto ActualResult = studyBoardService.updateBoard(study.getId(), studyBoard.getId(), requestDto);

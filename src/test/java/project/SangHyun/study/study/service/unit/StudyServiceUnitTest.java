@@ -50,7 +50,7 @@ class StudyServiceUnitTest {
     @DisplayName("스터디를 생성한다.")
     public void createStudy() throws Exception {
         //given
-        StudyCreateRequestDto requestDto = StudyFactory.makeCreateDto(member);
+        StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
         Study createdStudy = requestDto.toEntity(fileStoreHelper.storeFile(requestDto.getProfileImg()));
         StudyCreateResponseDto ExpectResult = StudyFactory.makeCreateResponseDto(createdStudy);
 
@@ -103,7 +103,7 @@ class StudyServiceUnitTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
-        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateDto("테스트 스터디 변경", "프론트엔드");
+        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("테스트 스터디 변경", "프론트엔드");
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));

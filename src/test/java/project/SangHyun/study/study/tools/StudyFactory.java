@@ -9,7 +9,9 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
+import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
+import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
@@ -34,13 +36,13 @@ public class StudyFactory extends BasicFactory {
     }
 
     // Request
-    public static StudyCreateRequestDto makeCreateDto(Member member) {
+    public static StudyCreateRequestDto makeCreateRequestDto(Member member) {
         return new StudyCreateRequestDto(member.getId(), "프론트엔드 모집", "프론트엔드",
                 "테스트", "2021-12-25", 2L, multipartFile, StudyMethod.FACE,
                 StudyState.STUDYING, RecruitState.PROCEED);
     }
 
-    public static StudyUpdateRequestDto makeUpdateDto(String title, String topic) {
+    public static StudyUpdateRequestDto makeUpdateRequestDto(String title, String topic) {
         return new StudyUpdateRequestDto(title, topic,
                 "변경", "2021-12-25", 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
     }
@@ -54,6 +56,17 @@ public class StudyFactory extends BasicFactory {
         return Arrays.stream(studies)
                     .map(study -> StudyFindResponseDto.create(study))
                     .collect(Collectors.toList());
+    }
+
+    public static StudyUpdateResponseDto makeUpdateResponseDto(Study study, String title, String content) {
+        StudyUpdateResponseDto responseDto = StudyUpdateResponseDto.create(study);
+        responseDto.setTitle(title);
+        responseDto.setContent(content);
+        return responseDto;
+    }
+
+    public static StudyDeleteResponseDto makeDeleteResponseDto(Study study) {
+        return StudyDeleteResponseDto.create(study);
     }
 
     public static StudyFindResponseDto makeFindResponseDto(Study study) {

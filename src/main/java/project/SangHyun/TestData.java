@@ -44,6 +44,7 @@ public class TestData {
         private String filePath;
         private final MemberRepository memberRepository;
         private final StudyRepository studyRepository;
+        private final StudyArticleRepository studyArticleRepository;
         private final PasswordEncoder passwordEncoder;
 
         private void initMember() {
@@ -71,9 +72,9 @@ public class TestData {
             StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, member, studyBoard1);
 
-            studyBoard1.addArticle(studyArticle1);
-            studyBoard1.addArticle(studyArticle2);
-            studyBoard1.addArticle(studyArticle3);
+            studyArticleRepository.save(studyArticle1);
+            studyArticleRepository.save(studyArticle2);
+            studyArticleRepository.save(studyArticle3);
 
             study.addBoard(studyBoard1);
             study.addBoard(studyBoard2);

@@ -8,15 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyboard.service.impl.StudyBoardServiceImpl;
 import project.SangHyun.study.studyboard.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.study.studyboard.dto.request.StudyBoardUpdateRequestDto;
@@ -69,7 +65,7 @@ class StudyBoardServiceUnitTest {
     @DisplayName("스터디에 속한 게시판을 생성한다.")
     public void createBoard() throws Exception {
         //given
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
         StudyBoard createdStudyBoard = requestDto.toEntity(study.getId());
         StudyBoardCreateResponseDto ExpectResult = StudyBoardCreateResponseDto.create(createdStudyBoard);
 
@@ -87,7 +83,7 @@ class StudyBoardServiceUnitTest {
     @DisplayName("스터디에 속한 게시판을 수정한다.")
     public void updateBoard() throws Exception {
         //given
-        StudyBoardUpdateRequestDto updateRequestDto = StudyBoardFactory.makeUpdateDto("테스트 게시판 수정");
+        StudyBoardUpdateRequestDto updateRequestDto = StudyBoardFactory.makeUpdateRequestDto("테스트 게시판 수정");
 
         //mocking
         given(studyBoardRepository.findById(study.getId())).willReturn(Optional.ofNullable(studyBoard));

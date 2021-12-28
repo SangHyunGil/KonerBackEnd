@@ -93,7 +93,7 @@ class StudyBoardControllerIntegrationTest {
         Member member = testDB.findStudyGeneralMember();
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/", study.getId())
@@ -111,7 +111,7 @@ class StudyBoardControllerIntegrationTest {
         Member member = testDB.findGeneralMember();
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/", study.getId())
@@ -129,7 +129,7 @@ class StudyBoardControllerIntegrationTest {
         Member member = testDB.findAdminMember();
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/", study.getId())
@@ -147,7 +147,7 @@ class StudyBoardControllerIntegrationTest {
         Member member = testDB.findStudyAdminMember();
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/", study.getId())
@@ -166,7 +166,7 @@ class StudyBoardControllerIntegrationTest {
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateDto("알고리즘 게시판");
+        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateRequestDto("알고리즘 게시판");
 
         //when, then
         mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
@@ -185,7 +185,7 @@ class StudyBoardControllerIntegrationTest {
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateDto("알고리즘 게시판");
+        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateRequestDto("알고리즘 게시판");
 
         //when, then
         mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
@@ -204,7 +204,7 @@ class StudyBoardControllerIntegrationTest {
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateDto("알고리즘 게시판");
+        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateRequestDto("알고리즘 게시판");
 
         //when, then
         mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
@@ -223,7 +223,7 @@ class StudyBoardControllerIntegrationTest {
         String accessToken = refreshTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateDto("알고리즘 게시판");
+        StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateRequestDto("알고리즘 게시판");
 
         //when, then
         mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())

@@ -73,8 +73,7 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
                         member.id, member.nickname, studyJoin.studyRole))
                 .from(studyJoin)
                 .innerJoin(studyJoin.member, member)
-                .where(studyJoin.study.id.eq(studyId),
-                        studyJoin.studyRole.ne(StudyRole.APPLY))
+                .where(studyJoin.study.id.eq(studyId))
                 .fetch();
     }
 
