@@ -8,6 +8,7 @@ import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
@@ -19,6 +20,7 @@ public class StudyCommentServiceImpl implements StudyCommentService {
     private final StudyCommentRepository studyCommentRepository;
 
     @Override
+    @Transactional
     public StudyCommentCreateResponseDto createComment(Long studyArticleId, StudyCommentCreateRequestDto requestDto) {
         StudyComment studyComment = studyCommentRepository.save(requestDto.toEntity(studyArticleId));
         return StudyCommentCreateResponseDto.create(studyComment);
@@ -29,5 +31,13 @@ public class StudyCommentServiceImpl implements StudyCommentService {
         StudyComment comment = studyCommentRepository.findById(studyCommentId).orElseThrow(StudyCommentNotFoundException::new);
         comment.update(requestDto.getContent());
         return StudyCommentUpdateResponseDto.create(comment);
+    }
+
+    @Override
+    @Transactional
+    public StudyCommentDeleteResponseDto deleteComment(Long studyCommentId) {
+        StudyComment comment = studyCommentRepository.findById(studyCommentId).orElseThrow(StudyCommentNotFoundException::new);
+        comment.findDeletableComment().ifPresentOrElse(studyCommentRepository::delete, comment::delete);
+        return StudyCommentDeleteResponseDto.create(comment);
     }
 }

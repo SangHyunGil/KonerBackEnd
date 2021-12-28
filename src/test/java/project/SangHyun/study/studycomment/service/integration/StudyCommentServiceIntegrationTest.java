@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteResponseDto;
+import project.SangHyun.study.studyarticle.service.StudyArticleService;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
@@ -26,9 +29,12 @@ import javax.persistence.EntityManager;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
+@Rollback(value = false)
 public class StudyCommentServiceIntegrationTest {
     @Autowired
     StudyCommentService studyCommentService;
+    @Autowired
+    StudyArticleService studyArticleService;
     @Autowired
     StudyCommentRepository studyCommentRepository;
     @Autowired
@@ -60,15 +66,14 @@ public class StudyCommentServiceIntegrationTest {
     @DisplayName("댓글에 답글을 추가한다.")
     public void addReplyComment() throws Exception {
         //given
-        StudyComment comment = testDB.findParentComment().get(0);
+        StudyComment comment = testDB.findParentComment();
         Member member = testDB.findStudyGeneralMember();
         StudyArticle studyArticle = testDB.findAnnounceArticle();
         StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, comment);
 
         //when
         StudyCommentCreateResponseDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
-        em.flush();
-        em.clear();
+        persistContextClear();
 
         //then
         Assertions.assertEquals("테스트 댓글입니다.", ActualResult.getContent());
@@ -76,16 +81,52 @@ public class StudyCommentServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("댓글을 수정한다.")
-    public void updateComment() throws Exception {
+    @DisplayName("게시글이 삭제되면 해당 댓글들 모두 삭제된다.")
+    public void onDeleteTest() throws Exception {
         //given
-        StudyArticle studyArticle = testDB.findAnnounceArticle();
-        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto();
+        StudyArticle announceArticle = testDB.findAnnounceArticle();
 
         //when
-        StudyCommentUpdateResponseDto ActualResult = studyCommentService.updateComment(studyArticle.getId(), requestDto);
+        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(announceArticle.getId());
+        System.out.println("em.contains(announceArticle) = " + em.contains(announceArticle));
+        System.out.println("em.contains(announceArticle) = " + em.contains(testDB.findParentComment()));
 
         //then
-        Assertions.assertEquals("테스트 댓글 수정입니다.", ActualResult.getContent());
+        Assertions.assertEquals(0, studyCommentRepository.findAll().size());
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다.(부모가 삭제처리되지 않았다면 자신만 삭제처리된다.)")
+    public void deleteComment() throws Exception {
+        //given
+        StudyComment studyComment = testDB.findChildComment();
+
+        //when
+        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyComment.getId());
+
+        //then
+        Assertions.assertEquals(1, studyCommentRepository.findAll().size());
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다.(부모가 삭제처리되어있다면 부모와 자신 모두 삭제처리된다.)")
+    public void deleteComment2() throws Exception {
+        //given
+        persistContextClear();
+        StudyComment parentComment = testDB.findParentComment();
+        StudyComment studyComment = testDB.findChildComment();
+        parentComment.delete();
+
+        //when
+        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyComment.getId());
+
+
+        //then
+        Assertions.assertEquals(0, studyCommentRepository.findAll().size());
+    }
+
+    private void persistContextClear() {
+        em.flush();
+        em.clear();
     }
 }

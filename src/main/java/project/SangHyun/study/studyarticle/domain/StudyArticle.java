@@ -31,8 +31,6 @@ public class StudyArticle extends EntityDate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private StudyBoard studyBoard;
-    @OneToMany(mappedBy = "studyArticle", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<StudyComment> studyComments = new ArrayList<>();
 
     @Builder
     public StudyArticle(String title, String content, Long views, Member member, StudyBoard studyBoard) {
@@ -62,10 +60,5 @@ public class StudyArticle extends EntityDate {
 
     public void deleteInStudyBoardCollections() {
         this.studyBoard.getStudyArticles().remove(this);
-    }
-
-    public void addComment(StudyComment studyComment) {
-        this.studyComments.add(studyComment);
-        studyComment.belongTo(this);
     }
 }

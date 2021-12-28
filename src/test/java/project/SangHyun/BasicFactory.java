@@ -93,14 +93,14 @@ public class BasicFactory {
 
     public static StudyComment makeTestStudyComment(Member member, StudyArticle studyArticle) {
         Long studyCommentId = 1L;
-        StudyComment studyComment = new StudyComment(member, studyArticle, null, "테스트 댓글입니다.");
+        StudyComment studyComment = new StudyComment(member, studyArticle, null, "테스트 댓글입니다.", false);
         ReflectionTestUtils.setField(studyComment, "id", studyCommentId);
         return studyComment;
     }
 
     public static StudyComment makeTestStudyReplyComment(Member member, StudyArticle studyArticle, StudyComment studyComment) {
         Long studyReplyCommentId = 2L;
-        StudyComment studyReplyComment = new StudyComment(member, studyArticle, studyComment, "테스트 댓글입니다.");
+        StudyComment studyReplyComment = new StudyComment(member, studyArticle, studyComment, "테스트 댓글입니다.", false);
         ReflectionTestUtils.setField(studyReplyComment, "id", studyReplyCommentId);
         return studyReplyComment;
     }

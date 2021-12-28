@@ -110,8 +110,13 @@ public class TestDB {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyComment> findParentComment() {
-        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId());
+    public StudyComment findParentComment() {
+        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyComment findChildComment() {
+        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
     }
 
     private void initMember() {
@@ -162,13 +167,11 @@ public class TestDB {
         StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
 
-        StudyComment studyComment1 = new StudyComment(memberC, studyArticle1, null, "공지사항 댓글1입니다.");
-        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.");
-        StudyComment studyComment3 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글3입니다.");
+        StudyComment studyComment1 = new StudyComment(memberC, studyArticle1, null, "공지사항 댓글1입니다.", false);
+        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.", false);
 
-        studyArticle1.addComment(studyComment1);
-        studyArticle1.addComment(studyComment2);
-        studyArticle1.addComment(studyComment3);
+        studyCommentRepository.save(studyComment1);
+        studyCommentRepository.save(studyComment2);
 
         studyBoard1.addArticle(studyArticle1);
         studyBoard1.addArticle(studyArticle2);
