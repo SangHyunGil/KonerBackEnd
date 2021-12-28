@@ -1,5 +1,6 @@
 package project.SangHyun.helper;
 
+import project.SangHyun.advice.exception.HierarchyStructureException;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentFindResponseDto;
 
 import java.util.ArrayList;
@@ -18,11 +19,11 @@ public final class HierarchyHelper<K, E, D> {
     private final Function<D, List<D>> getChildren;
 
 
-    public static <K, E, D> HierarchyHelper of(List<E> entities, Function<E, D> toDto, Function<E, E> getParent, Function<E, K> getKey, Function<D, List<D>> getChildren) {
+    public static <E, D, K> HierarchyHelper of(List<E> entities, Function<E, D> toDto, Function<E, E> getParent, Function<E, K> getKey, Function<D, List<D>> getChildren) {
         return new HierarchyHelper(new ArrayList(), new HashMap(), entities, toDto, getParent, getKey, getChildren);
     }
 
-    public HierarchyHelper(List<D> roots, Map<K, D> map, List<E> entities, Function<E, D> toDto, Function<E, E> getParent, Function<E, K> getKey, Function<D, List<D>> getChildren) {
+    private HierarchyHelper(List<D> roots, Map<K, D> map, List<E> entities, Function<E, D> toDto, Function<E, E> getParent, Function<E, K> getKey, Function<D, List<D>> getChildren) {
         this.roots = roots;
         this.map = map;
         this.entities = entities;
@@ -32,12 +33,20 @@ public final class HierarchyHelper<K, E, D> {
         this.getChildren = getChildren;
     }
 
-    public List<D> makeHierarchy() {
+    public List<D> convertToHierarchyStructure() {
+        try {
+            return makeHierarchyStructure();
+        } catch (NullPointerException e) {
+            throw new HierarchyStructureException();
+        }
+    }
+
+    private List<D> makeHierarchyStructure() {
         for (E entity : entities) {
             D dto = applyToDtoFunction(entity);
             map.put(applyGetKeyFunction(entity), dto);
             if (hasParent(entity)) {
-                D parentDto = map.get(applyGetKeyFunction(entity));
+                D parentDto = map.get(applyGetKeyFunction(applyGetParentFunction(entity)));
                 applyGetChildrenFunction(parentDto).add(dto);
             } else {
                 roots.add(dto);
@@ -55,7 +64,7 @@ public final class HierarchyHelper<K, E, D> {
     }
 
     private boolean hasParent(E entity) {
-        return applyGetParentFunction(entity) == null;
+        return applyGetParentFunction(entity) != null;
     }
 
     private E applyGetParentFunction(E entity) {

@@ -22,9 +22,7 @@ import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Profile("test")
@@ -111,12 +109,12 @@ public class TestDB {
 
     @Transactional(readOnly = true)
     public StudyComment findParentComment() {
-        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
+        return studyCommentRepository.findAllByMemberId(memberRepository.findByEmail("xptmxm0!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
     }
 
     @Transactional(readOnly = true)
     public StudyComment findChildComment() {
-        return studyCommentRepository.findByMemberId(memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
+        return studyCommentRepository.findAllByMemberId(memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
     }
 
     private void initMember() {

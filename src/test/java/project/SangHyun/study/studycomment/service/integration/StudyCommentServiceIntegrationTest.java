@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
@@ -16,10 +15,8 @@ import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteRespon
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
@@ -76,7 +73,7 @@ public class StudyCommentServiceIntegrationTest {
 
         //then
         Assertions.assertEquals("테스트 댓글입니다.", ActualResult.getContent());
-        Assertions.assertEquals(2, studyCommentRepository.findByMemberId(member.getId()).get(0).getChildren().size());
+        Assertions.assertEquals(2, studyCommentRepository.findAllByMemberId(member.getId()).get(0).getChildren().size());
     }
 
     @Test

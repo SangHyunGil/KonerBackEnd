@@ -1,5 +1,6 @@
 package project.SangHyun.study.studycomment.service;
 
+import org.springframework.data.jpa.repository.Query;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;

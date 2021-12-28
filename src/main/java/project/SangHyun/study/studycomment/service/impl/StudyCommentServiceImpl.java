@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.advice.exception.StudyCommentNotFoundException;
+import project.SangHyun.helper.HierarchyHelper;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
@@ -46,7 +47,7 @@ public class StudyCommentServiceImpl implements StudyCommentService {
 
     @Override
     public List<StudyCommentFindResponseDto> findComments(Long studyArticleId) {
-        List<StudyComment> studyComments = studyCommentRepository.findAll();
+        List<StudyComment> studyComments = studyCommentRepository.findAllByStudyArticleId(studyArticleId);
         return StudyCommentFindResponseDto.create(studyComments);
     }
 }
