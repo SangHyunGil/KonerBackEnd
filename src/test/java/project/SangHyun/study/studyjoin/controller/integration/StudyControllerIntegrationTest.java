@@ -20,7 +20,6 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
@@ -64,13 +63,9 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(post("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(post("/study/" + study.getId() + "/join/" + member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(member.getId()));
@@ -83,13 +78,9 @@ class StudyControllerIntegrationTest {
         Member member = testDB.findNotAuthMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(post("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(post("/study/" + study.getId() + "/join/" + member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -102,13 +93,9 @@ class StudyControllerIntegrationTest {
         Member creator = testDB.findStudyCreatorMember();
         Member applyMember = testDB.findStudyApplyMember();
         String accessToken = accessTokenHelper.createToken(creator.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(put("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
@@ -122,13 +109,9 @@ class StudyControllerIntegrationTest {
         Member adminMember = testDB.findAdminMember();
         Member applyMember = testDB.findStudyApplyMember();
         String accessToken = accessTokenHelper.createToken(adminMember.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(put("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
@@ -141,13 +124,9 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findStudyGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(put("/study/" + study.getId() + "/join/" + member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -159,13 +138,9 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findNotStudyMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(put("/study/" + study.getId() + "/join/" + member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -178,13 +153,9 @@ class StudyControllerIntegrationTest {
         Member creator = testDB.findStudyCreatorMember();
         Member applyMember = testDB.findStudyApplyMember();
         String accessToken = accessTokenHelper.createToken(creator.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -197,13 +168,9 @@ class StudyControllerIntegrationTest {
         Member adminMember = testDB.findAdminMember();
         Member applyMember = testDB.findStudyApplyMember();
         String accessToken = accessTokenHelper.createToken(adminMember.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, applyMember);
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
@@ -215,14 +182,11 @@ class StudyControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findStudyGeneralMember();
+        Member applyMember = testDB.findStudyApplyMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -233,14 +197,11 @@ class StudyControllerIntegrationTest {
         //given
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findNotStudyMember();
+        Member applyMember = testDB.findStudyApplyMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }

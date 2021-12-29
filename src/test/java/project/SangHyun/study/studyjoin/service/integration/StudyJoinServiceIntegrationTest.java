@@ -17,12 +17,10 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.service.impl.StudyJoinServiceImpl;
-import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -57,10 +55,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findNotStudyMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(requestDto);
+        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(study.getId(), member.getId());
         System.out.println("ActualResult = " + ActualResult.getStudyInfos());
 
         //then
@@ -74,10 +71,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(requestDto));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -86,10 +82,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findGeneralMember();
         Study study = testDB.findZeroHeadCountStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(requestDto));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -98,11 +93,10 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyApplyMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
         List<StudyFindMembersResponseDto> prevStudyMembers = studyJoinService.findStudyMembers(study.getId());
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(requestDto);
+        StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(study.getId(), member.getId());
 
         //then
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
@@ -115,10 +109,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.acceptJoin(requestDto));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -127,10 +120,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyApplyMember();
         Study study = testDB.findZeroHeadCountStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.acceptJoin(requestDto));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -139,10 +131,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findNotStudyMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.acceptJoin(requestDto));
+        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -151,14 +142,14 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyApplyMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.rejectJoin(requestDto);
+        StudyJoinResponseDto ActualResult = studyJoinService.rejectJoin(study.getId(), member.getId());
 
         //then
         Assertions.assertEquals(Optional.empty(), studyJoinRepository.findApplyStudy(study.getId(), member.getId()));
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+        Assertions.assertEquals(4, studyJoinRepository.findStudyMembers(study.getId()).size());
     }
 
     @Test
@@ -167,10 +158,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(requestDto));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -179,10 +169,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyApplyMember();
         Study study = testDB.findZeroHeadCountStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.rejectJoin(requestDto));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -191,10 +180,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findNotStudyMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //when, then
-        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.rejectJoin(requestDto));
+        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test

@@ -21,6 +21,7 @@ import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,8 @@ public class TestDB {
     StudyArticleRepository studyArticleRepository;
     @Autowired
     StudyCommentRepository studyCommentRepository;
+    @Autowired
+    StudyJoinRepository studyJoinRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -153,20 +156,23 @@ public class TestDB {
 
         Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 5L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
 
+        studyRepository.save(study);
+        studyRepository.save(emptyStudy);
+
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
-        study.join(studyJoin);
+        studyJoinRepository.save(studyJoin);
 
         StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.ADMIN);
-        study.join(studyJoin2);
+        studyJoinRepository.save(studyJoin2);
 
         StudyJoin studyJoin3 = new StudyJoin(memberC, study, StudyRole.MEMBER);
-        study.join(studyJoin3);
+        studyJoinRepository.save(studyJoin3);
 
         StudyJoin studyJoin4 = new StudyJoin(memberD, study, StudyRole.APPLY);
-        study.join(studyJoin4);
+        studyJoinRepository.save(studyJoin4);
 
         StudyJoin studyJoin5 = new StudyJoin(memberE, study, StudyRole.MEMBER);
-        study.join(studyJoin5);
+        studyJoinRepository.save(studyJoin5);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
@@ -189,8 +195,5 @@ public class TestDB {
         study.addBoard(studyBoard1);
         study.addBoard(studyBoard2);
         study.addBoard(studyBoard3);
-
-        studyRepository.save(study);
-        studyRepository.save(emptyStudy);
     }
 }

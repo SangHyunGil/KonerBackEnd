@@ -69,8 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}").access("@studyGuard.check(#studyId)")
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}").access("@studyGuard.check(#studyId)")
 
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}/join").access("@studyJoinGuard.check(#studyId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/join").access("@studyJoinGuard.check(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/join/{memberId}").access("@studyJoinGuard.check(#studyId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/join/{memberId}").access("@studyJoinGuard.check(#studyId)")
 
                 .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*").access("@studyBoardGuard.checkJoin(#studyId)")
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*").access("@studyBoardGuard.checkJoinAndAuth(#studyId)")
@@ -89,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
 
-                    .anyRequest().hasAnyRole("MEMBER", "ADMIN")
+                .anyRequest().hasAnyRole("MEMBER", "ADMIN")
 
             .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())

@@ -19,6 +19,7 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class TestData {
         private final MemberRepository memberRepository;
         private final StudyRepository studyRepository;
         private final StudyArticleRepository studyArticleRepository;
+        private final StudyJoinRepository studyJoinRepository;
         private final PasswordEncoder passwordEncoder;
 
         private void initMember() {
@@ -60,10 +62,10 @@ public class TestData {
             Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "/defaultImg.png", MemberRole.ROLE_MEMBER);
             memberRepository.save(member);
 
-            Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", filePath+"\\defaultImg2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 3L, "2021-12-25", member, new ArrayList<>(), new ArrayList<>());
+            Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", "컴공", "/defaultImg.png", MemberRole.ROLE_MEMBER);
+            memberRepository.save(memberB);
 
-            StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
-            study.join(studyJoin);
+            Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", filePath+"\\defaultImg2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 3L, "2021-12-25", member, new ArrayList<>(), new ArrayList<>());
 
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
@@ -74,6 +76,12 @@ public class TestData {
             study.addBoard(studyBoard3);
 
             studyRepository.save(study);
+
+            StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
+            studyJoinRepository.save(studyJoin);
+
+            StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.APPLY);
+            studyJoinRepository.save(studyJoin2);
 
             StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, member, studyBoard1);

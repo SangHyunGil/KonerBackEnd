@@ -15,7 +15,6 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -56,18 +55,16 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디에 참가 신청한다.")
     public void applyJoin() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
-        StudyJoin createdStudyJoin = requestDto.toEntity();
-        StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(createdStudyJoin);
+        StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(studyJoin);
 
         //mocking
         given(studyJoinRepository.exist(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.save(any())).willReturn(createdStudyJoin);
+        given(studyJoinRepository.save(any())).willReturn(studyJoin);
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(requestDto);
+        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(study.getId(), member.getId());
 
         //then
         Assertions.assertEquals(ExpectResult.getStudyInfos(), ActualResult.getStudyInfos());
@@ -77,21 +74,19 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디에 이미 참가한 회원은 스터디 참가 신청에 실패한다.")
     public void applyJoin_fail1() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyJoinRepository.exist(any(), any())).willReturn(true);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(requestDto));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디의 정원이 꽉 찼다면 스터디 참가 신청에 실패한다.")
     public void applyJoin_fail2() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyJoinRepository.exist(any(), any())).willReturn(false);
@@ -99,14 +94,13 @@ class StudyJoinServiceUnitTest {
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(requestDto));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디 참가를 수락한다.")
     public void acceptJoin() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
         StudyJoin studyJoin = StudyJoinFactory.makeTestStudyJoinApply(member, study);
         StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(studyJoin);
 
@@ -117,7 +111,7 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(requestDto);
+        StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(study.getId(), member.getId());
 
         //then
         Assertions.assertEquals(ExpectResult.getStudyJoinId(), ActualResult.getStudyJoinId());
@@ -127,21 +121,19 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디에 이미 참가한 회원은 스터디 참가 수락에 실패한다.")
     public void acceptJoin_fail1() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
         given(studyJoinRepository.exist(any(), any())).willReturn(true);
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.acceptJoin(requestDto));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디의 정원이 꽉 찼다면 스터디 참가 수락에 실패한다.")
     public void acceptJoin_fail2() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
@@ -149,14 +141,13 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.acceptJoin(requestDto));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디에 참여하지 않았다면 스터디 참가 수락에 실패한다.")
     public void acceptJoin_fail3() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
@@ -165,14 +156,13 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.empty());
 
         //when, then
-        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.acceptJoin(requestDto));
+        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디 참가를 거절한다.")
     public void rejectJoin() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
         StudyJoin studyJoin = StudyJoinFactory.makeTestStudyJoinApply(member, study);
         StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(studyJoin);
 
@@ -183,7 +173,7 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.rejectJoin(requestDto);
+        StudyJoinResponseDto ActualResult = studyJoinService.rejectJoin(study.getId(), member.getId());
 
         //then
         Assertions.assertEquals(ExpectResult.getStudyJoinId(), ActualResult.getStudyJoinId());
@@ -193,21 +183,19 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디에 이미 참가한 회원은 스터디 참가 거절에 실패한다.")
     public void rejectJoin_fail1() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
         given(studyJoinRepository.exist(any(), any())).willReturn(true);
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(requestDto));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디의 정원이 꽉 찼다면 스터디 참가 수락에 실패한다.")
     public void rejectJoin_fail2() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
@@ -215,14 +203,13 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.rejectJoin(requestDto));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test
     @DisplayName("스터디에 참여하지 않았다면 스터디 참가 수락에 실패한다.")
     public void rejectJoin_fail3() {
         //given
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto(study, member);
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
@@ -231,7 +218,7 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.empty());
 
         //when, then
-        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.rejectJoin(requestDto));
+        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test

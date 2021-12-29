@@ -39,9 +39,9 @@ class StudyJoinRepositoryTest {
     @Autowired
     StudyArticleRepository studyArticleRepository;
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
     StudyJoinRepository studyJoinRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void beforeEach() {
@@ -54,11 +54,13 @@ class StudyJoinRepositoryTest {
         Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
                 StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
 
+        studyRepository.save(study);
+
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
-        study.join(studyJoin);
+        studyJoinRepository.save(studyJoin);
 
         StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.ADMIN);
-        study.join(studyJoin2);
+        studyJoinRepository.save(studyJoin2);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
@@ -66,8 +68,6 @@ class StudyJoinRepositoryTest {
         study.addBoard(studyBoard1);
         study.addBoard(studyBoard2);
         study.addBoard(studyBoard3);
-
-        studyRepository.save(study);
 
         StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, memberA, studyBoard1);
         StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
