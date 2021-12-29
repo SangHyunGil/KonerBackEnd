@@ -126,8 +126,8 @@ class StudyJoinControllerUnitTest {
     @DisplayName("스터디에 참여한 스터디원들의 정보를 로드한다.")
     public void findStudyMembers() throws Exception {
         //given
-        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(member.getId(), "테스터1", StudyRole.CREATOR);
-        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto(member.getId(), "테스터1", StudyRole.MEMBER);
+        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(member.getId(), "테스터1", StudyRole.CREATOR, "빠르게 지원합니다.");
+        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto(member.getId(), "테스터1", StudyRole.MEMBER, "빠르게 지원합니다.");
         StudyFindMembersResponseDto responseDto1 = StudyFindMembersResponseDto.create(studyMember1);
         StudyFindMembersResponseDto responseDto2 = StudyFindMembersResponseDto.create(studyMember2);
         List<StudyFindMembersResponseDto> responseDtos = new ArrayList<>(Arrays.asList(responseDto1, responseDto2));

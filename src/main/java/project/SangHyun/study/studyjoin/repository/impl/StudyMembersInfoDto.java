@@ -12,4 +12,5 @@ public class StudyMembersInfoDto {
     private Long memberId;
     private String memberName;
     private StudyRole studyRole;
+    private String applyContent;
 }

@@ -37,7 +37,7 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     public List<StudyInfoDto> findStudyInfoByMemberId(Long memberId) {
         return jpaQueryFactory
                 .select(Projections.constructor(StudyInfoDto.class,
-                        studyJoin.study.id, studyJoin.studyRole, studyJoin.applyContent))
+                        studyJoin.study.id, studyJoin.studyRole))
                 .from(studyJoin)
                 .join(studyJoin.study, study)
                 .where(studyJoin.member.id.eq(memberId),
@@ -70,7 +70,7 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     public List<StudyMembersInfoDto> findStudyMembers(Long studyId) {
         return jpaQueryFactory
                 .select(Projections.constructor(StudyMembersInfoDto.class,
-                        member.id, member.nickname, studyJoin.studyRole))
+                        member.id, member.nickname, studyJoin.studyRole, studyJoin.applyContent))
                 .from(studyJoin)
                 .innerJoin(studyJoin.member, member)
                 .where(studyJoin.study.id.eq(studyId))
