@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
@@ -24,6 +26,8 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
+
+import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -78,8 +82,7 @@ class StudyControllerIntegrationTest {
         mockMvc.perform(get("/study/{id}", study.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyId").value(study.getId()))
-                .andExpect(jsonPath("$.data.title").value(study.getTitle()))
-                .andExpect(jsonPath("$.data.topic").value(study.getTopic()));
+                .andExpect(jsonPath("$.data.title").value(study.getTitle()));
     }
 
     @Test
@@ -97,7 +100,7 @@ class StudyControllerIntegrationTest {
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
                         .param("schedule", requestDto.getSchedule())
-                        .param("topic", requestDto.getTopic())
+                        .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
@@ -109,8 +112,7 @@ class StudyControllerIntegrationTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value("프론트엔드 모집"))
-                .andExpect(jsonPath("$.data.topic").value("프론트엔드"));
+                .andExpect(jsonPath("$.data.title").value("프론트엔드 모집"));
     }
 
     @Test
@@ -152,7 +154,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findStudyCreatorMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", "모바일");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", List.of("모바일"));
 
         //when, then
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
@@ -160,7 +162,7 @@ class StudyControllerIntegrationTest {
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
                         .param("schedule", requestDto.getSchedule())
-                        .param("topic", requestDto.getTopic())
+                        .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
@@ -182,7 +184,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", "모바일");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", List.of("모바일"));
 
         //when, then
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
@@ -190,7 +192,7 @@ class StudyControllerIntegrationTest {
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
                         .param("schedule", requestDto.getSchedule())
-                        .param("topic", requestDto.getTopic())
+                        .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
@@ -212,7 +214,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", "모바일");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", List.of("모바일"));
 
         //when, then
         mockMvc.perform(put("/study/{studyId}", study.getId())

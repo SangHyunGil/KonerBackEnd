@@ -103,7 +103,7 @@ class StudyServiceUnitTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
-        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("테스트 스터디 변경", "프론트엔드");
+        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("테스트 스터디 변경", List.of("프론트엔드"));
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
@@ -113,7 +113,7 @@ class StudyServiceUnitTest {
 
         //then
         Assertions.assertEquals("테스트 스터디 변경", ActualResult.getTitle());
-        Assertions.assertEquals("프론트엔드", ActualResult.getTopic());
+        Assertions.assertEquals("프론트엔드", ActualResult.getTopic().get(0));
     }
 
     @Test

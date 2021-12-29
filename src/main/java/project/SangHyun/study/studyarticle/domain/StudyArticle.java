@@ -1,9 +1,6 @@
 package project.SangHyun.study.studyarticle.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
@@ -19,6 +16,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 public class StudyArticle extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

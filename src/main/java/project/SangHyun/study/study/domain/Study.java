@@ -12,12 +12,14 @@ import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@EqualsAndHashCode(of = "id")
 public class Study extends EntityDate {
 
     @Id
@@ -25,7 +27,10 @@ public class Study extends EntityDate {
     @Column(name = "study_id")
     private Long id;
     private String title;
-    private String topic;
+    @ElementCollection
+    @CollectionTable(name = "STUDY_TAG", joinColumns = @JoinColumn(name = "study_id"))
+    @Column(name = "TAG_NAME")
+    private List<String> tags = new ArrayList<>();
     private String content;
     private String profileImgUrl;
     @Enumerated(EnumType.STRING)
@@ -49,16 +54,16 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, String topic, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, Long headCount, String schedule, StudyMethod studyMethod, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, List<String> tags, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, StudyMethod studyMethod, Long headCount, String schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
-        this.topic = topic;
+        this.tags = tags;
         this.content = content;
         this.profileImgUrl = profileImgUrl;
         this.studyState = studyState;
         this.recruitState = recruitState;
+        this.studyMethod = studyMethod;
         this.headCount = headCount;
         this.schedule = schedule;
-        this.studyMethod = studyMethod;
         this.member = member;
         this.studyJoins = studyJoins;
         this.studyBoards = studyBoards;
@@ -66,7 +71,7 @@ public class Study extends EntityDate {
 
     public Study update(StudyUpdateRequestDto requestDto, String profileImgUrl) {
         this.title = requestDto.getTitle();
-        this.topic = requestDto.getTopic();
+        this.tags = requestDto.getTags();
         this.content = requestDto.getContent();
         this.schedule = requestDto.getSchedule();
         this.studyState = requestDto.getStudyState();

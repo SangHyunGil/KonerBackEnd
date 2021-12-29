@@ -1,9 +1,6 @@
 package project.SangHyun.member.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.common.EntityDate;
@@ -16,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "MEMBERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 public class Member extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

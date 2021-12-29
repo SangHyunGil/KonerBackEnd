@@ -23,6 +23,7 @@ import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Profile("test")
@@ -148,9 +149,9 @@ public class TestDB {
         Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberE);
 
-        Study emptyStudy = new Study("임시용", "임시용", "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 0L, "2021-12-25", StudyMethod.FACE, memberB, new ArrayList<>(), new ArrayList<>());
+        Study emptyStudy = new Study("임시용", List.of("임시용"), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 0L, "2021-12-25", memberB, new ArrayList<>(), new ArrayList<>());
 
-        Study study = new Study("백엔드 모집", "백엔드", "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, 5L, "2021-12-25", StudyMethod.FACE, memberA, new ArrayList<>(), new ArrayList<>());
+        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 5L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
         study.join(studyJoin);
@@ -164,7 +165,7 @@ public class TestDB {
         StudyJoin studyJoin4 = new StudyJoin(memberD, study, StudyRole.APPLY);
         study.join(studyJoin4);
 
-        StudyJoin studyJoin5 = new StudyJoin(memberE, study, StudyRole.APPLY);
+        StudyJoin studyJoin5 = new StudyJoin(memberE, study, StudyRole.MEMBER);
         study.join(studyJoin5);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);

@@ -117,7 +117,7 @@ class StudyControllerUnitTest {
                         .param("title", requestDto.getTitle())
                         .param("schedule", requestDto.getSchedule())
                         .param("content", requestDto.getContent())
-                        .param("topic", requestDto.getTopic())
+                        .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
@@ -136,7 +136,7 @@ class StudyControllerUnitTest {
     @DisplayName("스터디에 대한 정보를 수정한다.")
     public void updateStudy() throws Exception {
         //given
-        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("테스트 글 수정", "테스트 내용 수정");
+        StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("테스트 글 수정", List.of("테스트 내용 수정"));
         StudyUpdateResponseDto responseDto = StudyFactory.makeUpdateResponseDto(study, "테스트 글 수정", "테스트 내용 수정");
         SingleResult<StudyUpdateResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
@@ -151,7 +151,7 @@ class StudyControllerUnitTest {
                         .param("title", requestDto.getTitle())
                         .param("schedule", requestDto.getSchedule())
                         .param("content", requestDto.getContent())
-                        .param("topic", requestDto.getTopic())
+                        .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
