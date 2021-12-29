@@ -22,6 +22,9 @@ public class FileStoreHelper {
     }
 
     public String storeFile(MultipartFile multipartFile) throws IOException {
+        if (multipartFile == null) {
+            return "/defaultImg2.png";
+        }
         String storeFileName = createStoreFileName(multipartFile);
         String path = createPath(filePath, storeFileName);
         multipartFile.transferTo(new File(path));

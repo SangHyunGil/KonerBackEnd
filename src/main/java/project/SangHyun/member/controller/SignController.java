@@ -30,16 +30,6 @@ public class SignController {
     private final SignService signService;
     private final ResponseServiceImpl responseService;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) throws Exception {
-        binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                setValue(null);
-            }
-        });
-    }
-
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
     public SingleResult<MemberRegisterResponseDto> register(@Valid @ModelAttribute MemberRegisterRequestDto requestDto,
