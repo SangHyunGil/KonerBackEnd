@@ -32,16 +32,6 @@ public class MemberController {
     private final ResponseServiceImpl responseService;
     private final MemberService memberService;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) throws Exception {
-        binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                setValue(null);
-            }
-        });
-    }
-
     @ApiOperation(value = "회원 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")
     @PostMapping("/info")
     public SingleResult<MemberInfoResponseDto> getMemberInfo(@ApiIgnore @AuthenticationPrincipal MemberDetails memberDetails) {
