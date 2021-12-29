@@ -2,7 +2,9 @@ package project.SangHyun.advice;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -178,5 +180,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result HierarchyStructureException() {
         return responseService.getFailureResult(-125, "댓글 계층 구조 변환에 실패했습니다.");
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result handleBindException(BindException e) {
+        return responseService.getFailureResult(-126, e.getBindingResult().getFieldError().getDefaultMessage());
     }
 }

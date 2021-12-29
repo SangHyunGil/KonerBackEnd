@@ -13,9 +13,13 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import java.beans.PropertyEditorSupport;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -41,5 +45,15 @@ public class SangHyunApplication {
 	@Bean
 	public JPAQueryFactory jpaQueryFactory(EntityManager em) {
 		return new JPAQueryFactory(em);
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) throws Exception {
+		binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text) {
+				setValue(null);
+			}
+		});
 	}
 }
