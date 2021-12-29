@@ -44,7 +44,7 @@ public class Study extends EntityDate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @OneToMany(mappedBy = "study", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "study")
     private List<StudyJoin> studyJoins = new ArrayList<>();
     @OneToMany(mappedBy = "study", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<StudyBoard> studyBoards = new ArrayList<>();

@@ -1,6 +1,8 @@
 package project.SangHyun.study.studyjoin.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
@@ -24,6 +26,7 @@ public class StudyJoin extends EntityDate {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
 
     @Enumerated(EnumType.STRING)
@@ -46,9 +49,5 @@ public class StudyJoin extends EntityDate {
 
     public void acceptMember() {
         this.studyRole = StudyRole.MEMBER;
-    }
-
-    public void deleteInStudyCollections() {
-        this.study.deleteStudyJoin(this);
     }
 }
