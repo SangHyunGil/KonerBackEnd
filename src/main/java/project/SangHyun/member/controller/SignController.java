@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
@@ -17,6 +19,7 @@ import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
 
 import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 
 @Slf4j
@@ -24,16 +27,26 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/sign")
 public class SignController {
-
     private final SignService signService;
     private final ResponseServiceImpl responseService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) throws Exception {
+        binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                setValue(null);
+            }
+        });
+    }
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
     public SingleResult<MemberRegisterResponseDto> register(@Valid @ModelAttribute MemberRegisterRequestDto requestDto,
                                                             BindingResult bindingResult) throws IOException, BindException {
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
+        }
         return responseService.getSingleResult(signService.registerMember(requestDto));
     }
 

@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
@@ -19,6 +21,7 @@ import project.SangHyun.response.service.ResponseServiceImpl;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 
 @Slf4j
@@ -26,9 +29,18 @@ import java.io.IOException;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class MemberController {
-
     private final ResponseServiceImpl responseService;
     private final MemberService memberService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) throws Exception {
+        binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                setValue(null);
+            }
+        });
+    }
 
     @ApiOperation(value = "회원 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")
     @PostMapping("/info")
