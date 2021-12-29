@@ -1,9 +1,6 @@
 package project.SangHyun.study.studyjoin.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
@@ -14,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 public class StudyJoin extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

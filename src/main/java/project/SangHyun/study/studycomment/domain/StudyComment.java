@@ -1,9 +1,6 @@
 package project.SangHyun.study.studycomment.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
@@ -18,6 +15,7 @@ import java.util.Optional;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 public class StudyComment extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +25,7 @@ public class StudyComment extends EntityDate {
     @JoinColumn(name = "member_id")
     private Member member;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "articlez_id")
+    @JoinColumn(name = "article_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyArticle studyArticle;
     @ManyToOne(fetch = FetchType.LAZY)

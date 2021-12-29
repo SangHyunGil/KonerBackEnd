@@ -29,7 +29,7 @@ public class StudyFindResponseDto {
     private String title;
 
     @ApiModelProperty(value = "스터디 주제")
-    private String topic;
+    private List<String> tags;
 
     @ApiModelProperty(value = "스터디 내용")
     private String content;
@@ -62,7 +62,7 @@ public class StudyFindResponseDto {
 
         return new StudyFindResponseDto(study.getId(),
                 new StudyMemberProfile(study.getMember().getNickname(), StudyRole.CREATOR, study.getMember().getProfileImgUrl()),
-                study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
+                study.getTitle(), study.getTags(), study.getContent(), study.getSchedule(),
                 (long) studyMembers.size(), study.getHeadCount(), studyMembers, study.getStudyMethod(),
                 study.getStudyState(), study.getRecruitState());
     }

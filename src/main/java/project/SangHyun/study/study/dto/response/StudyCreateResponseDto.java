@@ -11,6 +11,8 @@ import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class StudyCreateResponseDto {
     private String title;
 
     @ApiModelProperty(value = "스터디 주제")
-    private String topic;
+    private List<String> tags;
 
     @ApiModelProperty(value = "스터디 내용")
     private String content;
@@ -51,7 +53,7 @@ public class StudyCreateResponseDto {
 
     public static StudyCreateResponseDto create(Study study) {
         return new StudyCreateResponseDto(study.getId(), study.getMember().getId(),
-                study.getTitle(), study.getTopic(), study.getContent(), study.getSchedule(),
+                study.getTitle(), study.getTags(), study.getContent(), study.getSchedule(),
                 study.getHeadCount(),  study.getProfileImgUrl(), study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

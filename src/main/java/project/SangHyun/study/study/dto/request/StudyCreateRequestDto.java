@@ -18,6 +18,7 @@ import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,8 +33,7 @@ public class StudyCreateRequestDto {
     private String title;
 
     @ApiModelProperty(value = "스터디 주제", notes = "스터디 주제를 입력해주세요.", required = true, example = "백엔드")
-    @NotBlank(message = "스터디 주제를 입력해주세요.")
-    private String topic;
+    private List<String> tags;
 
     @ApiModelProperty(value = "스터디 내용", notes = "스터디 내용을 입력해주세요.", required = true, example = "내용")
     @NotBlank(message = "스터디 내용을 입력해주세요.")
@@ -61,7 +61,7 @@ public class StudyCreateRequestDto {
     public Study toEntity(String profileImg) {
         Study study = Study.builder()
                 .title(title)
-                .topic(topic)
+                .tags(tags == null ? new ArrayList<>() : tags)
                 .content(content)
                 .schedule(schedule)
                 .studyState(studyState)

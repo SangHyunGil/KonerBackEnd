@@ -12,6 +12,7 @@ import project.SangHyun.study.study.enums.StudyState;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,8 +24,7 @@ public class StudyUpdateRequestDto {
     private String title;
 
     @ApiModelProperty(value = "스터디 주제", notes = "스터디 주제를 입력해주세요.", required = true, example = "백엔드")
-    @NotBlank(message = "스터디 주제를 입력해주세요.")
-    private String topic;
+    private List<String> tags;
 
     @ApiModelProperty(value = "스터디 내용", notes = "스터디 내용을 입력해주세요.", required = true, example = "내용")
     @NotBlank(message = "스터디 내용을 입력해주세요.")

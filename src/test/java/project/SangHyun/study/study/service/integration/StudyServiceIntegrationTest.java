@@ -97,7 +97,7 @@ class StudyServiceIntegrationTest {
     public void updateStudy() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
-        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", "프론트 엔드");
+        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", List.of("프론트 엔드"));
 
         //when
         StudyUpdateResponseDto ActualResult = studyService.updateStudy(study.getId(), updateRequestDto);
