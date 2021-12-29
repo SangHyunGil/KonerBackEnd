@@ -81,7 +81,7 @@ public class StudyCreateRequestDto {
     }
 
     private void initStudyJoins(Study study) {
-        study.join(new StudyJoin(new Member(memberId), study, StudyRole.CREATOR));
+        study.join(new StudyJoin(new Member(memberId), null, study, StudyRole.CREATOR));
     }
 
     private void initStudyBoards(Study study) {

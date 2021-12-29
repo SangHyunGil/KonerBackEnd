@@ -11,4 +11,5 @@ import project.SangHyun.study.study.enums.StudyRole;
 public class StudyInfoDto {
     Long studyId;
     StudyRole studyRole;
+    String content;
 }

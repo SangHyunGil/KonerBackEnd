@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import project.SangHyun.response.domain.MultipleResult;
 import project.SangHyun.response.domain.SingleResult;
 import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
@@ -27,8 +28,9 @@ public class StudyJoinController {
 
     @ApiOperation(value = "스터디 참가 신청", notes = "스터디 참가를 신청한다.")
     @PostMapping("/join/{memberId}")
-    public SingleResult<StudyJoinResponseDto> applyJoin(@PathVariable Long studyId, @PathVariable Long memberId) {
-        return responseService.getSingleResult(studyJoinService.applyJoin(studyId, memberId));
+    public SingleResult<StudyJoinResponseDto> applyJoin(@PathVariable Long studyId, @PathVariable Long memberId,
+                                                        @RequestBody StudyJoinRequestDto requestDto) {
+        return responseService.getSingleResult(studyJoinService.applyJoin(studyId, memberId, requestDto));
     }
 
     @ApiOperation(value = "스터디 참가 수락", notes = "스터디 참가를 수락한다.")

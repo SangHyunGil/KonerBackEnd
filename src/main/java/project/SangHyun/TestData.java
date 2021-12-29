@@ -77,11 +77,11 @@ public class TestData {
 
             studyRepository.save(study);
 
-            StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
+            StudyJoin studyJoin = new StudyJoin(member, null, study, StudyRole.CREATOR);
             studyJoinRepository.save(studyJoin);
 
-            StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.APPLY);
-            studyJoinRepository.save(studyJoin2);
+            StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 지원합니다.", study, StudyRole.APPLY);
+            studyJoinRepository.save(studyJoin);
 
             StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, member, studyBoard1);

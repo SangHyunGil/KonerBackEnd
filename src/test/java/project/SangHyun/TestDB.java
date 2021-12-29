@@ -159,19 +159,19 @@ public class TestDB {
         studyRepository.save(study);
         studyRepository.save(emptyStudy);
 
-        StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
+        StudyJoin studyJoin = new StudyJoin(memberA, null, study, StudyRole.CREATOR);
         studyJoinRepository.save(studyJoin);
 
-        StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.ADMIN);
+        StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 진행합니다.", study, StudyRole.ADMIN);
         studyJoinRepository.save(studyJoin2);
 
-        StudyJoin studyJoin3 = new StudyJoin(memberC, study, StudyRole.MEMBER);
+        StudyJoin studyJoin3 = new StudyJoin(memberC, "빠르게 진행합니다.", study, StudyRole.MEMBER);
         studyJoinRepository.save(studyJoin3);
 
-        StudyJoin studyJoin4 = new StudyJoin(memberD, study, StudyRole.APPLY);
+        StudyJoin studyJoin4 = new StudyJoin(memberD, "빠르게 진행합니다.", study, StudyRole.APPLY);
         studyJoinRepository.save(studyJoin4);
 
-        StudyJoin studyJoin5 = new StudyJoin(memberE, study, StudyRole.MEMBER);
+        StudyJoin studyJoin5 = new StudyJoin(memberE, "빠르게 진행합니다.", study, StudyRole.MEMBER);
         studyJoinRepository.save(studyJoin5);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);

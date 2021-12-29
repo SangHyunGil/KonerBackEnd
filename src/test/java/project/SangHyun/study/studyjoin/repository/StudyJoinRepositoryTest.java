@@ -56,10 +56,10 @@ class StudyJoinRepositoryTest {
 
         studyRepository.save(study);
 
-        StudyJoin studyJoin = new StudyJoin(memberA, study, StudyRole.CREATOR);
+        StudyJoin studyJoin = new StudyJoin(memberA, null, study, StudyRole.CREATOR);
         studyJoinRepository.save(studyJoin);
 
-        StudyJoin studyJoin2 = new StudyJoin(memberB, study, StudyRole.ADMIN);
+        StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 진행합니다.", study, StudyRole.ADMIN);
         studyJoinRepository.save(studyJoin2);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);

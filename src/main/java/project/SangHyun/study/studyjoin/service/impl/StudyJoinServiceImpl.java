@@ -13,6 +13,7 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
@@ -33,9 +34,9 @@ public class StudyJoinServiceImpl implements StudyJoinService {
 
     @Override
     @Transactional
-    public StudyJoinResponseDto applyJoin(Long studyId, Long memberId) {
+    public StudyJoinResponseDto applyJoin(Long studyId, Long memberId, StudyJoinRequestDto requestDto) {
         validateJoinCondition(studyId, memberId);
-        StudyJoin studyJoin = studyJoinRepository.save(makeStudyJoin(studyId, memberId));
+        StudyJoin studyJoin = studyJoinRepository.save(requestDto.toEntity(studyId, memberId));
         return StudyJoinResponseDto.create(studyJoin);
     }
 
@@ -45,10 +46,6 @@ public class StudyJoinServiceImpl implements StudyJoinService {
             throw new AlreadyJoinStudyMember();
         if (study.getHeadCount() <= studyJoinRepository.findStudyJoinCount(studyId))
             throw new ExceedMaximumStudyMember();
-    }
-
-    private StudyJoin makeStudyJoin(Long studyId, Long memberId) {
-        return new StudyJoin(new Member(memberId), new Study(studyId), StudyRole.APPLY);
     }
 
     @Override
