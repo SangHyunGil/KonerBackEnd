@@ -65,14 +65,14 @@ public class BasicFactory {
 
     public static StudyJoin makeTestStudyJoinCreator(Member member, Study study) {
         Long studyJoinId = 1L;
-        StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.CREATOR);
+        StudyJoin studyJoin = new StudyJoin(member, "빠르게 진행합니다.", study, StudyRole.CREATOR);
         ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
         return studyJoin;
     }
 
     public static StudyJoin makeTestStudyJoinApply(Member member, Study study) {
         Long studyJoinId = 1L;
-        StudyJoin studyJoin = new StudyJoin(member, study, StudyRole.APPLY);
+        StudyJoin studyJoin = new StudyJoin(member, "빠르게 진행합니다.", study, StudyRole.APPLY);
         ReflectionTestUtils.setField(studyJoin, "id", studyJoinId);
         return studyJoin;
     }

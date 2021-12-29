@@ -17,10 +17,12 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.service.impl.StudyJoinServiceImpl;
+import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -55,9 +57,10 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findNotStudyMember();
         Study study = testDB.findBackEndStudy();
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
 
         //when
-        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(study.getId(), member.getId());
+        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(study.getId(), member.getId(), requestDto);
         System.out.println("ActualResult = " + ActualResult.getStudyInfos());
 
         //then
@@ -71,9 +74,10 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         Study study = testDB.findBackEndStudy();
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
 
         //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId()));
+        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
     }
 
     @Test
@@ -82,9 +86,10 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findGeneralMember();
         Study study = testDB.findZeroHeadCountStudy();
+        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
 
         //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId()));
+        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
     }
 
     @Test

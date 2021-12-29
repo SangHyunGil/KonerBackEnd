@@ -19,16 +19,14 @@ public class StudyJoin extends EntityDate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "studyjoin_id")
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
+    private String applyContent;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
-
     @Enumerated(EnumType.STRING)
     private StudyRole studyRole;
 
@@ -37,8 +35,9 @@ public class StudyJoin extends EntityDate {
     }
 
     @Builder
-    public StudyJoin(Member member, Study study, StudyRole studyRole) {
+    public StudyJoin(Member member, String applyContent, Study study, StudyRole studyRole) {
         this.member = member;
+        this.applyContent = applyContent;
         this.study = study;
         this.studyRole = studyRole;
     }
