@@ -23,7 +23,6 @@ public class StudyBoard extends EntityDate {
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
 
     public StudyBoard(Long id) {
