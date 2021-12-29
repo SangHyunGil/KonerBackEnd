@@ -37,6 +37,10 @@ public class SignFactory extends BasicFactory {
         return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과", multipartFile);
     }
 
+    public static MemberRegisterRequestDto makeNotValidRequestDto() {
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmx", "테스터6", "컴퓨터공학과", multipartFile);
+    }
+
     public static MemberRegisterRequestDto makeDuplicateEmailRequestDto() {
         return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과", multipartFile);
     }

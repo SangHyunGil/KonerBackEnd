@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
@@ -42,8 +44,10 @@ public class MemberController {
 
     @ApiOperation(value = "회원 정보 수정", notes = "회원에 대한 정보를 수정한다.")
     @PutMapping("/{memberId}")
-    public SingleResult<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId,
-                                                              @Valid @ModelAttribute MemberUpdateRequestDto requestDto) throws IOException {
+    public SingleResult<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId, @Valid @ModelAttribute MemberUpdateRequestDto requestDto,
+                                                              BindingResult bindingResult) throws IOException, BindException {
+        if (bindingResult.hasErrors())
+            throw new BindException(bindingResult);
         return responseService.getSingleResult(memberService.updateMember(memberId, requestDto));
     }
 

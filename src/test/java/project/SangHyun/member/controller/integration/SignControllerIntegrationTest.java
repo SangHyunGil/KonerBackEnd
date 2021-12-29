@@ -72,6 +72,27 @@ class SignControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("회원가입 요구사항에 맞지 않는 요청은 실패한다.")
+    public void register_fail() throws Exception {
+        //given
+        MemberRegisterRequestDto requestDto = SignFactory.makeNotValidRequestDto();
+
+        //when, then
+        mockMvc.perform(multipart("/sign/register")
+                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .param("email", requestDto.getEmail())
+                        .param("password", requestDto.getPassword())
+                        .param("nickname", requestDto.getNickname())
+                        .param("department", requestDto.getDepartment())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
     @DisplayName("중복이메일이 존재해 회원가입이 실패한다.")
     public void register_fail1() throws Exception {
         //given
