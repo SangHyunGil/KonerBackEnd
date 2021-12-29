@@ -23,7 +23,11 @@ public class StudyFindMembersResponseDto {
     @ApiModelProperty(value = "스터디원 권한(PK)")
     private StudyRole studyRole;
 
+    @ApiModelProperty(value = "스터디원 지원 내용")
+    private String applyContent;
+
     public static StudyFindMembersResponseDto create(StudyMembersInfoDto studyMembersInfoDto) {
-        return new StudyFindMembersResponseDto(studyMembersInfoDto.getMemberId(), studyMembersInfoDto.getMemberName(), studyMembersInfoDto.getStudyRole());
+        return new StudyFindMembersResponseDto(studyMembersInfoDto.getMemberId(), studyMembersInfoDto.getMemberName(),
+                studyMembersInfoDto.getStudyRole(), studyMembersInfoDto.getApplyContent());
     }
 }

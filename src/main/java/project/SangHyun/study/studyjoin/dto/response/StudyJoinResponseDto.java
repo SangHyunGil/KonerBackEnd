@@ -25,7 +25,7 @@ public class StudyJoinResponseDto {
     private Long memberId;
 
     public static StudyJoinResponseDto create(StudyJoin studyJoin) {
-        StudyInfoDto studyInfos = new StudyInfoDto(studyJoin.getStudy().getId(), studyJoin.getStudyRole(), studyJoin.getApplyContent());
+        StudyInfoDto studyInfos = new StudyInfoDto(studyJoin.getStudy().getId(), studyJoin.getStudyRole());
         return new StudyJoinResponseDto(studyJoin.getId(), studyInfos, studyJoin.getMember().getId());
     }
 }
