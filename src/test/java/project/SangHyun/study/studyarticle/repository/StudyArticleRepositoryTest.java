@@ -52,7 +52,7 @@ class StudyArticleRepositoryTest {
         Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", null, MemberRole.ROLE_MEMBER);
         memberRepository.save(memberA);
 
-        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, null, study, StudyRole.CREATOR);

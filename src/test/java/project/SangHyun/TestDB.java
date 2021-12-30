@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.MemberNotFoundException;
+import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.study.study.enums.RecruitState;
 import project.SangHyun.study.study.enums.StudyMethod;
@@ -152,9 +152,9 @@ public class TestDB {
         Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberE);
 
-        Study emptyStudy = new Study("임시용", List.of("임시용"), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 0L, "2021-12-25", memberB, new ArrayList<>(), new ArrayList<>());
+        Study emptyStudy = new Study("임시용", List.of("임시용"), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 0L, "2021-12-25", memberB, new ArrayList<>(), new ArrayList<>());
 
-        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 5L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 5L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
 
         studyRepository.save(study);
         studyRepository.save(emptyStudy);

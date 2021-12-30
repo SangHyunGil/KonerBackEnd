@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.StudyArticleNotFoundException;
+import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
@@ -14,7 +14,6 @@ import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponse
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleUpdateResponseDto;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

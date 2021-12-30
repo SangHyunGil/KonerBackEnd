@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.MemberNotFoundException;
+import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
@@ -16,7 +16,7 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.MemberService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.io.IOException;
 import java.util.List;

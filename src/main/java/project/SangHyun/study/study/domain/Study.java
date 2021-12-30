@@ -21,7 +21,6 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Study extends EntityDate {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_id")
@@ -33,6 +32,7 @@ public class Study extends EntityDate {
     private List<String> tags = new ArrayList<>();
     private String content;
     private String profileImgUrl;
+    private String department;
     @Enumerated(EnumType.STRING)
     private StudyState studyState;
     @Enumerated(EnumType.STRING)
@@ -54,11 +54,12 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, List<String> tags, String content, String profileImgUrl, StudyState studyState, RecruitState recruitState, StudyMethod studyMethod, Long headCount, String schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, List<String> tags, String content, String profileImgUrl, String department, StudyState studyState, RecruitState recruitState, StudyMethod studyMethod, Long headCount, String schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
         this.tags = tags;
         this.content = content;
         this.profileImgUrl = profileImgUrl;
+        this.department = department;
         this.studyState = studyState;
         this.recruitState = recruitState;
         this.studyMethod = studyMethod;
@@ -77,6 +78,7 @@ public class Study extends EntityDate {
         this.studyState = requestDto.getStudyState();
         this.recruitState = requestDto.getRecruitState();
         this.headCount = requestDto.getHeadCount();
+        this.department = requestDto.getDepartment();
         this.profileImgUrl = profileImgUrl;
         return this;
     }
@@ -89,9 +91,5 @@ public class Study extends EntityDate {
     public void addBoard(StudyBoard studyBoard) {
         this.studyBoards.add(studyBoard);
         studyBoard.setStudy(this);
-    }
-
-    public void deleteStudyJoin(StudyJoin studyJoin) {
-        this.studyJoins.remove(studyJoin);
     }
 }

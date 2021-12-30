@@ -8,7 +8,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
-import project.SangHyun.advice.exception.InvalidWebSocketConnection;
+import project.SangHyun.common.advice.exception.InvalidWebSocketConnection;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 
 import java.util.Objects;

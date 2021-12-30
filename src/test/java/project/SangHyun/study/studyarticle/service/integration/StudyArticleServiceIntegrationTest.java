@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.advice.exception.StudyArticleNotFoundException;
+import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;

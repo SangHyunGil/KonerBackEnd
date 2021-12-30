@@ -1,6 +1,5 @@
 package project.SangHyun.study.study.controller.unit;
 
-import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,14 +17,14 @@ import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.response.domain.MultipleResult;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.controller.StudyController;
-import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.util.ArrayList;
 import java.util.List;

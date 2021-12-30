@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.MemberNotFoundException;
+import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 

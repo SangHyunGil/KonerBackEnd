@@ -51,7 +51,7 @@ class StudyJoinRepositoryTest {
         Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", "컴공", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberB);
 
-        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+        Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
 
         studyRepository.save(study);

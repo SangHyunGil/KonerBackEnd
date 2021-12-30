@@ -2,9 +2,9 @@ package project.SangHyun.study.studycomment.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.response.domain.MultipleResult;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;

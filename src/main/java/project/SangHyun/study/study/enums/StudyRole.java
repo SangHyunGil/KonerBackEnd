@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StudyRole {
-    APPLY("STUDY_APPLY"), MEMBER("STUDY_MEMBER"), CREATOR("STUDY_CREATOR"), ADMIN("STUDY_ADMIN");
+    APPLY, MEMBER, CREATOR, ADMIN;
 
-    private String desc;
 }

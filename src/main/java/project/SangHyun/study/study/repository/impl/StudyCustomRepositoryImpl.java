@@ -3,7 +3,6 @@ package project.SangHyun.study.study.repository.impl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import project.SangHyun.study.study.domain.QStudy;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyCustomRepository;
 import java.util.List;
@@ -15,7 +14,6 @@ import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
 @Slf4j
 @RequiredArgsConstructor
 public class StudyCustomRepositoryImpl implements StudyCustomRepository {
-
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override

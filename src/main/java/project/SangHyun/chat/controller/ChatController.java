@@ -10,11 +10,11 @@ import project.SangHyun.chat.dto.response.ChatFindResponseDto;
 import project.SangHyun.chat.dto.response.ChatMessageResponseDto;
 import project.SangHyun.chat.dto.response.ChatRoomCreateResponseDto;
 import project.SangHyun.chat.dto.response.ChatRoomFindResponseDto;
-import project.SangHyun.response.domain.MultipleResult;
-import project.SangHyun.response.domain.SingleResult;
+import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.chat.service.ChatRoomService;
 import project.SangHyun.chat.service.ChatService;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.chat.dto.request.ChatMessageRequestDto;
 import project.SangHyun.chat.dto.request.ChatRoomCreateRequestDto;
 

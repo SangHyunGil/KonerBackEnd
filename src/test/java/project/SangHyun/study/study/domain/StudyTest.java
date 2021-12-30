@@ -13,7 +13,7 @@ import project.SangHyun.study.study.enums.StudyMethod;
 import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,11 +31,11 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", member, studyJoins, studyBoards);
         FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
         MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
-        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", List.of("프론트엔드"), "음..", "2021-12-25", 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
+        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", List.of("프론트엔드"), "음..", "2021-12-25", "컴퓨터공학과", 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when
         Study ActualResult = study.update(requestDto, fileStoreHelper.storeFile(multipartFile));
@@ -51,7 +51,7 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", member, studyJoins, studyBoards);
         StudyJoin studyJoin = new StudyJoin(1L);
 
@@ -69,7 +69,7 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", member, studyJoins, studyBoards);
 
         StudyBoard studyBoard = new StudyBoard(1L);

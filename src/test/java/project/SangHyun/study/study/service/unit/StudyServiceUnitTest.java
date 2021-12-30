@@ -17,7 +17,7 @@ import project.SangHyun.study.study.dto.response.*;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.impl.StudyServiceImpl;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.util.ArrayList;
 import java.util.List;

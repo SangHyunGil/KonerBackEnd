@@ -1,6 +1,5 @@
 package project.SangHyun.member.controller.unit;
 
-import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,8 +14,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.service.MemberService;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.MemberDeleteResponseDto;

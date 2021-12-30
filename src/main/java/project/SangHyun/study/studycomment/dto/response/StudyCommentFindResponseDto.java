@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.helper.HierarchyHelper;
+import project.SangHyun.common.helper.HierarchyHelper;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 
 import java.util.*;

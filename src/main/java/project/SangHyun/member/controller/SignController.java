@@ -5,21 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 
 import javax.validation.Valid;
-import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 
 @Slf4j
