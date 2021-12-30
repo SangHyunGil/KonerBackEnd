@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
+import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
@@ -73,10 +74,11 @@ class StudyServiceIntegrationTest {
         //given
 
         //when
-        List<StudyFindResponseDto> ActualResult = studyService.findAllStudies();
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 6);
 
         //then
-        Assertions.assertEquals(2, ActualResult.size());
+        Assertions.assertEquals(2, ActualResult.getNumberOfElements());
+        Assertions.assertEquals(2, ActualResult.getData().size());
     }
 
     @Test

@@ -29,6 +29,7 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,8 +67,13 @@ class StudyControllerIntegrationTest {
         //given
 
         //when, then
-        mockMvc.perform(get("/study"))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/study")
+                        .param("studyId", String.valueOf(Long.MAX_VALUE))
+                        .param("department", "컴퓨터공학과")
+                        .param("size", "6"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.numberOfElements").value(2))
+                .andExpect(jsonPath("$.data.hasNext").value(false));;
     }
 
     @Test

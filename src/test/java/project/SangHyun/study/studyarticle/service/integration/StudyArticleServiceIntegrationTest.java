@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
+import project.SangHyun.common.dto.PageResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
@@ -61,12 +62,12 @@ class StudyArticleServiceIntegrationTest {
         StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
-        StudyArticleFindResponseDto ExpectResult = studyArticleService.findAllArticles(studyBoard.getId()).stream()
+        StudyArticle ExpectResult = studyArticleRepository.findAll().stream()
                 .filter(studyArticle -> studyArticle.getTitle().equals(requestDto.getTitle()))
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
 
-        Assertions.assertEquals(ExpectResult.getArticleId(), ActualResult.getArticleId());;
+        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getArticleId());;
     }
 
     @Test
@@ -76,10 +77,12 @@ class StudyArticleServiceIntegrationTest {
         StudyBoard studyBoard = testDB.findAnnounceBoard();
 
         //when
-        List<StudyArticleFindResponseDto> ActualResult = studyArticleService.findAllArticles(studyBoard.getId());
+        PageResponseDto ActualResult = studyArticleService.findAllArticles(studyBoard.getId(), 0, 10);
 
         //then
-        Assertions.assertEquals(3, ActualResult.size());;
+        Assertions.assertEquals(3, ActualResult.getNumberOfElements());
+        Assertions.assertEquals(1, ActualResult.getTotalPages());
+        Assertions.assertEquals(false, ActualResult.isHasNext());
     }
 
     @Test
@@ -104,14 +107,13 @@ class StudyArticleServiceIntegrationTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 삭제한다.")
     public void deleteArticle() throws Exception {
         //given
-        StudyBoard studyBoard = testDB.findAnnounceBoard();
         StudyArticle studyArticle = testDB.findAnnounceArticle();
 
         //when
         studyArticleService.deleteArticle(studyArticle.getId());
 
         //then
-        Assertions.assertEquals(2, studyArticleService.findAllArticles(studyBoard.getId()).size());
+        Assertions.assertEquals(2, studyRepository.findAll().size());
     }
 
     @Test

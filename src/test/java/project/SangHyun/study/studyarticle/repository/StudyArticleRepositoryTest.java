@@ -10,8 +10,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
@@ -79,8 +77,7 @@ class StudyArticleRepositoryTest {
 
         //when
         Study study = studyRepository.findStudyByTitle("백엔드 모집").get(0);
-        StudyBoard studyBoard = studyBoardRepository.findBoards(study.getId()).get(0);
-        List<StudyArticle> allArticles = studyArticleRepository.findAllArticles(studyBoard.getId());
+        List<StudyArticle> allArticles = studyArticleRepository.findAll();
 
         //then
         Assertions.assertEquals(3, allArticles.size());

@@ -8,13 +8,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.member.domain.Member;
+import project.SangHyun.common.dto.PageResponseDto;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyarticle.controller.StudyArticleController;
@@ -34,7 +38,6 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,6 +49,7 @@ public class StudyArticleControllerUnitTest {
     Study study;
     StudyBoard studyBoard;
     StudyArticle studyArticle;
+    List<StudyArticle> studyArticles;
 
     @InjectMocks
     StudyArticleController studyArticleController;
@@ -64,21 +68,25 @@ public class StudyArticleControllerUnitTest {
         studyBoard = StudyArticleFactory.makeTestStudyBoard(study);
         study.addBoard(studyBoard);
         studyArticle = StudyArticleFactory.makeTestStudyArticle(member, studyBoard);
+        studyArticles = List.of(this.studyArticle);
     }
 
     @Test
     @DisplayName("스터디의 한 카테고리에 해당하는 모든 게시글을 로드한다.")
     public void loadArticles() throws Exception {
         //given
-        List<StudyArticleFindResponseDto> responseDtos = StudyArticleFactory.makeFindAllResponseDto(studyArticle);
-        MultipleResult<StudyArticleFindResponseDto> ExpectResult = StudyArticleFactory.makeMultipleResult(responseDtos);
+        Page<StudyArticle> studyArticlesPage = new PageImpl<>(this.studyArticles, PageRequest.of(0, 10), studyArticles.size());
+        PageResponseDto responseDto = StudyArticleFactory.makeFindAllResponseDto(studyArticlesPage);
+        SingleResult<PageResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyArticleService.findAllArticles(studyBoard.getId())).willReturn(responseDtos);
-        given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
+        given(studyArticleService.findAllArticles(studyBoard.getId(), 0, 10)).willReturn(responseDto);
+        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
+                        .param("page", "0")
+                        .param("size", "10")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }

@@ -97,8 +97,7 @@ class StudyCommentRepositoryTest {
     public void findAllByStudyArticleId() throws Exception {
         //given
         Study study = studyRepository.findStudyByTitle("백엔드 모집").get(0);
-        StudyBoard studyBoard = studyBoardRepository.findBoards(study.getId()).get(0);
-        StudyArticle studyArticle = studyArticleRepository.findAllArticles(studyBoard.getId()).get(0);
+        StudyArticle studyArticle = studyArticleRepository.findAll().get(0);
 
         //when
         List<StudyComment> studyComments = studyCommentRepository.findAllByStudyArticleId(studyArticle.getId());

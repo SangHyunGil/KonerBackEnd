@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 import project.SangHyun.study.study.domain.Study;
 
 public interface StudyRepository extends JpaRepository<Study, Long>, StudyCustomRepository {
-    @Query("select s from Study s left join fetch s.member where s.id < :studyId order by s.id desc")
-    Slice<Study> findAllOrderByStudyIdDesc(@Param("studyId") Long lastStudyId, Pageable pageable);
+    @Query("select s from Study s " +
+            "left join fetch s.member " +
+            "where s.department = :department and s.id < :studyId " +
+            "order by s.id desc")
+    Slice<Study> findAllOrderByStudyIdDesc(@Param("studyId") Long lastStudyId,
+                                           @Param("department") String department, Pageable pageable);
 }

@@ -75,6 +75,8 @@ class StudyArticleControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
+                        .param("page", String.valueOf(0))
+                        .param("size", String.valueOf(10))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andDo(print())
                 .andExpect(status().isOk());

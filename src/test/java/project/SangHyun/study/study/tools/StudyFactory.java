@@ -1,9 +1,11 @@
 package project.SangHyun.study.study.tools;
 
+import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
+import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
@@ -52,10 +54,8 @@ public class StudyFactory extends BasicFactory {
         return StudyCreateResponseDto.create(study);
     }
 
-    public static List<StudyFindResponseDto> makeFindAllResponseDto(Study ... studies) {
-        return Arrays.stream(studies)
-                    .map(study -> StudyFindResponseDto.create(study))
-                    .collect(Collectors.toList());
+    public static SliceResponseDto makeFindAllResponseDto(Slice<Study> study) {
+        return SliceResponseDto.create(study, StudyFindResponseDto::create);
     }
 
     public static StudyUpdateResponseDto makeUpdateResponseDto(Study study, String title, String content) {

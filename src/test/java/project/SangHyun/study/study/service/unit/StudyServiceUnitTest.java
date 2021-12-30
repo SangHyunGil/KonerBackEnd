@@ -9,6 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
@@ -69,17 +74,18 @@ class StudyServiceUnitTest {
     @DisplayName("모든 스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        List<StudyFindResponseDto> ExpectResult = StudyFactory.makeFindAllResponseDto(study);
+        Slice slice = new SliceImpl(List.of(study), Pageable.ofSize(6), false);
+        SliceResponseDto ExpectResult = StudyFactory.makeFindAllResponseDto(slice);
 
         //mocking
-        given(studyRepository.findAll()).willReturn(List.of(study));
+        given(studyRepository.findAllOrderByStudyIdDesc(Long.MAX_VALUE, "컴퓨터공학과", Pageable.ofSize(6))).willReturn(slice);
 
-        //when
-        List<StudyFindResponseDto> ActualResult = studyService.findAllStudies();
+        //
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 6);
 
         //then
-        Assertions.assertEquals(ExpectResult.size(), ActualResult.size());
-        Assertions.assertEquals(ExpectResult.get(0).getStudyId(), ExpectResult.get(0).getStudyId());
+        Assertions.assertEquals(ExpectResult.getNumberOfElements(), ActualResult.getNumberOfElements());
+        Assertions.assertEquals(ExpectResult.getData(), ActualResult.getData());
     }
 
     @Test

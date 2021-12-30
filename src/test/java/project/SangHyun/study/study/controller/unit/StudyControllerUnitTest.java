@@ -7,31 +7,33 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.controller.StudyController;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
+import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
 import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
+import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.common.response.domain.MultipleResult;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
-import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
-import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
-import project.SangHyun.study.study.controller.StudyController;
-import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -66,17 +68,22 @@ class StudyControllerUnitTest {
     @DisplayName("스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        List<StudyFindResponseDto> responseDtos = StudyFactory.makeFindAllResponseDto(study);
-        MultipleResult<StudyFindResponseDto> ExpectResult = StudyFactory.makeMultipleResult(responseDtos);
+        Slice slice = new SliceImpl(List.of(study), Pageable.ofSize(6), false);
+        SliceResponseDto responseDto = StudyFactory.makeFindAllResponseDto(slice);
+        SingleResult<SliceResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyService.findAllStudies()).willReturn(responseDtos);
-        given(responseService.getMultipleResult(responseDtos)).willReturn(ExpectResult);
+        given(studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 6)).willReturn(responseDto);
+        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study"))
+        mockMvc.perform(get("/study")
+                        .param("studyId", String.valueOf(Long.MAX_VALUE))
+                        .param("department", "컴퓨터공학과")
+                        .param("size", "6"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.length()").value(1));
+                .andExpect(jsonPath("$.data.numberOfElements").value(1))
+                .andExpect(jsonPath("$.data.hasNext").value(false));
     }
 
     @Test

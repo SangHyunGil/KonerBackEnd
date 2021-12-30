@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.dto.PageResponseDto;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
@@ -28,8 +28,9 @@ public class StudyArticleController {
 
     @ApiOperation(value = "스터디 게시글 모두 찾기", notes = "스터디에 포함된 게시글을 모두 찾는다.")
     @GetMapping
-    public MultipleResult<StudyArticleFindResponseDto> findStudyArticles(@PathVariable Long studyId, @PathVariable Long boardId) {
-        return responseService.getMultipleResult(studyArticleService.findAllArticles(boardId));
+    public SingleResult<PageResponseDto> findStudyArticles(@PathVariable Long studyId, @PathVariable Long boardId,
+                                                           @RequestParam Integer page, @RequestParam Integer size) {
+        return responseService.getSingleResult(studyArticleService.findAllArticles(boardId, page, size));
     }
 
     @ApiOperation(value = "스터디 게시글 생성", notes = "스터디에 포함된 게시글을 생성한다.")

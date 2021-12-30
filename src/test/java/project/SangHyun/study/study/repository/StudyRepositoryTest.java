@@ -50,6 +50,12 @@ class StudyRepositoryTest {
                     StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
             studyRepository.save(study);
         }
+        for (int i = 0; i < 4; i++) {
+            Study study = new Study("역학 스터디 모집"+i, List.of("역학"), "역학 스터디 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "기계공학과",
+                    StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+            studyRepository.save(study);
+        }
+
     }
 
     @Test
@@ -77,14 +83,14 @@ class StudyRepositoryTest {
     }
 
     @Test
-    @DisplayName("6개씩 Slice로 조회하기에 뒤에 4개가 남아있다.")
+    @DisplayName("컴퓨터공학과 스터디를 6개씩 Slice로 조회하기에 뒤에 4개가 남아있다.")
     public void findAllStudyBySlice() throws Exception {
         //given
         Long lastStudyId = Long.MAX_VALUE;
         Pageable pageable = Pageable.ofSize(6);
 
         //when
-        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, pageable);
+        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,"컴퓨터공학과", pageable);
 
         //then
         Assertions.assertEquals(6, studies.getNumberOfElements());
@@ -92,15 +98,29 @@ class StudyRepositoryTest {
     }
 
     @Test
-    @DisplayName("6개씩 Slice로 조회하지만 4개만 남아있기에 4개가 조회되고 뒤에 남아있지 않다.")
+    @DisplayName("컴퓨터공학과 스터디를 6개씩 Slice로 조회하지만 4개만 남아있기에 4개가 조회되고 뒤에 남아있지 않다.")
     public void findAllStudyBySlice2() throws Exception {
         //given
         Long lastStudyId = studyRepository.findStudyByTitle("백엔드 모집4").get(0).getId();
         Pageable pageable = Pageable.ofSize(6);
-        persistContextClear();
 
         //when
-        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, pageable);
+        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,"컴퓨터공학과", pageable);
+
+        //then
+        Assertions.assertEquals(4, studies.getNumberOfElements());
+        Assertions.assertEquals(false, studies.hasNext());
+    }
+
+    @Test
+    @DisplayName("기계공학과 스터디를 6개씩 Slice로 조회하지만 4개만 남아있기에 4개가 조회되고 뒤에 남아있지 않다.")
+    public void findAllStudyBySlice3() throws Exception {
+        //given
+        Long lastStudyId = Long.MAX_VALUE;
+        Pageable pageable = Pageable.ofSize(6);
+
+        //when
+        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,"기계공학과", pageable);
 
         //then
         Assertions.assertEquals(4, studies.getNumberOfElements());
