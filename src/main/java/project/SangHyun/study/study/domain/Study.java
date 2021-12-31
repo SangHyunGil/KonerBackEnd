@@ -4,17 +4,12 @@ import lombok.*;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyMethod;
-import project.SangHyun.study.study.enums.StudyState;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -26,27 +21,24 @@ public class Study extends EntityDate {
     @Column(name = "study_id")
     private Long id;
     private String title;
+    private String content;
+    private String profileImgUrl;
+    private String department;
+    private Long headCount;
+    @Embedded
+    private StudyOptions studyOptions;
+    @Embedded
+    private Schedule schedule;
     @ElementCollection
     @CollectionTable(name = "STUDY_TAG", joinColumns = @JoinColumn(name = "study_id"))
     @Column(name = "TAG_NAME")
     private List<String> tags = new ArrayList<>();
-    private String content;
-    private String profileImgUrl;
-    private String department;
-    @Enumerated(EnumType.STRING)
-    private StudyState studyState;
-    @Enumerated(EnumType.STRING)
-    private RecruitState recruitState;
-    @Enumerated(EnumType.STRING)
-    private StudyMethod studyMethod;
-    private Long headCount;
-    private String schedule;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyJoin> studyJoins = new ArrayList<>();
-    @OneToMany(mappedBy = "study", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyBoard> studyBoards = new ArrayList<>();
 
     public Study(Long id) {
@@ -54,15 +46,13 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, List<String> tags, String content, String profileImgUrl, String department, StudyState studyState, RecruitState recruitState, StudyMethod studyMethod, Long headCount, String schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, List<String> tags, String content, String profileImgUrl, String department, StudyOptions studyOptions, Long headCount, Schedule schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = title;
         this.tags = tags;
         this.content = content;
         this.profileImgUrl = profileImgUrl;
         this.department = department;
-        this.studyState = studyState;
-        this.recruitState = recruitState;
-        this.studyMethod = studyMethod;
+        this.studyOptions = studyOptions;
         this.headCount = headCount;
         this.schedule = schedule;
         this.member = member;
@@ -74,9 +64,8 @@ public class Study extends EntityDate {
         this.title = requestDto.getTitle();
         this.tags = requestDto.getTags();
         this.content = requestDto.getContent();
-        this.schedule = requestDto.getSchedule();
-        this.studyState = requestDto.getStudyState();
-        this.recruitState = requestDto.getRecruitState();
+        this.schedule = new Schedule(requestDto.getStartDate(), requestDto.getEndDate());
+        this.studyOptions = new StudyOptions(requestDto.getStudyState(), requestDto.getRecruitState(), requestDto.getStudyMethod());
         this.headCount = requestDto.getHeadCount();
         this.department = requestDto.getDepartment();
         this.profileImgUrl = profileImgUrl;

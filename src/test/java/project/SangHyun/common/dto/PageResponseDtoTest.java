@@ -11,7 +11,6 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponseDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class PageResponseDtoTest {
@@ -29,24 +28,5 @@ class PageResponseDtoTest {
         Assertions.assertEquals(1, responseDto.getTotalPages());
         Assertions.assertEquals(1, responseDto.getNumberOfElements());
         Assertions.assertEquals(false, responseDto.isHasNext());
-    }
-
-    @Test
-    @DisplayName("페이징 엔티티에 대해 Dto를 구성한다.")
-    public void makeCreate2() throws Exception {
-        //given
-        List<StudyArticle> studyArticles = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
-            studyArticles.add(new StudyArticle("테스트", "테스트", 0L, new Member(1L), new StudyBoard(1L)));
-        }
-        Page<StudyArticle> pageStudyArticle = new PageImpl<>(studyArticles, PageRequest.of(0, 10), studyArticles.size());
-
-        //when
-        PageResponseDto responseDto = PageResponseDto.create(pageStudyArticle, StudyArticleFindResponseDto::create);
-
-        //then
-        Assertions.assertEquals(2, responseDto.getTotalPages());
-        Assertions.assertEquals(11, responseDto.getNumberOfElements());
-        Assertions.assertEquals(true, responseDto.isHasNext());
     }
 }

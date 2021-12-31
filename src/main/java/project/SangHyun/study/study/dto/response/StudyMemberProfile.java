@@ -3,7 +3,7 @@ package project.SangHyun.study.study.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.study.study.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyRole;
 
 @Data
 @NoArgsConstructor

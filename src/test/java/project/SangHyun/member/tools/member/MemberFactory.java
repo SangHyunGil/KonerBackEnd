@@ -3,7 +3,6 @@ package project.SangHyun.member.tools.member;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.config.security.member.MemberDetails;
@@ -13,7 +12,7 @@ import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.member.enums.MemberRole;
+import project.SangHyun.member.domain.MemberRole;
 
 import java.io.FileInputStream;
 import java.io.IOException;

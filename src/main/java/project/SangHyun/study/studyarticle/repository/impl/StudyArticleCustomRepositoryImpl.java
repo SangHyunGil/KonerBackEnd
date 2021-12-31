@@ -25,8 +25,9 @@ public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepos
         List<StudyArticle> studyArticles = jpaQueryFactory
                 .selectFrom(studyArticle)
                 .innerJoin(studyArticle.member, member).fetchJoin()
-                .innerJoin(studyArticle.studyBoard, studyBoard).fetchJoin()
                 .where(studyArticle.studyBoard.id.eq(boardId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<StudyArticle> countQuery = jpaQueryFactory

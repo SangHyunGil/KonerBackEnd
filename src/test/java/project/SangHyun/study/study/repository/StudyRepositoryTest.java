@@ -13,12 +13,14 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.enums.MemberRole;
+import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.study.domain.Schedule;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyMethod;
-import project.SangHyun.study.study.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyOptions;
+import project.SangHyun.study.study.domain.enums.RecruitState;
+import project.SangHyun.study.study.domain.enums.StudyMethod;
+import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 
 import javax.persistence.EntityManager;
@@ -47,12 +49,12 @@ class StudyRepositoryTest {
 
         for (int i = 0; i < 10; i++) {
             Study study = new Study("백엔드 모집"+i, List.of("백엔드", "스프링", "JPA"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
-                    StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+                    new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
             studyRepository.save(study);
         }
         for (int i = 0; i < 4; i++) {
             Study study = new Study("역학 스터디 모집"+i, List.of("역학"), "역학 스터디 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "기계공학과",
-                    StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+                    new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
             studyRepository.save(study);
         }
 

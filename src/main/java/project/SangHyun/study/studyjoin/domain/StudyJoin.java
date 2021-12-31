@@ -6,7 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyRole;
 
 import javax.persistence.*;
 

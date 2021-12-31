@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 
 @Data

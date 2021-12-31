@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.enums.MemberRole;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.common.helper.FileStoreHelper;
 

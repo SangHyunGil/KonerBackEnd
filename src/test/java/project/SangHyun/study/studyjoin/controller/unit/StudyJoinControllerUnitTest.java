@@ -16,7 +16,7 @@ import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyjoin.controller.StudyJoinController;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;

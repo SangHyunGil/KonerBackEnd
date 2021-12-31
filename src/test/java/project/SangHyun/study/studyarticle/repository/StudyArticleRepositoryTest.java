@@ -8,16 +8,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.enums.MemberRole;
+import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.study.domain.Schedule;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyMethod;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyOptions;
+import project.SangHyun.study.study.domain.enums.RecruitState;
+import project.SangHyun.study.study.domain.enums.StudyMethod;
+import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
@@ -33,6 +37,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class StudyArticleRepositoryTest {
+    StudyBoard studyBoard1;
 
     @Autowired
     MemberRepository memberRepository;
@@ -51,12 +56,12 @@ class StudyArticleRepositoryTest {
         memberRepository.save(memberA);
 
         Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
-                StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", memberA, new ArrayList<>(), new ArrayList<>());
+                new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE),  2L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
 
         StudyJoin studyJoin = new StudyJoin(memberA, null, study, StudyRole.CREATOR);
         study.join(studyJoin);
 
-        StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
+        studyBoard1 = new StudyBoard("공지사항", study);
         study.addBoard(studyBoard1);
 
         studyRepository.save(study);
@@ -68,6 +73,11 @@ class StudyArticleRepositoryTest {
         studyArticleRepository.save(studyArticle1);
         studyArticleRepository.save(studyArticle2);
         studyArticleRepository.save(studyArticle3);
+
+        for (int i = 0; i < 10; i++) {
+            StudyArticle studyArticleTest = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
+            studyArticleRepository.save(studyArticleTest);
+        }
     }
 
     @Test
@@ -80,7 +90,7 @@ class StudyArticleRepositoryTest {
         List<StudyArticle> allArticles = studyArticleRepository.findAll();
 
         //then
-        Assertions.assertEquals(3, allArticles.size());
+        Assertions.assertEquals(13, allArticles.size());
     }
 
     @Test
@@ -93,5 +103,33 @@ class StudyArticleRepositoryTest {
 
         //then
         Assertions.assertEquals("공지사항 테스트 글", studyArticle.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("13개의 게시글이 존재하므로 첫 번째 페이지를 로드하면 게시글을 10개 불러온다.")
+    public void findAllOrderByStudyArticleIdDesc() throws Exception {
+        //given
+
+        //when
+        Page<StudyArticle> studyArticles = studyArticleRepository.findAllOrderByStudyArticleIdDesc(studyBoard1.getId(), PageRequest.of(0, 10));
+
+        //then
+        Assertions.assertEquals(2, studyArticles.getTotalPages());
+        Assertions.assertEquals(10, studyArticles.getNumberOfElements());
+        Assertions.assertEquals(true,studyArticles.hasNext());
+    }
+
+    @Test
+    @DisplayName("13개의 게시글이 존재하므로 두 번째 페이지를 로드하면 게시글을 2개 불러온다.")
+    public void findAllOrderByStudyArticleIdDesc2() throws Exception {
+        //given
+
+        //when
+        Page<StudyArticle> studyArticles = studyArticleRepository.findAllOrderByStudyArticleIdDesc(studyBoard1.getId(), PageRequest.of(1, 10));
+
+        //then
+        Assertions.assertEquals(2, studyArticles.getTotalPages());
+        Assertions.assertEquals(3, studyArticles.getNumberOfElements());
+        Assertions.assertEquals(false, studyArticles.hasNext());
     }
 }
