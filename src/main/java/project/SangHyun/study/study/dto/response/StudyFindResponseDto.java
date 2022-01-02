@@ -46,6 +46,9 @@ public class StudyFindResponseDto {
     @ApiModelProperty(value = "스터디 정원수")
     private Long headCount;
 
+    @ApiModelProperty(value = "프로필 이미지", notes = "프로필 이미지를 업로드해주세요.", required = true, example = "")
+    private String profileImg;
+
     @ApiModelProperty(value = "스터디 참여인원들")
     private List<StudyMemberProfile> studyMembers;
 
@@ -66,7 +69,7 @@ public class StudyFindResponseDto {
         return new StudyFindResponseDto(study.getId(),
                 new StudyMemberProfile(study.getMember().getNickname(), StudyRole.CREATOR, study.getMember().getProfileImgUrl()),
                 study.getTitle(), study.getTags().getTagNames(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
-                (long) studyMembers.size(), study.getHeadCount(), studyMembers, study.getStudyOptions().getStudyMethod(),
+                (long) studyMembers.size(), study.getHeadCount(), study.getProfileImgUrl(), studyMembers, study.getStudyOptions().getStudyMethod(),
                 study.getStudyOptions().getStudyState(), study.getStudyOptions().getRecruitState());
     }
 }
