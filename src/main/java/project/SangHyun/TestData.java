@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.study.domain.Schedule;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.StudyOptions;
+import project.SangHyun.study.study.domain.*;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyRole;
@@ -67,7 +65,7 @@ public class TestData {
             Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", "컴공", "/defaultImg.png", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberB);
 
-            Study study = new Study("백엔드 모집", List.of("백엔드"), "백엔드 모집합니다.", filePath+"\\defaultImg2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"), new Tag("스프링"), new Tag("JPA"))), "백엔드 모집합니다.", filePath+"\\defaultImg2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
 
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);

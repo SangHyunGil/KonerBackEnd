@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
@@ -34,6 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
+@Rollback(value = false)
 class StudyServiceIntegrationTest {
     @Autowired
     StudyServiceImpl studyService;
@@ -51,6 +53,7 @@ class StudyServiceIntegrationTest {
     @BeforeEach
     void beforeEach() {
         testDB.init();
+        persistContextClear();
     }
 
     @Test
@@ -98,8 +101,9 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
+
         Study study = testDB.findBackEndStudy();
-        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", List.of("프론트 엔드"));
+        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", List.of("프론트엔드"));
 
         //when
         StudyUpdateResponseDto ActualResult = studyService.updateStudy(study.getId(), updateRequestDto);
@@ -120,5 +124,10 @@ class StudyServiceIntegrationTest {
         //then
         Assertions.assertEquals("백엔드 모집", ActualResult.getTitle());
         Assertions.assertEquals(1, studyRepository.findAll().size());
+    }
+
+    private void persistContextClear() {
+        em.flush();
+        em.clear();
     }
 }

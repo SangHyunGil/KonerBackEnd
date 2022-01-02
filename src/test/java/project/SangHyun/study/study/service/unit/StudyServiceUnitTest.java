@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import project.SangHyun.common.dto.SliceResponseDto;
-import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
@@ -119,7 +118,7 @@ class StudyServiceUnitTest {
 
         //then
         Assertions.assertEquals("테스트 스터디 변경", ActualResult.getTitle());
-        Assertions.assertEquals("프론트엔드", ActualResult.getTopic().get(0));
+        Assertions.assertEquals("프론트엔드", ActualResult.getTags().get(0));
     }
 
     @Test

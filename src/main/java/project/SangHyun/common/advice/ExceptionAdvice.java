@@ -186,4 +186,16 @@ public class ExceptionAdvice {
     protected Result handleBindException(BindException e) {
         return responseService.getFailureResult(-126, e.getBindingResult().getFieldError().getDefaultMessage());
     }
+
+    @ExceptionHandler(InCorrectTagNameException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result InCorrectTagNameException(BindException e) {
+        return responseService.getFailureResult(-127, "잘못된 태그 이름입니다.");
+    }
+
+    @ExceptionHandler(DuplicateTagsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result DuplicateTagsException(BindException e) {
+        return responseService.getFailureResult(-127, "중복된 태그가 존재합니다.");
+    }
 }

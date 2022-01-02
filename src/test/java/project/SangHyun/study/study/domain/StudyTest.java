@@ -31,7 +31,7 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
+        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
         FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
         MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
@@ -51,7 +51,7 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
+        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
         StudyJoin studyJoin = new StudyJoin(1L);
 
@@ -69,10 +69,10 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", List.of("백엔드"), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
+        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
                 new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
-
         StudyBoard studyBoard = new StudyBoard(1L);
+
         //when
         study.addBoard(studyBoard);
 

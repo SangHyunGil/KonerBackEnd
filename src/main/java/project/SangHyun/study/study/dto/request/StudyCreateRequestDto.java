@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.Schedule;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.StudyOptions;
+import project.SangHyun.study.study.domain.*;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyRole;
@@ -21,6 +19,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -66,8 +65,8 @@ public class StudyCreateRequestDto {
     public Study toEntity(String profileImg) {
         Study study = Study.builder()
                 .title(title)
-                .tags(tags == null ? new ArrayList<>() : tags)
                 .content(content)
+                .tags(new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList())))
                 .schedule(new Schedule(startDate, endDate))
                 .studyOptions(new StudyOptions(studyState, recruitState, studyMethod))
                 .member(new Member(memberId))

@@ -11,6 +11,7 @@ import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyState;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +28,7 @@ public class StudyUpdateResponseDto {
     private String title;
 
     @ApiModelProperty(value = "스터디 주제")
-    private List<String> topic;
+    private List<String> tags;
 
     @ApiModelProperty(value = "스터디 내용")
     private String content;
@@ -52,7 +53,7 @@ public class StudyUpdateResponseDto {
 
     public static StudyUpdateResponseDto create(Study study) {
         return new StudyUpdateResponseDto(study.getId(), study.getMember().getId(),
-                study.getTitle(), study.getTags(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
+                study.getTitle(), study.getTags().getTagNames(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
                 study.getHeadCount(), study.getStudyOptions().getStudyMethod(), study.getStudyOptions().getStudyState(), study.getStudyOptions().getRecruitState());
     }
 }

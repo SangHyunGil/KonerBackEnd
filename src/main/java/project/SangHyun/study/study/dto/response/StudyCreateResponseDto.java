@@ -12,6 +12,7 @@ import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyState;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -56,7 +57,7 @@ public class StudyCreateResponseDto {
 
     public static StudyCreateResponseDto create(Study study) {
         return new StudyCreateResponseDto(study.getId(), study.getMember().getId(),
-                study.getTitle(), study.getTags(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
+                study.getTitle(), study.getTags().getTagNames(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
                 study.getHeadCount(),  study.getProfileImgUrl(), study.getStudyOptions().getStudyMethod(), study.getStudyOptions().getStudyState(), study.getStudyOptions().getRecruitState());
     }
 }
