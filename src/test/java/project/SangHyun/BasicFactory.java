@@ -2,15 +2,14 @@ package project.SangHyun;
 
 import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.enums.MemberRole;
-import project.SangHyun.response.domain.MultipleResult;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.enums.RecruitState;
-import project.SangHyun.study.study.enums.StudyMethod;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.study.enums.StudyState;
+import project.SangHyun.member.domain.MemberRole;
+import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.study.study.domain.*;
+import project.SangHyun.study.study.domain.enums.RecruitState;
+import project.SangHyun.study.study.domain.enums.StudyMethod;
+import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
@@ -56,9 +55,9 @@ public class BasicFactory {
 
     public static Study makeTestStudy(Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         Long studyId = 1L;
-        Study study = new Study("프론트엔드 스터디", List.of("프론트엔드"),null,
-                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyState.STUDYING,
-                RecruitState.PROCEED, StudyMethod.FACE, 2L, "2021-12-25", member, studyJoins, studyBoards);
+        Study study = new Study("프론트엔드 스터디", new Tags(List.of(new Tag("프론트엔드"))),null,
+                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING,
+                RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
         ReflectionTestUtils.setField(study, "id", studyId);
         return study;
     }

@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
@@ -16,12 +14,11 @@ import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
 import project.SangHyun.member.service.MemberService;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 
 @Slf4j

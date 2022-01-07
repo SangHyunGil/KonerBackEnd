@@ -12,12 +12,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.helper.RedisHelper;
+import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.tools.StudyFactory;
@@ -31,6 +29,7 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,8 +67,13 @@ class StudyControllerIntegrationTest {
         //given
 
         //when, then
-        mockMvc.perform(get("/study"))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/study")
+                        .param("studyId", String.valueOf(Long.MAX_VALUE))
+                        .param("department", "컴퓨터공학과")
+                        .param("size", "6"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.numberOfElements").value(2))
+                .andExpect(jsonPath("$.data.hasNext").value(false));;
     }
 
     @Test
@@ -99,7 +103,8 @@ class StudyControllerIntegrationTest {
                         .param("memberId", String.valueOf(requestDto.getMemberId()))
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
-                        .param("schedule", requestDto.getSchedule())
+                        .param("startDate", requestDto.getStartDate())
+                        .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
@@ -161,7 +166,8 @@ class StudyControllerIntegrationTest {
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
-                        .param("schedule", requestDto.getSchedule())
+                        .param("startDate", requestDto.getStartDate())
+                        .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
@@ -191,7 +197,8 @@ class StudyControllerIntegrationTest {
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
-                        .param("schedule", requestDto.getSchedule())
+                        .param("startDate", requestDto.getStartDate())
+                        .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))

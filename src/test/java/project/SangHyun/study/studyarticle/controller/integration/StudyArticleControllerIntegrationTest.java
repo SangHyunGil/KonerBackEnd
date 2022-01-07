@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.helper.RedisHelper;
+import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.member.domain.Member;
@@ -75,6 +75,8 @@ class StudyArticleControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
+                        .param("page", String.valueOf(0))
+                        .param("size", String.valueOf(10))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andDo(print())
                 .andExpect(status().isOk());

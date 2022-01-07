@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import project.SangHyun.advice.exception.AuthenticationEntryPointException;
+import project.SangHyun.common.advice.exception.AuthenticationEntryPointException;
 
 import java.util.Date;
 

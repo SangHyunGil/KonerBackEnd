@@ -4,9 +4,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.response.domain.MultipleResult;
-import project.SangHyun.response.domain.SingleResult;
-import project.SangHyun.response.service.ResponseServiceImpl;
+import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
@@ -30,8 +31,9 @@ public class StudyController {
 
     @ApiOperation(value = "스터디 정보 로드", notes = "모든 스터디 정보를 얻어온다.")
     @GetMapping
-    public MultipleResult<StudyFindResponseDto> findAllStudies() {
-        return responseService.getMultipleResult(studyService.findAllStudies());
+    public SingleResult<SliceResponseDto> findAllStudies(@RequestParam Long studyId, @RequestParam String department,
+                                                         @RequestParam Integer size) {
+        return responseService.getSingleResult(studyService.findAllStudiesByDepartment(studyId, department, size));
     }
 
     @ApiOperation(value = "스터디 세부 정보 로드", notes = "스터디 세부 정보를 얻어온다.")

@@ -7,9 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.enums.StudyRole;
+import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 
 @Data
 @NoArgsConstructor

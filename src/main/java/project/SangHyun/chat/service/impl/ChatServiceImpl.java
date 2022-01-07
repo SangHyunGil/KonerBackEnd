@@ -3,7 +3,7 @@ package project.SangHyun.chat.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import project.SangHyun.advice.exception.ChatRoomNotFoundException;
+import project.SangHyun.common.advice.exception.ChatRoomNotFoundException;
 import project.SangHyun.chat.dto.response.ChatFindResponseDto;
 import project.SangHyun.chat.dto.response.ChatMessageResponseDto;
 import project.SangHyun.chat.entity.Chat;

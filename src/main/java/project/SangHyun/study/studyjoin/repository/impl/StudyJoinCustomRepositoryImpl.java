@@ -3,19 +3,15 @@ package project.SangHyun.study.studyjoin.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.enums.StudyRole;
-import project.SangHyun.study.studyjoin.domain.QStudyJoin;
+import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
-import static project.SangHyun.study.studyjoin.domain.QStudyJoin.*;
 import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
 
 @RequiredArgsConstructor

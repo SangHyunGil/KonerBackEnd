@@ -3,7 +3,7 @@ package project.SangHyun.study.studyboard.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.StudyBoardNotFoundException;
+import project.SangHyun.common.advice.exception.StudyBoardNotFoundException;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.study.studyboard.dto.request.StudyBoardUpdateRequestDto;

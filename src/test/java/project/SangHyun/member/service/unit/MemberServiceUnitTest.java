@@ -20,7 +20,7 @@ import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.util.List;
 import java.util.Optional;

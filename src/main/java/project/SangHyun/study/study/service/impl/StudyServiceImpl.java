@@ -2,16 +2,19 @@ package project.SangHyun.study.study.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.advice.exception.StudyNotFoundException;
+import project.SangHyun.common.advice.exception.StudyNotFoundException;
+import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.*;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.StudyService;
-import project.SangHyun.helper.FileStoreHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,11 +36,9 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public List<StudyFindResponseDto> findAllStudies() {
-        List<Study> studies = studyRepository.findAll();
-        return studies.stream()
-                .map(study -> StudyFindResponseDto.create(study))
-                .collect(Collectors.toList());
+    public SliceResponseDto findAllStudiesByDepartment(Long lastStudyId, String department, Integer size) {
+        Slice<Study> study = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, department, Pageable.ofSize(size));
+        return SliceResponseDto.create(study, StudyFindResponseDto::create);
     }
 
     @Override
