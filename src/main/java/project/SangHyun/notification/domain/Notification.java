@@ -1,6 +1,7 @@
 package project.SangHyun.notification.domain;
 
 import lombok.*;
+import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-public class Notification {
+public class Notification extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
