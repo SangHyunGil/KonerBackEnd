@@ -1,9 +1,6 @@
 package project.SangHyun.notification.domain;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.SangHyun.member.domain.Member;
 
 import javax.persistence.*;
@@ -23,4 +20,13 @@ public class Notification {
     private String content;
     private String url;
     private Boolean isRead;
+
+    @Builder
+    public Notification(Member receiver, NotificationType notificationType, String content, String url, Boolean isRead) {
+        this.receiver = receiver;
+        this.notificationType = notificationType;
+        this.content = content;
+        this.url = url;
+        this.isRead = isRead;
+    }
 }

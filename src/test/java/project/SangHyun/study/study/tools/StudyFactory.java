@@ -38,7 +38,7 @@ public class StudyFactory extends BasicFactory {
     // Request
     public static StudyCreateRequestDto makeCreateRequestDto(Member member) {
         return new StudyCreateRequestDto(member.getId(), "프론트엔드 모집", List.of("프론트엔드"),
-                "테스트", "2021-10-01", "2021-12-25", 2L, multipartFile, StudyMethod.FACE,
+                "테스트", "CSE", "2021-10-01", "2021-12-25", 2L, multipartFile, StudyMethod.FACE,
                 StudyState.STUDYING, RecruitState.PROCEED);
     }
 
