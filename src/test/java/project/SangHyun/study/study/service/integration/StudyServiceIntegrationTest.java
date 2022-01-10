@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
@@ -33,7 +32,6 @@ import java.util.List;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-@Rollback(value = false)
 class StudyServiceIntegrationTest {
     @Autowired
     StudyServiceImpl studyService;
@@ -79,9 +77,8 @@ class StudyServiceIntegrationTest {
 
         studyRepository.findAll().stream()
                 .forEach(study1 -> System.out.println("study1.getId() = " + study1.getId()));
-
         //when
-        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(3L, "컴퓨터공학과", 2);
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 2);
 
         //then
         Assertions.assertEquals(2, ActualResult.getNumberOfElements());

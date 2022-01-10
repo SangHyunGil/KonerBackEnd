@@ -14,22 +14,21 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.common.helper.RedisHelper;
+import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
-import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
+import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.study.tools.StudyFactory;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,6 +105,7 @@ class StudyControllerIntegrationTest {
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
+                        .param("department", requestDto.getDepartment())
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
