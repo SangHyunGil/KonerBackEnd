@@ -71,12 +71,7 @@ class StudyServiceIntegrationTest {
     @DisplayName("모든 스터디 정보를 로드한다.")
     public void loadStudyInfo() throws Exception {
         //given
-        Member member = testDB.findGeneralMember();
-        StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
-        studyService.createStudy(requestDto);
 
-        studyRepository.findAll().stream()
-                .forEach(study1 -> System.out.println("study1.getId() = " + study1.getId()));
         //when
         SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 2);
 
@@ -103,7 +98,6 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
-
         Study study = testDB.findBackEndStudy();
         StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", List.of("프론트엔드"));
 
