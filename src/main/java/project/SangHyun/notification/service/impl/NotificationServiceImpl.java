@@ -1,5 +1,7 @@
 package project.SangHyun.notification.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -14,32 +16,28 @@ import project.SangHyun.notification.service.NotificationService;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
-
-    private final Long timeout;
+    @Value("${spring.sse.time}")
+    private Long timeout;
     private final NotificationRepository notificationRepository;
     private final EmitterRepository emitterRepository;
 
-    public NotificationServiceImpl(@Value("${spring.sse.time}") Long timeout, NotificationRepository notificationRepository, EmitterRepository emitterRepository) {
-        this.timeout = timeout;
-        this.notificationRepository = notificationRepository;
-        this.emitterRepository = emitterRepository;
-    }
 
     @Override
-    public SseEmitter subscribe(Member member, String lastEventId) {
-        Long memberId = member.getId();
+    public SseEmitter subscribe(Long memberId, String lastEventId) {
         String emitterId = memberId + "_" + System.currentTimeMillis();
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));
 
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
 
-        // 503 에러를 방지하기 위한 Dummy 전송
-        sendNotification(emitter, emitterId, emitterId, "EventStream Created. [memberId=" + memberId + "]");
+        // 503 에러를 방지하기 위한 더미 이벤트 전송
+        sendNotification(emitter, emitterId, emitterId, "EventStream Created. [userId=" + memberId + "]");
 
-        // 캐시에 저장된 유실 Event 재전송
+        // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (hasLostData(lastEventId)) {
             sendLostData(lastEventId, memberId, emitterId, emitter);
         }
@@ -51,7 +49,6 @@ public class NotificationServiceImpl implements NotificationService {
         try {
             emitter.send(SseEmitter.event()
                     .id(eventId)
-                    .name("SSE")
                     .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(emitterId);

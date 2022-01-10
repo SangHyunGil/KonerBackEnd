@@ -5,13 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import project.SangHyun.config.redis.RedisKey;
 
 @Slf4j
 @Service
-@EnableAsync
 @RequiredArgsConstructor
 public class EmailHelper {
     private final JavaMailSender javaMailSender;

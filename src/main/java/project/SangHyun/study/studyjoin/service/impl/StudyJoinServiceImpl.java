@@ -2,12 +2,14 @@ package project.SangHyun.study.studyjoin.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
 import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
 import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.common.advice.exception.StudyNotFoundException;
+import project.SangHyun.notification.domain.NotificationType;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class StudyJoinServiceImpl implements StudyJoinService {
-
+    private final ApplicationEventPublisher eventPublisher;
     private final StudyJoinRepository studyJoinRepository;
     private final StudyRepository studyRepository;
 
@@ -35,6 +37,10 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     public StudyJoinResponseDto applyJoin(Long studyId, Long memberId, StudyJoinRequestDto requestDto) {
         validateJoinCondition(studyId, memberId);
         StudyJoin studyJoin = studyJoinRepository.save(requestDto.toEntity(studyId, memberId));
+        List<StudyJoin> studyJoins = studyJoinRepository.findAdminAndCreator(studyId);
+        studyJoins.forEach(
+                join -> join.publishEvent(eventPublisher, NotificationType.APPLY)
+        );
         return StudyJoinResponseDto.create(studyJoin);
     }
 
@@ -53,6 +59,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         StudyJoin studyJoin = studyJoinRepository.findApplyStudy(studyId, memberId)
                 .orElseThrow(StudyJoinNotFoundException::new);
         studyJoin.acceptMember();
+        studyJoin.publishEvent(eventPublisher, NotificationType.ACCEPT);
         return StudyJoinResponseDto.create(studyJoin);
     }
 
@@ -63,6 +70,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         StudyJoin studyJoin = studyJoinRepository.findApplyStudy(studyId, memberId)
                 .orElseThrow(StudyJoinNotFoundException::new);
         studyJoinRepository.delete(studyJoin);
+        studyJoin.publishEvent(eventPublisher, NotificationType.REJECT);
         return StudyJoinResponseDto.create(studyJoin);
     }
 

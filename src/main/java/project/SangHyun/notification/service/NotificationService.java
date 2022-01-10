@@ -5,6 +5,6 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.notification.domain.NotificationType;
 
 public interface NotificationService {
-    SseEmitter subscribe(Member member, String lastEventId);
+    SseEmitter subscribe(Long memberId, String lastEventId);
     void send(Member receiver, NotificationType notificationType, String content, String url);
 }

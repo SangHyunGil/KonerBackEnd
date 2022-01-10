@@ -3,8 +3,11 @@ package project.SangHyun.study.studyjoin.domain;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.notification.domain.NotificationType;
+import project.SangHyun.notification.dto.request.NotificationRequestDto;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.enums.StudyRole;
 
@@ -48,5 +51,10 @@ public class StudyJoin extends EntityDate {
 
     public void acceptMember() {
         this.studyRole = StudyRole.MEMBER;
+    }
+
+    public void publishEvent(ApplicationEventPublisher eventPublisher, NotificationType notificationType) {
+        eventPublisher.publishEvent(new NotificationRequestDto(member, notificationType,
+                notificationType.makeContent(study.getTitle()), notificationType.makeUrl(study.getId())));
     }
 }

@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.StudyNotFoundException;
 import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.study.study.dto.response.*;
+import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
+import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
+import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
+import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.StudyService;
-import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

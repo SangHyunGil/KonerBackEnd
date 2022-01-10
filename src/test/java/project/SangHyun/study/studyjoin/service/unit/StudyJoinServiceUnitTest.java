@@ -5,23 +5,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
 import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
 import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
+import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
-import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.impl.StudyJoinServiceImpl;
-import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class StudyJoinServiceUnitTest {
@@ -44,6 +47,9 @@ class StudyJoinServiceUnitTest {
     StudyJoinRepository studyJoinRepository;
     @Mock
     StudyRepository studyRepository;
+    @Mock
+    ApplicationEventPublisher publisher;
+
 
     @BeforeEach
     public void init() {
@@ -56,19 +62,23 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디에 참가 신청한다.")
     public void applyJoin() {
         //given
+        ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
         StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
         StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(studyJoin);
+        List<StudyJoin> admins = List.of(StudyJoinFactory.makeTestStudyJoinCreator(member, study));
 
         //mocking
         given(studyJoinRepository.exist(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
+        given(studyJoinRepository.findAdminAndCreator(any())).willReturn(admins);
         given(studyJoinRepository.save(any())).willReturn(studyJoin);
 
         //when
         StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(study.getId(), member.getId(), requestDto);
 
         //then
+        verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertEquals(ExpectResult.getStudyInfos(), ActualResult.getStudyInfos());
     }
 
@@ -105,6 +115,7 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디 참가를 수락한다.")
     public void acceptJoin() {
         //given
+        ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
         StudyJoin studyJoin = StudyJoinFactory.makeTestStudyJoinApply(member, study);
         StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(studyJoin);
 
@@ -118,6 +129,7 @@ class StudyJoinServiceUnitTest {
         StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(study.getId(), member.getId());
 
         //then
+        verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertEquals(ExpectResult.getStudyJoinId(), ActualResult.getStudyJoinId());
     }
 
@@ -167,6 +179,7 @@ class StudyJoinServiceUnitTest {
     @DisplayName("스터디 참가를 거절한다.")
     public void rejectJoin() {
         //given
+        ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
         StudyJoin studyJoin = StudyJoinFactory.makeTestStudyJoinApply(member, study);
         StudyJoinResponseDto ExpectResult = StudyJoinFactory.makeResponseDto(studyJoin);
 
@@ -180,6 +193,7 @@ class StudyJoinServiceUnitTest {
         StudyJoinResponseDto ActualResult = studyJoinService.rejectJoin(study.getId(), member.getId());
 
         //then
+        verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertEquals(ExpectResult.getStudyJoinId(), ActualResult.getStudyJoinId());
     }
 

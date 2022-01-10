@@ -17,6 +17,7 @@ public class Notification extends EntityDate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member receiver;
+    @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
     private String content;
     private String url;
