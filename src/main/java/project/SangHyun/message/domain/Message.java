@@ -30,6 +30,10 @@ public class Message extends EntityDate {
     private Boolean deletedBySender;
     private Boolean deletedByReceiver;
 
+    public Message(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public Message(String content, Member sender, Member receiver, Boolean deletedBySender, Boolean deletedByReceiver) {
         this.content = content;
@@ -57,5 +61,9 @@ public class Message extends EntityDate {
 
     public boolean isDeletedByReceiver() {
         return deletedByReceiver == true;
+    }
+
+    public boolean isMoreRecentlyThan(Message message) {
+        return this.id > message.getId();
     }
 }

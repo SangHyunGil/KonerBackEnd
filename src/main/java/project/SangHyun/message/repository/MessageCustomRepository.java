@@ -5,6 +5,7 @@ import project.SangHyun.message.domain.Message;
 import java.util.List;
 
 public interface MessageCustomRepository {
-    List<Message> findSendersWithRecentMessageDescById(Long receiverId);
-    List<Message> findAllMessageWithSenderIdAndReceiverIdDescById(Long senderId, Long receiverId);
+    List<Message> findAllCommunicatorsWithRecentMessageDescById(Long receiverId);
+    List<Message> findAllMessagesWithSenderIdAndReceiverIdDescById(Long senderId, Long receiverId);
+    List<Message> findAllMessagesByContent(String content);
 }

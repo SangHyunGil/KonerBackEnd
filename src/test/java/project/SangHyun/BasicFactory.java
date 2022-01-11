@@ -1,10 +1,11 @@
 package project.SangHyun;
 
 import org.springframework.test.util.ReflectionTestUtils;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.domain.MemberRole;
+import project.SangHyun.message.domain.Message;
 import project.SangHyun.study.study.domain.*;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
@@ -40,15 +41,22 @@ public class BasicFactory {
     }
 
     public static Member makeTestAuthMember() {
-        Long memberId = 1L;
+        Long memberId = 2L;
         Member member = new Member("xptmxm2!", "encodedPW", "유나", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestNotAuthMember() {
-        Long memberId = 1L;
+        Long memberId = 3L;
         Member member = new Member("xptmxm3!", "encodedPW", "동욱", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED);
+        ReflectionTestUtils.setField(member, "id", memberId);
+        return member;
+    }
+
+    public static Member makeTestAuthMember2() {
+        Long memberId = 4L;
+        Member member = new Member("xptmxm4!", "encodedPW", "영탁", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
@@ -102,5 +110,12 @@ public class BasicFactory {
         StudyComment studyReplyComment = new StudyComment(member, studyArticle, studyComment, "테스트 댓글입니다.", false);
         ReflectionTestUtils.setField(studyReplyComment, "id", studyReplyCommentId);
         return studyReplyComment;
+    }
+
+    public static Message makeTestMessage(Member sender, Member receiver) {
+        Long messageId = 1L;
+        Message message = new Message("테스트 메세지", sender, receiver, false, false);
+        ReflectionTestUtils.setField(message, "id", messageId);
+        return message;
     }
 }

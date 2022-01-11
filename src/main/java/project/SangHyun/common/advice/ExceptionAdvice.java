@@ -188,14 +188,20 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(InCorrectTagNameException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected Result InCorrectTagNameException(BindException e) {
         return responseService.getFailureResult(-127, "잘못된 태그 이름입니다.");
     }
 
     @ExceptionHandler(DuplicateTagsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected Result DuplicateTagsException(BindException e) {
-        return responseService.getFailureResult(-127, "중복된 태그가 존재합니다.");
+        return responseService.getFailureResult(-128, "중복된 태그가 존재합니다.");
+    }
+
+    @ExceptionHandler(MessageNotFountException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result MessageNotFountException(BindException e) {
+        return responseService.getFailureResult(-129, "존재하지 않는 쪽지입니다.");
     }
 }
