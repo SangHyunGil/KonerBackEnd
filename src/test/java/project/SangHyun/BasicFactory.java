@@ -112,8 +112,7 @@ public class BasicFactory {
         return studyReplyComment;
     }
 
-    public static Message makeTestMessage(Member sender, Member receiver) {
-        Long messageId = 1L;
+    public static Message makeTestMessage(Long messageId, Member sender, Member receiver) {
         Message message = new Message("테스트 메세지", sender, receiver, false, false, false);
         ReflectionTestUtils.setField(message, "id", messageId);
         return message;

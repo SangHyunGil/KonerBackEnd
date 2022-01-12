@@ -123,7 +123,7 @@ class MessageServiceUnitTest {
         //given
         Member testMemberA = MessageFactory.makeTestAuthMember();
         Member testMemberB = MessageFactory.makeTestAdminMember();
-        Message message = MessageFactory.makeTestMessage(testMemberA, testMemberB);
+        Message message = MessageFactory.makeTestMessage(1L, testMemberA, testMemberB);
 
         //mocking
         given(messageRepository.findById(message.getId())).willReturn(java.util.Optional.of(message));
@@ -142,7 +142,7 @@ class MessageServiceUnitTest {
         //given
         Member testMemberA = MessageFactory.makeTestAuthMember();
         Member testMemberB = MessageFactory.makeTestAdminMember();
-        Message message = MessageFactory.makeTestMessage(testMemberA, testMemberB);
+        Message message = MessageFactory.makeTestMessage(1L, testMemberA, testMemberB);
 
         //mocking
         given(messageRepository.findById(message.getId())).willReturn(java.util.Optional.of(message));
@@ -161,7 +161,7 @@ class MessageServiceUnitTest {
         //given
         Member testMemberA = MessageFactory.makeTestAuthMember();
         Member testMemberB = MessageFactory.makeTestAdminMember();
-        Message message = MessageFactory.makeTestMessage(testMemberA, testMemberB);
+        Message message = MessageFactory.makeTestMessage(1L, testMemberA, testMemberB);
 
         //mocking
         given(messageRepository.findById(message.getId())).willReturn(java.util.Optional.of(message));

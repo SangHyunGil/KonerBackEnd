@@ -101,9 +101,7 @@ public class MessageServiceIntegrationTest {
 
         List<Message> ActualResult = messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(sender.getId(), receiver.getId());
         List<CommunicatorFindResponseDto> messages = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
-        for (CommunicatorFindResponseDto message : messages) {
-            System.out.println("message.getContent() + message.getUnReadCount() = " + message.getContent() + message.getUnReadCount());
-        }
+
         //then
         Assertions.assertEquals(4, ActualResult.size());
         Assertions.assertEquals(true, ActualResult.get(0).getIsRead());

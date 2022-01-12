@@ -1,5 +1,6 @@
 package project.SangHyun.notification.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import project.SangHyun.notification.service.NotificationService;
 public class NotificationController {
     private final NotificationService notificationService;
 
+    @ApiOperation(value = "알림 구독", notes = "알림을 구독한다.")
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public SseEmitter subscribe(@AuthenticationPrincipal MemberDetails memberDetails,
                                 @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {

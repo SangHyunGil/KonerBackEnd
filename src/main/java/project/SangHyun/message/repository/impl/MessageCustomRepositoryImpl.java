@@ -60,12 +60,6 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                 .groupBy(message.sender, message.receiver)
                 .fetch();
 
-        for (MessageCount messageInfoDto : countMessages) {
-            System.out.println("messageInfoDto.getMessage().getSender() = " + messageInfoDto.getContent());
-            System.out.println("messageInfoDto.getMessage().getSender() = " + messageInfoDto.getSender().getEmail());
-            System.out.println("messageInfoDto.getUnReadCount() = " + messageInfoDto.getUnReadCount());
-        }
-
         return findRecentCommunicatorsByCompareSendAndReceiveMessage(receiveMessages, sendMessages, countMessages);
 
     }

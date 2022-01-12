@@ -200,6 +200,7 @@ public class TestDB {
         study.addBoard(studyBoard2);
         study.addBoard(studyBoard3);
 
+        // findStudyGeneralMember, findStudyApplyMember, findStudyMemberNotResourceOwner
         initMessage(memberC, memberD, memberE);
     }
 
