@@ -1,5 +1,6 @@
 package project.SangHyun.message.repository.impl;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.querydsl.core.types.ExpressionUtils.as;
+import static com.querydsl.core.types.dsl.Expressions.constant;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.message.domain.QMessage.message;
 
@@ -20,9 +23,12 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Message> findAllCommunicatorsWithRecentMessageDescById(Long memberId) {
-        List<Message> receiveMessages = jpaQueryFactory.selectFrom(message)
-                .innerJoin(message.sender, member).fetchJoin()
+    public List<MessageCount> findAllCommunicatorsWithRecentMessageDescById(Long memberId) {
+        List<MessageCount> receiveMessages = jpaQueryFactory
+                .select(Projections.constructor(MessageCount.class,
+                        message.id, message.sender, message.receiver,
+                        message.content, as(constant(0L),"unReadCount")))
+                .from(message)
                 .where(message.id.in(
                         JPAExpressions
                                 .select(message.id.max())
@@ -31,8 +37,11 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
-        List<Message> sendMessages = jpaQueryFactory.selectFrom(message)
-                .innerJoin(message.sender, member).fetchJoin()
+        List<MessageCount> sendMessages = jpaQueryFactory
+                .select(Projections.constructor(MessageCount.class,
+                        message.id, message.sender, message.receiver,
+                        message.content, as(constant(0L),"unReadCount")))
+                .from(message)
                 .where(message.id.in(
                         JPAExpressions
                                 .select(message.id.max())
@@ -41,26 +50,53 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
-        return findRecentCommunicatorsByCompareSendAndReceiveMessage(receiveMessages, sendMessages);
+        List<MessageCount> countMessages = jpaQueryFactory
+                .select(Projections.constructor(MessageCount.class,
+                        message.id, message.sender, message.receiver,
+                        message.content, message.count()))
+                .from(message)
+                .where(message.receiver.id.eq(memberId),
+                        message.isRead.eq(false))
+                .groupBy(message.sender, message.receiver)
+                .fetch();
+
+        for (MessageCount messageInfoDto : countMessages) {
+            System.out.println("messageInfoDto.getMessage().getSender() = " + messageInfoDto.getContent());
+            System.out.println("messageInfoDto.getMessage().getSender() = " + messageInfoDto.getSender().getEmail());
+            System.out.println("messageInfoDto.getUnReadCount() = " + messageInfoDto.getUnReadCount());
+        }
+
+        return findRecentCommunicatorsByCompareSendAndReceiveMessage(receiveMessages, sendMessages, countMessages);
 
     }
 
-    private List<Message> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<Message> receiveMessages, List<Message> sendMessages) {
-        Map<Long, Message> store = new HashMap<>();
+    private List<MessageCount> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<MessageCount> receiveMessages,
+                                                                                List<MessageCount> sendMessages, List<MessageCount> countMessages) {
+        Map<Long, MessageCount> store = new HashMap<>();
         // 받은 메세지 중 최신 메세지 기록
         receiveMessages
                 .forEach(receiveMessage -> store.put(receiveMessage.getSender().getId(), receiveMessage));
-        // 전송한 메세지 중 최신 메세지 비교 후 갱신
+
+        // 전송한 메세지 중 받은 메세지의 최신 메세지와 비교 후 갱신
         sendMessages
                 .forEach(sendMessage -> compareAndUpdate(store, sendMessage));
+
+        // 안읽은 메세지 개수 갱신
+        countMessages
+                .forEach(countMessage -> {
+                    MessageCount messageCount = store.get(countMessage.getSender().getId());
+                    messageCount.setUnReadCount(countMessage.getUnReadCount());
+                    System.out.println("messageCount = " + messageCount);
+                });
+
         return store.values().stream()
-                .sorted(Comparator.comparing(Message::getId, Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(MessageCount::getId, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
     }
 
-    private void compareAndUpdate(Map<Long, Message> store, Message sendMessage) {
+    private void compareAndUpdate(Map<Long, MessageCount> store, MessageCount sendMessage) {
         Long senderId = sendMessage.getReceiver().getId();
-        Message message = store.getOrDefault(senderId, new Message(Long.MIN_VALUE));
+        MessageCount message = store.getOrDefault(senderId, new MessageCount(Long.MIN_VALUE));
         if (sendMessage.isMoreRecentlyThan(message))
             store.put(senderId, sendMessage);
     }
@@ -87,5 +123,12 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                 .where(message.content.contains(content))
                 .orderBy(message.id.desc())
                 .fetch();
+    }
+
+    @Override
+    public Long countAllUnReadMessages(Long receiverId) {
+        return jpaQueryFactory.selectFrom(message)
+                .where(message.receiver.id.eq(receiverId))
+                .fetchCount();
     }
 }

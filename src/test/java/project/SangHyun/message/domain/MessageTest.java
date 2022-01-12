@@ -20,7 +20,7 @@ public class MessageTest {
     @DisplayName("쪽지를 전송한 사람이 쪽지를 제거한다.")
     public void deleteBySender() throws Exception {
         //given
-        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false);
+        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false, false);
 
         //when
         message.deleteBySender();
@@ -34,7 +34,7 @@ public class MessageTest {
     @DisplayName("쪽지를 수신한 사람이 쪽지를 제거한다.")
     public void deleteByReceiver() throws Exception {
         //given
-        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false);
+        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false, false);
 
         //when
         message.deleteByReceiver();
@@ -48,7 +48,7 @@ public class MessageTest {
     @DisplayName("송신자와 수신자에 의해 제거된 쪽지는 지워질 수 있다.")
     public void isDeletable() throws Exception {
         //given
-        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false);
+        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false, false);
 
         //when
         message.deleteBySender();
@@ -58,5 +58,18 @@ public class MessageTest {
         Assertions.assertEquals(true, message.isDeletable());
         Assertions.assertEquals(true, message.isDeletedByReceiver());
         Assertions.assertEquals(true, message.isDeletedBySender());
+    }
+
+    @Test
+    @DisplayName("읽지 않은 쪽지를 읽는다.")
+    public void read() throws Exception {
+        //given
+        Message message = new Message("테스트 쪽지입니다.", memberA, memberB, false, false, false);
+
+        //when
+        message.read();
+
+        //then
+        Assertions.assertEquals(true, message.getIsRead());
     }
 }

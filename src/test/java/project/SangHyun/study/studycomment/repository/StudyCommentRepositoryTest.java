@@ -27,6 +27,7 @@ import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,8 @@ class StudyCommentRepositoryTest {
     StudyArticleRepository studyArticleRepository;
     @Autowired
     StudyCommentRepository studyCommentRepository;
+    @Autowired
+    EntityManager em;
     @Autowired
     PasswordEncoder passwordEncoder;
 

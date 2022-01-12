@@ -204,19 +204,17 @@ public class TestDB {
     }
 
     private void initMessage(Member testMemberA, Member testMemberB, Member testMemberC) {
-        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false);
+        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
         messageRepository.save(messageA);
-        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
+        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
         messageRepository.save(messageB);
-        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false);
+        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
         messageRepository.save(messageC);
-        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
+        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
         messageRepository.save(messageD);
-        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
+        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
         messageRepository.save(messageE);
-        Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberB, false, false);
-        messageRepository.save(messageF);
-        Message messageG = new Message("일곱 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false);
+        Message messageG = new Message("일곱 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
         messageRepository.save(messageG);
     }
 }

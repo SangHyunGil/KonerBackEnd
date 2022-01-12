@@ -114,7 +114,7 @@ public class BasicFactory {
 
     public static Message makeTestMessage(Member sender, Member receiver) {
         Long messageId = 1L;
-        Message message = new Message("테스트 메세지", sender, receiver, false, false);
+        Message message = new Message("테스트 메세지", sender, receiver, false, false, false);
         ReflectionTestUtils.setField(message, "id", messageId);
         return message;
     }

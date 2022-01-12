@@ -27,6 +27,7 @@ public class Message extends EntityDate {
     @JoinColumn(name = "receiver_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member receiver;
+    private Boolean isRead;
     private Boolean deletedBySender;
     private Boolean deletedByReceiver;
 
@@ -35,10 +36,11 @@ public class Message extends EntityDate {
     }
 
     @Builder
-    public Message(String content, Member sender, Member receiver, Boolean deletedBySender, Boolean deletedByReceiver) {
+    public Message(String content, Member sender, Member receiver, Boolean isRead, Boolean deletedBySender, Boolean deletedByReceiver) {
         this.content = content;
         this.sender = sender;
         this.receiver = receiver;
+        this.isRead = isRead;
         this.deletedBySender = deletedBySender;
         this.deletedByReceiver = deletedByReceiver;
     }
@@ -63,7 +65,8 @@ public class Message extends EntityDate {
         return deletedByReceiver == true;
     }
 
-    public boolean isMoreRecentlyThan(Message message) {
-        return this.id > message.getId();
+    public Message read() {
+        this.isRead = true;
+        return this;
     }
 }

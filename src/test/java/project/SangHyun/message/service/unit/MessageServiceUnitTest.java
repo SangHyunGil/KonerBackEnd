@@ -10,9 +10,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.dto.request.MessageCreateRequestDto;
+import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
 import project.SangHyun.message.dto.response.MessageCreateResponseDto;
 import project.SangHyun.message.dto.response.MessageFindResponseDto;
 import project.SangHyun.message.repository.MessageRepository;
+import project.SangHyun.message.repository.impl.MessageCount;
 import project.SangHyun.message.service.impl.MessageServiceImpl;
 import project.SangHyun.message.tools.MessageFactory;
 
@@ -56,23 +58,27 @@ class MessageServiceUnitTest {
         Member testMemberA = MessageFactory.makeTestAuthMember();
         Member testMemberB = MessageFactory.makeTestAuthMember2();
         Member testMemberC = MessageFactory.makeTestAdminMember();
-        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false);
-        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
-        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false);
-        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
-        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
-        Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false);
-
+        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
+        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
+        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
+        Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
+        MessageCount messageCountC = new MessageCount(messageC.getId(), messageC.getSender(), messageC.getReceiver(), messageC.getContent(), 2L);
+        MessageCount messageCountF = new MessageCount(messageF.getId(), messageF.getSender(), messageF.getReceiver(), messageF.getContent(), 0L);
 
         //mocking
-        given(messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId())).willReturn(List.of(messageF, messageC));
+        given(messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId())).willReturn(List.of(messageCountF, messageCountC));
 
         //when
-        List<MessageFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(testMemberA.getId());
+        List<CommunicatorFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(testMemberA.getId());
 
         //then
         Assertions.assertEquals("여섯 번째 메세지 전송입니다.", ActualResult.get(0).getContent());
         Assertions.assertEquals("세 번째 메세지 전송입니다.", ActualResult.get(1).getContent());
+
+        Assertions.assertEquals(0, ActualResult.get(0).getUnReadCount());
+        Assertions.assertEquals(2, ActualResult.get(1).getUnReadCount());
     }
 
     @Test
@@ -82,13 +88,13 @@ class MessageServiceUnitTest {
         Member testMemberA = MessageFactory.makeTestAuthMember();
         Member testMemberB = MessageFactory.makeTestAuthMember2();
         Member testMemberC = MessageFactory.makeTestAdminMember();
-        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false);
-        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
-        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false);
-        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
-        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false);
-        Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberB, false, false);
-        Message messageG = new Message("일곱 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false);
+        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberB, false, false, false);
+        Message messageG = new Message("일곱 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
 
         //mocking
         given(messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(testMemberB.getId(), testMemberA.getId())).willReturn(List.of(messageF, messageC, messageA));
@@ -168,5 +174,30 @@ class MessageServiceUnitTest {
         //then
         Assertions.assertEquals(true, message.isDeletedBySender());
         Assertions.assertEquals(true, message.isDeletedByReceiver());
+    }
+
+    @Test
+    @DisplayName("받은 메세지들 중 안읽은 메세지의 개수를 출력한다.")
+    public void countUnReadMessages() throws Exception {
+        //given
+        Member testMemberA = MessageFactory.makeTestAuthMember();
+        Member testMemberB = MessageFactory.makeTestAuthMember2();
+        Member testMemberC = MessageFactory.makeTestAdminMember();
+        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
+
+
+        //mocking
+        given(messageRepository.countAllUnReadMessages(testMemberA.getId())).willReturn(5L);
+
+        //when
+        Long count = messageService.countUnReadMessages(testMemberA.getId());
+
+        //then
+        Assertions.assertEquals(5L, count);
     }
 }

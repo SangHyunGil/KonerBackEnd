@@ -17,11 +17,13 @@ import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
 import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
+import project.SangHyun.study.studycomment.dto.response.StudyCommentFindResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -57,6 +59,21 @@ public class StudyCommentServiceIntegrationTest {
         //then
         Assertions.assertEquals("테스트 댓글입니다.", ActualResult.getContent());
     }
+
+    @Test
+    @DisplayName("댓글을 전체 조회한다.")
+    public void findAll() throws Exception {
+        //given
+        StudyArticle announceArticle = testDB.findAnnounceArticle();
+
+        //when
+        List<StudyCommentFindResponseDto> comments = studyCommentService.findComments(announceArticle.getId());
+
+
+        //then
+        Assertions.assertEquals(2, studyCommentRepository.findAll().size());
+    }
+
 
     @Test
     @DisplayName("댓글에 답글을 추가한다.")

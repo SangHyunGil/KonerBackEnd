@@ -12,6 +12,7 @@ import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.dto.request.MessageCreateRequestDto;
+import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
 import project.SangHyun.message.dto.response.MessageCreateResponseDto;
 import project.SangHyun.message.dto.response.MessageFindResponseDto;
 import project.SangHyun.message.repository.MessageRepository;
@@ -61,12 +62,12 @@ public class MessageServiceIntegrationTest {
         Member receiver = testDB.findStudyGeneralMember();
 
         //when
-        List<MessageFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
+        List<CommunicatorFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
 
         //then
         Assertions.assertEquals(2, ActualResult.size());
         Assertions.assertEquals("일곱 번째 메세지 전송입니다.", ActualResult.get(0).getContent());
-        Assertions.assertEquals("여섯 번째 메세지 전송입니다.", ActualResult.get(1).getContent());
+        Assertions.assertEquals("세 번째 메세지 전송입니다.", ActualResult.get(1).getContent());
     }
 
     @Test
@@ -85,6 +86,34 @@ public class MessageServiceIntegrationTest {
         Assertions.assertEquals("다섯 번째 메세지 전송입니다.", ActualResult.get(1).getContent());
         Assertions.assertEquals("네 번째 메세지 전송입니다.", ActualResult.get(2).getContent());
         Assertions.assertEquals("두 번째 메세지 전송입니다.", ActualResult.get(3).getContent());
+    }
+
+    @Test
+    @DisplayName("어떤 상대와 쪽지를 나눈 모든 쪽지를 조회한다면 모두 읽음 처리된다.")
+    public void findAllMessages2() throws Exception {
+        //given
+        Member receiver = testDB.findStudyGeneralMember();
+        Member sender = testDB.findStudyMemberNotResourceOwner();
+
+        //when
+        messageService.findAllMessages(sender.getId(), receiver.getId());
+        persistenceContextClear();
+
+        List<Message> ActualResult = messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(sender.getId(), receiver.getId());
+        List<CommunicatorFindResponseDto> messages = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
+        for (CommunicatorFindResponseDto message : messages) {
+            System.out.println("message.getContent() + message.getUnReadCount() = " + message.getContent() + message.getUnReadCount());
+        }
+        //then
+        Assertions.assertEquals(4, ActualResult.size());
+        Assertions.assertEquals(true, ActualResult.get(0).getIsRead());
+        Assertions.assertEquals(true, ActualResult.get(1).getIsRead());
+        Assertions.assertEquals(true, ActualResult.get(2).getIsRead());
+        Assertions.assertEquals(true, ActualResult.get(3).getIsRead());
+
+        Assertions.assertEquals(0, messages.get(0).getUnReadCount());
+        Assertions.assertEquals(2, messages.get(1).getUnReadCount());
+
     }
 
     @Test
@@ -139,6 +168,19 @@ public class MessageServiceIntegrationTest {
         Assertions.assertEquals(true, message.isDeletedBySender());
         Assertions.assertEquals(true, message.isDeletedByReceiver());
         Assertions.assertEquals(0, size);
+    }
+
+    @Test
+    @DisplayName("받은 메세지들 중 안읽은 메세지의 개수를 출력한다.")
+    public void countUnReadMessages() throws Exception {
+        //given
+        Member member = testDB.findStudyGeneralMember();
+
+        //when
+        Long count = messageRepository.countAllUnReadMessages(member.getId());
+
+        //then
+        Assertions.assertEquals(5, count);
     }
 
     private void persistenceContextClear() {
