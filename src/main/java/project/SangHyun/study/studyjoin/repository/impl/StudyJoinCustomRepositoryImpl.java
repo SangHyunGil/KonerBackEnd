@@ -77,8 +77,21 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     public Optional<StudyJoin> findApplyStudy(Long studyId, Long memberId) {
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(studyJoin)
+                .innerJoin(studyJoin.member, member).fetchJoin()
+                .innerJoin(studyJoin.study, study).fetchJoin()
                 .where(studyJoin.study.id.eq(studyId),
                         studyJoin.member.id.eq(memberId))
                 .fetchFirst());
+    }
+
+    @Override
+    public List<StudyJoin> findAdminAndCreator(Long studyId) {
+        return jpaQueryFactory.select(studyJoin)
+                .from(studyJoin)
+                .innerJoin(studyJoin.member, member).fetchJoin()
+                .innerJoin(studyJoin.study, study).fetchJoin()
+                .where(studyJoin.id.eq(studyId).and(studyJoin.studyRole.eq(StudyRole.CREATOR))
+                        .or(studyJoin.studyRole.eq(StudyRole.ADMIN)))
+                .fetch();
     }
 }

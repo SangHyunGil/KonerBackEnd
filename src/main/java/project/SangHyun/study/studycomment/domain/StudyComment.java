@@ -35,7 +35,7 @@ public class StudyComment extends EntityDate {
     @OneToMany(mappedBy = "parent")
     private List<StudyComment> children = new ArrayList<>();
     private String content;
-    private Boolean isDeleted;
+    private Boolean deleted;
 
     public StudyComment(Long id) {
         this.id = id;
@@ -47,7 +47,7 @@ public class StudyComment extends EntityDate {
         this.studyArticle = studyArticle;
         this.parent = parent;
         this.content = content;
-        this.isDeleted = isDeleted;
+        this.deleted = isDeleted;
     }
 
     public void setParent(StudyComment studyComment) {
@@ -60,7 +60,7 @@ public class StudyComment extends EntityDate {
     }
 
     public void delete() {
-        this.isDeleted = true;
+        this.deleted = true;
     }
 
     public void update(String content) {
@@ -89,7 +89,7 @@ public class StudyComment extends EntityDate {
     }
 
     public Boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
     private Boolean isParentHasOnlyDeletedChildren() {

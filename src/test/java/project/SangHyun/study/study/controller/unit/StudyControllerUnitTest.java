@@ -125,6 +125,7 @@ class StudyControllerUnitTest {
                         .param("endDate", requestDto.getEndDate())
                         .param("content", requestDto.getContent())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
+                        .param("department", requestDto.getDepartment())
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))

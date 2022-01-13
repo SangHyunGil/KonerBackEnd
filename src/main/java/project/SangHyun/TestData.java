@@ -23,7 +23,8 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -65,7 +66,15 @@ public class TestData {
             Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", "컴공", "/defaultImg.png", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberB);
 
-            Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"), new Tag("스프링"), new Tag("JPA"))), "백엔드 모집합니다.", filePath+"\\defaultImg2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
+            Study study = makeStudy(member, "백엔드 모집", "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));
+            makeTestDummyStudy(member);
+
+            StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 지원합니다.", study, StudyRole.APPLY);
+            studyJoinRepository.save(studyJoin2);
+        }
+
+        private Study makeStudy(Member member, String title, String content, Tags tags) {
+            Study study = new Study(title, tags, content, filePath+"\\defaultImg2.png", "cse", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
 
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
@@ -77,12 +86,6 @@ public class TestData {
 
             studyRepository.save(study);
 
-            StudyJoin studyJoin = new StudyJoin(member, null, study, StudyRole.CREATOR);
-            studyJoinRepository.save(studyJoin);
-
-            StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 지원합니다.", study, StudyRole.APPLY);
-            studyJoinRepository.save(studyJoin);
-
             StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, member, studyBoard1);
             StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, member, studyBoard1);
@@ -90,6 +93,26 @@ public class TestData {
             studyArticleRepository.save(studyArticle1);
             studyArticleRepository.save(studyArticle2);
             studyArticleRepository.save(studyArticle3);
+
+            StudyJoin studyJoin = new StudyJoin(member, null, study, StudyRole.CREATOR);
+            studyJoinRepository.save(studyJoin);
+
+            return study;
+        }
+
+        private Tags makeTags(String ... tagNames) {
+            return new Tags(Arrays.stream(tagNames)
+                    .map(tagName -> new Tag(tagName))
+                    .collect(Collectors.toList()));
+        }
+
+        private void makeTestDummyStudy(Member member) {
+            for (int i = 0; i < 15; i++) {
+                if (i % 2 == 0)
+                    makeStudy(member, "백엔드 모집"+i, "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));
+                else
+                    makeStudy(member, "프론트엔드 모집"+i, "프론트엔드 모집합니다.", makeTags("프론트엔드", "REACT", "JS"));
+            }
         }
     }
 }

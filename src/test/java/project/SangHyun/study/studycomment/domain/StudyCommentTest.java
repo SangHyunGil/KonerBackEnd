@@ -56,7 +56,7 @@ class StudyCommentTest {
         studyComment.delete();
 
         //then
-        Assertions.assertEquals(true, studyComment.getIsDeleted());
+        Assertions.assertEquals(true, studyComment.getDeleted());
     }
 
     @Test

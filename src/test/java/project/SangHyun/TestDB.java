@@ -6,17 +6,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
+import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.message.domain.Message;
+import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.study.study.domain.*;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.study.domain.enums.StudyState;
-import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
@@ -39,6 +41,8 @@ public class TestDB {
     StudyCommentRepository studyCommentRepository;
     @Autowired
     StudyJoinRepository studyJoinRepository;
+    @Autowired
+    MessageRepository messageRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -195,5 +199,23 @@ public class TestDB {
         study.addBoard(studyBoard1);
         study.addBoard(studyBoard2);
         study.addBoard(studyBoard3);
+
+        // findStudyGeneralMember, findStudyApplyMember, findStudyMemberNotResourceOwner
+        initMessage(memberC, memberD, memberE);
+    }
+
+    private void initMessage(Member testMemberA, Member testMemberB, Member testMemberC) {
+        Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        messageRepository.save(messageA);
+        Message messageB = new Message("두 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        messageRepository.save(messageB);
+        Message messageC = new Message("세 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
+        messageRepository.save(messageC);
+        Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        messageRepository.save(messageD);
+        Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, false, false, false);
+        messageRepository.save(messageE);
+        Message messageG = new Message("일곱 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
+        messageRepository.save(messageG);
     }
 }

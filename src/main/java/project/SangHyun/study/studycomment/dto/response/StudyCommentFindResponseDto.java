@@ -40,21 +40,4 @@ public class StudyCommentFindResponseDto {
                 content,
                 new ArrayList<>());
     }
-
-    public static List<StudyCommentFindResponseDto> makeHierarchy(List<StudyComment> studyComments) {
-        List<StudyCommentFindResponseDto> roots = new ArrayList<>();
-        Map<Long, StudyCommentFindResponseDto> studyCommentMap = new HashMap<>();
-        for (StudyComment studyComment : studyComments) {
-            StudyCommentFindResponseDto commentDto = StudyCommentFindResponseDto.create(studyComment);
-            studyCommentMap.put(commentDto.getCommentId(), commentDto);
-            if (studyComment.getParent() == null) {
-                StudyCommentFindResponseDto parentCommentDto = studyCommentMap.get(studyComment.getParent().getId());
-                parentCommentDto.getChildren().add(commentDto);
-            } else {
-                roots.add(commentDto);
-            }
-        }
-
-        return roots;
-    }
 }

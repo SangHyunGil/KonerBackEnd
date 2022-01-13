@@ -29,6 +29,7 @@ public class StudyCommentCreateRequestDto {
                 .studyArticle(new StudyArticle(studyArticleId))
                 .parent(getParentComment())
                 .content(content)
+                .isDeleted(false)
                 .build();
     }
 

@@ -11,24 +11,23 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.tools.member.MemberFactory;
-import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
-import project.SangHyun.member.service.MemberService;
+import project.SangHyun.member.controller.MemberController;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.member.controller.MemberController;
+import project.SangHyun.member.service.MemberService;
+import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.securityContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,7 +69,7 @@ class MemberControllerUnitTest {
         mockMvc.perform(post("/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L));
+                .andExpect(jsonPath("$.data.memberId").value(2L));
     }
 
 
@@ -89,9 +88,8 @@ class MemberControllerUnitTest {
         mockMvc.perform(get("/users/{id}", 1)
                         .header("X-AUTH-TOKEN", accessToken)
                         .with(securityContext(SecurityContextHolder.getContext())))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L));
+                .andExpect(jsonPath("$.data.memberId").value(2L));
     }
 
     @Test
@@ -137,6 +135,6 @@ class MemberControllerUnitTest {
         mockMvc.perform(delete("/users/{id}", 1)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(1L));
+                .andExpect(jsonPath("$.data.memberId").value(2L));
     }
 }

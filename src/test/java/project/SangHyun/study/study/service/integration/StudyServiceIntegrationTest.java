@@ -7,35 +7,31 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
-import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
-import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.study.service.impl.StudyServiceImpl;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
+import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
+import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.study.service.impl.StudyServiceImpl;
+import project.SangHyun.study.study.tools.StudyFactory;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
 
 
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-@Rollback(value = false)
 class StudyServiceIntegrationTest {
     @Autowired
     StudyServiceImpl studyService;
@@ -77,11 +73,12 @@ class StudyServiceIntegrationTest {
         //given
 
         //when
-        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 6);
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 2);
 
         //then
         Assertions.assertEquals(2, ActualResult.getNumberOfElements());
         Assertions.assertEquals(2, ActualResult.getData().size());
+        Assertions.assertEquals(false, ActualResult.isHasNext());
     }
 
     @Test
@@ -101,7 +98,6 @@ class StudyServiceIntegrationTest {
     @DisplayName("스터디의 정보를 업데이트한다.")
     public void updateStudy() throws Exception {
         //given
-
         Study study = testDB.findBackEndStudy();
         StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", List.of("프론트엔드"));
 
