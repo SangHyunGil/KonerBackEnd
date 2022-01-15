@@ -1,0 +1,25 @@
+version: "3"
+services:
+  mysql-container:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: project_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - 3400:3306
+
+  redis-container:
+    image: redis
+    ports:
+      - 6380:6379
+
+
+  demo:
+    build: .
+    restart: on-failure
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - redis
