@@ -1,19 +1,21 @@
-version: "3"
+version: '3'
+
 services:
-  mysql-container:
-    image: mysql
+  mysql:
+    image: mysql:latest
+    hostname: mysql
     environment:
-      MYSQL_DATABASE: project_db
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: demo
+      MYSQL_USER: gsh
+      MYSQL_PASSWORD: gsh
     ports:
-      - 3400:3306
+      - "3307:3306"
 
   redis-container:
     image: redis
     ports:
-      - 6380:6379
-
+      - 6379:6379
 
   demo:
     build: .
