@@ -30,6 +30,7 @@ public class StudyCommentServiceImpl implements StudyCommentService {
     }
 
     @Override
+    @Transactional
     public StudyCommentUpdateResponseDto updateComment(Long studyCommentId, StudyCommentUpdateRequestDto requestDto) {
         StudyComment comment = studyCommentRepository.findById(studyCommentId).orElseThrow(StudyCommentNotFoundException::new);
         comment.update(requestDto.getContent());

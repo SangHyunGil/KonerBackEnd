@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    hostname: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+      MYSQL_USER: gsh
+      MYSQL_PASSWORD: gsh
+    ports:
+      - "3307:3306"
+
+  redis-container:
+    image: redis
+    ports:
+      - 6379:6379
+
+  demo:
+    build: .
+    restart: on-failure
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - redis
