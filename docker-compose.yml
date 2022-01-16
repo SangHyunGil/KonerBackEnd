@@ -12,16 +12,17 @@ services:
     ports:
       - "3307:3306"
 
-  redis-container:
-    image: redis
+  redis:
+    image: redis:latest
+    hostname: redis
     ports:
-      - 6379:6379
+      - "6380:6379"
 
   demo:
     build: .
     restart: on-failure
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - mysql
       - redis
