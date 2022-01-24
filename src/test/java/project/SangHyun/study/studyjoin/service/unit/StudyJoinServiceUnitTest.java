@@ -19,6 +19,7 @@ import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
+import project.SangHyun.study.studyjoin.dto.response.FindJoinedStudyResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
@@ -131,6 +132,21 @@ class StudyJoinServiceUnitTest {
         //then
         verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertEquals(ExpectResult.getStudyJoinId(), ActualResult.getStudyJoinId());
+    }
+
+    @Test
+    @DisplayName("참여한 모든 스터디 조회한다.")
+    public void findJoinedStudy() {
+        //given
+
+        //mocking
+        given(studyJoinRepository.findStudiesByMemberId(any())).willReturn(new ArrayList<>(List.of(study)));
+
+        //when
+        List<FindJoinedStudyResponseDto> ActualResult = studyJoinService.findJoinedStudies(member.getId());
+
+        //then
+        Assertions.assertEquals(1, ActualResult.size());
     }
 
     @Test
@@ -262,5 +278,4 @@ class StudyJoinServiceUnitTest {
         //then
         Assertions.assertEquals(3, ActualResult.size());
     }
-
 }

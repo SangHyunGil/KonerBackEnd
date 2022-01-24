@@ -14,6 +14,7 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
+import project.SangHyun.study.studyjoin.dto.response.FindJoinedStudyResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
@@ -75,10 +76,20 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     }
 
     @Override
+    public List<FindJoinedStudyResponseDto> findJoinedStudies(Long memberId) {
+        List<Study> studies = studyJoinRepository.findStudiesByMemberId(memberId);
+        return studies.stream()
+                .map(study -> FindJoinedStudyResponseDto.create(study))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<StudyFindMembersResponseDto> findStudyMembers(Long studyId) {
         List<StudyMembersInfoDto> studyMembers = studyJoinRepository.findStudyMembers(studyId);
         return studyMembers.stream()
                 .map(studyMember -> StudyFindMembersResponseDto.create(studyMember))
                 .collect(Collectors.toList());
     }
+
+
 }

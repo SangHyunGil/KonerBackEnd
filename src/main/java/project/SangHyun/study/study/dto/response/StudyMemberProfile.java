@@ -8,7 +8,7 @@ import project.SangHyun.study.study.domain.enums.StudyRole;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class StudyMemberProfile {
+public class StudyMemberProfile {
     private String nickname;
     private StudyRole studyRole;
     private String profileImgUrl;

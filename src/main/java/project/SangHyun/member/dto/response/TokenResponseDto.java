@@ -7,9 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.service.impl.JwtTokens;
-import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,17 +25,14 @@ public class TokenResponseDto {
     @ApiModelProperty(value = "학과")
     private String department;
 
-    @ApiModelProperty(value = "스터디참여정보")
-    private List<StudyInfoDto> studyInfos;
-
     @ApiModelProperty(value = "AccessToken")
     private String accessToken;
 
     @ApiModelProperty(value = "RefreshToken")
     private String refreshToken;
 
-    public static TokenResponseDto create(Member member, List<StudyInfoDto> studyInfos, JwtTokens jwtTokens) {
+    public static TokenResponseDto create(Member member, JwtTokens jwtTokens) {
         return new TokenResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartment(),
-                studyInfos, jwtTokens.getAccessToken(), jwtTokens.getRefreshToken());
+                jwtTokens.getAccessToken(), jwtTokens.getRefreshToken());
     }
 }

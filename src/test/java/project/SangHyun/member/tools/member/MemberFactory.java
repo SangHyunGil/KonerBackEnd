@@ -7,17 +7,16 @@ import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.member.domain.MemberRole;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 public class MemberFactory extends BasicFactory {
     private static FileInputStream fileInputStream;
@@ -42,7 +41,7 @@ public class MemberFactory extends BasicFactory {
     }
 
     public static MemberInfoResponseDto makeInfoResponseDto(Member member) {
-        return MemberInfoResponseDto.create(member, List.of());
+        return MemberInfoResponseDto.create(member);
     }
 
     public static MemberProfileResponseDto makeProfileResponseDto(Member member) {
