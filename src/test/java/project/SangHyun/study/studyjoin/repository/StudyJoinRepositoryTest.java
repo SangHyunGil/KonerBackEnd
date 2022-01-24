@@ -23,7 +23,6 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,17 +90,16 @@ class StudyJoinRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원 ID로 스터디에 대한 정보를 조회한다.")
-    public void findStudyInfoByMemberId() throws Exception {
+    @DisplayName("참여한 모든 스터디를 조회한다.")
+    public void findJoinedStudies() throws Exception {
         //given
         Member member = memberRepository.findByEmail("xptmxm3!").get();
 
         //when
-        List<StudyInfoDto> studyInfoByMemberId = studyJoinRepository.findStudyInfoByMemberId(member.getId());
+        List<Study> studies = studyJoinRepository.findStudiesByMemberId(member.getId());
 
         //then
-        Assertions.assertEquals(1, studyInfoByMemberId.size());
-        Assertions.assertEquals(true, studyInfoByMemberId.get(0).getStudyRole().equals(StudyRole.CREATOR));
+        Assertions.assertEquals(1, studies.size());
     }
 
     @Test

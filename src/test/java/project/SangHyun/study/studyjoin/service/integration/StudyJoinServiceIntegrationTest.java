@@ -18,6 +18,7 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
+import project.SangHyun.study.studyjoin.dto.response.FindJoinedStudyResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
@@ -66,6 +67,19 @@ class StudyJoinServiceIntegrationTest {
         //then
         Assertions.assertEquals(StudyRole.APPLY, ActualResult.getStudyInfos().getStudyRole());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+    }
+
+    @Test
+    @DisplayName("참가한 모든 스터디를 조회한다.")
+    public void findJoinedStudy() throws Exception {
+        //given
+        Member member = testDB.findStudyMemberNotResourceOwner();
+
+        //when
+        List<FindJoinedStudyResponseDto> ActualResult = studyJoinService.findJoinedStudies(member.getId());
+
+        //then
+        Assertions.assertEquals(1, ActualResult.size());
     }
 
     @Test

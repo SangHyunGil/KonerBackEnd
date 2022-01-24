@@ -24,6 +24,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Component
@@ -57,6 +58,8 @@ public class TestData {
 
             Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴공", "/defaultImg.png", MemberRole.ROLE_NOT_PERMITTED);
             memberRepository.save(memberB);
+
+            Supplier<Member> creator = () -> new Member(10L);
         }
 
         private void initStudy() {
@@ -107,7 +110,7 @@ public class TestData {
         }
 
         private void makeTestDummyStudy(Member member) {
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 50; i++) {
                 if (i % 2 == 0)
                     makeStudy(member, "백엔드 모집"+i, "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));
                 else

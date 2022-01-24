@@ -6,17 +6,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
-import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.service.impl.JwtTokens;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class SignFactory extends BasicFactory {
     private static FileInputStream fileInputStream;
@@ -89,11 +88,11 @@ public class SignFactory extends BasicFactory {
     }
 
     public static MemberLoginResponseDto makeLoginResponseDto(Member member) {
-        return MemberLoginResponseDto.create(member, new ArrayList<>(), new JwtTokens("accessToken", "refreshToken"));
+        return MemberLoginResponseDto.create(member, new JwtTokens("accessToken", "refreshToken"));
     }
 
     public static TokenResponseDto makeTokenResponseDto(Member member) {
-        return TokenResponseDto.create(member, new ArrayList<>(), new JwtTokens("newAccessToken", "newRefreshToken"));
+        return TokenResponseDto.create(member, new JwtTokens("newAccessToken", "newRefreshToken"));
     }
 
     public static MemberChangePwResponseDto makeChangePwResponseDto(Member member) {

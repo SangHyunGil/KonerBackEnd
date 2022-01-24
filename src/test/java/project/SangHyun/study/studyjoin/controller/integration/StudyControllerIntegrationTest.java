@@ -224,4 +224,19 @@ class StudyControllerIntegrationTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("참여한 모든 스터디를 조회한다.")
+    public void findJoinedStudy() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyMemberNotResourceOwner();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+
+        //when, then
+        mockMvc.perform(get("/study/join")
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1));
+    }
 }

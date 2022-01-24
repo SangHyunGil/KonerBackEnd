@@ -3,6 +3,7 @@ package project.SangHyun.study.studyjoin.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
@@ -27,18 +28,6 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
                 .where(studyJoin.study.id.eq(studyId),
                         studyJoin.studyRole.ne(StudyRole.APPLY))
                 .fetchCount();
-    }
-
-    @Override
-    public List<StudyInfoDto> findStudyInfoByMemberId(Long memberId) {
-        return jpaQueryFactory
-                .select(Projections.constructor(StudyInfoDto.class,
-                        studyJoin.study.id, studyJoin.studyRole))
-                .from(studyJoin)
-                .join(studyJoin.study, study)
-                .where(studyJoin.member.id.eq(memberId),
-                        studyJoin.studyRole.ne(StudyRole.APPLY))
-                .fetch();
     }
 
     @Override
@@ -70,6 +59,17 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
                 .from(studyJoin)
                 .innerJoin(studyJoin.member, member)
                 .where(studyJoin.study.id.eq(studyId))
+                .fetch();
+    }
+
+    @Override
+    public List<Study> findStudiesByMemberId(Long memberId) {
+        return jpaQueryFactory
+                .select(study)
+                .from(studyJoin)
+                .innerJoin(studyJoin.study, study)
+                .where(studyJoin.member.id.eq(memberId),
+                        studyJoin.studyRole.ne(StudyRole.APPLY))
                 .fetch();
     }
 

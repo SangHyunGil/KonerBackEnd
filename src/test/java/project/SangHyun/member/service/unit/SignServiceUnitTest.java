@@ -9,22 +9,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.common.helper.EmailHelper;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.common.helper.RedisHelper;
-import project.SangHyun.member.service.impl.SignServiceImpl;
+import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
-import project.SangHyun.member.dto.request.*;
+import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.member.service.impl.SignServiceImpl;
+import project.SangHyun.member.tools.sign.SignFactory;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -120,7 +119,6 @@ class SignServiceUnitTest {
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
-        given(studyJoinRepository.findStudyInfoByMemberId(any())).willReturn(new ArrayList<>());
         given(passwordEncoder.matches(any(), any())).willReturn(true);
         given(accessTokenHelper.createToken(any())).willReturn("accessToken");
         given(refreshTokenHelper.createToken(any())).willReturn("refreshToken");
@@ -276,7 +274,6 @@ class SignServiceUnitTest {
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(accessTokenHelper.createToken(any())).willReturn("newAccessToken");
         given(refreshTokenHelper.createToken(any())).willReturn("newRefreshToken");
-        given(studyJoinRepository.findStudyInfoByMemberId(any())).willReturn(new ArrayList<>());
 
         //when
         TokenResponseDto ActualResult = signService.tokenReIssue(requestDto);

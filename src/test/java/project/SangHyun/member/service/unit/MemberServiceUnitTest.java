@@ -8,21 +8,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.tools.member.MemberFactory;
-import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
-import project.SangHyun.member.service.impl.MemberServiceImpl;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
 import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.member.service.impl.MemberServiceImpl;
+import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -58,7 +57,6 @@ class MemberServiceUnitTest {
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
-        given(studyJoinRepository.findStudyInfoByMemberId(authMember.getId())).willReturn(List.of());
 
         //when
         MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);

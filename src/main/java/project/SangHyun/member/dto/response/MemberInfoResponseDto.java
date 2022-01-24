@@ -6,9 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,10 +24,7 @@ public class MemberInfoResponseDto {
     @ApiModelProperty(value = "학과")
     private String department;
 
-    @ApiModelProperty(value = "스터디 정보")
-    private List<StudyInfoDto> studyInfos;
-
-    public static MemberInfoResponseDto create(Member member, List<StudyInfoDto> studyInfo) {
-        return new MemberInfoResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartment(), studyInfo);
+    public static MemberInfoResponseDto create(Member member) {
+        return new MemberInfoResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartment());
     }
 }

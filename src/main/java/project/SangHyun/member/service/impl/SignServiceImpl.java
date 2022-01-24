@@ -6,25 +6,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.*;
+import project.SangHyun.common.helper.EmailHelper;
+import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
-import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
-import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
-import project.SangHyun.common.helper.EmailHelper;
-import project.SangHyun.common.helper.FileStoreHelper;
-import project.SangHyun.common.helper.RedisHelper;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -68,9 +66,8 @@ public class SignServiceImpl implements SignService {
     public MemberLoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         validateLoginInfo(requestDto, member);
-        List<StudyInfoDto> studyJoinInfos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
-        return MemberLoginResponseDto.create(member, studyJoinInfos, jwtTokens);
+        return MemberLoginResponseDto.create(member, jwtTokens);
     }
 
     private void validateLoginInfo(MemberLoginRequestDto requestDto, Member member) {
@@ -93,9 +90,8 @@ public class SignServiceImpl implements SignService {
         String email = refreshTokenHelper.extractSubject(requestDto.getRefreshToken());
         compareWithRedisStoredValue(requestDto.getRefreshToken(), email);
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
-        List<StudyInfoDto> studyInfos = studyJoinRepository.findStudyInfoByMemberId(member.getId());
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
-        return TokenResponseDto.create(member, studyInfos, jwtTokens);
+        return TokenResponseDto.create(member, jwtTokens);
     }
 
     // 요청이 실사용자에 의한 것인지 검증하기 위해 Redis에 저장된 값과 비교
