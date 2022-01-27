@@ -29,7 +29,7 @@ public class StudyFactory extends BasicFactory {
     static {
         try {
             fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
-            multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
+            multipartFile = new MockMultipartFile("git", "git.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }

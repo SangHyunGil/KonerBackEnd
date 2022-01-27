@@ -53,20 +53,20 @@ public class TestData {
         private final PasswordEncoder passwordEncoder;
 
         private void initMember() {
-            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴공", "/defaultImg2.png", MemberRole.ROLE_MEMBER);
+            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong1.jpg", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberA);
 
-            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴공", "/defaultImg.png", MemberRole.ROLE_NOT_PERMITTED);
+            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong2.jpg", MemberRole.ROLE_NOT_PERMITTED);
             memberRepository.save(memberB);
 
             Supplier<Member> creator = () -> new Member(10L);
         }
 
         private void initStudy() {
-            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "/defaultImg.png", MemberRole.ROLE_MEMBER);
+            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong3.jpg", MemberRole.ROLE_MEMBER);
             memberRepository.save(member);
 
-            Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", "컴공", "/defaultImg.png", MemberRole.ROLE_MEMBER);
+            Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong4.jpg", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberB);
 
             Study study = makeStudy(member, "백엔드 모집", "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));
@@ -77,7 +77,7 @@ public class TestData {
         }
 
         private Study makeStudy(Member member, String title, String content, Tags tags) {
-            Study study = new Study(title, tags, content, filePath+"\\defaultImg2.png", "cse", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study(title, tags, content, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/StudyDefaultImg.png", "cse", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
 
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);

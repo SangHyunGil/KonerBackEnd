@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -98,7 +99,7 @@ class StudyControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(multipart("/study")
-                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("memberId", String.valueOf(requestDto.getMemberId()))
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
@@ -163,7 +164,7 @@ class StudyControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
-                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
                         .param("startDate", requestDto.getStartDate())
@@ -194,7 +195,7 @@ class StudyControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
-                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("title", requestDto.getTitle())
                         .param("content", requestDto.getContent())
                         .param("startDate", requestDto.getStartDate())

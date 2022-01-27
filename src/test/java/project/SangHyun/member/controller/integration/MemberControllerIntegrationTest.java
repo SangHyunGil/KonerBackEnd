@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -16,13 +17,12 @@ import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
+import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.tools.member.MemberFactory;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,7 +109,7 @@ class MemberControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(multipart("/users/{id}", member.getId())
-                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
                         .param("department", requestDto.getDepartment())
@@ -133,7 +133,7 @@ class MemberControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(multipart("/users/{id}", member.getId())
-                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
                         .param("department", requestDto.getDepartment())
