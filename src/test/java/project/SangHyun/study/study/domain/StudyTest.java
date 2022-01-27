@@ -3,9 +3,12 @@ package project.SangHyun.study.study.domain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
@@ -13,16 +16,15 @@ import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
-import project.SangHyun.common.helper.FileStoreHelper;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+@SpringBootTest
 class StudyTest {
-    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";
-    FileStoreHelper fileStoreHelper = new FileStoreHelper(filePathDir);
+    @Autowired
+    private FileStoreHelper fileStoreHelper;
 
     @Test
     @DisplayName("스터디 정보를 업데이트한다.")

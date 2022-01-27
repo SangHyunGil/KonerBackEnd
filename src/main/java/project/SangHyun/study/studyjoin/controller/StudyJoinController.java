@@ -14,6 +14,7 @@ import project.SangHyun.study.studyjoin.dto.response.FindJoinedStudyResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
 import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RestController
@@ -29,9 +30,9 @@ public class StudyJoinController {
         return responseService.getMultipleResult(studyJoinService.findStudyMembers(studyId));
     }
 
-    @ApiOperation(value = "스터디 참가 신청", notes = "스터디 참가를 신청한다.")
+    @ApiOperation(value = "참여 스터디 조회", notes = "참여한 스터디를 조회한다.")
     @GetMapping("/join")
-    public MultipleResult<FindJoinedStudyResponseDto> findJoinedStudy(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public MultipleResult<FindJoinedStudyResponseDto> findJoinedStudy(@ApiIgnore @AuthenticationPrincipal MemberDetails memberDetails) {
         return responseService.getMultipleResult(studyJoinService.findJoinedStudies(memberDetails.getId()));
     }
 

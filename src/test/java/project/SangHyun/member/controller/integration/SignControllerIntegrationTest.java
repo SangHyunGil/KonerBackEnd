@@ -8,24 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.common.helper.RedisHelper;
+import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.member.dto.request.*;
+import project.SangHyun.member.tools.sign.SignFactory;
 
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -58,7 +60,7 @@ class SignControllerIntegrationTest {
 
         //when, then
         mockMvc.perform(multipart("/sign/register")
-                        .file("profileImg", requestDto.getProfileImg().getBytes())
+                        .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
                         .param("nickname", requestDto.getNickname())

@@ -3,19 +3,21 @@ package project.SangHyun.member.domain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.tools.member.MemberFactory;
-import project.SangHyun.common.helper.FileStoreHelper;
 
-import java.io.File;
 import java.io.FileInputStream;
 
+@SpringBootTest
 public class MemberTest {
-    String filePathDir = new File("C:/Users/Family/Desktop/SH/spring/Study").getAbsolutePath() + "/";
-    FileStoreHelper fileStoreHelper = new FileStoreHelper(filePathDir);
+    @Autowired
+    private FileStoreHelper fileStoreHelper;
 
     @Test
     @DisplayName("회원의 정보를 수정한다.")
