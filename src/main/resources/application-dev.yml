@@ -78,5 +78,4 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     algorithm: PBEWithMD5AndDES
-    password: KonerJasyptSecretKey
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
