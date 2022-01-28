@@ -1,0 +1,75 @@
+spring:
+  sse:
+    time: 3600000
+
+  jwt:
+    key:
+      access: R2lsU1NhbmdBY2Nlc3NUb2tlbjk3
+      refresh: R2lsU1NhbmdSZWZyZXNoVG9rZW45Nw==
+
+    time:
+      access: 1800000
+      refresh: 604800000
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate.default_batch_fetch_size: 1000
+    hibernate:
+      format_sql: true
+      ddl-auto: create
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3307/demo?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true
+    username: root
+    password: root
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: zizon5941
+    password: tkdgus1234$
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  redis:
+    host: localhost
+    port: 6379
+
+  domain:
+    http://localhost:3000
+
+  file:
+    dir: "profileImg"
+
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
+
+  config:
+    activate:
+      on-profile: test
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAQSLK7DFZMAVV6RFF
+      secretKey: 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
+    s3:
+      bucket: koner-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
