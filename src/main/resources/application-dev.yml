@@ -19,19 +19,19 @@ spring:
       hibernate.default_batch_fetch_size: 1000
     hibernate:
       format_sql: true
-      ddl-auto: create
+      ddl-auto: update
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(ob+dzVKsg1bScNfOj8a6QplFE6FltnndMERG1KLU0QhryvDt7Qa1tAp+ej/IZwrcJqp+ZjttWBw7WgQ+QEsE+INeI/FJsy8bMrW97+AdlA5rjWaGpGbe411UduWsXBhAEV6TMPY7DlitAx3QSsDeu/fdCa0KjAq4u4+b5F8AvuEJu+05NUpatA==)
-    username: ENC(KKdwtJ1FVpyGhcAHUxakUw==)
-    password: ENC(g9TrLHYx/z+QF6aahmXXAdWyY0uUWbEW7d/loDrpm18=)
+    url: ENC(TzJV8dUultXperwwiD28halHGuhxf9mhrWzIQGRjwsEvkhRKioc1FxHgxnI/RT9z2UB/vMsfI3iUJBBnEVh9gCbGX1F9rINxo7L7OQFt9ObeUrMY+GVuXxg2ZgF5VPJkzlAk0IHQpAsi7rwAgtWegqumEzkPdsT0MxjrS0oZBUk7CBTPglfFOEiOfYmQT/+9nNQYwT8cy3W3IXHExRU89CwN/xhKPlYbZel2U9WoEoM=)
+    username: ENC(36oN9PtBYyLcp0fOANPh3OcuFdC5HJ8h)
+    password: ENC(X1CD8QjgOhHEMORMufz9dDMTJiife43z)
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ENC(EgmHF31rL10vUdDf6ctcUacv187jdbCW)
-    password: ENC(Ma8GwcH4PAm0rcWIQryJIW6XXBe3HIBV)
+    username: ENC(Hqntsjre7+AQBxi7VRlIi54rhdkHT0gL)
+    password: ENC(zufhnTGMPVbyBWisvjAAPjc6ZMa2Lyxg)
     properties:
       mail:
         smtp:
@@ -44,14 +44,14 @@ spring:
           writetimeout: 5000
 
   redis:
-    host: localhost
+    host: redis
     port: 6379
 
   domain:
     http://localhost:3000
 
   file:
-    dir: "profileImg"
+    dir: "profileImg/"
 
   servlet:
     multipart:
@@ -65,11 +65,18 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: ENC(cueoDaq4/zDWBIp5VYxL5mUbKtm/Ss4Kk0EtnT3K/qg=)
-      secretKey: ENC(9GxzHCHL3jgJYrjiW1qjbh8klLCNC7gp6A5wzN/ubIXJ3qrKoeK3HG7WBJsWu9t0K17m5sKbQdY=)
+      accessKey: ENC(u/vXX3SW22mMgSSjIEDhEqg28RnNkcliVF/dtpu/c+I=)
+      secretKey: ENC(Ih8ngp5C7CKN4Oe0Itwmyrq3teKjkAJHJEHSY3NclEDzJBtvajpfWFnZ9/dBjSduJDOaRETuM1k=)
     s3:
       bucket: koner-bucket
     region:
       static: ap-northeast-2
     stack:
       auto: false
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    algorithm: PBEWithMD5AndDES
+    password: KonerJasyptSecretKey
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator

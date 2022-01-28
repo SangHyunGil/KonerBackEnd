@@ -1,7 +1,6 @@
 package project.SangHyun;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,6 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,8 +42,6 @@ public class TestData {
     @Transactional
     @RequiredArgsConstructor
     static class InitService {
-        @Value("${spring.file.dir}/")
-        private String filePath;
         private final MemberRepository memberRepository;
         private final StudyRepository studyRepository;
         private final StudyArticleRepository studyArticleRepository;
@@ -58,8 +54,6 @@ public class TestData {
 
             Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong2.jpg", MemberRole.ROLE_NOT_PERMITTED);
             memberRepository.save(memberB);
-
-            Supplier<Member> creator = () -> new Member(10L);
         }
 
         private void initStudy() {

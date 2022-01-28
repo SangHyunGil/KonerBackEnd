@@ -1,17 +1,6 @@
 version: '3'
 
 services:
-  mysql:
-    image: mysql:latest
-    hostname: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: demo
-      MYSQL_USER: gsh
-      MYSQL_PASSWORD: gsh
-    ports:
-      - "3307:3306"
-
   redis:
     image: redis:latest
     hostname: redis
@@ -21,6 +10,8 @@ services:
   demo:
     build: .
     restart: on-failure
+    env_file:
+      - web.env
     ports:
       - "8080:8080"
     depends_on:
