@@ -12,7 +12,8 @@ import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 
 @SpringBootTest
 public class MemberTest {
@@ -24,7 +25,7 @@ public class MemberTest {
     public void updateMember() throws Exception {
         //given
         Member member = MemberFactory.makeTestAuthMember();
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+        InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
         MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부", multipartFile);

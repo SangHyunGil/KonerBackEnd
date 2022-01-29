@@ -12,7 +12,8 @@ import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 class TagsTest {
@@ -20,7 +21,7 @@ class TagsTest {
     @DisplayName("공백의 태그를 가진 Tag 컬렉션은 예외를 반환한다.")
     public void blank() throws Exception {
         //given
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+        InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
         MockMultipartFile profileImg = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 스터디", List.of(" "),
@@ -35,7 +36,7 @@ class TagsTest {
     @DisplayName("중복된 태그를 가지지 않은 Tag 컬렉션은 성공적으로 저장된다.")
     public void success() throws Exception {
         //given
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+        InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
         MockMultipartFile profileImg = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 스터디", List.of("백엔드", "JPA"),
@@ -50,7 +51,7 @@ class TagsTest {
     @Test
     @DisplayName("중복된 태그를 가진 Tag 컬렉션은 예외를 반환한다.")
     public void duplicateTest() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+        InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
         MockMultipartFile profileImg = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 스터디", List.of("백엔드", "백엔드"),

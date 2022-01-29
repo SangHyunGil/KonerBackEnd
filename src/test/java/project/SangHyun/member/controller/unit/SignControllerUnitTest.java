@@ -12,23 +12,22 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.tools.sign.SignFactory;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
-import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.controller.SignController;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
-import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.controller.SignController;
+import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.tools.sign.SignFactory;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +58,7 @@ class SignControllerUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member createdMember = requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), "C:\\Users\\Family\\Desktop\\SH\\spring\\StudyProfile\\git.png");
+        Member createdMember = requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
         MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(createdMember);
         SingleResult<MemberRegisterResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
