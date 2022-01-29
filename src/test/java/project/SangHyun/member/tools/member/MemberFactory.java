@@ -14,17 +14,18 @@ import project.SangHyun.member.dto.response.MemberInfoResponseDto;
 import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 
 public class MemberFactory extends BasicFactory {
-    private static FileInputStream fileInputStream;
+    private static InputStream fileInputStream;
     private static MultipartFile multipartFile;
 
     static {
         try {
-            fileInputStream = new FileInputStream("C:\\Users\\Family\\Pictures\\Screenshots\\git.png");
+            InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
             multipartFile = new MockMultipartFile("git", "git.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
