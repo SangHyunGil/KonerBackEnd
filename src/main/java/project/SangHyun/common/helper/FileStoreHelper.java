@@ -17,6 +17,7 @@ public class FileStoreHelper {
     private final AmazonS3Client awsS3Client;
     private final String bucket;
     private final String filePath;
+    private final String STUDY_DEFAULT_IMG = "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/logo/KakaoTalk_20220128_143615435.png";
 
     public FileStoreHelper(AmazonS3Client awsS3Client,
                            @Value("${cloud.aws.s3.bucket}") String bucket,
@@ -28,7 +29,7 @@ public class FileStoreHelper {
 
     public String storeFile(MultipartFile file) throws IOException {
         if (file == null) {
-            return "디폴트이미지 경로";
+            return STUDY_DEFAULT_IMG;
         }
         String fileName = createFileName(file.getOriginalFilename());
         uploadToS3(file, fileName);
