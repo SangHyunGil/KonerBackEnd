@@ -1,7 +1,6 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 	id 'java'
 }
 
@@ -24,7 +23,6 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
-	implementation 'com.querydsl:querydsl-jpa'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
@@ -60,22 +58,28 @@ test {
 	systemProperty "jasypt.encryptor.password", project.getProperties().get("jasypt.encryptor.password")
 }
 
-def querydslDir = 'src/main/generated'
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-sourceSets {
-	main.java.srcDir querydslDir
-}
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
+configure(project) {
+	apply plugin: "io.spring.dependency-management"
 
-compileQuerydsl.doFirst {
-	if(file(querydslDir).exists() )
-		delete(file(querydslDir))
+	dependencies {
+		implementation "com.querydsl:querydsl-jpa"
+		implementation "com.querydsl:querydsl-core"
+		annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // querydsl JPAAnnotationProcessor 사용 지정
+		annotationProcessor "jakarta.persistence:jakarta.persistence-api:2.2.3"
+		annotationProcessor "jakarta.annotation:jakarta.annotation-api:1.3.5"
+	}
+
+	// querydsl 적용
+	def generated='src/main/generated'
+	sourceSets {
+		main.java.srcDirs += [ generated ]
+	}
+
+	tasks.withType(JavaCompile) {
+		options.generatedSourceOutputDirectory = file(generated)
+	}
+
+	clean.doLast {
+		file(generated).deleteDir()
+	}
 }
