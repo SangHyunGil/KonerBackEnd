@@ -20,6 +20,7 @@ import project.SangHyun.member.dto.response.MemberProfileResponseDto;
 import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @SpringBootTest
@@ -33,6 +34,8 @@ class MemberServiceIntegrationTest {
     MemberRepository memberRepository;
     @Autowired
     TestDB testDB;
+    @Autowired
+    EntityManager em;
 
     @BeforeEach
     void beforeEach() {
@@ -85,13 +88,20 @@ class MemberServiceIntegrationTest {
     public void deleteMember() throws Exception {
         //given
         Member member = testDB.findGeneralMember();
+        List<Member> prevMembers = memberRepository.findAll();
+        persistenceContextClear();
 
         //when
         MemberDeleteResponseDto ActualResult = memberService.deleteMember(member.getId());
-        List<Member> members = memberRepository.findAll();
+        List<Member> laterMembers = memberRepository.findAll();
 
         //then
-        Assertions.assertEquals(7, members.size());
+        Assertions.assertEquals(1, prevMembers.size()-laterMembers.size());
         Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+    }
+
+    private void persistenceContextClear() {
+        em.flush();
+        em.clear();
     }
 }
