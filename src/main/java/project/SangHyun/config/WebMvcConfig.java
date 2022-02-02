@@ -7,25 +7,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-
-    @Value("${spring.domain.local}")
-    private String allowedOrigin1;
-
-    @Value("${spring.domain.prod}")
-    private String allowedOrigin2;
+    @Value("${spring.domain}")
+    private String prodOrigin;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedOrigin1)
+                .allowedOrigins(prodOrigin)
                 .allowCredentials(true)
                 .allowedMethods("*")
                 .allowedHeaders("*");
 
-        registry.addMapping("/**")
-                .allowedOrigins(allowedOrigin2)
-                .allowCredentials(true)
-                .allowedMethods("*")
-                .allowedHeaders("*");
     }
 }
