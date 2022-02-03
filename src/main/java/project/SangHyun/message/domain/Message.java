@@ -17,7 +17,9 @@ import javax.persistence.*;
 public class Message extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "message_id")
     private Long id;
+    @Column(nullable = false, length = 1000)
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
@@ -27,8 +29,11 @@ public class Message extends EntityDate {
     @JoinColumn(name = "receiver_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member receiver;
+    @Column(nullable = false)
     private Boolean isRead;
+    @Column(nullable = false)
     private Boolean deletedBySender;
+    @Column(nullable = false)
     private Boolean deletedByReceiver;
 
     public Message(Long id) {

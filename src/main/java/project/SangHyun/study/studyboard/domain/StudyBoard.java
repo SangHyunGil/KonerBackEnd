@@ -15,7 +15,9 @@ import javax.persistence.*;
 public class StudyBoard extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long id;
+    @Column(nullable = false)
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")

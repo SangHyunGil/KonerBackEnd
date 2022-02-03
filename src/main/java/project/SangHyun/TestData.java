@@ -91,7 +91,7 @@ public class TestData {
             studyArticleRepository.save(studyArticle2);
             studyArticleRepository.save(studyArticle3);
 
-            StudyJoin studyJoin = new StudyJoin(member, null, study, StudyRole.CREATOR);
+            StudyJoin studyJoin = new StudyJoin(member, "하이요", study, StudyRole.CREATOR);
             studyJoinRepository.save(studyJoin);
 
             return study;

@@ -142,52 +142,52 @@ public class TestDB {
 
     private void initStudy() {
         Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
-        memberRepository.save(memberA);
+        Member storedMemberA = memberRepository.save(memberA);
 
         Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
-        memberRepository.save(memberB);
+        Member storedMemberB = memberRepository.save(memberB);
 
         Member memberC = new Member("xptmxm0!", passwordEncoder.encode("xptmxm0!"), "예림", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
-        memberRepository.save(memberC);
+        Member storedMemberC = memberRepository.save(memberC);
 
         Member memberD = new Member("xptmxm10!", passwordEncoder.encode("xptmxm10!"), "동욱", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
-        memberRepository.save(memberD);
+        Member storedMemberD = memberRepository.save(memberD);
 
         Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
-        memberRepository.save(memberE);
+        Member storedMemberE = memberRepository.save(memberE);
 
-        Study emptyStudy = new Study("임시용", new Tags(List.of(new Tag("임시용"))), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 0L, new Schedule("2021-10-01", "2021-12-25"), memberB, new ArrayList<>(), new ArrayList<>());
+        Study emptyStudy = new Study("임시용", new Tags(List.of(new Tag("임시용"))), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 0L, new Schedule("2021-10-01", "2021-12-25"), storedMemberB, new ArrayList<>(), new ArrayList<>());
 
-        Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"), new Tag("JPA"), new Tag("스프링"))), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 5L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
+        Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"), new Tag("JPA"), new Tag("스프링"))), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 5L, new Schedule("2021-10-01", "2021-12-25"), storedMemberA, new ArrayList<>(), new ArrayList<>());
 
         studyRepository.save(study);
         studyRepository.save(emptyStudy);
 
-        StudyJoin studyJoin = new StudyJoin(memberA, null, study, StudyRole.CREATOR);
+        StudyJoin studyJoin = new StudyJoin(storedMemberA, null, study, StudyRole.CREATOR);
         studyJoinRepository.save(studyJoin);
 
-        StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 진행합니다.", study, StudyRole.ADMIN);
+        StudyJoin studyJoin2 = new StudyJoin(storedMemberB, "빠르게 진행합니다.", study, StudyRole.ADMIN);
         studyJoinRepository.save(studyJoin2);
 
-        StudyJoin studyJoin3 = new StudyJoin(memberC, "빠르게 진행합니다.", study, StudyRole.MEMBER);
+        StudyJoin studyJoin3 = new StudyJoin(storedMemberC, "빠르게 진행합니다.", study, StudyRole.MEMBER);
         studyJoinRepository.save(studyJoin3);
 
-        StudyJoin studyJoin4 = new StudyJoin(memberD, "빠르게 진행합니다.", study, StudyRole.APPLY);
+        StudyJoin studyJoin4 = new StudyJoin(storedMemberD, "빠르게 진행합니다.", study, StudyRole.APPLY);
         studyJoinRepository.save(studyJoin4);
 
-        StudyJoin studyJoin5 = new StudyJoin(memberE, "빠르게 진행합니다.", study, StudyRole.MEMBER);
+        StudyJoin studyJoin5 = new StudyJoin(storedMemberE, "빠르게 진행합니다.", study, StudyRole.MEMBER);
         studyJoinRepository.save(studyJoin5);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
         StudyBoard studyBoard3 = new StudyBoard("알고리즘", study);
 
-        StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, memberA, studyBoard1);
-        StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
-        StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
+        StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
+        StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
+        StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
 
-        StudyComment studyComment1 = new StudyComment(memberC, studyArticle1, null, "공지사항 댓글1입니다.", false);
-        StudyComment studyComment2 = new StudyComment(memberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.", false);
+        StudyComment studyComment1 = new StudyComment(storedMemberC, studyArticle1, null, "공지사항 댓글1입니다.", false);
+        StudyComment studyComment2 = new StudyComment(storedMemberA, studyArticle1, studyComment1, "공지사항 댓글2입니다.", false);
 
         studyCommentRepository.save(studyComment1);
         studyCommentRepository.save(studyComment2);
@@ -201,7 +201,7 @@ public class TestDB {
         study.addBoard(studyBoard3);
 
         // findStudyGeneralMember, findStudyApplyMember, findStudyMemberNotResourceOwner
-        initMessage(memberC, memberD, memberE);
+        initMessage(storedMemberC, storedMemberD, storedMemberE);
     }
 
     private void initMessage(Member testMemberA, Member testMemberB, Member testMemberC) {
