@@ -48,7 +48,7 @@ spring:
     port: 6379
 
   domain:
-    http://localhost:3000
+    http://koner.kr/
 
   file:
     dir: "profileImg/"
