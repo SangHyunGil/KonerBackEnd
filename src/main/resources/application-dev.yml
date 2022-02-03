@@ -47,7 +47,7 @@ spring:
     host: redis
     port: 6379
 
-  domain: http://localhost
+  domain: http://koner.kr/
 
   file:
     dir: "profileImg/"
