@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 public class EmailHelper {
     private final JavaMailSender javaMailSender;
     private static final String UNIVERSITY_EMAIL = "@koreatech.ac.kr";
-    private static final String VERIFY_URL = "http://localhost:3000/signup/verify";
+    private static final String VERIFY_URL = "http://koner.kr/signup/verify";
 
     @Async
     public void send(String email, String value, String redisKey) {
