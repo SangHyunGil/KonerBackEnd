@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class Study extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "study_id")
     private Long id;
     private String title;
     private String content;

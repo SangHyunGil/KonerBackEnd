@@ -4,14 +4,11 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
-import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
-import project.SangHyun.study.studycomment.domain.StudyComment;
+import project.SangHyun.study.studyboard.domain.StudyBoard;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -20,7 +17,6 @@ import java.util.List;
 public class StudyArticle extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "article_id")
     private Long id;
     private String title;
     private String content;

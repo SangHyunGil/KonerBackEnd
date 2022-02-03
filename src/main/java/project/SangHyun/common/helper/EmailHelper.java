@@ -31,7 +31,7 @@ public class EmailHelper {
             mm.setFrom(new InternetAddress("zizon5941@gmail.com"));
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email+UNIVERSITY_EMAIL));
             mm.setSubject(makeTitle(key), "UTF-8");
-            mm.setText(getHtml(getUrl(VERIFY_URL, email, authCode, key)), "UTF-8", "html");
+            mm.setText(getHtml(getUrl(email, authCode, key)), "UTF-8", "html");
 
             return mm;
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class EmailHelper {
                 "</html>";
     }
 
-    private String getUrl(String verifyUrl, String email, String authCode, String key) {
+    private String getUrl(String email, String authCode, String key) {
         return VERIFY_URL + makeParam(email, authCode, key);
     }
 
