@@ -5,11 +5,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.studyarticle.domain.StudyArticle;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -18,7 +15,6 @@ import java.util.List;
 public class StudyBoard extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
     private Long id;
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
