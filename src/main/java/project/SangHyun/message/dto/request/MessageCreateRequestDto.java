@@ -34,6 +34,7 @@ public class MessageCreateRequestDto {
                 .receiver(new Member(receiverId))
                 .deletedBySender(false)
                 .deletedByReceiver(false)
+                .isRead(false)
                 .build();
     }
 }

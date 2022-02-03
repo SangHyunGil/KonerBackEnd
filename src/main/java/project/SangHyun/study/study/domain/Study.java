@@ -19,24 +19,33 @@ import java.util.stream.Collectors;
 public class Study extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "study_id")
     private Long id;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false, length = 1000)
     private String content;
+    @Column(nullable = false)
     private String profileImgUrl;
+    @Column(nullable = false)
     private String department;
+    @Column(nullable = false)
     private Long headCount;
     @Embedded
+    @Column(nullable = false)
     private StudyOptions studyOptions;
     @Embedded
+    @Column(nullable = false)
     private Schedule schedule;
     @Embedded
+    @Column(nullable = false)
     private Tags tags = new Tags();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyJoin> studyJoins = new ArrayList<>();
-    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyBoard> studyBoards = new ArrayList<>();
 
     public Study(Long id) {

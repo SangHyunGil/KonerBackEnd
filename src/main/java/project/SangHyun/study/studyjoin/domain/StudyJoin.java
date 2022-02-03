@@ -20,10 +20,13 @@ import javax.persistence.*;
 public class StudyJoin extends EntityDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "join_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+    @Column(length = 1000)
     private String applyContent;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")

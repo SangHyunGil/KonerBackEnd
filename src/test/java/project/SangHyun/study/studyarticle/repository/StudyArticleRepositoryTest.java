@@ -48,13 +48,13 @@ class StudyArticleRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", null, MemberRole.ROLE_MEMBER);
-        memberRepository.save(memberA);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member storedMemberA = memberRepository.save(memberA);
 
         Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"))), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
-                new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE),  2L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
+                new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE),  2L, new Schedule("2021-10-01", "2021-12-25"), storedMemberA, new ArrayList<>(), new ArrayList<>());
 
-        StudyJoin studyJoin = new StudyJoin(memberA, null, study, StudyRole.CREATOR);
+        StudyJoin studyJoin = new StudyJoin(storedMemberA, null, study, StudyRole.CREATOR);
         study.join(studyJoin);
 
         studyBoard1 = new StudyBoard("공지사항", study);
@@ -62,16 +62,16 @@ class StudyArticleRepositoryTest {
 
         studyRepository.save(study);
 
-        StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, memberA, studyBoard1);
-        StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, memberA, studyBoard1);
-        StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
+        StudyArticle studyArticle1 = new StudyArticle("공지사항 테스트 글", "공지사항 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
+        StudyArticle studyArticle2 = new StudyArticle("자유게시판 테스트 글", "자유게시판 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
+        StudyArticle studyArticle3 = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
 
         studyArticleRepository.save(studyArticle1);
         studyArticleRepository.save(studyArticle2);
         studyArticleRepository.save(studyArticle3);
 
         for (int i = 0; i < 10; i++) {
-            StudyArticle studyArticleTest = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, memberA, studyBoard1);
+            StudyArticle studyArticleTest = new StudyArticle("알고리즘 테스트 글", "알고리즘 테스트 글입니다.", 0L, storedMemberA, studyBoard1);
             studyArticleRepository.save(studyArticleTest);
         }
     }
@@ -82,7 +82,6 @@ class StudyArticleRepositoryTest {
         //given
 
         //when
-        Study study = studyRepository.findStudyByTitle("백엔드 모집").get(0);
         List<StudyArticle> allArticles = studyArticleRepository.findAll();
 
         //then
