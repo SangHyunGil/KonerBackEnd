@@ -3,6 +3,8 @@ package project.SangHyun.study.study.domain;
 import lombok.*;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.domain.Tag.Tag;
+import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -17,34 +19,46 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Study extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_id")
     private Long id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false, length = 1000)
     private String content;
-    @Column(nullable = false)
-    private String profileImgUrl;
+
     @Column(nullable = false)
     private String department;
+
     @Column(nullable = false)
     private Long headCount;
+
+    @Column(nullable = false)
+    private String profileImgUrl;
+
     @Embedded
     @Column(nullable = false)
     private StudyOptions studyOptions;
+
     @Embedded
     @Column(nullable = false)
     private Schedule schedule;
+
     @Embedded
     @Column(nullable = false)
     private Tags tags = new Tags();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
     @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyJoin> studyJoins = new ArrayList<>();
+
     @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyBoard> studyBoards = new ArrayList<>();
 

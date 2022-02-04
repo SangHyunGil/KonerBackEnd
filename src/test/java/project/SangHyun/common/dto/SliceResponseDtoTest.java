@@ -8,6 +8,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.*;
+import project.SangHyun.study.study.domain.Tag.Tag;
+import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;

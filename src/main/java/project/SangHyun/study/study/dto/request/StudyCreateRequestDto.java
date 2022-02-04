@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.*;
+import project.SangHyun.study.study.domain.Tag.Tag;
+import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyRole;

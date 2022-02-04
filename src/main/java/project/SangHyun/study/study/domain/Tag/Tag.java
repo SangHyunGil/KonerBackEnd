@@ -1,14 +1,12 @@
-package project.SangHyun.study.study.domain;
+package project.SangHyun.study.study.domain.Tag;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.advice.exception.InCorrectTagNameException;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 
 @Getter
 @Embeddable

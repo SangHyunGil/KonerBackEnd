@@ -18,22 +18,27 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class StudyJoin extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "join_id")
     private Long id;
+
+    @Column(length = 1000)
+    private String applyContent;
+
+    @Enumerated(EnumType.STRING)
+    private StudyRole studyRole;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-    @Column(length = 1000)
-    private String applyContent;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
-    @Enumerated(EnumType.STRING)
-    private StudyRole studyRole;
 
     public StudyJoin(Long id) {
         this.id = id;

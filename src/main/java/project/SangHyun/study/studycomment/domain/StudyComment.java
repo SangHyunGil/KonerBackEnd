@@ -17,28 +17,35 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class StudyComment extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
+
+    @Column(nullable = false, length = 1000)
+    private String content;
+
+    @Column(nullable = false)
+    private Boolean deleted;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyArticle studyArticle;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyComment parent;
+
     @OneToMany(mappedBy = "parent")
     private List<StudyComment> children = new ArrayList<>();
-    @Column(nullable = false, length = 1000)
-    private String content;
-    @Column(nullable = false)
-    private Boolean deleted;
 
     public StudyComment(Long id) {
         this.id = id;

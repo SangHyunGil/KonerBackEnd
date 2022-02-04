@@ -10,6 +10,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.domain.Tag.Tag;
+import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
 import project.SangHyun.study.study.domain.enums.StudyState;

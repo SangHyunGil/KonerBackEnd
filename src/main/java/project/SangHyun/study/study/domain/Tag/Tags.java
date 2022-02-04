@@ -1,7 +1,5 @@
-package project.SangHyun.study.study.domain;
+package project.SangHyun.study.study.domain.Tag;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.SangHyun.common.advice.exception.DuplicateTagsException;
 
@@ -12,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Tags {
     @ElementCollection
     @CollectionTable(name = "study_tag", joinColumns = @JoinColumn(name = "study_id"))
