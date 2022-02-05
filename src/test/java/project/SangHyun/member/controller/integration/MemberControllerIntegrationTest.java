@@ -112,7 +112,7 @@ class MemberControllerIntegrationTest {
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("PUT");
                             return requestPostProcessor;
@@ -136,7 +136,7 @@ class MemberControllerIntegrationTest {
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("PUT");
                             return requestPostProcessor;

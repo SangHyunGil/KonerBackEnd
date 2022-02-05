@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.config.security.member.MemberDetails;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
@@ -38,7 +39,7 @@ public class MemberFactory extends BasicFactory {
     }
 
     public static MemberUpdateRequestDto makeUpdateRequestDto(String nickname) {
-        return new MemberUpdateRequestDto("xptmxm1!", nickname, "컴퓨터공학부", multipartFile);
+        return new MemberUpdateRequestDto("xptmxm1!", nickname, Department.CSE, multipartFile);
     }
 
     public static MemberInfoResponseDto makeInfoResponseDto(Member member) {

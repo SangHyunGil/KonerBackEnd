@@ -26,6 +26,6 @@ public class ChatRoomFindResponseDto {
 
     public static ChatRoomFindResponseDto create(ChatRoom chatRoom) {
         return new ChatRoomFindResponseDto(chatRoom.getId(), chatRoom.getMember().getId(),
-                chatRoom.getMember().getNickname(), chatRoom.getRoomName());
+                chatRoom.getCreator(), chatRoom.getRoomName());
     }
 }

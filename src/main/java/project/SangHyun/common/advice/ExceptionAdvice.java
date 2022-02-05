@@ -204,4 +204,22 @@ public class ExceptionAdvice {
     protected Result MessageNotFountException(BindException e) {
         return responseService.getFailureResult(-129, "존재하지 않는 쪽지입니다.");
     }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidEmailException(BindException e) {
+        return responseService.getFailureResult(-130, "적절하지 않은 이메일입니다.");
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidPasswordException(BindException e) {
+        return responseService.getFailureResult(-131, "적절하지 않은 비밀번호입니다.");
+    }
+
+    @ExceptionHandler(InvalidNicknameException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidNicknameException(BindException e) {
+        return responseService.getFailureResult(-132, "적절하지 않은 닉네임입니다.");
+    }
 }

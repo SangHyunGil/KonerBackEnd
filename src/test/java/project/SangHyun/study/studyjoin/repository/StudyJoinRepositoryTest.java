@@ -10,10 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.study.domain.*;
+import project.SangHyun.study.study.domain.Schedule;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyOptions;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.domain.enums.RecruitState;
@@ -46,10 +49,10 @@ class StudyJoinRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         Member storeMemberA = memberRepository.save(memberA);
 
-        Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", "컴공", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         Member storeMemberB = memberRepository.save(memberB);
 
         Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"))), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",

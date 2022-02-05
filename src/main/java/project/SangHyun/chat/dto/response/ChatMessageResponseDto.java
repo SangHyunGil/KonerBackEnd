@@ -29,7 +29,7 @@ public class ChatMessageResponseDto {
 
     public static ChatMessageResponseDto create(Chat chat) {
         return new ChatMessageResponseDto(chat.getChatRoom().getId(),
-                chat.getId(), chat.getMember().getId(), chat.getMember().getNickname(),
+                chat.getId(), chat.getMember().getId(), chat.getSender(),
                 chat.getContent());
     }
 }

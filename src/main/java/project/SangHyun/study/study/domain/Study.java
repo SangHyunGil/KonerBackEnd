@@ -5,6 +5,9 @@ import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
+import project.SangHyun.study.study.domain.enums.RecruitState;
+import project.SangHyun.study.study.domain.enums.StudyMethod;
+import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -101,5 +104,41 @@ public class Study extends EntityDate {
     public void addBoard(StudyBoard studyBoard) {
         this.studyBoards.add(studyBoard);
         studyBoard.setStudy(this);
+    }
+
+    public String getCreatorNickname() {
+        return member.getNickname();
+    }
+
+    public String getCreatorProfileImgUrl() {
+        return member.getProfileImgUrl();
+    }
+
+    public List<String> getTagNames() {
+        return tags.getTagNames();
+    }
+
+    public String getStartDate() {
+        return schedule.getStartDate();
+    }
+
+    public String getEndDate() {
+        return schedule.getEndDate();
+    }
+
+    public String getStudyProfileImgUrl() {
+        return profileImgUrl;
+    }
+
+    public StudyMethod getStudyMethod() {
+        return studyOptions.getStudyMethod();
+    }
+
+    public StudyState getStudyState() {
+        return studyOptions.getStudyState();
+    }
+
+    public RecruitState getRecruitState() {
+        return studyOptions.getRecruitState();
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
@@ -51,18 +52,18 @@ public class TestData {
         private final PasswordEncoder passwordEncoder;
 
         private void initMember() {
-            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong1.jpg", MemberRole.ROLE_MEMBER);
+            Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong1.jpg", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberA);
 
-            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong2.jpg", MemberRole.ROLE_NOT_PERMITTED);
+            Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong2.jpg", MemberRole.ROLE_NOT_PERMITTED);
             memberRepository.save(memberB);
         }
 
         private void initStudy() {
-            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong3.jpg", MemberRole.ROLE_MEMBER);
+            Member member = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong3.jpg", MemberRole.ROLE_MEMBER);
             memberRepository.save(member);
 
-            Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", "컴퓨터공학부", "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong4.jpg", MemberRole.ROLE_MEMBER);
+            Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong4.jpg", MemberRole.ROLE_MEMBER);
             memberRepository.save(memberB);
 
             Study study = makeStudy(member, "백엔드 모집", "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));

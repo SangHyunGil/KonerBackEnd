@@ -26,6 +26,6 @@ public class MemberUpdateResponseDto {
 
     public static MemberUpdateResponseDto create(Member member) {
         return new MemberUpdateResponseDto(member.getId(), member.getEmail(),
-                member.getNickname(), member.getDepartment());
+                member.getNickname(), member.getDepartmentName());
     }
 }

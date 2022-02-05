@@ -58,7 +58,7 @@ class SignControllerIntegrationTest {
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;
@@ -79,7 +79,7 @@ class SignControllerIntegrationTest {
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;
@@ -100,7 +100,7 @@ class SignControllerIntegrationTest {
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;
@@ -121,7 +121,7 @@ class SignControllerIntegrationTest {
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;

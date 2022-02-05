@@ -109,7 +109,7 @@ class MemberControllerUnitTest {
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("PUT");
                             return requestPostProcessor;

@@ -5,6 +5,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.*;
@@ -33,19 +34,19 @@ public class SignFactory extends BasicFactory {
 
     // Request
     public static MemberRegisterRequestDto makeRegisterRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", "컴퓨터공학과", multipartFile);
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", Department.CSE, multipartFile);
     }
 
     public static MemberRegisterRequestDto makeNotValidRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmx", "테스터6", "컴퓨터공학과", multipartFile);
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmx", "테스터6", Department.CSE, multipartFile);
     }
 
     public static MemberRegisterRequestDto makeDuplicateEmailRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", "컴퓨터공학과", multipartFile);
+        return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", Department.CSE, multipartFile);
     }
 
     public static MemberRegisterRequestDto makeDuplicateNicknameRequestDto() {
-        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", "컴퓨터공학과", multipartFile);
+        return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", Department.CSE, multipartFile);
     }
 
     public static MemberLoginRequestDto makeAuthMemberLoginRequestDto() {
@@ -78,7 +79,7 @@ public class SignFactory extends BasicFactory {
 
     public static Member makeAuthTestMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "승범", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm1!", "encodedPW", "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }

@@ -37,4 +37,8 @@ public class Chat {
         this.chatRoom = chatRoom;
         this.content = content;
     }
+
+    public String getSender() {
+        return member.getNickname();
+    }
 }

@@ -55,7 +55,7 @@ class SignServiceUnitTest {
 
     @BeforeEach
     public void init() {
-        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, passwordEncoder, memberRepository, studyJoinRepository, redisHelper, emailHelper);
+        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, passwordEncoder, memberRepository, redisHelper, emailHelper);
 
         authMember = SignFactory.makeAuthTestMember();
         notAuthMember = SignFactory.makeTestNotAuthMember();
@@ -66,10 +66,11 @@ class SignServiceUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member createdMember = requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), null);
+        Member createdMember = requestDto.toEntity("encoded PW", null);
         MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
 
         //mocking
+        given(passwordEncoder.encode(any())).willReturn("encoded PW");
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
         given(memberRepository.findByNickname(any())).willReturn(Optional.empty());
         given(passwordEncoder.encode(any())).willReturn("encodedPW");

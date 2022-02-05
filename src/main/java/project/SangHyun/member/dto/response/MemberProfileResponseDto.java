@@ -29,6 +29,6 @@ public class MemberProfileResponseDto {
 
     public static MemberProfileResponseDto create(Member member) {
         return new MemberProfileResponseDto(member.getId(), member.getEmail(),
-                member.getNickname(), member.getDepartment(), member.getProfileImgUrl());
+                member.getNickname(), member.getDepartmentName(), member.getProfileImgUrl());
     }
 }

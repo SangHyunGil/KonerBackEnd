@@ -20,7 +20,6 @@ import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -38,7 +37,6 @@ public class SignServiceImpl implements SignService {
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
-    private final StudyJoinRepository studyJoinRepository;
 
     private final RedisHelper redisHelper;
     private final EmailHelper emailHelper;

@@ -32,7 +32,7 @@ public class TokenResponseDto {
     private String refreshToken;
 
     public static TokenResponseDto create(Member member, JwtTokens jwtTokens) {
-        return new TokenResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartment(),
+        return new TokenResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartmentName(),
                 jwtTokens.getAccessToken(), jwtTokens.getRefreshToken());
     }
 }

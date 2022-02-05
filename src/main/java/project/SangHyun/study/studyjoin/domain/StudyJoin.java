@@ -64,4 +64,12 @@ public class StudyJoin extends EntityDate {
         eventPublisher.publishEvent(new NotificationRequestDto(member, notificationType,
                 notificationType.makeContent(study.getTitle()), notificationType.makeUrl(study.getId())));
     }
+
+    public String getParticipantNickname() {
+        return member.getNickname();
+    }
+
+    public String getParticipantProfileImgUrl() {
+        return member.getProfileImgUrl();
+    }
 }

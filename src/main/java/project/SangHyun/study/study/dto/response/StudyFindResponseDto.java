@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.enums.RecruitState;
 import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.study.domain.enums.StudyState;
 
 import java.util.List;
@@ -62,14 +61,14 @@ public class StudyFindResponseDto {
     private RecruitState recruitState;
 
     public static StudyFindResponseDto create(Study study) {
-        List<StudyMemberProfile> studyMembers = study.getStudyJoins().stream()
-                .map(studyJoin -> new StudyMemberProfile(studyJoin.getMember().getNickname(), studyJoin.getStudyRole(), studyJoin.getMember().getProfileImgUrl()))
+        List<StudyMemberProfile> participants = study.getStudyJoins().stream()
+                .map(StudyMemberProfile::create)
                 .collect(Collectors.toList());
 
         return new StudyFindResponseDto(study.getId(),
-                new StudyMemberProfile(study.getMember().getNickname(), StudyRole.CREATOR, study.getMember().getProfileImgUrl()),
-                study.getTitle(), study.getTags().getTagNames(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
-                (long) studyMembers.size(), study.getHeadCount(), study.getProfileImgUrl(), studyMembers, study.getStudyOptions().getStudyMethod(),
-                study.getStudyOptions().getStudyState(), study.getStudyOptions().getRecruitState());
+                StudyMemberProfile.create(study), study.getTitle(), study.getTagNames(),
+                study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
+                (long) participants.size(), study.getHeadCount(), study.getStudyProfileImgUrl(), participants,
+                study.getStudyMethod(),  study.getStudyState(), study.getRecruitState());
     }
 }

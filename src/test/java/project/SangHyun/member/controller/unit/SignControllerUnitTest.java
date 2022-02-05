@@ -58,7 +58,7 @@ class SignControllerUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member createdMember = requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
+        Member createdMember = requestDto.toEntity("encodedPassword", "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
         MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(createdMember);
         SingleResult<MemberRegisterResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
@@ -72,7 +72,7 @@ class SignControllerUnitTest {
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;

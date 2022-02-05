@@ -12,10 +12,13 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.study.domain.*;
+import project.SangHyun.study.study.domain.Schedule;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyOptions;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.domain.enums.RecruitState;
@@ -44,7 +47,7 @@ class StudyRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         memberRepository.save(memberA);
 
         for (int i = 0; i < 10; i++) {

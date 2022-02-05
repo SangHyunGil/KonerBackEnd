@@ -29,6 +29,6 @@ public class StudyArticleUpdateResponseDto {
 
     public static StudyArticleUpdateResponseDto create(StudyArticle studyArticle) {
         return new StudyArticleUpdateResponseDto(studyArticle.getId(), studyArticle.getStudyBoard().getId(),
-                studyArticle.getMember().getNickname(), studyArticle.getTitle(), studyArticle.getContent());
+                studyArticle.getCreatorNickname(), studyArticle.getTitle(), studyArticle.getContent());
     }
 }

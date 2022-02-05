@@ -32,6 +32,6 @@ public class StudyArticleFindResponseDto {
 
     public static StudyArticleFindResponseDto create(StudyArticle studyArticle) {
         return new StudyArticleFindResponseDto(studyArticle.getId(), studyArticle.getStudyBoard().getId(),
-                studyArticle.getMember().getNickname(), studyArticle.getTitle(), studyArticle.getContent(), studyArticle.getViews());
+                studyArticle.getCreatorNickname(), studyArticle.getTitle(), studyArticle.getContent(), studyArticle.getViews());
     }
 }

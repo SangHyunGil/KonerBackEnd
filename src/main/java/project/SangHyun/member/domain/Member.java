@@ -18,20 +18,21 @@ public class Member extends EntityDate {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Embedded
+    private Email email;
 
-    @Column(nullable = false)
-    private String password;
+    @Embedded
+    private Password password;
 
-    @Column(nullable = false, unique = true)
-    private String nickname;
-
-    @Column(nullable = false)
-    private String department;
+    @Embedded
+    private Nickname nickname;
 
     @Column(nullable = false)
     private String profileImgUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Department department;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,18 +43,18 @@ public class Member extends EntityDate {
     }
 
     @Builder
-    public Member(String email, String password, String nickname, String department, String profileImgUrl, MemberRole memberRole) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
+    public Member(String email, String password, String nickname, Department department, String profileImgUrl, MemberRole memberRole) {
+        this.email = new Email(email);
+        this.password = new Password(password);
+        this.nickname = new Nickname(nickname);
         this.department = department;
         this.profileImgUrl = profileImgUrl;
         this.memberRole = memberRole;
     }
 
     public Member updateMemberInfo(MemberUpdateRequestDto requestDto, String profileImgUrl) {
-        this.email = requestDto.getEmail();
-        this.nickname = requestDto.getNickname();
+        this.email = new Email(requestDto.getEmail());
+        this.nickname = new Nickname(requestDto.getNickname());
         this.department = requestDto.getDepartment();
         this.profileImgUrl = profileImgUrl;
         return this;
@@ -64,6 +65,26 @@ public class Member extends EntityDate {
     }
 
     public void changePassword(String password) {
-        this.password = password;
+        this.password = new Password(password);
+    }
+
+    public String getEmail() {
+        return email.getEmail();
+    }
+
+    public String getPassword() {
+        return password.getPassword();
+    }
+
+    public String getNickname() {
+        return nickname.getNickname();
+    }
+
+    public String getDepartmentName() {
+        return department.getDesc();
+    }
+
+    public String getProfileImgUrl() {
+        return profileImgUrl;
     }
 }

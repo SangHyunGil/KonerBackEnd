@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
@@ -36,16 +37,16 @@ class MessageRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm6!", passwordEncoder.encode("xptmxm6!"), "길쌍", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm6!", passwordEncoder.encode("xptmxm6!"), "길쌍", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
         testMemberA = memberRepository.save(memberA);
 
-        Member memberB = new Member("xptmxm7!", passwordEncoder.encode("xptmxm7!"), "상현", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberB = new Member("xptmxm7!", passwordEncoder.encode("xptmxm7!"), "상현", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
         testMemberB = memberRepository.save(memberB);
 
-        Member memberC = new Member("xptmxm8!", passwordEncoder.encode("xptmxm8!"), "현상", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberC = new Member("xptmxm8!", passwordEncoder.encode("xptmxm8!"), "현상", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
         testMemberC = memberRepository.save(memberC);
 
-        Member memberD = new Member("xptmxm9!", passwordEncoder.encode("xptmxm9!"), "현상길", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberD = new Member("xptmxm9!", passwordEncoder.encode("xptmxm9!"), "현상길", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
         testMemberD = memberRepository.save(memberD);
 
     }

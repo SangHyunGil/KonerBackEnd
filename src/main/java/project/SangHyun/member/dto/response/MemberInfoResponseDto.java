@@ -25,6 +25,6 @@ public class MemberInfoResponseDto {
     private String department;
 
     public static MemberInfoResponseDto create(Member member) {
-        return new MemberInfoResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartment());
+        return new MemberInfoResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartmentName());
     }
 }

@@ -28,7 +28,7 @@ public class MemberTest {
         InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
         MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
-        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", "컴퓨터공학부", multipartFile);
+        MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto("test", "닉네임 수정", Department.CSE, multipartFile);
 
         //when
         Member updateMember = member.updateMemberInfo(requestDto, fileStoreHelper.storeFile(multipartFile));

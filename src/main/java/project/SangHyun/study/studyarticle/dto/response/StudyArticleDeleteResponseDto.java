@@ -26,6 +26,6 @@ public class StudyArticleDeleteResponseDto {
 
     public static StudyArticleDeleteResponseDto create(StudyArticle studyArticle) {
         return new StudyArticleDeleteResponseDto(studyArticle.getId(), studyArticle.getStudyBoard().getId(),
-                studyArticle.getMember().getNickname(), studyArticle.getTitle());
+                studyArticle.getCreatorNickname(), studyArticle.getTitle());
     }
 }

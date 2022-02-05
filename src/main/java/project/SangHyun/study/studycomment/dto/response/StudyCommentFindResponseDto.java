@@ -28,12 +28,13 @@ public class StudyCommentFindResponseDto {
     List<StudyCommentFindResponseDto> children;
 
     public static List<StudyCommentFindResponseDto> create(List<StudyComment> studyComments) {
-        HierarchyHelper hierarchyHelper = HierarchyHelper.of(studyComments, StudyCommentFindResponseDto::create, StudyComment::getParent, StudyComment::getId, StudyCommentFindResponseDto::getChildren);
+        HierarchyHelper hierarchyHelper = HierarchyHelper.of(studyComments, StudyCommentFindResponseDto::create,
+                StudyComment::getParent, StudyComment::getId, StudyCommentFindResponseDto::getChildren);
         return hierarchyHelper.convertToHierarchyStructure();
     }
 
     public static StudyCommentFindResponseDto create(StudyComment studyComment) {
-        MemberProfile memberProfile = studyComment.isDeleted() ? null : new MemberProfile(studyComment.getMember().getNickname(), studyComment.getMember().getProfileImgUrl());
+        MemberProfile memberProfile = studyComment.isDeleted() ? null : new MemberProfile(studyComment.getCreatorNickname(), studyComment.getCreatorProfileImgUrl());
         String content = studyComment.isDeleted() ? null : studyComment.getContent();
         return new StudyCommentFindResponseDto(studyComment.getId(),
                 memberProfile,

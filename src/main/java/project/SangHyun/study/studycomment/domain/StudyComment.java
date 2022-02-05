@@ -77,6 +77,14 @@ public class StudyComment extends EntityDate {
         this.content = content;
     }
 
+    public String getCreatorNickname() {
+        return member.getNickname();
+    }
+
+    public String getCreatorProfileImgUrl() {
+        return member.getProfileImgUrl();
+    }
+
     public Optional<StudyComment> findDeletableComment() {
         return hasChildren() ? Optional.empty() : Optional.ofNullable(findDeletableRootComment());
     }
