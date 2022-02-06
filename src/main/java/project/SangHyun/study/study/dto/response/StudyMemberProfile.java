@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 @Data

@@ -7,13 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.*;
+import project.SangHyun.study.study.domain.Schedule;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyRole;
-import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
@@ -43,8 +46,7 @@ public class StudyCreateRequestDto {
     private String content;
 
     @ApiModelProperty(value = "스터디 학과", notes = "스터디 학과를 입력해주세요.", required = true, example = "CSE")
-    @NotBlank(message = "스터디 학과를 입력해주세요.")
-    private String department;
+    private StudyCategory department;
 
     @ApiModelProperty(value = "스터디 시작 일정", notes = "스터디 시작 일정을 입력해주세요.", required = true, example = "2021-12-25")
     private String startDate;
@@ -71,8 +73,8 @@ public class StudyCreateRequestDto {
     public Study toEntity(String profileImg) {
         Study study = Study.builder()
                 .title(title)
-                .content(content)
-                .department(department)
+                .introduction(content)
+                .category(department)
                 .tags(new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList())))
                 .schedule(new Schedule(startDate, endDate))
                 .studyOptions(new StudyOptions(studyState, recruitState, studyMethod))

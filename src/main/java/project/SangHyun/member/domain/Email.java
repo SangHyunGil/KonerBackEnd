@@ -20,9 +20,26 @@ public class Email {
     private String email;
 
     public Email(String email) {
-        if (Objects.isNull(email) || email.isBlank()) {
+        if (isNotValidEmail(email)) {
             throw new InvalidEmailException();
         }
         this.email = email;
+    }
+
+    private boolean isNotValidEmail(String email) {
+        return Objects.isNull(email) || email.isBlank();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Email)) return false;
+        Email email1 = (Email) o;
+        return getEmail().equals(email1.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEmail());
     }
 }

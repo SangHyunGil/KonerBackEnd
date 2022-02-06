@@ -27,8 +27,8 @@ public class Member extends EntityDate {
     @Embedded
     private Nickname nickname;
 
-    @Column(nullable = false)
-    private String profileImgUrl;
+    @Embedded
+    private MemberProfileImgUrl profileImgUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -48,7 +48,7 @@ public class Member extends EntityDate {
         this.password = new Password(password);
         this.nickname = new Nickname(nickname);
         this.department = department;
-        this.profileImgUrl = profileImgUrl;
+        this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
         this.memberRole = memberRole;
     }
 
@@ -56,7 +56,7 @@ public class Member extends EntityDate {
         this.email = new Email(requestDto.getEmail());
         this.nickname = new Nickname(requestDto.getNickname());
         this.department = requestDto.getDepartment();
-        this.profileImgUrl = profileImgUrl;
+        this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
         return this;
     }
 
@@ -85,6 +85,6 @@ public class Member extends EntityDate {
     }
 
     public String getProfileImgUrl() {
-        return profileImgUrl;
+        return profileImgUrl.getProfileImgUrl();
     }
 }

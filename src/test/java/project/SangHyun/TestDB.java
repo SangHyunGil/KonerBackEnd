@@ -14,13 +14,14 @@ import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.study.study.domain.Schedule;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.StudyOptions;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyRole;
-import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
@@ -161,14 +162,14 @@ public class TestDB {
         Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
         Member storedMemberE = memberRepository.save(memberE);
 
-        Study emptyStudy = new Study("임시용", new Tags(List.of(new Tag("임시용"))), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 0L, new Schedule("2021-10-01", "2021-12-25"), storedMemberB, new ArrayList<>(), new ArrayList<>());
+        Study emptyStudy = new Study("임시용", new Tags(List.of(new Tag("임시용"))), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE, new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 0L, new Schedule("2021-10-01", "2021-12-25"), storedMemberB, new ArrayList<>(), new ArrayList<>());
 
-        Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"), new Tag("JPA"), new Tag("스프링"))), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 5L, new Schedule("2021-10-01", "2021-12-25"), storedMemberA, new ArrayList<>(), new ArrayList<>());
+        Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"), new Tag("JPA"), new Tag("스프링"))), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE, new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 5L, new Schedule("2021-10-01", "2021-12-25"), storedMemberA, new ArrayList<>(), new ArrayList<>());
 
         studyRepository.save(study);
         studyRepository.save(emptyStudy);
 
-        StudyJoin studyJoin = new StudyJoin(storedMemberA, null, study, StudyRole.CREATOR);
+        StudyJoin studyJoin = new StudyJoin(storedMemberA, "", study, StudyRole.CREATOR);
         studyJoinRepository.save(studyJoin);
 
         StudyJoin studyJoin2 = new StudyJoin(storedMemberB, "빠르게 진행합니다.", study, StudyRole.ADMIN);

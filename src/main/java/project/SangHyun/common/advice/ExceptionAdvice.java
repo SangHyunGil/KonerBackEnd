@@ -189,37 +189,79 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(InCorrectTagNameException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result InCorrectTagNameException(BindException e) {
+    protected Result InCorrectTagNameException() {
         return responseService.getFailureResult(-127, "잘못된 태그 이름입니다.");
     }
 
     @ExceptionHandler(DuplicateTagsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result DuplicateTagsException(BindException e) {
+    protected Result DuplicateTagsException() {
         return responseService.getFailureResult(-128, "중복된 태그가 존재합니다.");
     }
 
     @ExceptionHandler(MessageNotFountException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result MessageNotFountException(BindException e) {
+    protected Result MessageNotFountException() {
         return responseService.getFailureResult(-129, "존재하지 않는 쪽지입니다.");
     }
 
     @ExceptionHandler(InvalidEmailException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result InvalidEmailException(BindException e) {
+    protected Result InvalidEmailException() {
         return responseService.getFailureResult(-130, "적절하지 않은 이메일입니다.");
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result InvalidPasswordException(BindException e) {
+    protected Result InvalidPasswordException() {
         return responseService.getFailureResult(-131, "적절하지 않은 비밀번호입니다.");
     }
 
     @ExceptionHandler(InvalidNicknameException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result InvalidNicknameException(BindException e) {
+    protected Result InvalidNicknameException() {
         return responseService.getFailureResult(-132, "적절하지 않은 닉네임입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyTitleException() {
+        return responseService.getFailureResult(-133, "적절하지 않은 스터디 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyIntroductionException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyIntroductionException() {
+        return responseService.getFailureResult(-134, "적절하지 않은 스터디 소개글입니다.");
+    }
+
+    @ExceptionHandler(InvalidHeadCountException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidHeadCountException() {
+        return responseService.getFailureResult(-135, "적절하지 않은 인원 수입니다.");
+    }
+
+    @ExceptionHandler(InvalidProfileUrlImg.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidProfileUrlImg() {
+        return responseService.getFailureResult(-136, "적절하지 않은 프로필 이미지입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyArticleTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyArticleTitleException() {
+        return responseService.getFailureResult(-137, "적절하지 않은 스터디 게시글 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyArticleContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyArticleContentException() {
+        return responseService.getFailureResult(-138, "적절하지 않은 스터디 게시글 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidViewsException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidViewsException() {
+        return responseService.getFailureResult(-139, "적절하지 않은 스터디 게시글 조회수입니다.");
     }
 }

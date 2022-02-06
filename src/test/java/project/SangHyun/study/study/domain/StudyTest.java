@@ -10,11 +10,12 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -36,11 +37,11 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
+        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE,
                 new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
         InputStream fileInputStream = new URL("https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg").openStream();
         MultipartFile multipartFile = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
-        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", List.of("프론트엔드"), "음..", "2021-10-01", "2021-12-25", "컴퓨터공학과", 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
+        StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", List.of("프론트엔드"), "음..", "2021-10-01", "2021-12-25", StudyCategory.CSE, 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when
         Study ActualResult = study.update(requestDto, fileStoreHelper.storeFile(multipartFile));
@@ -56,7 +57,7 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
+        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE,
                 new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
         StudyJoin studyJoin = new StudyJoin(1L);
 
@@ -74,7 +75,7 @@ class StudyTest {
         Member member = new Member(1L);
         List<StudyJoin> studyJoins = new ArrayList<>(List.of(new StudyJoin(1L)));
         List<StudyBoard> studyBoards = new ArrayList<>(List.of(new StudyBoard(1L)));
-        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
+        Study study = new Study("백엔드 스터디", new Tags(List.of(new Tag("백엔드"))), "백엔드 스터디 모집합니다!",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE,
                 new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
         StudyBoard studyBoard = new StudyBoard(1L);
 

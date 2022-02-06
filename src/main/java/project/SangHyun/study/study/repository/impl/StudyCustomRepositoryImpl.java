@@ -30,7 +30,7 @@ public class StudyCustomRepositoryImpl implements StudyCustomRepository {
     @Override
     public List<Study> findStudyByTitle(String title) {
         return jpaQueryFactory.selectFrom(study)
-                .where(study.title.contains(title))
+                .where(study.title.title.contains(title))
                 .fetch();
     }
 }

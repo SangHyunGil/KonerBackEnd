@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.SangHyun.common.advice.exception.InCorrectTagNameException;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Getter
@@ -13,6 +14,8 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "name")
 public class Tag {
+
+    @Column(nullable = false)
     private String name;
 
     public Tag(String name) {

@@ -15,7 +15,7 @@ import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
 import project.SangHyun.study.studyjoin.dto.response.FindJoinedStudyResponseDto;

@@ -10,6 +10,7 @@ import project.SangHyun.common.advice.exception.StudyNotFoundException;
 import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
@@ -37,8 +38,8 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public SliceResponseDto findAllStudiesByDepartment(Long lastStudyId, String department, Integer size) {
-        Slice<Study> study = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, department, Pageable.ofSize(size));
+    public SliceResponseDto findAllStudiesByDepartment(Long lastStudyId, StudyCategory category, Integer size) {
+        Slice<Study> study = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, category, Pageable.ofSize(size));
         return SliceResponseDto.create(study, StudyFindResponseDto::create);
     }
 

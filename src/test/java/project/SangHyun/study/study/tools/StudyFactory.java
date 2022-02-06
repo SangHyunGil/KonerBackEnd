@@ -8,9 +8,10 @@ import project.SangHyun.BasicFactory;
 import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
@@ -39,13 +40,13 @@ public class StudyFactory extends BasicFactory {
     // Request
     public static StudyCreateRequestDto makeCreateRequestDto(Member member) {
         return new StudyCreateRequestDto(member.getId(), "프론트엔드 모집", List.of("프론트엔드"),
-                "테스트", "CSE", "2021-10-01", "2021-12-25", 2L, multipartFile, StudyMethod.FACE,
+                "테스트", StudyCategory.CSE, "2021-10-01", "2021-12-25", 2L, multipartFile, StudyMethod.FACE,
                 StudyState.STUDYING, RecruitState.PROCEED);
     }
 
     public static StudyUpdateRequestDto makeUpdateRequestDto(String title, List<String> tags) {
         return new StudyUpdateRequestDto(title, tags,
-                "변경", "2021-10-01", "2021-12-25", "컴퓨터공학과", 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
+                "변경", "2021-10-01", "2021-12-25", StudyCategory.CSE, 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
     }
 
     // Response

@@ -6,9 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +38,7 @@ public class StudyUpdateRequestDto {
     private String endDate;
 
     @ApiModelProperty(value = "스터디 학과", notes = "스터디 학과를 입력해주세요.", required = true, example = "컴퓨터공학과")
-    private String department;
+    private StudyCategory department;
 
     @ApiModelProperty(value = "스터디 인원수", notes = "스터디 인원수를 입력해주세요.", required = true, example = "1")
     @Min(value = 1, message = "스터디 인원수는 1 이상이어야 합니다.")

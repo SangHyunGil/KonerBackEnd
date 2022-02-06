@@ -21,13 +21,14 @@ public class StudyArticle extends EntityDate {
     @Column(name = "article_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
+    @Embedded
+    private StudyArticleTitle title;
 
-    @Column(nullable = false, length = 1000)
-    private String content;
+    @Embedded
+    private StudyArticleContent content;
 
-    private Long views;
+    @Embedded
+    private Views views;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -41,9 +42,9 @@ public class StudyArticle extends EntityDate {
 
     @Builder
     public StudyArticle(String title, String content, Long views, Member member, StudyBoard studyBoard) {
-        this.title = title;
-        this.content = content;
-        this.views = views;
+        this.title = new StudyArticleTitle(title);
+        this.content = new StudyArticleContent(content);
+        this.views = new Views(views);
         this.member = member;
         this.studyBoard = studyBoard;
     }
@@ -53,15 +54,27 @@ public class StudyArticle extends EntityDate {
     }
 
     public void updateArticleInfo(StudyArticleUpdateRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
+        this.title = new StudyArticleTitle(requestDto.getTitle());
+        this.content = new StudyArticleContent(requestDto.getContent());
     }
 
     public void updateViews() {
-        this.views += 1;
+        this.views.increase();
     }
 
     public String getCreatorNickname() {
         return member.getNickname();
+    }
+
+    public String getTitle() {
+        return title.getTitle();
+    }
+
+    public String getContent() {
+        return content.getContent();
+    }
+
+    public Long getViews() {
+        return views.getViews();
     }
 }

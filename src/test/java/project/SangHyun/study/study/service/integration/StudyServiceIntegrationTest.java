@@ -14,6 +14,7 @@ import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
@@ -73,7 +74,7 @@ class StudyServiceIntegrationTest {
         //given
 
         //when
-        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 2);
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, StudyCategory.CSE, 2);
 
         //then
         Assertions.assertEquals(2, ActualResult.getNumberOfElements());

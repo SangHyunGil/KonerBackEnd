@@ -7,9 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import project.SangHyun.common.advice.exception.DuplicateTagsException;
 import project.SangHyun.common.advice.exception.InCorrectTagNameException;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 
 import java.io.InputStream;
@@ -25,7 +25,7 @@ class TagsTest {
         MockMultipartFile profileImg = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 스터디", List.of(" "),
-                "백엔드 스터디입니다.", "CSE", "2021-12-01", "2021-01-01", 2L, profileImg,
+                "백엔드 스터디입니다.", StudyCategory.CSE, "2021-12-01", "2021-01-01", 2L, profileImg,
                 StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         Assertions.assertThrows(InCorrectTagNameException.class, () -> requestDto.toEntity("convertedProfileImg"));
@@ -40,7 +40,7 @@ class TagsTest {
         MockMultipartFile profileImg = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 스터디", List.of("백엔드", "JPA"),
-                "백엔드 스터디입니다.", "CSE", "2021-12-01", "2021-01-01", 2L, profileImg,
+                "백엔드 스터디입니다.", StudyCategory.CSE, "2021-12-01", "2021-01-01", 2L, profileImg,
                 StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         Study study = requestDto.toEntity("convertedProfileImg");
@@ -55,7 +55,7 @@ class TagsTest {
         MockMultipartFile profileImg = new MockMultipartFile("Img", "myImg.png", MediaType.IMAGE_PNG_VALUE, fileInputStream);
 
         StudyCreateRequestDto requestDto = new StudyCreateRequestDto(1L, "백엔드 스터디", List.of("백엔드", "백엔드"),
-                "백엔드 스터디입니다.", "CSE", "2021-12-01", "2021-01-01", 2L, profileImg,
+                "백엔드 스터디입니다.", StudyCategory.CSE, "2021-12-01", "2021-01-01", 2L, profileImg,
                 StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         Assertions.assertThrows(DuplicateTagsException.class, () -> requestDto.toEntity("convertedProfileImg"));

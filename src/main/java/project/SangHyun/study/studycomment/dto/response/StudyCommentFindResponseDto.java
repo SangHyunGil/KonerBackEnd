@@ -34,7 +34,7 @@ public class StudyCommentFindResponseDto {
     }
 
     public static StudyCommentFindResponseDto create(StudyComment studyComment) {
-        MemberProfile memberProfile = studyComment.isDeleted() ? null : new MemberProfile(studyComment.getCreatorNickname(), studyComment.getCreatorProfileImgUrl());
+        MemberProfile memberProfile = new MemberProfile(studyComment.getCreatorNickname(), studyComment.getCreatorProfileImgUrl());
         String content = studyComment.isDeleted() ? null : studyComment.getContent();
         return new StudyCommentFindResponseDto(studyComment.getId(),
                 memberProfile,

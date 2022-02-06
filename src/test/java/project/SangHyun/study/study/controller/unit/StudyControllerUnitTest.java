@@ -20,6 +20,7 @@ import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.controller.StudyController;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
@@ -73,13 +74,13 @@ class StudyControllerUnitTest {
         SingleResult<SliceResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 6)).willReturn(responseDto);
+        given(studyService.findAllStudiesByDepartment(Long.MAX_VALUE, StudyCategory.CSE, 6)).willReturn(responseDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(get("/study")
                         .param("studyId", String.valueOf(Long.MAX_VALUE))
-                        .param("department", "컴퓨터공학과")
+                        .param("department", String.valueOf(StudyCategory.CSE))
                         .param("size", "6"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.numberOfElements").value(1))
@@ -125,7 +126,7 @@ class StudyControllerUnitTest {
                         .param("endDate", requestDto.getEndDate())
                         .param("content", requestDto.getContent())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))

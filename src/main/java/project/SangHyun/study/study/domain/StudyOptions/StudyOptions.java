@@ -1,10 +1,8 @@
-package project.SangHyun.study.study.domain;
+package project.SangHyun.study.study.domain.StudyOptions;
 
 import lombok.*;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,9 +14,12 @@ import javax.persistence.Enumerated;
 @EqualsAndHashCode
 public class StudyOptions {
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StudyState studyState;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RecruitState recruitState;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StudyMethod studyMethod;
 }

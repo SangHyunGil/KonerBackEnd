@@ -1,4 +1,4 @@
-package project.SangHyun.study.study.domain.enums;
+package project.SangHyun.study.study.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

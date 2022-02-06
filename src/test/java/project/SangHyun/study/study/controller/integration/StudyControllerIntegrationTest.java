@@ -20,6 +20,7 @@ import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.repository.StudyRepository;
@@ -69,7 +70,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(get("/study")
                         .param("studyId", String.valueOf(Long.MAX_VALUE))
-                        .param("department", "컴퓨터공학과")
+                        .param("department", String.valueOf(StudyCategory.CSE))
                         .param("size", "6"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.numberOfElements").value(2))
@@ -106,7 +107,7 @@ class StudyControllerIntegrationTest {
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))

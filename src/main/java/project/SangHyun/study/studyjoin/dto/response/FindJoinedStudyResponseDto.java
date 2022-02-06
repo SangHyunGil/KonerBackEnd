@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.dto.response.StudyMemberProfile;
 
 import java.util.List;
@@ -54,7 +54,7 @@ public class FindJoinedStudyResponseDto {
     public static FindJoinedStudyResponseDto create(Study study) {
         return new FindJoinedStudyResponseDto(study.getId(),
                 StudyMemberProfile.create(study), study.getTitle(), study.getTagNames(),
-                study.getContent(), study.getStartDate(), study.getEndDate(),
+                study.getIntroduction(), study.getStartDate(), study.getEndDate(),
                 study.getProfileImgUrl(), study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

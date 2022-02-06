@@ -4,16 +4,15 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleCustomRepository;
+
 import java.util.List;
 
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.studyarticle.domain.QStudyArticle.studyArticle;
-import static project.SangHyun.study.studyboard.domain.QStudyBoard.studyBoard;
 
 @RequiredArgsConstructor
 public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepository {
@@ -41,7 +40,7 @@ public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepos
     public List<StudyArticle> findArticleByTitle(String title) {
         return jpaQueryFactory
                 .selectFrom(studyArticle)
-                .where(studyArticle.title.contains(title))
+                .where(studyArticle.title.title.contains(title))
                 .fetch();
     }
 }

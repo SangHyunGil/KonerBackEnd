@@ -6,13 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.StudyOptions;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -57,7 +55,8 @@ public class StudyCreateResponseDto {
 
     public static StudyCreateResponseDto create(Study study) {
         return new StudyCreateResponseDto(study.getId(), study.getMember().getId(),
-                study.getTitle(), study.getTags().getTagNames(), study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
-                study.getHeadCount(),  study.getProfileImgUrl(), study.getStudyOptions().getStudyMethod(), study.getStudyOptions().getStudyState(), study.getStudyOptions().getRecruitState());
+                study.getTitle(), study.getTags().getTagNames(), study.getIntroduction(),
+                study.getStartDate(), study.getEndDate(), study.getHeadCount(), study.getProfileImgUrl(),
+                study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

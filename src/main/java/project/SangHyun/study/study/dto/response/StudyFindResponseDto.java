@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,8 +67,8 @@ public class StudyFindResponseDto {
 
         return new StudyFindResponseDto(study.getId(),
                 StudyMemberProfile.create(study), study.getTitle(), study.getTagNames(),
-                study.getContent(), study.getSchedule().getStartDate(), study.getSchedule().getEndDate(),
-                (long) participants.size(), study.getHeadCount(), study.getStudyProfileImgUrl(), participants,
-                study.getStudyMethod(),  study.getStudyState(), study.getRecruitState());
+                study.getIntroduction(), study.getStartDate(), study.getEndDate(),
+                (long) participants.size(), study.getHeadCount(), study.getProfileImgUrl(), participants,
+                study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

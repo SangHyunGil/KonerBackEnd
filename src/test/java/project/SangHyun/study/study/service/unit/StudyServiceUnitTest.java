@@ -13,15 +13,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.study.study.dto.response.*;
+import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
+import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
+import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
+import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.impl.StudyServiceImpl;
 import project.SangHyun.study.study.tools.StudyFactory;
-import project.SangHyun.common.helper.FileStoreHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,10 +81,10 @@ class StudyServiceUnitTest {
         SliceResponseDto ExpectResult = StudyFactory.makeFindAllResponseDto(slice);
 
         //mocking
-        given(studyRepository.findAllOrderByStudyIdDesc(Long.MAX_VALUE, "컴퓨터공학과", Pageable.ofSize(6))).willReturn(slice);
+        given(studyRepository.findAllOrderByStudyIdDesc(Long.MAX_VALUE, StudyCategory.CSE, Pageable.ofSize(6))).willReturn(slice);
 
         //
-        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 6);
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, StudyCategory.CSE, 6);
 
         //then
         Assertions.assertEquals(ExpectResult.getNumberOfElements(), ActualResult.getNumberOfElements());
