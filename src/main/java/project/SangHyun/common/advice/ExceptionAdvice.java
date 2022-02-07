@@ -264,4 +264,22 @@ public class ExceptionAdvice {
     protected Result InvalidViewsException() {
         return responseService.getFailureResult(-139, "적절하지 않은 스터디 게시글 조회수입니다.");
     }
+
+    @ExceptionHandler(InvalidStudyBoardTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyBoardTitleException() {
+        return responseService.getFailureResult(-140, "적절하지 않은 스터디 게시판 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyCommentContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyCommentContentException() {
+        return responseService.getFailureResult(-141, "적절하지 않은 스터디 댓글 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidApplyContentContent.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidApplyContentContent() {
+        return responseService.getFailureResult(-142, "적절하지 않은 스터디 지원 내용입니다.");
+    }
 }

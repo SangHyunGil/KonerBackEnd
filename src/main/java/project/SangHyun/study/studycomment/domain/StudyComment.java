@@ -23,11 +23,19 @@ public class StudyComment extends EntityDate {
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(nullable = false, length = 1000)
-    private String content;
+    @Embedded
+    private StudyCommentContent content;
 
     @Column(nullable = false)
     private Boolean deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private StudyComment parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<StudyComment> children = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -39,14 +47,6 @@ public class StudyComment extends EntityDate {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyArticle studyArticle;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private StudyComment parent;
-
-    @OneToMany(mappedBy = "parent")
-    private List<StudyComment> children = new ArrayList<>();
-
     public StudyComment(Long id) {
         this.id = id;
     }
@@ -56,7 +56,7 @@ public class StudyComment extends EntityDate {
         this.member = member;
         this.studyArticle = studyArticle;
         this.parent = parent;
-        this.content = content;
+        this.content = new StudyCommentContent(content);
         this.deleted = isDeleted;
     }
 
@@ -69,12 +69,16 @@ public class StudyComment extends EntityDate {
         studyComment.setParent(this);
     }
 
+    public void update(String content) {
+        this.content = new StudyCommentContent(content);
+    }
+
     public void delete() {
         this.deleted = true;
     }
 
-    public void update(String content) {
-        this.content = content;
+    public String getContent() {
+        return content.getContent();
     }
 
     public String getCreatorNickname() {

@@ -24,10 +24,11 @@ public class StudyJoin extends EntityDate {
     @Column(name = "join_id")
     private Long id;
 
-    @Column(length = 1000)
-    private String applyContent;
+    @Embedded
+    private ApplyContent applyContent;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StudyRole studyRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,7 +48,7 @@ public class StudyJoin extends EntityDate {
     @Builder
     public StudyJoin(Member member, String applyContent, Study study, StudyRole studyRole) {
         this.member = member;
-        this.applyContent = applyContent;
+        this.applyContent = new ApplyContent(applyContent);
         this.study = study;
         this.studyRole = studyRole;
     }
@@ -63,6 +64,10 @@ public class StudyJoin extends EntityDate {
     public void publishEvent(ApplicationEventPublisher eventPublisher, NotificationType notificationType) {
         eventPublisher.publishEvent(new NotificationRequestDto(member, notificationType,
                 notificationType.makeContent(study.getTitle()), notificationType.makeUrl(study.getId())));
+    }
+
+    public String getApplyContent() {
+        return applyContent.getApplyContent();
     }
 
     public String getParticipantNickname() {
