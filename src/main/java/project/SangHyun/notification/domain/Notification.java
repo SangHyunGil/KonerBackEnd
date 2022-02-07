@@ -13,30 +13,44 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Notification extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
     private Long id;
+
+    @Embedded
+    private NotificationContent content;
+
+    @Embedded
+    private RelatedURL url;
+
+    @Column(nullable = false)
+    private Boolean isRead;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private NotificationType notificationType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member receiver;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private NotificationType notificationType;
-    @Column(nullable = false)
-    private String content;
-    @Column(nullable = false)
-    private String url;
-    @Column(nullable = false)
-    private Boolean isRead;
 
     @Builder
     public Notification(Member receiver, NotificationType notificationType, String content, String url, Boolean isRead) {
         this.receiver = receiver;
         this.notificationType = notificationType;
-        this.content = content;
-        this.url = url;
+        this.content = new NotificationContent(content);
+        this.url = new RelatedURL(url);
         this.isRead = isRead;
+    }
+
+    public String getContent() {
+        return content.getContent();
+    }
+
+    public String getUrl() {
+        return url.getUrl();
     }
 }

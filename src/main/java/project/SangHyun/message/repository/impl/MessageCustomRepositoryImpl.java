@@ -27,7 +27,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         List<MessageCount> receiveMessages = jpaQueryFactory
                 .select(Projections.constructor(MessageCount.class,
                         message.id, message.sender, message.receiver,
-                        message.content, as(constant(0L),"unReadCount")))
+                        message.content.content, as(constant(0L),"unReadCount")))
                 .from(message)
                 .where(message.id.in(
                         JPAExpressions
@@ -40,7 +40,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         List<MessageCount> sendMessages = jpaQueryFactory
                 .select(Projections.constructor(MessageCount.class,
                         message.id, message.sender, message.receiver,
-                        message.content, as(constant(0L),"unReadCount")))
+                        message.content.content, as(constant(0L),"unReadCount")))
                 .from(message)
                 .where(message.id.in(
                         JPAExpressions
@@ -53,7 +53,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         List<MessageCount> countMessages = jpaQueryFactory
                 .select(Projections.constructor(MessageCount.class,
                         message.id, message.sender, message.receiver,
-                        message.content, message.count()))
+                        message.content.content, message.count()))
                 .from(message)
                 .where(message.receiver.id.eq(memberId),
                         message.isRead.eq(false))
@@ -114,7 +114,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         return jpaQueryFactory.selectFrom(message)
                 .innerJoin(message.sender, member).fetchJoin()
                 .innerJoin(message.receiver, member).fetchJoin()
-                .where(message.content.contains(content))
+                .where(message.content.content.contains(content))
                 .orderBy(message.id.desc())
                 .fetch();
     }

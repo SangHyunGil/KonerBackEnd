@@ -282,4 +282,22 @@ public class ExceptionAdvice {
     protected Result InvalidApplyContentContent() {
         return responseService.getFailureResult(-142, "적절하지 않은 스터디 지원 내용입니다.");
     }
+
+    @ExceptionHandler(InvalidMessageContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidMessageContentException() {
+        return responseService.getFailureResult(-143, "적절하지 않은 쪽지 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidNotificationContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidNotificationContentException() {
+        return responseService.getFailureResult(-144, "적절하지 않은 알림 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidRelatedURLException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidRelatedURLException() {
+        return responseService.getFailureResult(-145, "적절하지 않은 알림 URL입니다.");
+    }
 }

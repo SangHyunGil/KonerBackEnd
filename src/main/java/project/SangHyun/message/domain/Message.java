@@ -21,8 +21,8 @@ public class Message extends EntityDate {
     @Column(name = "message_id")
     private Long id;
 
-    @Column(nullable = false, length = 1000)
-    private String content;
+    @Embedded
+    private MessageContent content;
 
     @Column(nullable = false)
     private Boolean isRead;
@@ -49,7 +49,7 @@ public class Message extends EntityDate {
 
     @Builder
     public Message(String content, Member sender, Member receiver, Boolean isRead, Boolean deletedBySender, Boolean deletedByReceiver) {
-        this.content = content;
+        this.content = new MessageContent(content);
         this.sender = sender;
         this.receiver = receiver;
         this.isRead = isRead;
@@ -80,5 +80,9 @@ public class Message extends EntityDate {
     public Message read() {
         this.isRead = true;
         return this;
+    }
+
+    public String getContent() {
+        return content.getContent();
     }
 }
