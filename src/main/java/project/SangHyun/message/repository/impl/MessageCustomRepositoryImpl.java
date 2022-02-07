@@ -1,9 +1,11 @@
 package project.SangHyun.message.repository.impl;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import project.SangHyun.member.domain.QMember;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.repository.MessageCustomRepository;
 
@@ -33,7 +35,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                         JPAExpressions
                                 .select(message.id.max())
                                 .from(message)
-                                .where(message.receiver.id.eq(memberId))
+                                .where(equalsWithMemberId(memberId, message.receiver))
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
@@ -46,7 +48,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                         JPAExpressions
                                 .select(message.id.max())
                                 .from(message)
-                                .where(message.sender.id.eq(memberId))
+                                .where(equalsWithMemberId(memberId, message.sender))
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
@@ -55,13 +57,17 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                         message.id, message.sender, message.receiver,
                         message.content.content, message.count()))
                 .from(message)
-                .where(message.receiver.id.eq(memberId),
+                .where(equalsWithMemberId(memberId, message.receiver),
                         message.isRead.eq(false))
                 .groupBy(message.sender, message.receiver)
                 .fetch();
 
         return findRecentCommunicatorsByCompareSendAndReceiveMessage(receiveMessages, sendMessages, countMessages);
 
+    }
+
+    private BooleanExpression equalsWithMemberId(Long memberId, QMember receiver) {
+        return receiver.id.eq(memberId);
     }
 
     private List<MessageCount> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<MessageCount> receiveMessages,
@@ -101,10 +107,10 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         return jpaQueryFactory.selectFrom(message)
                 .innerJoin(message.sender, member).fetchJoin()
                 .innerJoin(message.receiver, member).fetchJoin()
-                .where((message.sender.id.eq(senderId).and(
-                        message.receiver.id.eq(receiverId)))
-                        .or(message.sender.id.eq(receiverId).and(
-                                message.receiver.id.eq(senderId))))
+                .where((equalsWithMemberId(senderId, message.sender).and(
+                        equalsWithMemberId(receiverId, message.receiver)))
+                        .or(equalsWithMemberId(receiverId, message.sender).and(
+                                equalsWithMemberId(senderId, message.receiver))))
                 .orderBy(message.id.desc())
                 .fetch();
     }
@@ -122,7 +128,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     @Override
     public Long countAllUnReadMessages(Long receiverId) {
         return jpaQueryFactory.selectFrom(message)
-                .where(message.receiver.id.eq(receiverId))
+                .where(equalsWithMemberId(receiverId, message.receiver))
                 .fetchCount();
     }
 }

@@ -1,5 +1,6 @@
 package project.SangHyun.study.studyarticle.repository.impl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import project.SangHyun.study.studyarticle.repository.StudyArticleCustomReposito
 
 import java.util.List;
 
+import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.studyarticle.domain.QStudyArticle.studyArticle;
 
@@ -24,23 +26,31 @@ public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepos
         List<StudyArticle> studyArticles = jpaQueryFactory
                 .selectFrom(studyArticle)
                 .innerJoin(studyArticle.member, member).fetchJoin()
-                .where(studyArticle.studyBoard.id.eq(boardId))
+                .where(equalsBoardId(boardId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<StudyArticle> countQuery = jpaQueryFactory
                 .selectFrom(studyArticle)
-                .where(studyArticle.studyBoard.id.eq(boardId));
+                .where(equalsBoardId(boardId));
 
         return PageableExecutionUtils.getPage(studyArticles, pageable, countQuery::fetchCount);
+    }
+
+    private BooleanBuilder equalsBoardId(Long boardId) {
+        return nullSafeBuilder(() -> studyArticle.studyBoard.id.eq(boardId));
     }
 
     @Override
     public List<StudyArticle> findArticleByTitle(String title) {
         return jpaQueryFactory
                 .selectFrom(studyArticle)
-                .where(studyArticle.title.title.contains(title))
+                .where(equalsStudyTitle(title))
                 .fetch();
+    }
+
+    private BooleanBuilder equalsStudyTitle(String title) {
+        return nullSafeBuilder(() -> studyArticle.title.title.contains(title));
     }
 }

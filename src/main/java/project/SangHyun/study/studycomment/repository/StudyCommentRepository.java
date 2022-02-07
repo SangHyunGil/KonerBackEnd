@@ -14,6 +14,8 @@ public interface StudyCommentRepository extends JpaRepository<StudyComment, Long
     List<StudyComment> findAllByMemberId(Long memberId);
     @EntityGraph(attributePaths = {"member"})
     Optional<StudyComment> findById(Long id);
-    @Query("select sc from StudyComment sc left join fetch sc.parent where sc.studyArticle.id = :studyArticleId order by sc.parent.id asc nulls first, sc.id asc")
+    @Query("select sc from StudyComment sc left join fetch sc.parent " +
+            "where sc.studyArticle.id = :studyArticleId " +
+            "order by sc.parent.id asc nulls first, sc.id asc")
     List<StudyComment> findAllByStudyArticleId(@Param("studyArticleId") Long studyArticleId);
 }
