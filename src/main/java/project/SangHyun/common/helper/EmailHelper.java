@@ -20,12 +20,12 @@ public class EmailHelper {
     private static final String VERIFY_URL = "http://koner.kr/signup/verify";
 
     @Async
-    public void send(String email, String value, String redisKey) {
+    public void send(String email, String value, RedisKey redisKey) {
         MimeMessage mm = makeMail(email, value, redisKey);
         javaMailSender.send(mm);
     }
 
-    public MimeMessage makeMail(String email, String authCode, String key) {
+    public MimeMessage makeMail(String email, String authCode, RedisKey key) {
         try {
             MimeMessage mm = javaMailSender.createMimeMessage();
             mm.setFrom(new InternetAddress("zizon5941@gmail.com"));
@@ -119,15 +119,15 @@ public class EmailHelper {
                 "</html>";
     }
 
-    private String getUrl(String email, String authCode, String key) {
+    private String getUrl(String email, String authCode, RedisKey key) {
         return VERIFY_URL + makeParam(email, authCode, key);
     }
 
-    private String makeTitle(String key) {
+    private String makeTitle(RedisKey key) {
         return RedisKey.isVerifying(key) ? "회원가입 인증 요청" : "비밀번호 변경 요청";
     }
 
-    private String makeParam(String email, String authCode, String key) {
+    private String makeParam(String email, String authCode, RedisKey key) {
         return "?" + emailParam(email) + authCodeParam(authCode) + redisKeyParam(key);
     }
 
@@ -139,7 +139,7 @@ public class EmailHelper {
         return "&authCode=" + authCode;
     }
 
-    private String redisKeyParam(String key) {
-        return "&redisKey=" + key;
+    private String redisKeyParam(RedisKey key) {
+        return "&redisKey=" + key.getKey();
     }
 }

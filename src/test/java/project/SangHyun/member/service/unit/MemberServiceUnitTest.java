@@ -20,7 +20,6 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.impl.MemberServiceImpl;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.Optional;
 
@@ -37,8 +36,6 @@ class MemberServiceUnitTest {
     MemberServiceImpl memberService;
     @Mock
     MemberRepository memberRepository;
-    @Mock
-    StudyJoinRepository studyJoinRepository;
     @Mock
     FileStoreHelper fileStoreHelper;
 

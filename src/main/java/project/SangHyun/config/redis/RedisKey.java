@@ -22,7 +22,7 @@ public enum RedisKey {
                 .orElse(RedisKey.UNKNOWN);
     }
 
-    public static boolean isVerifying(String redisKey) {
-        return redisKey.equals(VERIFY.getKey());
+    public static boolean isVerifying(RedisKey redisKey) {
+        return redisKey.equals(VERIFY);
     }
 }

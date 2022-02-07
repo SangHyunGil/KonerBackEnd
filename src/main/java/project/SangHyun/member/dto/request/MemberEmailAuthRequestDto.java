@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.config.redis.RedisKey;
 
 import javax.validation.constraints.NotBlank;
 
@@ -19,5 +20,5 @@ public class MemberEmailAuthRequestDto {
 
     @ApiModelProperty(value = "Redis 키", notes = "Redis에 저장된 이메일 키를 입력해주세요", required = true, example = "-")
     @NotBlank(message = "Redis 키를 입력해주세요.")
-    private String redisKey;
+    private RedisKey redisKey;
 }

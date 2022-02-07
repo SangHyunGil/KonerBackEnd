@@ -5,14 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.common.helper.EmailHelper;
 import project.SangHyun.common.helper.FileStoreHelper;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.*;
 import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
@@ -20,9 +21,9 @@ import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.member.service.impl.RedisService;
 import project.SangHyun.member.service.impl.SignServiceImpl;
 import project.SangHyun.member.tools.sign.SignFactory;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.Optional;
 
@@ -35,6 +36,7 @@ class SignServiceUnitTest {
     Member authMember;
     Member notAuthMember;
 
+    @InjectMocks
     SignServiceImpl signService;
     @Mock
     JwtTokenHelper accessTokenHelper;
@@ -45,17 +47,15 @@ class SignServiceUnitTest {
     @Mock
     MemberRepository memberRepository;
     @Mock
-    RedisHelper redisHelper;
+    RedisService redisService;
     @Mock
     EmailHelper emailHelper;
-    @Mock
-    StudyJoinRepository studyJoinRepository;
     @Mock
     FileStoreHelper fileStoreHelper;
 
     @BeforeEach
     public void init() {
-        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, passwordEncoder, memberRepository, redisHelper, emailHelper);
+        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, passwordEncoder, memberRepository, emailHelper, redisService);
 
         authMember = SignFactory.makeAuthTestMember();
         notAuthMember = SignFactory.makeTestNotAuthMember();
@@ -123,7 +123,7 @@ class SignServiceUnitTest {
         given(passwordEncoder.matches(any(), any())).willReturn(true);
         given(accessTokenHelper.createToken(any())).willReturn("accessToken");
         given(refreshTokenHelper.createToken(any())).willReturn("refreshToken");
-        willDoNothing().given(redisHelper).setDataWithExpiration(any(), any(), any());
+        willDoNothing().given(redisService).store(any(), any(), any());
 
         //when
         MemberLoginResponseDto ActualResult = signService.loginMember(requestDto);
@@ -164,11 +164,11 @@ class SignServiceUnitTest {
     @DisplayName("회원가입 후 인증을 위한 이메일을 전송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("VERIFY");
+        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
-        willDoNothing().given(redisHelper).setDataWithExpiration(any(), any(), any());
+        willDoNothing().given(redisService).store(any(), any(), any());
         willDoNothing().given(emailHelper).send(any(), any(), any());
 
         //when
@@ -182,11 +182,11 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호 변경을 위한 이메일을 전송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("PASSWORD");
+        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
-        willDoNothing().given(redisHelper).setDataWithExpiration(any(), any(), any());
+        willDoNothing().given(redisService).store(any(), any(), any());
         willDoNothing().given(emailHelper).send(any(), any(), any());
 
         //when
@@ -200,12 +200,12 @@ class SignServiceUnitTest {
     @DisplayName("회원가입 후 인증에 대한 메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(notAuthMember.getEmail(), "authCode", "VERIFY");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(notAuthMember.getEmail(), "authCode", RedisKey.VERIFY);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
-        given(redisHelper.getData(any())).willReturn("authCode");
-        willDoNothing().given(redisHelper).deleteData(any());
+        given(redisService.validate(any(), any())).willReturn(true);
+        willDoNothing().given(redisService).delete(any());
 
         //when
         String ActualResult = signService.verify(requestDto);
@@ -218,11 +218,11 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호 변경에 대한 메일을 검증한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", "PASSWORD");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
 
         //mocking
-        given(redisHelper.getData(any())).willReturn("authCode");
-        willDoNothing().given(redisHelper).deleteData(any());
+        given(redisService.validate(any(), any())).willReturn(true);
+        willDoNothing().given(redisService).delete(any());
 
         //when
         String ActualResult = signService.verify(requestDto);
@@ -235,10 +235,10 @@ class SignServiceUnitTest {
     @DisplayName("Redis에 저장된 값과 검증 값과 달라 이메일 인증에 실패한다.")
     public void verify_fail() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode","PASSWORD");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.PASSWORD);
 
         //mocking
-        given(redisHelper.getData(any())).willReturn("different");
+        given(redisService.validate(any(), any())).willReturn(false);
 
         //when, then
         Assertions.assertThrows(RedisValueDifferentException.class, ()->signService.verify(requestDto));
@@ -253,7 +253,7 @@ class SignServiceUnitTest {
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(passwordEncoder.encode(any())).willReturn("encodedChangedPW");
-        willDoNothing().given(redisHelper).deleteData(any());
+        willDoNothing().given(redisService).delete(any());
 
         //when
         MemberChangePwResponseDto ActualResult = signService.changePassword(requestDto);
@@ -270,7 +270,7 @@ class SignServiceUnitTest {
         TokenResponseDto ExpectResult = SignFactory.makeTokenResponseDto(authMember);
 
         //mocking
-        given(redisHelper.getData(any())).willReturn("test");
+        given(redisService.validate(any(), any())).willReturn(true);
         given(refreshTokenHelper.extractSubject(any())).willReturn("test");
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(accessTokenHelper.createToken(any())).willReturn("newAccessToken");
@@ -290,7 +290,7 @@ class SignServiceUnitTest {
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto("refreshToken");
 
         //mocking
-        given(redisHelper.getData(any())).willReturn("wrongToken!!!!");
+        given(redisService.validate(any(), any())).willReturn(false);
         given(refreshTokenHelper.extractSubject(any())).willReturn("!!!wrongToken");
 
         //when, then

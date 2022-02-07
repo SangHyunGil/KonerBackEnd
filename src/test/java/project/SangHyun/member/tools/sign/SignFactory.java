@@ -5,6 +5,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
+import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
@@ -61,11 +62,11 @@ public class SignFactory extends BasicFactory {
         return new MemberLoginRequestDto("xptmxm1!", "wrong");
     }
 
-    public static MemberEmailAuthRequestDto makeEmailAuthRequestDto(String redisKey) {
+    public static MemberEmailAuthRequestDto makeEmailAuthRequestDto(RedisKey redisKey) {
         return new MemberEmailAuthRequestDto("xptmxm1!", redisKey);
     }
 
-    public static VerifyEmailRequestDto makeVerifyEmailRequestDto(String email, String authCode, String redisKey) {
+    public static VerifyEmailRequestDto makeVerifyEmailRequestDto(String email, String authCode, RedisKey redisKey) {
         return new VerifyEmailRequestDto(email, authCode, redisKey);
     }
 

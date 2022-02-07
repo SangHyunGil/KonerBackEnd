@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.config.redis.RedisKey;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +19,5 @@ public class VerifyEmailRequestDto {
     private String authCode;
 
     @ApiModelProperty(value = "Redis 키", notes = "Redis 키를 입력해주세요.", required = true, example = "-")
-    private String redisKey;
+    private RedisKey redisKey;
 }

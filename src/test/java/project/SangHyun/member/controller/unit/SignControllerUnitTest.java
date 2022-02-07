@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.controller.SignController;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.*;
@@ -85,7 +86,7 @@ class SignControllerUnitTest {
     @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("VERIFY");
+        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
         String result = "이메일 전송에 성공하였습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
@@ -104,7 +105,7 @@ class SignControllerUnitTest {
     @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("PASSWORD");
+        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
         String result = "이메일 전송에 성공하였습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
@@ -123,7 +124,7 @@ class SignControllerUnitTest {
     @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", "VERIFY");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.VERIFY);
         String result = "이메일 인증이 완료되었습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
@@ -142,7 +143,7 @@ class SignControllerUnitTest {
     @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", "PASSWORD");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
         String result = "이메일 인증이 완료되었습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
