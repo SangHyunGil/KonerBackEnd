@@ -23,6 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/sign")
 public class SignController {
+
     private final SignService signService;
     private final ResponseServiceImpl responseService;
 
@@ -34,12 +35,6 @@ public class SignController {
             throw new BindException(bindingResult);
         }
         return responseService.getSingleResult(signService.registerMember(requestDto));
-    }
-
-    @ApiOperation(value = "검증 메일 발송", notes = "검증을 위해 메일을 발송한다.")
-    @PostMapping("/email")
-    public SingleResult<String> sendEmail(@RequestBody MemberEmailAuthRequestDto requestDto) {
-        return responseService.getSingleResult(signService.sendEmail(requestDto));
     }
 
     @ApiOperation(value = "이메일 인증", notes = "이메일 인증을 진행한다.")

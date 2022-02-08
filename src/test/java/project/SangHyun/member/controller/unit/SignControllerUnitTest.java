@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.SingleResult;
@@ -43,8 +42,6 @@ class SignControllerUnitTest {
     SignService signService;
     @Mock
     ResponseServiceImpl responseService;
-    @Mock
-    PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void beforeEach() {
@@ -79,44 +76,6 @@ class SignControllerUnitTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
-    public void sendMail_register() throws Exception {
-        //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
-        String result = "이메일 전송에 성공하였습니다.";
-        SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
-
-        //mocking
-        given(signService.sendEmail(requestDto)).willReturn(result);
-        given(responseService.getSingleResult(result)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/sign/email")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(requestDto)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
-    public void sendMail_pw() throws Exception {
-        //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
-        String result = "이메일 전송에 성공하였습니다.";
-        SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
-
-        //mocking
-        given(signService.sendEmail(requestDto)).willReturn(result);
-        given(responseService.getSingleResult(result)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/sign/email")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
     }
 

@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
@@ -50,8 +49,6 @@ class StudyArticleControllerIntegrationTest {
     StudyArticleRepository studyArticleRepository;
     @Autowired
     StudyJoinRepository studyJoinRepository;
-    @Autowired
-    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired

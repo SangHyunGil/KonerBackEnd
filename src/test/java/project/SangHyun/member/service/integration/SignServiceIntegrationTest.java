@@ -11,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
@@ -20,6 +19,7 @@ import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
+import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.impl.SignServiceImpl;
 import project.SangHyun.member.tools.sign.SignFactory;
@@ -116,36 +116,10 @@ class SignServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("회원가입 후 인증을 위한 검증 메일을 전송한다.")
-    public void sendMail_register() throws Exception {
-        //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
-
-        //when
-        String ActualResult = signService.sendEmail(requestDto);
-
-        //then
-        Assertions.assertEquals("이메일 전송에 성공하였습니다.", ActualResult);
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경을 위한 검증 메일을 전송한다.")
-    public void sendMail_pw() throws Exception {
-        //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
-
-        //when
-        String ActualResult = signService.sendEmail(requestDto);
-
-        //then
-        Assertions.assertEquals("이메일 전송에 성공하였습니다.", ActualResult);
-    }
-
-    @Test
     @DisplayName("회원가입에 대한 메일을 검증한다.")
     public void verifyMail_register() throws Exception {
         //given
-        String authCode = makeAuthCode("xptmxm2!", "VERIFY");
+        String authCode = makeAuthCode(RedisKey.VERIFY, "xptmxm2!");
         VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, RedisKey.VERIFY);
 
         //when
@@ -155,9 +129,9 @@ class SignServiceIntegrationTest {
         Assertions.assertEquals("이메일 인증이 완료되었습니다.", ActualResult);
     }
 
-    private String makeAuthCode(String s, String verify) {
+    private String makeAuthCode(RedisKey redisKey, String email) {
         String authCode = UUID.randomUUID().toString();
-        redisHelper.setDataWithExpiration(verify + s, authCode, 60 * 5L);
+        redisHelper.store(redisKey + email, authCode, 60 * 5L);
         return authCode;
     }
 
@@ -165,7 +139,7 @@ class SignServiceIntegrationTest {
     @DisplayName("비밀번호 변경에 대한 메일을 검증한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        String authCode = makeAuthCode("xptmxm1!", "PASSWORD");
+        String authCode = makeAuthCode(RedisKey.PASSWORD, "xptmxm1!");
         VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, RedisKey.PASSWORD);
 
         //when
@@ -216,7 +190,7 @@ class SignServiceIntegrationTest {
 
     private String makeRefreshToken(Member member) {
         String refreshToken = refreshTokenHelper.createToken(member.getEmail());
-        redisHelper.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
+        redisHelper.store(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
         return refreshToken;
     }
 

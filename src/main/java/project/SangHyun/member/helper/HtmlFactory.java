@@ -1,46 +1,7 @@
-package project.SangHyun.common.helper;
+package project.SangHyun.member.helper;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import project.SangHyun.config.redis.RedisKey;
-
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class EmailHelper {
-    private final JavaMailSender javaMailSender;
-    private static final String UNIVERSITY_EMAIL = "@koreatech.ac.kr";
-    private static final String VERIFY_URL = "http://koner.kr/signup/verify";
-
-    @Async
-    public void send(String email, String value, RedisKey redisKey) {
-        MimeMessage mm = makeMail(email, value, redisKey);
-        javaMailSender.send(mm);
-    }
-
-    public MimeMessage makeMail(String email, String authCode, RedisKey key) {
-        try {
-            MimeMessage mm = javaMailSender.createMimeMessage();
-            mm.setFrom(new InternetAddress("zizon5941@gmail.com"));
-            mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email+UNIVERSITY_EMAIL));
-            mm.setSubject(makeTitle(key), "UTF-8");
-            mm.setText(getHtml(getUrl(email, authCode, key)), "UTF-8", "html");
-
-            return mm;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Mail Send Failed!");
-        }
-    }
-
-    private String getHtml(String url) {
+public class HtmlFactory {
+    public static String getHtml(String url) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" style=\"-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #f1f1f1;display: flex;align-items: center;margin: 0 auto !important;padding: 0 !important;height: 100% !important;width: 100% !important;\">\n" +
                 "<head style=\"-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;\">\n" +
@@ -117,29 +78,5 @@ public class EmailHelper {
                 "  </center>\n" +
                 "</body>\n" +
                 "</html>";
-    }
-
-    private String getUrl(String email, String authCode, RedisKey key) {
-        return VERIFY_URL + makeParam(email, authCode, key);
-    }
-
-    private String makeTitle(RedisKey key) {
-        return RedisKey.isVerifying(key) ? "회원가입 인증 요청" : "비밀번호 변경 요청";
-    }
-
-    private String makeParam(String email, String authCode, RedisKey key) {
-        return "?" + emailParam(email) + authCodeParam(authCode) + redisKeyParam(key);
-    }
-
-    private String emailParam(String email) {
-        return "email=" + email;
-    }
-
-    private String authCodeParam(String authCode) {
-        return "&authCode=" + authCode;
-    }
-
-    private String redisKeyParam(RedisKey key) {
-        return "&redisKey=" + key.getKey();
     }
 }

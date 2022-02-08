@@ -6,7 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.helper.EmailHelper;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.config.redis.RedisKey;
@@ -17,11 +16,12 @@ import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
+import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.service.impl.dto.JwtTokens;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,13 +32,9 @@ public class SignServiceImpl implements SignService {
     private final JwtTokenHelper accessTokenHelper;
     private final JwtTokenHelper refreshTokenHelper;
     private final FileStoreHelper fileStoreHelper;
-
     private final PasswordEncoder passwordEncoder;
-
     private final MemberRepository memberRepository;
-
-    private final EmailHelper emailHelper;
-    private final RedisService redisService;
+    private final RedisHelper redisService;
 
 
     @Override
@@ -68,15 +64,6 @@ public class SignServiceImpl implements SignService {
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
         return TokenResponseDto.create(member, jwtTokens);
-    }
-
-    @Override
-    @Transactional
-    public String sendEmail(MemberEmailAuthRequestDto requestDto) {
-        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-        String authCode = makeAuthCodeAndStoreInRedis(requestDto);
-        emailHelper.send(member.getEmail(), authCode, requestDto.getRedisKey());
-        return "이메일 전송에 성공하였습니다.";
     }
 
     @Override
@@ -129,13 +116,6 @@ public class SignServiceImpl implements SignService {
 
     private Boolean isNotValidRedisValue(String key, String email) {
         return !redisService.validate(key, email);
-    }
-
-    private String makeAuthCodeAndStoreInRedis(MemberEmailAuthRequestDto requestDto) {
-        String key = getRedisKey(requestDto.getRedisKey(), requestDto.getEmail());
-        String authCode = UUID.randomUUID().toString();
-        redisService.store(key, authCode, 60*5L);
-        return authCode;
     }
 
     private String getRedisKey(RedisKey redisKey, String email) {

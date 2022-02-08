@@ -1,4 +1,4 @@
-package project.SangHyun.member.service.integration;
+package project.SangHyun.member.helper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,15 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.member.service.impl.RedisService;
 
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-class RedisServiceIntegrationTest {
+class RedisHelperIntegrationTest {
 
     @Autowired
-    RedisService redisService;
+    RedisHelper redisHelper;
     @Autowired
     TestDB testDB;
 
@@ -35,7 +34,7 @@ class RedisServiceIntegrationTest {
         Long time = 100000L;
 
         //when, then
-        Assertions.assertDoesNotThrow(() -> redisService.store(key, value, time));
+        Assertions.assertDoesNotThrow(() -> redisHelper.store(key, value, time));
     }
 
     @Test
@@ -46,10 +45,10 @@ class RedisServiceIntegrationTest {
         String value = "value";
         String expectValue = "value";
         Long time = 500000000L;
-        redisService.store(key, value, time);
+        redisHelper.store(key, value, time);
 
         //when
-        Boolean result = redisService.validate(key, expectValue);
+        Boolean result = redisHelper.validate(key, expectValue);
 
         // then
         Assertions.assertEquals(true, result);
@@ -63,10 +62,10 @@ class RedisServiceIntegrationTest {
         String value = "value";
         String expectValue = "wrongValue";
         Long time = 5000000L;
-        redisService.store(key, value, time);
+        redisHelper.store(key, value, time);
 
         //when
-        Boolean result = redisService.validate(key, expectValue);
+        Boolean result = redisHelper.validate(key, expectValue);
 
         // then
         Assertions.assertEquals(false, result);
@@ -79,9 +78,9 @@ class RedisServiceIntegrationTest {
         String key = "key";
         String value = "value";
         Long time = 5000000L;
-        redisService.store(key, value, time);
+        redisHelper.store(key, value, time);
 
         //when, then
-        Assertions.assertDoesNotThrow(() -> redisService.delete(key));
+        Assertions.assertDoesNotThrow(() -> redisHelper.delete(key));
     }
 }

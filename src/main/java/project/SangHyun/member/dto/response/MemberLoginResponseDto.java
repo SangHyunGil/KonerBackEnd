@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.service.impl.JwtTokens;
+import project.SangHyun.member.service.impl.dto.JwtTokens;
 
 @Data
 @NoArgsConstructor

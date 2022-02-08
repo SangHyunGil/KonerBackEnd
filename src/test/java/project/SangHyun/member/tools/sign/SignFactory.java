@@ -14,7 +14,7 @@ import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
-import project.SangHyun.member.service.impl.JwtTokens;
+import project.SangHyun.member.service.impl.dto.JwtTokens;
 
 import java.io.IOException;
 import java.io.InputStream;

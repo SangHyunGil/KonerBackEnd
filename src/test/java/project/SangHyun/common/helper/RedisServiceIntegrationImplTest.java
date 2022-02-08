@@ -9,9 +9,7 @@
 //import org.springframework.test.context.ActiveProfiles;
 //import org.springframework.transaction.annotation.Transactional;
 //import project.SangHyun.TestDB;
-//import project.SangHyun.common.helper.RedisHelper;
-//
-//import static org.mockito.ArgumentMatchers.any;
+//import project.SangHyun.member.helper.RedisHelper;
 //
 //@SpringBootTest
 //@Transactional
@@ -19,7 +17,7 @@
 //class RedisServiceIntegrationImplTest {
 //
 //    @Autowired
-//    RedisHelper redisService;
+//    RedisHelper redisHelper;
 //    @Autowired
 //    TestDB testDB;
 //
@@ -36,7 +34,7 @@
 //        String value = "value";
 //
 //        //when
-//        redisService.setDataWithExpiration(key, value, 60 * 5L);
+//        redisHelper.store(key, value, 60 * 5L);
 //
 //        //then
 //        Assertions.assertEquals(value, redisService.getData(key));
@@ -50,10 +48,10 @@
 //        String value = "value";
 //
 //        //when
-//        redisService.setDataWithExpiration(key, value, 60 * 5L);
+//        redisHelper.store(key, value, 60 * 5L);
 //
 //        //then
-//        Assertions.assertEquals(value, redisService.getData(key));
+//        Assertions.assertEquals(value, redisHelper.validate(key));
 //    }
 //
 //    @Test
@@ -64,9 +62,9 @@
 //        String value = "value";
 //
 //        //when
-//        redisService.setDataWithExpiration(key, value, 60 * 5L);
+//        redisHelper.store(key, value, 60 * 5L);
 //
 //        //then
-//        redisService.deleteData(key);
+//        redisHelper.delete(key);
 //    }
 //}

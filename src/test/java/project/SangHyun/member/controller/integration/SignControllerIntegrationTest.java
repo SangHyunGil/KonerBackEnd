@@ -1,5 +1,6 @@
 package project.SangHyun.member.controller.integration;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +15,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.config.redis.RedisKey;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.dto.request.*;
+import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.tools.sign.SignFactory;
+
+import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,9 +40,9 @@ class SignControllerIntegrationTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    RedisHelper redisHelper;
-    @Autowired
     JwtTokenHelper refreshTokenHelper;
+    @Autowired
+    RedisHelper redisHelper;
     @Autowired
     TestDB testDB;
 
@@ -130,119 +136,90 @@ class SignControllerIntegrationTest {
                 .andExpect(status().is5xxServerError());
     }
 
-//    @Test
-//    @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
-//    public void sendMail_register() throws Exception {
-//        //given
-//        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("VERIFY");
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/email")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
-//    public void sendMail_pw() throws Exception {
-//        //given
-//        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto("PASSWORD");
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/email")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
-//    public void verifyMail_register() throws Exception {
-//        //given
-//        String authCode = makeAuthCode("xptmxm2!", "VERIFY");
-//        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, "VERIFY");
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/verify")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//    }
-//
-//    private String makeAuthCode(String s, String verify) {
-//        String authCode = UUID.randomUUID().toString();
-//        redisHelper.setDataWithExpiration(verify + s, authCode, 60 * 5L);
-//        return authCode;
-//    }
-//
-//    @Test
-//    @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
-//    public void verifyMail_pw() throws Exception {
-//        //given
-//        String authCode = makeAuthCode("xptmxm1!", "PASSWORD");
-//        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, "PASSWORD");
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/verify")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andExpect(status().isOk());
-//
-//    }
-//
-//    @Test
-//    @DisplayName("비밀번호 변경을 진행한다.")
-//    public void changePW() throws Exception {
-//        //given
-//        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/password")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    @DisplayName("로그인을 진행한다.")
-//    public void login() throws Exception {
-//        //given
-//        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    @DisplayName("RefreshToken을 이용해 JWT 토큰들을 재발급한다.")
-//    public void reIssue() throws Exception {
-//        //given
-//        Member member = SignFactory.makeAuthTestMember();
-//        String refreshToken = makeRefreshToken(member);
-//        TokenRequestDto requestDto = SignFactory.makeTokenRequestDto(refreshToken);
-//
-//        //when, then
-//        mockMvc.perform(post("/sign/reissue")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("utf-8")
-//                        .content(new Gson().toJson(requestDto)))
-//                .andExpect(status().isOk());
-//    }
-//
-//    private String makeRefreshToken(Member member) {
-//        String refreshToken = refreshTokenHelper.createToken(member.getEmail());
-//        redisHelper.setDataWithExpiration(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
-//        return refreshToken;
-//    }
+    @Test
+    @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
+    public void verifyMail_register() throws Exception {
+        //given
+        String authCode = makeAuthCode(RedisKey.VERIFY, "xptmxm2!");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, RedisKey.VERIFY);
+
+        //when, then
+        mockMvc.perform(post("/sign/verify")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
+    public void verifyMail_pw() throws Exception {
+        //given
+        String authCode = makeAuthCode(RedisKey.PASSWORD, "xptmxm1!");
+        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, RedisKey.PASSWORD);
+
+        //when, then
+        mockMvc.perform(post("/sign/verify")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
+
+    }
+
+    private String makeAuthCode(RedisKey redisKey, String email) {
+        String authCode = UUID.randomUUID().toString();
+        redisHelper.store(redisKey + email, authCode, 60 * 5L);
+        return authCode;
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경을 진행한다.")
+    public void changePW() throws Exception {
+        //given
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
+
+        //when, then
+        mockMvc.perform(post("/sign/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("로그인을 진행한다.")
+    public void login() throws Exception {
+        //given
+        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+
+        //when, then
+        mockMvc.perform(post("/sign/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("RefreshToken을 이용해 JWT 토큰들을 재발급한다.")
+    public void reIssue() throws Exception {
+        //given
+        Member member = SignFactory.makeAuthTestMember();
+        String refreshToken = makeRefreshToken(member);
+        TokenRequestDto requestDto = SignFactory.makeTokenRequestDto(refreshToken);
+
+        //when, then
+        mockMvc.perform(post("/sign/reissue")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
+    }
+
+    private String makeRefreshToken(Member member) {
+        String refreshToken = refreshTokenHelper.createToken(member.getEmail());
+        redisHelper.store(refreshToken, member.getEmail(), refreshTokenHelper.getValidTime());
+        return refreshToken;
+    }
 }

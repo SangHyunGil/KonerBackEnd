@@ -15,16 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.study.studyboard.dto.request.StudyBoardUpdateRequestDto;
+import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -35,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @ActiveProfiles("test")
 class StudyBoardControllerIntegrationTest {
+
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -45,8 +45,6 @@ class StudyBoardControllerIntegrationTest {
     StudyRepository studyRepository;
     @Autowired
     StudyJoinRepository studyJoinRepository;
-    @Autowired
-    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper refreshTokenHelper;
     @Autowired
