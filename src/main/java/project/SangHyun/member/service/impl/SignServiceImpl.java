@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
+import project.SangHyun.member.dto.request.MemberLoginRequestDto;
+import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.dto.request.TokenRequestDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
@@ -32,9 +32,10 @@ public class SignServiceImpl implements SignService {
     private final JwtTokenHelper accessTokenHelper;
     private final JwtTokenHelper refreshTokenHelper;
     private final FileStoreHelper fileStoreHelper;
+    private final RedisHelper redisHelper;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-    private final RedisHelper redisService;
+
 
 
     @Override
@@ -66,28 +67,6 @@ public class SignServiceImpl implements SignService {
         return TokenResponseDto.create(member, jwtTokens);
     }
 
-    @Override
-    @Transactional
-    public String verify(VerifyEmailRequestDto requestDto) {
-        String redisKey = getRedisKey(requestDto.getRedisKey(), requestDto.getEmail());
-        validateRedisValue(redisKey, requestDto.getAuthCode());
-        if (isVerifyEmail(requestDto)) {
-            Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-            member.changeRole(MemberRole.ROLE_MEMBER);
-        }
-        redisService.delete(getRedisKey(requestDto.getRedisKey(), requestDto.getEmail()));
-        return "이메일 인증이 완료되었습니다.";
-    }
-
-    @Override
-    @Transactional
-    public MemberChangePwResponseDto changePassword(MemberChangePwRequestDto requestDto) {
-        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-        member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
-        redisService.delete(getRedisKey(RedisKey.PASSWORD, requestDto.getEmail()));
-        return MemberChangePwResponseDto.create(member);
-    }
-
     private void validateDuplicated(String email, String nickname) {
         if (memberRepository.findByEmail(email).isPresent())
             throw new MemberEmailAlreadyExistsException();
@@ -105,7 +84,7 @@ public class SignServiceImpl implements SignService {
     private JwtTokens makeJwtTokens(String subject) {
         String accessToken = accessTokenHelper.createToken(subject);
         String refreshToken = refreshTokenHelper.createToken(subject);
-        redisService.store(refreshToken, subject, refreshTokenHelper.getValidTime());
+        redisHelper.store(refreshToken, subject, refreshTokenHelper.getValidTime());
         return new JwtTokens(accessToken, refreshToken);
     }
 
@@ -115,14 +94,6 @@ public class SignServiceImpl implements SignService {
     }
 
     private Boolean isNotValidRedisValue(String key, String email) {
-        return !redisService.validate(key, email);
-    }
-
-    private String getRedisKey(RedisKey redisKey, String email) {
-        return redisKey.getKey() + email;
-    }
-
-    private boolean isVerifyEmail(VerifyEmailRequestDto requestDto) {
-        return RedisKey.isVerifying(requestDto.getRedisKey());
+        return !redisHelper.validate(key, email);
     }
 }

@@ -8,14 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
-import project.SangHyun.member.dto.response.MemberInfoResponseDto;
-import project.SangHyun.member.dto.response.MemberProfileResponseDto;
-import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
+import project.SangHyun.member.dto.response.*;
+import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.impl.MemberServiceImpl;
 import project.SangHyun.member.tools.member.MemberFactory;
@@ -38,6 +38,10 @@ class MemberServiceUnitTest {
     MemberRepository memberRepository;
     @Mock
     FileStoreHelper fileStoreHelper;
+    @Mock
+    PasswordEncoder passwordEncoder;
+    @Mock
+    RedisHelper redisHelper;
 
     @BeforeEach
     public void init() {
@@ -110,5 +114,23 @@ class MemberServiceUnitTest {
 
         //then
         Assertions.assertEquals(ExpectResult.getMemberId(), ActualResult.getMemberId());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경을 진행한다.")
+    public void changePW() throws Exception {
+        //given
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change");
+
+        //mocking
+        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
+        given(passwordEncoder.encode(any())).willReturn("encodedChangedPW");
+        willDoNothing().given(redisHelper).delete(any());
+
+        //when
+        MemberChangePwResponseDto ActualResult = memberService.changePassword(requestDto);
+
+        //then
+        Assertions.assertEquals(1L, ActualResult.getId());
     }
 }

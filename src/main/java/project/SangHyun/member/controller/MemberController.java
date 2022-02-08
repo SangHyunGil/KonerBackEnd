@@ -7,15 +7,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
-import project.SangHyun.member.dto.response.MemberInfoResponseDto;
-import project.SangHyun.member.dto.response.MemberProfileResponseDto;
-import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
-import project.SangHyun.member.service.MemberService;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.config.security.member.MemberDetails;
+import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
+import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
+import project.SangHyun.member.dto.response.*;
+import project.SangHyun.member.service.MemberService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
@@ -35,7 +33,7 @@ public class MemberController {
         return responseService.getSingleResult(memberService.getMemberInfo(memberDetails));
     }
 
-    @ApiOperation(value = "프로필 정보 로드", notes = "ID(PK)로 프로필에 대한 정보를 얻어온다.")
+    @ApiOperation(value = "회원 프로필 정보 로드", notes = "회원 ID(PK)로 프로필에 대한 정보를 얻어온다.")
     @GetMapping("/{memberId}")
     public SingleResult<MemberProfileResponseDto> getProfile(@PathVariable Long memberId) {
         return responseService.getSingleResult(memberService.getProfile(memberId));
@@ -54,5 +52,11 @@ public class MemberController {
     @DeleteMapping("/{memberId}")
     public SingleResult<MemberDeleteResponseDto> deleteMember(@PathVariable Long memberId) {
         return responseService.getSingleResult(memberService.deleteMember(memberId));
+    }
+
+    @ApiOperation(value = "회원 비밀번호 변경", notes = "회원 비밀번호 변경을 진행한다.")
+    @PostMapping("/password")
+    public SingleResult<MemberChangePwResponseDto> changePassword(@Valid @RequestBody MemberChangePwRequestDto requestDto) {
+        return responseService.getSingleResult(memberService.changePassword(requestDto));
     }
 }

@@ -1,56 +1,25 @@
-package project.SangHyun.member.service.impl;
+package project.SangHyun.member.helper.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.common.advice.exception.MemberNotFoundException;
+import org.springframework.stereotype.Component;
 import project.SangHyun.config.redis.RedisKey;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.helper.RedisHelper;
-import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.EmailService;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.UUID;
 
-import static project.SangHyun.member.helper.HtmlFactory.getHtml;
+import static project.SangHyun.member.helper.email.HtmlFactory.getHtml;
 
-
-@Service
-@Transactional(readOnly = true)
+@Component
 @RequiredArgsConstructor
-public class GmailServiceImpl implements EmailService {
+public class GmailHelper implements EmailHelper{
 
     private static final String UNIVERSITY_DOMAIN = "@koreatech.ac.kr";
     private static final String VERIFY_URL = "http://koner.kr/signup/verify";
-    private static final Long EMAIL_VALID_TIME = 60 * 5L;
 
-    private final RedisHelper redisHelper;
     private final JavaMailSender javaMailSender;
-    private final MemberRepository memberRepository;
-
-    public String send(String email, RedisKey redisKey) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
-        String authCode = makeAuthCodeAndStoreInRedis(redisKey, email);
-        sendEmail(member.getEmail(), authCode, redisKey);
-        return "이메일 전송에 성공하였습니다.";
-    }
-
-    private String makeAuthCodeAndStoreInRedis(RedisKey redisKey, String email) {
-        String key = getRedisKey(redisKey, email);
-        String authCode = UUID.randomUUID().toString();
-        redisHelper.store(key, authCode, EMAIL_VALID_TIME);
-        return authCode;
-    }
-
-    private String getRedisKey(RedisKey redisKey, String email) {
-        return redisKey.getKey() + email;
-    }
-
     @Async
     public void sendEmail(String email, String value, RedisKey redisKey) {
         MimeMessage mm = makeMail(email, value, redisKey);

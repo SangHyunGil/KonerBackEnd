@@ -16,13 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.*;
+import project.SangHyun.member.dto.request.MemberLoginRequestDto;
+import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.dto.request.TokenRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.tools.sign.SignFactory;
-
-import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -134,57 +133,6 @@ class SignControllerIntegrationTest {
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().is5xxServerError());
-    }
-
-    @Test
-    @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
-    public void verifyMail_register() throws Exception {
-        //given
-        String authCode = makeAuthCode(RedisKey.VERIFY, "xptmxm2!");
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, RedisKey.VERIFY);
-
-        //when, then
-        mockMvc.perform(post("/sign/verify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
-    public void verifyMail_pw() throws Exception {
-        //given
-        String authCode = makeAuthCode(RedisKey.PASSWORD, "xptmxm1!");
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, RedisKey.PASSWORD);
-
-        //when, then
-        mockMvc.perform(post("/sign/verify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto)))
-                .andExpect(status().isOk());
-
-    }
-
-    private String makeAuthCode(RedisKey redisKey, String email) {
-        String authCode = UUID.randomUUID().toString();
-        redisHelper.store(redisKey + email, authCode, 60 * 5L);
-        return authCode;
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경을 진행한다.")
-    public void changePW() throws Exception {
-        //given
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
-
-        //when, then
-        mockMvc.perform(post("/sign/password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto)))
-                .andExpect(status().isOk());
     }
 
     @Test

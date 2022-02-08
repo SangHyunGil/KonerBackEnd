@@ -64,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/study").permitAll()
                 .antMatchers(HttpMethod.GET, "/study/*").permitAll()
 
+                .antMatchers("/users/password").permitAll()
+
                 .antMatchers(HttpMethod.PUT, "/users/{userId}").access("@memberGuard.check(#userId)")
                 .antMatchers(HttpMethod.DELETE, "/users/{userId}").access("@memberGuard.check(#userId)")
 

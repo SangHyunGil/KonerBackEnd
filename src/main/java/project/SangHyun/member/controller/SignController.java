@@ -6,14 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
+import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.member.dto.request.MemberLoginRequestDto;
+import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.dto.request.TokenRequestDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -35,18 +36,6 @@ public class SignController {
             throw new BindException(bindingResult);
         }
         return responseService.getSingleResult(signService.registerMember(requestDto));
-    }
-
-    @ApiOperation(value = "이메일 인증", notes = "이메일 인증을 진행한다.")
-    @PostMapping("/verify")
-    public SingleResult<String> verify(@RequestBody VerifyEmailRequestDto requestDto) {
-        return responseService.getSingleResult(signService.verify(requestDto));
-    }
-
-    @ApiOperation(value = "비밀번호 변경", notes = "비밀번호 변경을 진행한다.")
-    @PostMapping("/password")
-    public SingleResult<MemberChangePwResponseDto> changePassword(@Valid @RequestBody MemberChangePwRequestDto requestDto) {
-        return responseService.getSingleResult(signService.changePassword(requestDto));
     }
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")

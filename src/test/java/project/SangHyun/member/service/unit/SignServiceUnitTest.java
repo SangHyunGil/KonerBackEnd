@@ -12,10 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.common.helper.FileStoreHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
+import project.SangHyun.member.dto.request.MemberLoginRequestDto;
+import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.dto.request.TokenRequestDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
@@ -52,7 +52,7 @@ class SignServiceUnitTest {
 
     @BeforeEach
     public void init() {
-        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, passwordEncoder, memberRepository, redisHelper);
+        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, redisHelper, passwordEncoder, memberRepository);
 
         authMember = SignFactory.makeAuthTestMember();
         notAuthMember = SignFactory.makeTestNotAuthMember();
@@ -155,72 +155,6 @@ class SignServiceUnitTest {
 
         //when, then
         Assertions.assertThrows(LoginFailureException.class, ()->signService.loginMember(requestDto));
-    }
-
-    @Test
-    @DisplayName("회원가입 후 인증에 대한 메일을 검증한다.")
-    public void verifyMail_register() throws Exception {
-        //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(notAuthMember.getEmail(), "authCode", RedisKey.VERIFY);
-
-        //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
-        given(redisHelper.validate(any(), any())).willReturn(true);
-        willDoNothing().given(redisHelper).delete(any());
-
-        //when
-        String ActualResult = signService.verify(requestDto);
-
-        //then
-        Assertions.assertEquals("이메일 인증이 완료되었습니다.", ActualResult);
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경에 대한 메일을 검증한다.")
-    public void verifyMail_pw() throws Exception {
-        //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
-
-        //mocking
-        given(redisHelper.validate(any(), any())).willReturn(true);
-        willDoNothing().given(redisHelper).delete(any());
-
-        //when
-        String ActualResult = signService.verify(requestDto);
-
-        //then
-        Assertions.assertEquals("이메일 인증이 완료되었습니다.", ActualResult);
-    }
-
-    @Test
-    @DisplayName("Redis에 저장된 값과 검증 값과 달라 이메일 인증에 실패한다.")
-    public void verify_fail() throws Exception {
-        //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.PASSWORD);
-
-        //mocking
-        given(redisHelper.validate(any(), any())).willReturn(false);
-
-        //when, then
-        Assertions.assertThrows(RedisValueDifferentException.class, ()->signService.verify(requestDto));
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경을 진행한다.")
-    public void changePW() throws Exception {
-        //given
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change");
-
-        //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
-        given(passwordEncoder.encode(any())).willReturn("encodedChangedPW");
-        willDoNothing().given(redisHelper).delete(any());
-
-        //when
-        MemberChangePwResponseDto ActualResult = signService.changePassword(requestDto);
-
-        //then
-        Assertions.assertEquals(1L, ActualResult.getId());
     }
 
     @Test

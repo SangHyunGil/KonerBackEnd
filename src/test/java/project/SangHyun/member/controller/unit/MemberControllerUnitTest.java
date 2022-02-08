@@ -1,5 +1,6 @@
 package project.SangHyun.member.controller.unit;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,9 @@ import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.controller.MemberController;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
-import project.SangHyun.member.dto.response.MemberInfoResponseDto;
-import project.SangHyun.member.dto.response.MemberProfileResponseDto;
-import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
+import project.SangHyun.member.dto.response.*;
 import project.SangHyun.member.service.MemberService;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
@@ -136,5 +135,24 @@ class MemberControllerUnitTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.memberId").value(2L));
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경을 진행한다.")
+    public void changePW() throws Exception {
+        //given
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change1!");
+        MemberChangePwResponseDto responseDto = SignFactory.makeChangePwResponseDto(authMember);
+        SingleResult<MemberChangePwResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
+
+        //mocking
+        given(memberService.changePassword(requestDto)).willReturn(responseDto);
+        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+
+        //when, then
+        mockMvc.perform(post("/users/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
     }
 }

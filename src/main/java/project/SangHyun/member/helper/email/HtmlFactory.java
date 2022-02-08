@@ -1,4 +1,4 @@
-package project.SangHyun.member.helper;
+package project.SangHyun.member.helper.email;
 
 public class HtmlFactory {
     public static String getHtml(String url) {

@@ -10,20 +10,27 @@ import org.springframework.web.bind.annotation.RestController;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.service.EmailService;
+import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
+import project.SangHyun.member.service.impl.VerifyService;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sign")
-public class EmailController {
+public class VerifyController {
 
-    private final EmailService emailService;
+    private final VerifyService verifyService;
     private final ResponseServiceImpl responseService;
 
     @ApiOperation(value = "검증 메일 발송", notes = "검증을 위해 메일을 발송한다.")
     @PostMapping("/email")
     public SingleResult<String> sendEmail(@RequestBody MemberEmailAuthRequestDto requestDto) {
-        return responseService.getSingleResult(emailService.send(requestDto.getEmail(), requestDto.getRedisKey()));
+        return responseService.getSingleResult(verifyService.send(requestDto.getEmail(), requestDto.getRedisKey()));
+    }
+
+    @ApiOperation(value = "검증 메일 인증", notes = "검증 메일으로 발송된 인증번호를 검증한다.")
+    @PostMapping("/verify")
+    public SingleResult<String> verify(@RequestBody VerifyEmailRequestDto requestDto) {
+        return responseService.getSingleResult(verifyService.verify(requestDto));
     }
 }

@@ -17,9 +17,11 @@ import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -203,5 +205,19 @@ class MemberControllerIntegrationTest {
         mockMvc.perform(delete("/users/{id}", memberA.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경을 진행한다.")
+    public void changePW() throws Exception {
+        //given
+        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
+
+        //when, then
+        mockMvc.perform(post("/users/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
     }
 }

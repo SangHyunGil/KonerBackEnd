@@ -13,11 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
-import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.controller.SignController;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
+import project.SangHyun.member.dto.request.MemberLoginRequestDto;
+import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.dto.request.TokenRequestDto;
 import project.SangHyun.member.dto.response.MemberLoginResponseDto;
 import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
@@ -76,63 +76,6 @@ class SignControllerUnitTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("회원가입 후 인증에 대한 이메일을 검증한다.")
-    public void verifyMail_register() throws Exception {
-        //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.VERIFY);
-        String result = "이메일 인증이 완료되었습니다.";
-        SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
-
-        //mocking
-        given(signService.verify(requestDto)).willReturn(result);
-        given(responseService.getSingleResult(result)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/sign/verify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(requestDto)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경에 대한 이메일을 검증한다.")
-    public void verifyMail_pw() throws Exception {
-        //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
-        String result = "이메일 인증이 완료되었습니다.";
-        SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
-
-        //mocking
-        given(signService.verify(requestDto)).willReturn(result);
-        given(responseService.getSingleResult(result)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/sign/verify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(requestDto)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("비밀번호 변경을 진행한다.")
-    public void changePW() throws Exception {
-        //given
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change1!");
-        MemberChangePwResponseDto responseDto = SignFactory.makeChangePwResponseDto(authMember);
-        SingleResult<MemberChangePwResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
-
-        //mocking
-        given(signService.changePassword(requestDto)).willReturn(responseDto);
-        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
-
-        //when, then
-        mockMvc.perform(post("/sign/password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
     }
 
