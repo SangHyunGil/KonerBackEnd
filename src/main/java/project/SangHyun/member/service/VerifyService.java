@@ -1,4 +1,4 @@
-package project.SangHyun.member.service.impl;
+package project.SangHyun.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,14 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.helper.email.EmailHelper;
 import project.SangHyun.member.repository.MemberRepository;
 
 import java.util.UUID;
-
 
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +25,7 @@ public class VerifyService {
     private final MemberRepository memberRepository;
 
     public String send(String email, RedisKey redisKey) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+        Member member = findMemberByEmail(email);
         String authCode = makeAuthCodeAndStoreInRedis(redisKey, email);
         emailHelper.sendEmail(member.getEmail(), authCode, redisKey);
         return "이메일 전송에 성공하였습니다.";
@@ -38,11 +36,15 @@ public class VerifyService {
         String redisKey = redisHelper.getRedisKey(requestDto.getRedisKey(), requestDto.getEmail());
         redisHelper.validate(redisKey, requestDto.getAuthCode());
         if (isRegistering(requestDto)) {
-            Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
-            member.changeRole(MemberRole.ROLE_MEMBER);
+            Member member = findMemberByEmail(requestDto.getEmail());
+            member.authenticate();
         }
         redisHelper.delete(redisKey);
         return "이메일 인증이 완료되었습니다.";
+    }
+
+    private Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
     }
 
     private String makeAuthCodeAndStoreInRedis(RedisKey redisKey, String email) {

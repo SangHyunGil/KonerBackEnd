@@ -21,7 +21,7 @@ import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.impl.SignServiceImpl;
+import project.SangHyun.member.service.SignService;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import java.util.Optional;
@@ -35,7 +35,7 @@ class SignServiceUnitTest {
     Member notAuthMember;
 
     @InjectMocks
-    SignServiceImpl signService;
+    SignService signService;
     @Mock
     JwtTokenHelper accessTokenHelper;
     @Mock
@@ -51,7 +51,7 @@ class SignServiceUnitTest {
 
     @BeforeEach
     public void init() {
-        signService = new SignServiceImpl(accessTokenHelper, refreshTokenHelper, fileStoreHelper, redisHelper, passwordEncoder, memberRepository);
+        signService = new SignService(fileStoreHelper, accessTokenHelper, refreshTokenHelper, redisHelper, passwordEncoder, memberRepository);
 
         authMember = SignFactory.makeAuthTestMember();
         notAuthMember = SignFactory.makeTestNotAuthMember();

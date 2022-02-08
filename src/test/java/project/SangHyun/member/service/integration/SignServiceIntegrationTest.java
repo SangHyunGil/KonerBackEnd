@@ -21,7 +21,7 @@ import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.impl.SignServiceImpl;
+import project.SangHyun.member.service.SignService;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 @SpringBootTest
@@ -30,7 +30,7 @@ import project.SangHyun.member.tools.sign.SignFactory;
 class SignServiceIntegrationTest {
 
     @Autowired
-    SignServiceImpl signService;
+    SignService signService;
     @Autowired
     JwtTokenHelper refreshTokenHelper;
     @Autowired

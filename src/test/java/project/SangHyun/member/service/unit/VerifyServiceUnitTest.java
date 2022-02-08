@@ -16,7 +16,7 @@ import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.helper.email.EmailHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.impl.VerifyService;
+import project.SangHyun.member.service.VerifyService;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import java.util.Optional;

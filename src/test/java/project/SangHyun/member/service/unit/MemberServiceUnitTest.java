@@ -17,7 +17,7 @@ import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.dto.response.*;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.impl.MemberServiceImpl;
+import project.SangHyun.member.service.MemberService;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -33,7 +33,7 @@ class MemberServiceUnitTest {
     Member notAuthMember;
 
     @InjectMocks
-    MemberServiceImpl memberService;
+    MemberService memberService;
     @Mock
     MemberRepository memberRepository;
     @Mock
@@ -53,11 +53,11 @@ class MemberServiceUnitTest {
     @DisplayName("회원 정보를 로드한다.")
     public void loadUserInfo() throws Exception {
         //given
-        MemberDetails memberDetails = MemberFactory.makeMemberDetails();
+        MemberDetails memberDetails = MemberFactory.makeMemberDetails(authMember.getId());
         MemberInfoResponseDto ExpectResult = MemberFactory.makeInfoResponseDto(authMember);
 
         //mocking
-        given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
         MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);

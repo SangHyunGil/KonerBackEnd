@@ -60,8 +60,8 @@ public class Member extends EntityDate {
         return this;
     }
 
-    public void changeRole(MemberRole memberRole) {
-        this.memberRole = memberRole;
+    public void authenticate() {
+        this.memberRole = MemberRole.ROLE_MEMBER;
     }
 
     public void changePassword(String password) {

@@ -21,7 +21,6 @@ import java.net.URL;
 import java.util.Collections;
 
 public class MemberFactory extends BasicFactory {
-    private static InputStream fileInputStream;
     private static MultipartFile multipartFile;
 
     static {
@@ -33,8 +32,8 @@ public class MemberFactory extends BasicFactory {
         }
     }
 
-    public static MemberDetails makeMemberDetails() {
-        return new MemberDetails(1L,"xptmxm1!", "encodedPW",
+    public static MemberDetails makeMemberDetails(Long id) {
+        return new MemberDetails(id,"xptmxm1!", "encodedPW",
                 Collections.singletonList(new SimpleGrantedAuthority(MemberRole.ROLE_MEMBER.toString())));
     }
 

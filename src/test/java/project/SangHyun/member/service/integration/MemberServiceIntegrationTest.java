@@ -48,7 +48,7 @@ class MemberServiceIntegrationTest {
     @DisplayName("회원 정보를 로드한다.")
     public void loadUserInfo() throws Exception {
         //given
-        MemberDetails memberDetails = MemberFactory.makeMemberDetails();
+        MemberDetails memberDetails = MemberFactory.makeMemberDetails(testDB.findGeneralMember().getId());
 
         //when
         MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);

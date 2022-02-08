@@ -11,7 +11,7 @@ import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
 import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
-import project.SangHyun.member.service.impl.VerifyService;
+import project.SangHyun.member.service.VerifyService;
 
 @Slf4j
 @RestController

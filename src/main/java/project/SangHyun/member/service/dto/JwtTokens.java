@@ -1,4 +1,4 @@
-package project.SangHyun.member.service.impl.dto;
+package project.SangHyun.member.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

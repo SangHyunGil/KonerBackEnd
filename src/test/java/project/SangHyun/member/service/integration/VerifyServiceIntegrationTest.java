@@ -14,7 +14,7 @@ import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
 import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
-import project.SangHyun.member.service.impl.VerifyService;
+import project.SangHyun.member.service.VerifyService;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import java.util.UUID;

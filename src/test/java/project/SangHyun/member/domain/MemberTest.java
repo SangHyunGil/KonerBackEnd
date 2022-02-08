@@ -38,13 +38,13 @@ public class MemberTest {
     }
 
     @Test
-    @DisplayName("회원의 권한을 수정한다.")
+    @DisplayName("회원 인증을 진행한다.")
     public void changeRole() throws Exception {
         //given
         Member member = MemberFactory.makeTestAuthMember();
 
         //when
-        member.changeRole(MemberRole.ROLE_MEMBER);
+        member.authenticate();
 
         //then
         Assertions.assertEquals(MemberRole.ROLE_MEMBER, member.getMemberRole());
