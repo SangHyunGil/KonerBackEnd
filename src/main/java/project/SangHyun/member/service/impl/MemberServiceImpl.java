@@ -63,11 +63,8 @@ public class MemberServiceImpl implements MemberService {
     public MemberChangePwResponseDto changePassword(MemberChangePwRequestDto requestDto) {
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
-        redisHelper.delete(getRedisKey(RedisKey.PASSWORD, requestDto.getEmail()));
+        String redisKey = redisHelper.getRedisKey(RedisKey.PASSWORD, requestDto.getEmail());
+        redisHelper.delete(redisKey);
         return MemberChangePwResponseDto.create(member);
-    }
-
-    private String getRedisKey(RedisKey redisKey, String email) {
-        return redisKey.getKey() + email;
     }
 }

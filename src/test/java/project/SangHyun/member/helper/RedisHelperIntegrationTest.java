@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
+import project.SangHyun.common.advice.exception.RedisValueDifferentException;
 
 @SpringBootTest
 @Transactional
@@ -38,7 +39,7 @@ class RedisHelperIntegrationTest {
     }
 
     @Test
-    @DisplayName("Redis에 저장된 값과 같은 경우 True를 반환한다.")
+    @DisplayName("Redis에 저장된 값과 같은 경우 예외를 발생시키지 않는다.")
     public void validate1() throws Exception {
         //given
         String key = "key";
@@ -47,15 +48,12 @@ class RedisHelperIntegrationTest {
         Long time = 500000000L;
         redisHelper.store(key, value, time);
 
-        //when
-        Boolean result = redisHelper.validate(key, expectValue);
-
-        // then
-        Assertions.assertEquals(true, result);
+        //when, then
+        Assertions.assertDoesNotThrow(() -> redisHelper.validate(key, expectValue));
     }
 
     @Test
-    @DisplayName("Redis에 저장된 값과 다른 경우 False를 반환한다.")
+    @DisplayName("Redis에 저장된 값과 다른 경우 예외를 반환한다.")
     public void validate2() throws Exception {
         //given
         String key = "key";
@@ -64,11 +62,8 @@ class RedisHelperIntegrationTest {
         Long time = 5000000L;
         redisHelper.store(key, value, time);
 
-        //when
-        Boolean result = redisHelper.validate(key, expectValue);
-
-        // then
-        Assertions.assertEquals(false, result);
+        //when, then
+        Assertions.assertThrows(RedisValueDifferentException.class, () -> redisHelper.validate(key, expectValue));
     }
 
     @Test

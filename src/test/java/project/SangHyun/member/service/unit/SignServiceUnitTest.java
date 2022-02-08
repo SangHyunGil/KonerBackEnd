@@ -27,8 +27,7 @@ import project.SangHyun.member.tools.sign.SignFactory;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SignServiceUnitTest {
@@ -165,11 +164,11 @@ class SignServiceUnitTest {
         TokenResponseDto ExpectResult = SignFactory.makeTokenResponseDto(authMember);
 
         //mocking
-        given(redisHelper.validate(any(), any())).willReturn(true);
         given(refreshTokenHelper.extractSubject(any())).willReturn("test");
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
         given(accessTokenHelper.createToken(any())).willReturn("newAccessToken");
         given(refreshTokenHelper.createToken(any())).willReturn("newRefreshToken");
+        willDoNothing().given(redisHelper).validate(any(), any());
 
         //when
         TokenResponseDto ActualResult = signService.tokenReIssue(requestDto);
@@ -185,8 +184,8 @@ class SignServiceUnitTest {
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto("refreshToken");
 
         //mocking
-        given(redisHelper.validate(any(), any())).willReturn(false);
         given(refreshTokenHelper.extractSubject(any())).willReturn("!!!wrongToken");
+        willThrow(RedisValueDifferentException.class).willDoNothing().given(redisHelper).validate(any(), any());
 
         //when, then
         Assertions.assertThrows(RedisValueDifferentException.class, ()->signService.tokenReIssue(requestDto));

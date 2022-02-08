@@ -29,14 +29,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SignServiceImpl implements SignService {
 
+    private final FileStoreHelper fileStoreHelper;
     private final JwtTokenHelper accessTokenHelper;
     private final JwtTokenHelper refreshTokenHelper;
-    private final FileStoreHelper fileStoreHelper;
     private final RedisHelper redisHelper;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-
-
 
     @Override
     @Transactional
@@ -61,7 +59,7 @@ public class SignServiceImpl implements SignService {
     @Transactional
     public TokenResponseDto tokenReIssue(TokenRequestDto requestDto) {
         String email = refreshTokenHelper.extractSubject(requestDto.getRefreshToken());
-        validateRedisValue(requestDto.getRefreshToken(), email);
+        redisHelper.validate(requestDto.getRefreshToken(), email);
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
         return TokenResponseDto.create(member, jwtTokens);
@@ -86,14 +84,5 @@ public class SignServiceImpl implements SignService {
         String refreshToken = refreshTokenHelper.createToken(subject);
         redisHelper.store(refreshToken, subject, refreshTokenHelper.getValidTime());
         return new JwtTokens(accessToken, refreshToken);
-    }
-
-    private void validateRedisValue(String key, String email) {
-        if (isNotValidRedisValue(key, email))
-            throw new RedisValueDifferentException();
-    }
-
-    private Boolean isNotValidRedisValue(String key, String email) {
-        return !redisHelper.validate(key, email);
     }
 }

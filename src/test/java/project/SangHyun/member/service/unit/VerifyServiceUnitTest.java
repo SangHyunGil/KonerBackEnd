@@ -22,8 +22,7 @@ import project.SangHyun.member.tools.sign.SignFactory;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class VerifyServiceUnitTest {
@@ -90,7 +89,7 @@ public class VerifyServiceUnitTest {
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
-        given(redisHelper.validate(any(), any())).willReturn(true);
+        willDoNothing().given(redisHelper).validate(any(), any());
         willDoNothing().given(redisHelper).delete(any());
 
         //when
@@ -107,7 +106,7 @@ public class VerifyServiceUnitTest {
         VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.VERIFY);
 
         //mocking
-        given(redisHelper.validate(any(), any())).willReturn(false);
+        willThrow(RedisValueDifferentException.class).willDoNothing().given(redisHelper).validate(any(), any());
 
         //when, then
         Assertions.assertThrows(RedisValueDifferentException.class, () -> verifyService.verify(requestDto));
@@ -120,7 +119,7 @@ public class VerifyServiceUnitTest {
         VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
 
         //mocking
-        given(redisHelper.validate(any(), any())).willReturn(true);
+        willDoNothing().given(redisHelper).validate(any(), any());
         willDoNothing().given(redisHelper).delete(any());
 
         //when
@@ -137,7 +136,7 @@ public class VerifyServiceUnitTest {
         VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.PASSWORD);
 
         //mocking
-        given(redisHelper.validate(any(), any())).willReturn(false);
+        willThrow(RedisValueDifferentException.class).willDoNothing().given(redisHelper).validate(any(), any());
 
         //when, then
         Assertions.assertThrows(RedisValueDifferentException.class, () -> verifyService.verify(requestDto));
