@@ -12,7 +12,7 @@ import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
+import project.SangHyun.member.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.service.VerifyService;
 import project.SangHyun.member.tools.sign.SignFactory;
@@ -67,7 +67,7 @@ public class VerifyServiceIntegrationTest {
     public void verifyMail_register() throws Exception {
         //given
         String authCode = makeAuthCode(RedisKey.VERIFY, "xptmxm2!");
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, RedisKey.VERIFY);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, RedisKey.VERIFY);
 
         //when
         String ActualResult = verifyService.verify(requestDto);
@@ -81,7 +81,7 @@ public class VerifyServiceIntegrationTest {
     public void verifyMail_register_fail() throws Exception {
         //given
         String authCode = makeAuthCode(RedisKey.VERIFY, "xptmxm2!");
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", "wrongAuthCode", RedisKey.VERIFY);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", "wrongAuthCode", RedisKey.VERIFY);
 
         //when, then
         Assertions.assertThrows(RedisValueDifferentException.class, () -> verifyService.verify(requestDto));
@@ -92,7 +92,7 @@ public class VerifyServiceIntegrationTest {
     public void verifyMail_pw() throws Exception {
         //given
         String authCode = makeAuthCode(RedisKey.PASSWORD, "xptmxm1!");
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, RedisKey.PASSWORD);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, RedisKey.PASSWORD);
 
         //when
         String ActualResult = verifyService.verify(requestDto);
@@ -106,7 +106,7 @@ public class VerifyServiceIntegrationTest {
     public void verifyMail_pw_fail() throws Exception {
         //given
         String authCode = makeAuthCode(RedisKey.PASSWORD, "xptmxm1!");
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.PASSWORD);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.PASSWORD);
 
         //when, then
         Assertions.assertThrows(RedisValueDifferentException.class, () -> verifyService.verify(requestDto));

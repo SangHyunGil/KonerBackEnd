@@ -10,8 +10,8 @@ import project.SangHyun.config.redis.RedisKey;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "메일 인증 링크 검증 요청")
-public class ValidateLinkRequestDto {
+@ApiModel(value = "메일 검증 요청")
+public class VerifyRequestDto {
     @ApiModelProperty(value = "아이디", notes = "아이디를 입력해주세요.", required = true, example = "GilSSang")
     private String email;
 

@@ -1,11 +1,12 @@
 package project.SangHyun.message.repository.impl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import project.SangHyun.member.domain.QMember;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.repository.MessageCustomRepository;
 
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.core.types.dsl.Expressions.constant;
+import static java.util.Comparator.comparing;
+import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.message.domain.QMessage.message;
 
@@ -25,9 +28,9 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<MessageCount> findAllCommunicatorsWithRecentMessageDescById(Long memberId) {
-        List<MessageCount> receiveMessages = jpaQueryFactory
-                .select(Projections.constructor(MessageCount.class,
+    public List<MessageDto> findAllCommunicatorsWithRecentMessageDescById(Long memberId) {
+        List<MessageDto> receiveMessages = jpaQueryFactory
+                .select(Projections.constructor(MessageDto.class,
                         message.id, message.sender, message.receiver,
                         message.content.content, as(constant(0L),"unReadCount")))
                 .from(message)
@@ -35,12 +38,12 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                         JPAExpressions
                                 .select(message.id.max())
                                 .from(message)
-                                .where(equalsWithMemberId(memberId, message.receiver))
+                                .where(equalsWithReceiverId(memberId))
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
-        List<MessageCount> sendMessages = jpaQueryFactory
-                .select(Projections.constructor(MessageCount.class,
+        List<MessageDto> sendMessages = jpaQueryFactory
+                .select(Projections.constructor(MessageDto.class,
                         message.id, message.sender, message.receiver,
                         message.content.content, as(constant(0L),"unReadCount")))
                 .from(message)
@@ -48,17 +51,17 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                         JPAExpressions
                                 .select(message.id.max())
                                 .from(message)
-                                .where(equalsWithMemberId(memberId, message.sender))
+                                .where(equalsWithSenderId(memberId))
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
-        List<MessageCount> countMessages = jpaQueryFactory
-                .select(Projections.constructor(MessageCount.class,
+        List<MessageDto> countMessages = jpaQueryFactory
+                .select(Projections.constructor(MessageDto.class,
                         message.id, message.sender, message.receiver,
                         message.content.content, message.count()))
                 .from(message)
-                .where(equalsWithMemberId(memberId, message.receiver),
-                        message.isRead.eq(false))
+                .where(equalsWithReceiverId(memberId),
+                        isUnReadMessage())
                 .groupBy(message.sender, message.receiver)
                 .fetch();
 
@@ -66,51 +69,13 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
 
     }
 
-    private BooleanExpression equalsWithMemberId(Long memberId, QMember receiver) {
-        return receiver.id.eq(memberId);
-    }
-
-    private List<MessageCount> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<MessageCount> receiveMessages,
-                                                                                List<MessageCount> sendMessages, List<MessageCount> countMessages) {
-        Map<Long, MessageCount> store = new HashMap<>();
-        // 받은 메세지 중 최신 메세지 기록
-        receiveMessages
-                .forEach(receiveMessage -> store.put(receiveMessage.getSender().getId(), receiveMessage));
-
-        // 전송한 메세지 중 받은 메세지의 최신 메세지와 비교 후 갱신
-        sendMessages
-                .forEach(sendMessage -> compareAndUpdate(store, sendMessage));
-
-        // 안읽은 메세지 개수 갱신
-        countMessages
-                .forEach(countMessage -> {
-                    MessageCount messageCount = store.get(countMessage.getSender().getId());
-                    messageCount.setUnReadCount(countMessage.getUnReadCount());
-                    System.out.println("messageCount = " + messageCount);
-                });
-
-        return store.values().stream()
-                .sorted(Comparator.comparing(MessageCount::getId, Comparator.reverseOrder()))
-                .collect(Collectors.toList());
-    }
-
-    private void compareAndUpdate(Map<Long, MessageCount> store, MessageCount sendMessage) {
-        Long senderId = sendMessage.getReceiver().getId();
-        MessageCount message = store.getOrDefault(senderId, new MessageCount(Long.MIN_VALUE));
-        if (sendMessage.isMoreRecentlyThan(message))
-            store.put(senderId, sendMessage);
-    }
-
-
     @Override
     public List<Message> findAllMessagesWithSenderIdAndReceiverIdDescById(Long senderId, Long receiverId) {
         return jpaQueryFactory.selectFrom(message)
                 .innerJoin(message.sender, member).fetchJoin()
                 .innerJoin(message.receiver, member).fetchJoin()
-                .where((equalsWithMemberId(senderId, message.sender).and(
-                        equalsWithMemberId(receiverId, message.receiver)))
-                        .or(equalsWithMemberId(receiverId, message.sender).and(
-                                equalsWithMemberId(senderId, message.receiver))))
+                .where((equalsWithSenderId(senderId).and(equalsWithReceiverId(receiverId))).or
+                       (equalsWithSenderId(receiverId).and(equalsWithReceiverId(senderId))))
                 .orderBy(message.id.desc())
                 .fetch();
     }
@@ -120,7 +85,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         return jpaQueryFactory.selectFrom(message)
                 .innerJoin(message.sender, member).fetchJoin()
                 .innerJoin(message.receiver, member).fetchJoin()
-                .where(message.content.content.contains(content))
+                .where(containContent(content))
                 .orderBy(message.id.desc())
                 .fetch();
     }
@@ -128,7 +93,54 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     @Override
     public Long countAllUnReadMessages(Long receiverId) {
         return jpaQueryFactory.selectFrom(message)
-                .where(equalsWithMemberId(receiverId, message.receiver))
+                .where(equalsWithReceiverId(receiverId))
                 .fetchCount();
+    }
+
+    private BooleanExpression equalsWithSenderId(Long memberId) {
+        return message.sender.id.eq(memberId);
+    }
+
+    private BooleanExpression equalsWithReceiverId(Long memberId) {
+        return message.receiver.id.eq(memberId);
+    }
+
+    private List<MessageDto> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<MessageDto> receiveMessages,
+                                                                                   List<MessageDto> sendMessages, List<MessageDto> countMessages) {
+        Map<Member, MessageDto> store = new HashMap<>();
+
+        // 보낸 메세지 중 최신 메세지 기록
+        receiveMessages
+                .forEach(receiveMessage -> store.put(receiveMessage.getSender(), receiveMessage));
+
+        // 전송한 메세지의 최신 메세지와 받은 메세지의 최신 메세지를 비교한 후 더 최신의 것으로 갱신
+        sendMessages
+                .forEach(sendMessage -> compareAndUpdate(store, sendMessage));
+
+        // 안읽은 메세지 개수 갱신
+        countMessages
+                .forEach(countMessage -> {
+                    MessageDto messageCount = store.get(countMessage.getSender());
+                    messageCount.setUnReadCount(countMessage.getUnReadCount());
+                });
+
+        return store.values().stream()
+                .sorted(comparing(MessageDto::getId, Comparator.reverseOrder()))
+                .collect(Collectors.toList());
+    }
+
+    private void compareAndUpdate(Map<Member, MessageDto> store, MessageDto sendMessage) {
+        Member receiver = sendMessage.getReceiver();
+        MessageDto message = store.getOrDefault(receiver, new MessageDto(Long.MIN_VALUE));
+        if (sendMessage.isMoreRecentlyThan(message))
+            store.put(receiver, sendMessage);
+    }
+
+    private BooleanBuilder isUnReadMessage() {
+        return nullSafeBuilder(() -> message.isRead.eq(false));
+    }
+
+    private BooleanBuilder containContent(String content) {
+        return nullSafeBuilder(() -> message.content.content.contains(content));
     }
 }

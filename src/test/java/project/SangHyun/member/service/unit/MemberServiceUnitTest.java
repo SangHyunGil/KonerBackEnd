@@ -54,32 +54,32 @@ class MemberServiceUnitTest {
     public void loadUserInfo() throws Exception {
         //given
         MemberDetails memberDetails = MemberFactory.makeMemberDetails(authMember.getId());
-        MemberInfoResponseDto ExpectResult = MemberFactory.makeInfoResponseDto(authMember);
+        MemberResponseDto ExpectResult = MemberFactory.makeInfoResponseDto(authMember);
 
         //mocking
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
-        MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
+        MemberResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
 
         //then
-        Assertions.assertEquals(ExpectResult.getMemberId(), ActualResult.getMemberId());
+        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());
     }
 
     @Test
     @DisplayName("회원 프로필 정보를 로드한다.")
     public void loadProfile() throws Exception {
         //given
-        MemberProfileResponseDto ExpectResult = MemberFactory.makeProfileResponseDto(authMember);
+        MemberResponseDto ExpectResult = MemberFactory.makeProfileResponseDto(authMember);
 
         //mocking
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
-        MemberProfileResponseDto ActualResult = memberService.getProfile(authMember.getId());
+        MemberResponseDto ActualResult = memberService.getProfile(authMember.getId());
 
         //then
-        Assertions.assertEquals(ExpectResult.getMemberId(), ActualResult.getMemberId());
+        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());
     }
 
     @Test
@@ -93,7 +93,7 @@ class MemberServiceUnitTest {
         given(fileStoreHelper.storeFile(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
 
         //when
-        MemberUpdateResponseDto ActualResult = memberService.updateMember(authMember.getId(), requestDto);
+        MemberResponseDto ActualResult = memberService.updateMember(authMember.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스터 변경", ActualResult.getNickname());
@@ -103,17 +103,13 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 삭제한다.")
     public void deleteMember() throws Exception {
         //given
-        MemberDeleteResponseDto ExpectResult = MemberFactory.makeDeleteResponseDto(authMember);
 
         //mocking
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
         willDoNothing().given(memberRepository).delete(authMember);
 
-        //when
-        MemberDeleteResponseDto ActualResult = memberService.deleteMember(authMember.getId());
-
-        //then
-        Assertions.assertEquals(ExpectResult.getMemberId(), ActualResult.getMemberId());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> memberService.deleteMember(authMember.getId()));
     }
 
     @Test
@@ -127,10 +123,7 @@ class MemberServiceUnitTest {
         given(passwordEncoder.encode(any())).willReturn("encodedChangedPW");
         willDoNothing().given(redisHelper).delete(any());
 
-        //when
-        MemberChangePwResponseDto ActualResult = memberService.changePassword(requestDto);
-
-        //then
-        Assertions.assertEquals(1L, ActualResult.getId());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> memberService.changePassword(requestDto));
     }
 }

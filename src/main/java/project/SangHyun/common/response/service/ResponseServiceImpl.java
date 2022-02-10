@@ -11,6 +11,13 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class ResponseServiceImpl {
+
+    private static final String SUCCESS_MSG = "요청에 성공하였습니다.";
+
+    public Result getDefaultSuccessResult() {
+        return getSuccessResult();
+    }
+
     public <T> SingleResult<T> getSingleResult(T data) {
         SingleResult<T> result = new SingleResult<>();
         setSuccessResult(result);
@@ -29,7 +36,9 @@ public class ResponseServiceImpl {
 
     public Result getSuccessResult() {
         Result result = new Result();
-        setSuccessResult(result);
+        result.setSuccess(true);
+        result.setCode(0);
+        result.setMsg(SUCCESS_MSG);
 
         return result;
     }
@@ -37,7 +46,7 @@ public class ResponseServiceImpl {
     public void setSuccessResult(Result result) {
         result.setSuccess(true);
         result.setCode(0);
-        result.setMsg("성공");
+        result.setMsg(SUCCESS_MSG);
     }
 
     public Result getFailureResult(int code, String msg) {

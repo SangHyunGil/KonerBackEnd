@@ -14,7 +14,7 @@ import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
 import project.SangHyun.message.dto.response.MessageCreateResponseDto;
 import project.SangHyun.message.dto.response.MessageFindResponseDto;
 import project.SangHyun.message.repository.MessageRepository;
-import project.SangHyun.message.repository.impl.MessageCount;
+import project.SangHyun.message.repository.impl.MessageDto;
 import project.SangHyun.message.service.impl.MessageServiceImpl;
 import project.SangHyun.message.tools.MessageFactory;
 
@@ -64,11 +64,12 @@ class MessageServiceUnitTest {
         Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
         Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
         Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
-        MessageCount messageCountC = new MessageCount(messageC.getId(), messageC.getSender(), messageC.getReceiver(), messageC.getContent(), 2L);
-        MessageCount messageCountF = new MessageCount(messageF.getId(), messageF.getSender(), messageF.getReceiver(), messageF.getContent(), 0L);
+
+        MessageDto messageDtoC = new MessageDto(messageC.getId(), messageC.getSender(), messageC.getReceiver(), messageC.getContent(), 2L);
+        MessageDto messageDtoF = new MessageDto(messageF.getId(), messageF.getSender(), messageF.getReceiver(), messageF.getContent(), 0L);
 
         //mocking
-        given(messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId())).willReturn(List.of(messageCountF, messageCountC));
+        given(messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId())).willReturn(List.of(messageDtoF, messageDtoC));
 
         //when
         List<CommunicatorFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(testMemberA.getId());

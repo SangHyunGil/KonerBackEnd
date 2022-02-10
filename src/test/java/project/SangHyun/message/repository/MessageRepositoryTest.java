@@ -15,7 +15,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.repository.impl.MessageCount;
+import project.SangHyun.message.repository.impl.MessageDto;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ class MessageRepositoryTest {
         messageRepository.save(messageB);
 
         //when
-        List<MessageCount> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
+        List<MessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
 
         //then
         Assertions.assertEquals(2,ActualResult.size());
@@ -70,7 +70,7 @@ class MessageRepositoryTest {
     }
 
     @Test
-    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다.")
+    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다. (1:N)")
     public void findSender2() throws Exception {
         //given
         Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
@@ -89,7 +89,7 @@ class MessageRepositoryTest {
         messageRepository.save(messageG);
 
         //when
-        List<MessageCount> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
+        List<MessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
 
         //then
         Assertions.assertEquals(3, ActualResult.size());
@@ -99,7 +99,7 @@ class MessageRepositoryTest {
     }
 
     @Test
-    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다.")
+    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다. (1:1)")
     public void findAll() throws Exception {
         //given
         Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);

@@ -6,14 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.service.dto.JwtTokens;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "프로필 요청 결과")
-public class MemberProfileResponseDto {
+@ApiModel(value = "로그인 요청 결과")
+public class LoginResponseDto {
     @ApiModelProperty(value = "회원 ID(PK)")
-    private Long memberId;
+    private Long id;
 
     @ApiModelProperty(value = "아이디")
     private String email;
@@ -24,11 +25,14 @@ public class MemberProfileResponseDto {
     @ApiModelProperty(value = "학과")
     private String department;
 
-    @ApiModelProperty(value = "프로필 사진")
-    private String profileImgUrl;
+    @ApiModelProperty(value = "AccessToken")
+    private String accessToken;
 
-    public static MemberProfileResponseDto create(Member member) {
-        return new MemberProfileResponseDto(member.getId(), member.getEmail(),
-                member.getNickname(), member.getDepartmentName(), member.getProfileImgUrl());
+    @ApiModelProperty(value = "RefreshToken")
+    private String refreshToken;
+
+    public static LoginResponseDto create(Member member, JwtTokens jwtTokens) {
+        return new LoginResponseDto(member.getId(), member.getEmail(), member.getNickname(), member.getDepartmentName(),
+                jwtTokens.getAccessToken(), jwtTokens.getRefreshToken());
     }
 }

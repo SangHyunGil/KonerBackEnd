@@ -12,7 +12,7 @@ import project.SangHyun.common.advice.exception.RedisValueDifferentException;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
+import project.SangHyun.member.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.helper.email.EmailHelper;
 import project.SangHyun.member.repository.MemberRepository;
@@ -85,7 +85,7 @@ public class VerifyServiceUnitTest {
     @DisplayName("회원가입 후 인증에 대한 메일 검증에 성공한다.")
     public void verifyMail_register() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(notAuthMember.getEmail(), "authCode", RedisKey.VERIFY);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto(notAuthMember.getEmail(), "authCode", RedisKey.VERIFY);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
@@ -103,7 +103,7 @@ public class VerifyServiceUnitTest {
     @DisplayName("회원가입 후 인증에 대한 메일 검증에 실패한다.")
     public void verifyMail_register_fail() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.VERIFY);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.VERIFY);
 
         //mocking
         willThrow(RedisValueDifferentException.class).willDoNothing().given(redisHelper).validate(any(), any());
@@ -116,7 +116,7 @@ public class VerifyServiceUnitTest {
     @DisplayName("비밀번호 변경에 대한 메일 검증에 성공한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
 
         //mocking
         willDoNothing().given(redisHelper).validate(any(), any());
@@ -133,7 +133,7 @@ public class VerifyServiceUnitTest {
     @DisplayName("비밀번호 변경에 대한 메일 검증에 실패한다.")
     public void verifyMail_pw_fail() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.PASSWORD);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode",RedisKey.PASSWORD);
 
         //mocking
         willThrow(RedisValueDifferentException.class).willDoNothing().given(redisHelper).validate(any(), any());

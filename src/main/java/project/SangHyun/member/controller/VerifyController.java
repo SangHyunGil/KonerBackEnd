@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
+import project.SangHyun.member.dto.request.VerifyRequestDto;
 import project.SangHyun.member.service.VerifyService;
 
 @Slf4j
@@ -30,7 +30,7 @@ public class VerifyController {
 
     @ApiOperation(value = "검증 메일 인증", notes = "검증 메일으로 발송된 인증번호를 검증한다.")
     @PostMapping("/verify")
-    public SingleResult<String> verify(@RequestBody VerifyEmailRequestDto requestDto) {
+    public SingleResult<String> verify(@RequestBody VerifyRequestDto requestDto) {
         return responseService.getSingleResult(verifyService.verify(requestDto));
     }
 }

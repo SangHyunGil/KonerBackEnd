@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
+import project.SangHyun.member.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.helper.email.EmailHelper;
 import project.SangHyun.member.repository.MemberRepository;
@@ -32,7 +32,7 @@ public class VerifyService {
     }
 
     @Transactional
-    public String verify(VerifyEmailRequestDto requestDto) {
+    public String verify(VerifyRequestDto requestDto) {
         String redisKey = redisHelper.getRedisKey(requestDto.getRedisKey(), requestDto.getEmail());
         redisHelper.validate(redisKey, requestDto.getAuthCode());
         if (isRegistering(requestDto)) {
@@ -54,7 +54,7 @@ public class VerifyService {
         return authCode;
     }
 
-    private boolean isRegistering(VerifyEmailRequestDto requestDto) {
+    private boolean isRegistering(VerifyRequestDto requestDto) {
         return RedisKey.isVerifying(requestDto.getRedisKey());
     }
 }

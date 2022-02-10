@@ -12,8 +12,8 @@ import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.MemberLoginRequestDto;
 import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.MemberLoginResponseDto;
-import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.LoginResponseDto;
+import project.SangHyun.member.dto.response.MemberResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
@@ -34,19 +34,19 @@ public class SignService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) throws IOException {
+    public MemberResponseDto registerMember(MemberRegisterRequestDto requestDto) throws IOException {
         validateDuplicated(requestDto.getEmail(), requestDto.getNickname());
         Member member = memberRepository.save(
                 requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), fileStoreHelper.storeFile(requestDto.getProfileImg()))
         );
-        return MemberRegisterResponseDto.create(member);
+        return MemberResponseDto.create(member);
     }
 
-    public MemberLoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
+    public LoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
         Member member = findMemberByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, member);
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
-        return MemberLoginResponseDto.create(member, jwtTokens);
+        return LoginResponseDto.create(member, jwtTokens);
     }
 
     @Transactional

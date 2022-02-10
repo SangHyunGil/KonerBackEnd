@@ -16,8 +16,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.MemberLoginRequestDto;
 import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.MemberLoginResponseDto;
-import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.LoginResponseDto;
+import project.SangHyun.member.dto.response.MemberResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
@@ -54,7 +54,7 @@ class SignServiceIntegrationTest {
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
 
         //when
-        MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);
+        MemberResponseDto ActualResult = signService.registerMember(requestDto);
 
         //then
         Assertions.assertEquals("xptmxm6!", ActualResult.getEmail());
@@ -87,7 +87,7 @@ class SignServiceIntegrationTest {
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //when
-        MemberLoginResponseDto ActualResult = signService.loginMember(requestDto);
+        LoginResponseDto ActualResult = signService.loginMember(requestDto);
 
         //then
         Assertions.assertEquals(requestDto.getEmail(), ActualResult.getEmail());

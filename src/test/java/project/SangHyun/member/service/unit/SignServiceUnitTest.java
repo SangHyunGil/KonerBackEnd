@@ -16,8 +16,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.MemberLoginRequestDto;
 import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.MemberLoginResponseDto;
-import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.LoginResponseDto;
+import project.SangHyun.member.dto.response.MemberResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
@@ -63,7 +63,7 @@ class SignServiceUnitTest {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
         Member createdMember = requestDto.toEntity("encoded PW", null);
-        MemberRegisterResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
+        MemberResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
 
         //mocking
         given(passwordEncoder.encode(any())).willReturn("encoded PW");
@@ -74,7 +74,7 @@ class SignServiceUnitTest {
         given(fileStoreHelper.storeFile(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
         
         //when
-        MemberRegisterResponseDto ActualResult = signService.registerMember(requestDto);
+        MemberResponseDto ActualResult = signService.registerMember(requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getEmail(), ActualResult.getEmail());
@@ -112,7 +112,7 @@ class SignServiceUnitTest {
     public void login() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        MemberLoginResponseDto ExpectResult = SignFactory.makeLoginResponseDto(authMember);
+        LoginResponseDto ExpectResult = SignFactory.makeLoginResponseDto(authMember);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));
@@ -122,7 +122,7 @@ class SignServiceUnitTest {
         willDoNothing().given(redisHelper).store(any(), any(), any());
 
         //when
-        MemberLoginResponseDto ActualResult = signService.loginMember(requestDto);
+        LoginResponseDto ActualResult = signService.loginMember(requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());

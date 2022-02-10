@@ -2,6 +2,7 @@ package project.SangHyun;
 
 import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
@@ -25,6 +26,16 @@ import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import java.util.List;
 
 public class BasicFactory {
+
+    public static Result makeDefaultSuccessResult() {
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setCode(0);
+        result.setMsg("성공");
+
+        return result;
+    }
+
     public static <T> SingleResult<T> makeSingleResult(T responseDto) {
         SingleResult<T> singleResult = new SingleResult<>();
         singleResult.setCode(0); singleResult.setSuccess(true); singleResult.setMsg("성공");

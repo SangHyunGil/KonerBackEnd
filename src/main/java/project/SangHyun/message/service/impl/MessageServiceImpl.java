@@ -11,7 +11,7 @@ import project.SangHyun.message.dto.response.MessageCreateResponseDto;
 import project.SangHyun.message.dto.response.MessageDeleteResponseDto;
 import project.SangHyun.message.dto.response.MessageFindResponseDto;
 import project.SangHyun.message.repository.MessageRepository;
-import project.SangHyun.message.repository.impl.MessageCount;
+import project.SangHyun.message.repository.impl.MessageDto;
 import project.SangHyun.message.service.MessageService;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<CommunicatorFindResponseDto> findAllCommunicatorsWithRecentMessage(Long receiverId) {
-        List<MessageCount> messages = messageRepository.findAllCommunicatorsWithRecentMessageDescById(receiverId);
+        List<MessageDto> messages = messageRepository.findAllCommunicatorsWithRecentMessageDescById(receiverId);
         return messages.stream()
                 .map(message -> CommunicatorFindResponseDto.create(message))
                 .collect(Collectors.toList());

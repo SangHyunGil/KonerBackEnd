@@ -27,36 +27,35 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
-    public MemberInfoResponseDto getMemberInfo(MemberDetails memberDetails) {
+    public MemberResponseDto getMemberInfo(MemberDetails memberDetails) {
         Member member = findMemberById(memberDetails.getId());
-        return MemberInfoResponseDto.create(member);
+        return MemberResponseDto.create(member);
     }
 
-    public MemberProfileResponseDto getProfile(Long memberId) {
+    public MemberResponseDto getProfile(Long memberId) {
         Member member = findMemberById(memberId);
-        return MemberProfileResponseDto.create(member);
+        return MemberResponseDto.create(member);
     }
 
     @Transactional
-    public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto) throws IOException {
+    public MemberResponseDto updateMember(Long memberId, MemberUpdateRequestDto requestDto) throws IOException {
         Member member = findMemberById(memberId);
-        return MemberUpdateResponseDto.create(member.updateMemberInfo(requestDto, fileStoreHelper.storeFile(requestDto.getProfileImg())));
+        Member updatedMember = member.updateMemberInfo(requestDto, fileStoreHelper.storeFile(requestDto.getProfileImg()));
+        return MemberResponseDto.create(updatedMember);
     }
 
     @Transactional
-    public MemberDeleteResponseDto deleteMember(Long memberId) {
+    public void deleteMember(Long memberId) {
         Member member = findMemberById(memberId);
         memberRepository.delete(member);
-        return  MemberDeleteResponseDto.create(member);
     }
 
     @Transactional
-    public MemberChangePwResponseDto changePassword(MemberChangePwRequestDto requestDto) {
+    public void changePassword(MemberChangePwRequestDto requestDto) {
         Member member = findMemberByEmail(requestDto.getEmail());
         member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
         String redisKey = redisHelper.getRedisKey(RedisKey.PASSWORD, requestDto.getEmail());
         redisHelper.delete(redisKey);
-        return MemberChangePwResponseDto.create(member);
     }
 
     private Member findMemberById(Long id) {

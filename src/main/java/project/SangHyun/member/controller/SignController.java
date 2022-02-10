@@ -11,8 +11,8 @@ import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.dto.request.MemberLoginRequestDto;
 import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.MemberLoginResponseDto;
-import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.LoginResponseDto;
+import project.SangHyun.member.dto.response.MemberResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
 
@@ -30,8 +30,8 @@ public class SignController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
-    public SingleResult<MemberRegisterResponseDto> register(@Valid @ModelAttribute MemberRegisterRequestDto requestDto,
-                                                            BindingResult bindingResult) throws IOException, BindException {
+    public SingleResult<MemberResponseDto> register(@Valid @ModelAttribute MemberRegisterRequestDto requestDto,
+                                                    BindingResult bindingResult) throws IOException, BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
@@ -40,7 +40,7 @@ public class SignController {
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
-    public SingleResult<MemberLoginResponseDto> login(@Valid @RequestBody MemberLoginRequestDto requestDto) {
+    public SingleResult<LoginResponseDto> login(@Valid @RequestBody MemberLoginRequestDto requestDto) {
         return responseService.getSingleResult(signService.loginMember(requestDto));
     }
 

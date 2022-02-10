@@ -18,7 +18,7 @@ import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.controller.VerifyController;
 import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyEmailRequestDto;
+import project.SangHyun.member.dto.request.VerifyRequestDto;
 import project.SangHyun.member.service.VerifyService;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -85,7 +85,7 @@ public class VerifyControllerUnitTest {
     @DisplayName("회원가입 후 인증에 대한 이메일 검증에 성공한다.")
     public void verifyMail_register() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.VERIFY);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.VERIFY);
         String result = "이메일 인증이 완료되었습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
@@ -103,7 +103,7 @@ public class VerifyControllerUnitTest {
     @DisplayName("회원가입 후 인증에 대한 이메일 검증에 실패한다.")
     public void verifyMail_register_fail() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.VERIFY);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.VERIFY);
         String result = "이메일 인증이 완료되었습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
@@ -121,7 +121,7 @@ public class VerifyControllerUnitTest {
     @DisplayName("비밀번호 변경에 대한 이메일 검증을 성공한다.")
     public void verifyMail_pw() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "authCode", RedisKey.PASSWORD);
         String result = "이메일 인증이 완료되었습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 
@@ -140,7 +140,7 @@ public class VerifyControllerUnitTest {
     @DisplayName("비밀번호 변경에 대한 이메일 검증에 실패한다.")
     public void verifyMail_pw_fail() throws Exception {
         //given
-        VerifyEmailRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.PASSWORD);
+        VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.PASSWORD);
         String result = "이메일 인증이 완료되었습니다.";
         SingleResult<String> ExpectResult = SignFactory.makeSingleResult(result);
 

@@ -18,8 +18,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.dto.request.MemberLoginRequestDto;
 import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.MemberLoginResponseDto;
-import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.LoginResponseDto;
+import project.SangHyun.member.dto.response.MemberResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
 import project.SangHyun.member.tools.sign.SignFactory;
@@ -57,8 +57,8 @@ class SignControllerUnitTest {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
         Member createdMember = requestDto.toEntity("encodedPassword", "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
-        MemberRegisterResponseDto responseDto = MemberRegisterResponseDto.create(createdMember);
-        SingleResult<MemberRegisterResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
+        MemberResponseDto responseDto = MemberResponseDto.create(createdMember);
+        SingleResult<MemberResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
         given(signService.registerMember(any())).willReturn(responseDto);
@@ -84,8 +84,8 @@ class SignControllerUnitTest {
     public void login() throws Exception {
         //given
         MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
-        MemberLoginResponseDto responseDto = SignFactory.makeLoginResponseDto(authMember);
-        SingleResult<MemberLoginResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
+        LoginResponseDto responseDto = SignFactory.makeLoginResponseDto(authMember);
+        SingleResult<LoginResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
         given(signService.loginMember(requestDto)).willReturn(responseDto);

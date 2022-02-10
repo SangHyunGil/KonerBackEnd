@@ -10,10 +10,7 @@ import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.MemberDeleteResponseDto;
-import project.SangHyun.member.dto.response.MemberInfoResponseDto;
-import project.SangHyun.member.dto.response.MemberProfileResponseDto;
-import project.SangHyun.member.dto.response.MemberUpdateResponseDto;
+import project.SangHyun.member.dto.response.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,19 +38,15 @@ public class MemberFactory extends BasicFactory {
         return new MemberUpdateRequestDto("xptmxm1!", nickname, Department.CSE, multipartFile);
     }
 
-    public static MemberInfoResponseDto makeInfoResponseDto(Member member) {
-        return MemberInfoResponseDto.create(member);
+    public static MemberResponseDto makeInfoResponseDto(Member member) {
+        return MemberResponseDto.create(member);
     }
 
-    public static MemberProfileResponseDto makeProfileResponseDto(Member member) {
-        return MemberProfileResponseDto.create(member);
+    public static MemberResponseDto makeProfileResponseDto(Member member) {
+        return MemberResponseDto.create(member);
     }
 
-    public static MemberUpdateResponseDto makeUpdateResponseDto(Member member) {
-        return MemberUpdateResponseDto.create(member);
-    }
-
-    public static MemberDeleteResponseDto makeDeleteResponseDto(Member member) {
-        return MemberDeleteResponseDto.create(member);
+    public static MemberResponseDto makeUpdateResponseDto(Member member) {
+        return MemberResponseDto.create(member);
     }
 }

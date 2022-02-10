@@ -51,7 +51,7 @@ class MemberServiceIntegrationTest {
         MemberDetails memberDetails = MemberFactory.makeMemberDetails(testDB.findGeneralMember().getId());
 
         //when
-        MemberInfoResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
+        MemberResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
 
         //then
         Assertions.assertEquals("xptmxm1!", ActualResult.getEmail());
@@ -64,10 +64,10 @@ class MemberServiceIntegrationTest {
         Member member = testDB.findGeneralMember();
 
         //when
-        MemberProfileResponseDto ActualResult = memberService.getProfile(member.getId());
+        MemberResponseDto ActualResult = memberService.getProfile(member.getId());
 
         //then
-        Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+        Assertions.assertEquals(member.getId(), ActualResult.getId());
     }
 
     @Test
@@ -78,7 +78,7 @@ class MemberServiceIntegrationTest {
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
 
         //when
-        MemberUpdateResponseDto ActualResult = memberService.updateMember(member.getId(), requestDto);
+        MemberResponseDto ActualResult = memberService.updateMember(member.getId(), requestDto);
 
         //then
 
@@ -94,12 +94,11 @@ class MemberServiceIntegrationTest {
         persistenceContextClear();
 
         //when
-        MemberDeleteResponseDto ActualResult = memberService.deleteMember(member.getId());
+        memberService.deleteMember(member.getId());
         List<Member> laterMembers = memberRepository.findAll();
 
         //then
         Assertions.assertEquals(1, prevMembers.size()-laterMembers.size());
-        Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
     }
 
     @Test
@@ -109,11 +108,8 @@ class MemberServiceIntegrationTest {
         Member member = SignFactory.makeAuthTestMember();
         MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(member.getEmail(), "change");
 
-        //when
-        MemberChangePwResponseDto ActualResult = memberService.changePassword(requestDto);
-
-        //then
-        Assertions.assertTrue(passwordEncoder.matches("change", ActualResult.getPassword()));
+        //when, then
+        Assertions.assertDoesNotThrow(() -> memberService.changePassword(requestDto));
     }
 
     private void persistenceContextClear() {

@@ -10,9 +10,8 @@ import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.dto.response.MemberChangePwResponseDto;
-import project.SangHyun.member.dto.response.MemberLoginResponseDto;
-import project.SangHyun.member.dto.response.MemberRegisterResponseDto;
+import project.SangHyun.member.dto.response.LoginResponseDto;
+import project.SangHyun.member.dto.response.MemberResponseDto;
 import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.dto.JwtTokens;
 
@@ -66,8 +65,8 @@ public class SignFactory extends BasicFactory {
         return new MemberEmailAuthRequestDto("xptmxm1!", redisKey);
     }
 
-    public static VerifyEmailRequestDto makeVerifyEmailRequestDto(String email, String authCode, RedisKey redisKey) {
-        return new VerifyEmailRequestDto(email, authCode, redisKey);
+    public static VerifyRequestDto makeVerifyEmailRequestDto(String email, String authCode, RedisKey redisKey) {
+        return new VerifyRequestDto(email, authCode, redisKey);
     }
 
     public static MemberChangePwRequestDto makeChangePwRequestDto(String email, String password) {
@@ -86,19 +85,15 @@ public class SignFactory extends BasicFactory {
     }
 
     // Response
-    public static MemberRegisterResponseDto makeRegisterResponseDto(Member member) {
-        return MemberRegisterResponseDto.create(member);
+    public static MemberResponseDto makeRegisterResponseDto(Member member) {
+        return MemberResponseDto.create(member);
     }
 
-    public static MemberLoginResponseDto makeLoginResponseDto(Member member) {
-        return MemberLoginResponseDto.create(member, new JwtTokens("accessToken", "refreshToken"));
+    public static LoginResponseDto makeLoginResponseDto(Member member) {
+        return LoginResponseDto.create(member, new JwtTokens("accessToken", "refreshToken"));
     }
 
     public static TokenResponseDto makeTokenResponseDto(Member member) {
         return TokenResponseDto.create(member, new JwtTokens("newAccessToken", "newRefreshToken"));
-    }
-
-    public static MemberChangePwResponseDto makeChangePwResponseDto(Member member) {
-        return MemberChangePwResponseDto.create(member);
     }
 }

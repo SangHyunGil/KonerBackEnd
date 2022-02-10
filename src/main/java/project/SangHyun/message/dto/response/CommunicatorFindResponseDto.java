@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.message.repository.impl.MessageCount;
+import project.SangHyun.message.repository.impl.MessageDto;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +24,7 @@ public class CommunicatorFindResponseDto {
     @ApiModelProperty(value = "읽지 않은 쪽지 개수")
     private Long unReadCount;
 
-    public static CommunicatorFindResponseDto create(MessageCount message) {
+    public static CommunicatorFindResponseDto create(MessageDto message) {
         return new CommunicatorFindResponseDto(message.getSender().getId(),
                 message.getReceiver().getId(), message.getContent(), message.getUnReadCount());
     }
