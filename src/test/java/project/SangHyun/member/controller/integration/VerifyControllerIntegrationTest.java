@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.redis.RedisKey;
-import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyRequestDto;
+import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
+import project.SangHyun.member.controller.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -51,7 +51,7 @@ public class VerifyControllerIntegrationTest {
     @DisplayName("회원가입 후 인증에 대한 검증 메일을 발송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
+        EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
 
         //when, then
         mockMvc.perform(post("/sign/email")
@@ -65,7 +65,7 @@ public class VerifyControllerIntegrationTest {
     @DisplayName("비밀번호에 대한 검증 메일을 발송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
+        EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
 
         //when, then
         mockMvc.perform(post("/sign/email")

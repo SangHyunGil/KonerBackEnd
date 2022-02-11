@@ -16,11 +16,12 @@ import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.controller.MemberController;
+import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
+import project.SangHyun.member.controller.dto.request.MemberUpdateRequestDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.*;
 import project.SangHyun.member.service.MemberService;
+import project.SangHyun.member.service.dto.MemberDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -59,11 +60,12 @@ class MemberControllerUnitTest {
     @DisplayName("AccessToken을 이용해 회원의 정보를 로드한다.")
     public void getMemberInfo() throws Exception {
         //given
+        MemberDto memberDto = MemberDto.create(authMember);
         MemberResponseDto responseDto = MemberFactory.makeInfoResponseDto(authMember);
         SingleResult<MemberResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(memberService.getMemberInfo(any())).willReturn(responseDto);
+        given(memberService.getMemberInfo(any())).willReturn(memberDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -78,11 +80,12 @@ class MemberControllerUnitTest {
     @DisplayName("회원의 유저 프로필을 로드한다.")
     public void getUserProfile() throws Exception {
         //given
+        MemberDto memberDto = MemberDto.create(authMember);
         MemberResponseDto responseDto = MemberFactory.makeProfileResponseDto(authMember);
         SingleResult<MemberResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(memberService.getProfile(any())).willReturn(responseDto);
+        given(memberService.getProfile(any())).willReturn(memberDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -97,20 +100,21 @@ class MemberControllerUnitTest {
     @DisplayName("회원의 유저 프로필을 수정한다.")
     public void updateMember() throws Exception {
         //given
-        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("상현");
+        MemberDto memberDto = MemberDto.create(authMember);
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("상현", "상현이 수정입니다.");
         MemberResponseDto responseDto = MemberFactory.makeUpdateResponseDto(authMember);
         SingleResult<MemberResponseDto> ExpectResult = MemberFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(memberService.updateMember(any(), any())).willReturn(responseDto);
+        given(memberService.updateMember(any(), any())).willReturn(memberDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(multipart("/users/{id}", 1)
                         .file("profileImg", requestDto.getProfileImg().getBytes())
-                        .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
                         .param("department", String.valueOf(requestDto.getDepartment()))
+                        .param("introduction", requestDto.getIntroduction())
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("PUT");
                             return requestPostProcessor;
@@ -118,7 +122,8 @@ class MemberControllerUnitTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.nickname").value("유나"));
+                .andExpect(jsonPath("$.data.nickname").value("유나"))
+                .andExpect(jsonPath("$.data.introduction").value("유나입니다."));
     }
 
     @Test
@@ -141,7 +146,7 @@ class MemberControllerUnitTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change1!");
+        ChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change1!");
         Result ExpectResult = SignFactory.makeDefaultSuccessResult();
 
         //mocking

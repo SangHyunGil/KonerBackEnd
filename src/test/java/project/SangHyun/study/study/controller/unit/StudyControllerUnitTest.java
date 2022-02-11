@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.dto.SliceResponseDto;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.domain.Member;
@@ -54,7 +54,7 @@ class StudyControllerUnitTest {
     @Mock
     ResponseServiceImpl responseService;
     @Mock
-    FileStoreHelper fileStoreHelper;
+    AwsS3BucketHelper awsS3BucketHelper;
 
     @BeforeEach
     void beforeEach() {
@@ -109,7 +109,7 @@ class StudyControllerUnitTest {
     public void createStudy() throws Exception {
         //given
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
-        Study createdStudy = requestDto.toEntity(fileStoreHelper.storeFile(requestDto.getProfileImg()));
+        Study createdStudy = requestDto.toEntity(awsS3BucketHelper.store(requestDto.getProfileImg()));
         StudyCreateResponseDto responseDto = StudyCreateResponseDto.create(createdStudy);
         SingleResult<StudyCreateResponseDto> ExpectResult = StudyFactory.makeSingleResult(responseDto);
 
@@ -124,7 +124,7 @@ class StudyControllerUnitTest {
                         .param("title", requestDto.getTitle())
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
-                        .param("content", requestDto.getContent())
+                        .param("description", requestDto.getDescription())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("department", String.valueOf(requestDto.getDepartment()))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
@@ -160,7 +160,7 @@ class StudyControllerUnitTest {
                         .param("title", requestDto.getTitle())
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
-                        .param("content", requestDto.getContent())
+                        .param("description", requestDto.getDescription())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
@@ -174,7 +174,7 @@ class StudyControllerUnitTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value(ExpectResult.getData().getTitle()))
-                .andExpect(jsonPath("$.data.content").value(ExpectResult.getData().getContent()));
+                .andExpect(jsonPath("$.data.description").value(ExpectResult.getData().getDescription()));
     }
 
     @Test
@@ -191,7 +191,6 @@ class StudyControllerUnitTest {
         //when, then
         mockMvc.perform(delete("/study/{id}", study.getId()))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$.data.studyId").value(ExpectResult.getData().getStudyId()));
     }
 }

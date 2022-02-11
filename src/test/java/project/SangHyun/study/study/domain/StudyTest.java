@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
@@ -28,7 +28,7 @@ import java.util.List;
 @SpringBootTest
 class StudyTest {
     @Autowired
-    private FileStoreHelper fileStoreHelper;
+    private AwsS3BucketHelper awsS3BucketHelper;
 
     @Test
     @DisplayName("스터디 정보를 업데이트한다.")
@@ -44,7 +44,7 @@ class StudyTest {
         StudyUpdateRequestDto requestDto = new StudyUpdateRequestDto("프론트엔드 모집", List.of("프론트엔드"), "음..", "2021-10-01", "2021-12-25", StudyCategory.CSE, 2L, multipartFile, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED);
 
         //when
-        Study ActualResult = study.update(requestDto, fileStoreHelper.storeFile(multipartFile));
+        Study ActualResult = study.update(requestDto, awsS3BucketHelper.store(multipartFile));
 
         //then
         Assertions.assertEquals("프론트엔드 모집", ActualResult.getTitle());

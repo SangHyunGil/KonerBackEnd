@@ -1,4 +1,4 @@
-package project.SangHyun.member.dto.response;
+package project.SangHyun.member.controller.dto.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,6 +13,7 @@ import project.SangHyun.member.service.dto.JwtTokens;
 @AllArgsConstructor
 @ApiModel(value = "재발행 요청 결과")
 public class TokenResponseDto {
+
     @ApiModelProperty(value = "회원 ID(PK)")
     private Long id;
 

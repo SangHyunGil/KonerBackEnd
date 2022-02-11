@@ -229,7 +229,7 @@ public class ExceptionAdvice {
         return responseService.getFailureResult(-133, "적절하지 않은 스터디 제목입니다.");
     }
 
-    @ExceptionHandler(InvalidStudyIntroductionException.class)
+    @ExceptionHandler(InvalidStudyDescriptionException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected Result InvalidStudyIntroductionException() {
         return responseService.getFailureResult(-134, "적절하지 않은 스터디 소개글입니다.");
@@ -299,5 +299,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected Result InvalidRelatedURLException() {
         return responseService.getFailureResult(-145, "적절하지 않은 알림 URL입니다.");
+    }
+
+    @ExceptionHandler(InvalidIntroductionException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidIntroductionException() {
+        return responseService.getFailureResult(-146, "적절하지 않은 회원 소개글입니다.");
     }
 }

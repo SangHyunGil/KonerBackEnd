@@ -1,6 +1,7 @@
 package project.SangHyun.member.helper.email;
 
 public class HtmlFactory {
+
     public static String getHtml(String url) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" style=\"-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #f1f1f1;display: flex;align-items: center;margin: 0 auto !important;padding: 0 !important;height: 100% !important;width: 100% !important;\">\n" +

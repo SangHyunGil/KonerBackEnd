@@ -52,28 +52,28 @@ public class BasicFactory {
 
     public static Member makeTestAdminMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN);
+        Member member = new Member("xptmxm1!", "encodedPW", "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN, "상현입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestAuthMember() {
         Long memberId = 2L;
-        Member member = new Member("xptmxm2!", "encodedPW", "유나", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm2!", "encodedPW", "유나", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "유나입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestNotAuthMember() {
         Long memberId = 3L;
-        Member member = new Member("xptmxm3!", "encodedPW", "동욱", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED);
+        Member member = new Member("xptmxm3!", "encodedPW", "동욱", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED, "동욱입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestAuthMember2() {
         Long memberId = 4L;
-        Member member = new Member("xptmxm4!", "encodedPW", "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm4!", "encodedPW", "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "영탁입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }

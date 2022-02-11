@@ -9,11 +9,13 @@ import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.dto.request.*;
-import project.SangHyun.member.dto.response.LoginResponseDto;
-import project.SangHyun.member.dto.response.MemberResponseDto;
-import project.SangHyun.member.dto.response.TokenResponseDto;
+import project.SangHyun.member.controller.dto.request.*;
+import project.SangHyun.member.controller.dto.response.LoginResponseDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
+import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.dto.JwtTokens;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberRegisterDto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,41 +38,57 @@ public class SignFactory extends BasicFactory {
     public static MemberRegisterRequestDto makeRegisterRequestDto() {
         return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "테스터6", Department.CSE, multipartFile);
     }
+    public static MemberRegisterDto makeRegisterDto() {
+        return new MemberRegisterDto("xptmxm6!", "xptmxm6!", "테스터6", Department.CSE, multipartFile);
+    }
 
     public static MemberRegisterRequestDto makeNotValidRequestDto() {
         return new MemberRegisterRequestDto("xptmxm6!", "xptmx", "테스터6", Department.CSE, multipartFile);
     }
 
+    public static MemberRegisterDto makeNotValidDto() {
+        return new MemberRegisterDto("xptmxm6!", "xptmx", "테스터6", Department.CSE, multipartFile);
+    }
+
+
     public static MemberRegisterRequestDto makeDuplicateEmailRequestDto() {
         return new MemberRegisterRequestDto("xptmxm1!", "xptmxm6!", "테스터6", Department.CSE, multipartFile);
+    }
+
+    public static MemberRegisterDto makeDuplicateEmailDto() {
+        return new MemberRegisterDto("xptmxm1!", "xptmxm6!", "테스터6", Department.CSE, multipartFile);
     }
 
     public static MemberRegisterRequestDto makeDuplicateNicknameRequestDto() {
         return new MemberRegisterRequestDto("xptmxm6!", "xptmxm6!", "승범", Department.CSE, multipartFile);
     }
 
-    public static MemberLoginRequestDto makeAuthMemberLoginRequestDto() {
-        return new MemberLoginRequestDto("xptmxm1!", "xptmxm1!");
+    public static MemberRegisterDto makeDuplicateNicknameDto() {
+        return new MemberRegisterDto("xptmxm6!", "xptmxm6!", "승범", Department.CSE, multipartFile);
     }
 
-    public static MemberLoginRequestDto makeNotAuthMemberLoginRequestDto() {
-        return new MemberLoginRequestDto("xptmxm2!", "xptmxm2!");
+    public static LoginRequestDto makeAuthMemberLoginRequestDto() {
+        return new LoginRequestDto("xptmxm1!", "xptmxm1!");
     }
 
-    public static MemberLoginRequestDto makeWrongPwMemberLoginRequestDto() {
-        return new MemberLoginRequestDto("xptmxm1!", "wrong");
+    public static LoginRequestDto makeNotAuthMemberLoginRequestDto() {
+        return new LoginRequestDto("xptmxm2!", "xptmxm2!");
     }
 
-    public static MemberEmailAuthRequestDto makeEmailAuthRequestDto(RedisKey redisKey) {
-        return new MemberEmailAuthRequestDto("xptmxm1!", redisKey);
+    public static LoginRequestDto makeWrongPwMemberLoginRequestDto() {
+        return new LoginRequestDto("xptmxm1!", "wrong");
+    }
+
+    public static EmailAuthRequestDto makeEmailAuthRequestDto(RedisKey redisKey) {
+        return new EmailAuthRequestDto("xptmxm1!", redisKey);
     }
 
     public static VerifyRequestDto makeVerifyEmailRequestDto(String email, String authCode, RedisKey redisKey) {
         return new VerifyRequestDto(email, authCode, redisKey);
     }
 
-    public static MemberChangePwRequestDto makeChangePwRequestDto(String email, String password) {
-        return new MemberChangePwRequestDto(email, password);
+    public static ChangePwRequestDto makeChangePwRequestDto(String email, String password) {
+        return new ChangePwRequestDto(email, password);
     }
 
     public static TokenRequestDto makeTokenRequestDto(String refreshToken) {
@@ -79,14 +97,14 @@ public class SignFactory extends BasicFactory {
 
     public static Member makeAuthTestMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm1!", "encodedPW", "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "승범입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     // Response
     public static MemberResponseDto makeRegisterResponseDto(Member member) {
-        return MemberResponseDto.create(member);
+        return MemberResponseDto.create(MemberDto.create(member));
     }
 
     public static LoginResponseDto makeLoginResponseDto(Member member) {

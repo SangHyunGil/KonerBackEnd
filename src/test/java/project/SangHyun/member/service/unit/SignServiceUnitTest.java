@@ -10,18 +10,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.member.controller.dto.request.LoginRequestDto;
+import project.SangHyun.member.controller.dto.request.TokenRequestDto;
+import project.SangHyun.member.controller.dto.response.LoginResponseDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
+import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberLoginRequestDto;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.LoginResponseDto;
-import project.SangHyun.member.dto.response.MemberResponseDto;
-import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberRegisterDto;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import java.util.Optional;
@@ -47,7 +48,7 @@ class SignServiceUnitTest {
     @Mock
     RedisHelper redisHelper;
     @Mock
-    FileStoreHelper fileStoreHelper;
+    AwsS3BucketHelper fileStoreHelper;
 
     @BeforeEach
     public void init() {
@@ -61,7 +62,7 @@ class SignServiceUnitTest {
     @DisplayName("회원 가입을 진행한다.")
     public void register() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
+        MemberRegisterDto requestDto = SignFactory.makeRegisterDto();
         Member createdMember = requestDto.toEntity("encoded PW", null);
         MemberResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
 
@@ -71,10 +72,10 @@ class SignServiceUnitTest {
         given(memberRepository.findByNickname(any())).willReturn(Optional.empty());
         given(passwordEncoder.encode(any())).willReturn("encodedPW");
         given(memberRepository.save(any())).willReturn(createdMember);
-        given(fileStoreHelper.storeFile(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
+        given(fileStoreHelper.store(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
         
         //when
-        MemberResponseDto ActualResult = signService.registerMember(requestDto);
+        MemberDto ActualResult = signService.registerMember(requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getEmail(), ActualResult.getEmail());
@@ -84,7 +85,7 @@ class SignServiceUnitTest {
     @DisplayName("이메일중복으로 인해 회원 가입에 실패한다.")
     public void register_fail1() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
+        MemberRegisterDto requestDto = SignFactory.makeRegisterDto();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
@@ -97,7 +98,7 @@ class SignServiceUnitTest {
     @DisplayName("닉네임중복으로 인해 회원 가입에 실패한다.")
     public void register_fail2() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
+        MemberRegisterDto requestDto = SignFactory.makeRegisterDto();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
@@ -111,7 +112,7 @@ class SignServiceUnitTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
         LoginResponseDto ExpectResult = SignFactory.makeLoginResponseDto(authMember);
 
         //mocking
@@ -132,7 +133,7 @@ class SignServiceUnitTest {
     @DisplayName("인증이 미완료된 회원은 로그인에 실패한다.")
     public void login_fail1() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
@@ -146,7 +147,7 @@ class SignServiceUnitTest {
     @DisplayName("비밀번호가 틀린 회원은 로그인에 실패한다.")
     public void login_fail2() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));

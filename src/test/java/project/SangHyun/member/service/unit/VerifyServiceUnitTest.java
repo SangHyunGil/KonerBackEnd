@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyRequestDto;
+import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
+import project.SangHyun.member.controller.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.helper.email.EmailHelper;
 import project.SangHyun.member.repository.MemberRepository;
@@ -49,7 +49,7 @@ public class VerifyServiceUnitTest {
     @DisplayName("회원가입 후 인증을 위한 이메일을 전송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
+        EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(notAuthMember));
@@ -67,7 +67,7 @@ public class VerifyServiceUnitTest {
     @DisplayName("비밀번호 변경을 위한 이메일을 전송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
+        EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));

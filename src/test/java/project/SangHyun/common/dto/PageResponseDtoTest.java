@@ -20,7 +20,7 @@ class PageResponseDtoTest {
     @DisplayName("페이징 엔티티에 대해 Dto를 구성한다.")
     public void makeCreate() throws Exception {
         //given
-        List<StudyArticle> studyArticles = List.of(new StudyArticle("테스트", "테스트", 0L, new Member("xptmxm1!", "xptmxm1!", "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER), new StudyBoard(1L)));
+        List<StudyArticle> studyArticles = List.of(new StudyArticle("테스트", "테스트", 0L, new Member("xptmxm1!", "xptmxm1!", "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "승범입니다."), new StudyBoard(1L)));
         Page<StudyArticle> pageStudyArticle = new PageImpl<>(studyArticles, PageRequest.of(0, 10), studyArticles.size());
 
         //when

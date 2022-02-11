@@ -33,7 +33,7 @@ public class Study extends EntityDate {
     private StudyTitle title;
 
     @Embedded
-    private StudyIntroduction introduction;
+    private Description description;
 
     @Embedded
     private HeadCount headCount;
@@ -69,9 +69,9 @@ public class Study extends EntityDate {
     }
 
     @Builder
-    public Study(String title, Tags tags, String introduction, String profileImgUrl, StudyCategory category, StudyOptions studyOptions, Long headCount, Schedule schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, Tags tags, String description, String profileImgUrl, StudyCategory category, StudyOptions studyOptions, Long headCount, Schedule schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         this.title = new StudyTitle(title);
-        this.introduction = new StudyIntroduction(introduction);
+        this.description = new Description(description);
         this.tags = tags;
         this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
         this.category = category;
@@ -85,7 +85,7 @@ public class Study extends EntityDate {
 
     public Study update(StudyUpdateRequestDto requestDto, String profileImgUrl) {
         this.title = new StudyTitle(requestDto.getTitle());
-        this.introduction = new StudyIntroduction(requestDto.getContent());
+        this.description = new Description(requestDto.getDescription());
         this.tags = new Tags(requestDto.getTags().stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
         this.schedule = new Schedule(requestDto.getStartDate(), requestDto.getEndDate());
         this.studyOptions = new StudyOptions(requestDto.getStudyState(), requestDto.getRecruitState(), requestDto.getStudyMethod());
@@ -109,8 +109,8 @@ public class Study extends EntityDate {
         return title.getTitle();
     }
 
-    public String getIntroduction() {
-        return introduction.getIntroduction();
+    public String getDescription() {
+        return description.getDescription();
     }
 
     public Long getHeadCount() {

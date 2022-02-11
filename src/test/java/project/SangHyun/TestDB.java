@@ -136,30 +136,30 @@ public class TestDB {
     }
 
     private void initMember() {
-        Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "승범입니다.");
         memberRepository.save(memberA);
 
-        Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED);
+        Member memberB = new Member("xptmxm2!", passwordEncoder.encode("xptmxm2!"), "유나", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED, "유나입니다.");
         memberRepository.save(memberB);
 
-        Member memberC = new Member("xptmxm4!", passwordEncoder.encode("xptmxm4!"), "윤정", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN);
+        Member memberC = new Member("xptmxm4!", passwordEncoder.encode("xptmxm4!"), "윤정", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN, "윤정입니다.");
         memberRepository.save(memberC);
     }
 
     private void initStudy() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "상현입니다.");
         Member storedMemberA = memberRepository.save(memberA);
 
-        Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberB = new Member("xptmxm5!", passwordEncoder.encode("xptmxm5!"), "진영", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "진영입니다.");
         Member storedMemberB = memberRepository.save(memberB);
 
-        Member memberC = new Member("xptmxm0!", passwordEncoder.encode("xptmxm0!"), "예림", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberC = new Member("xptmxm0!", passwordEncoder.encode("xptmxm0!"), "예림", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "예림입니다.");
         Member storedMemberC = memberRepository.save(memberC);
 
-        Member memberD = new Member("xptmxm10!", passwordEncoder.encode("xptmxm10!"), "동욱", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberD = new Member("xptmxm10!", passwordEncoder.encode("xptmxm10!"), "동욱", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "동욱입니다.");
         Member storedMemberD = memberRepository.save(memberD);
 
-        Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "영탁입니다.");
         Member storedMemberE = memberRepository.save(memberE);
 
         Study emptyStudy = new Study("임시용", new Tags(List.of(new Tag("임시용"))), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE, new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 0L, new Schedule("2021-10-01", "2021-12-25"), storedMemberB, new ArrayList<>(), new ArrayList<>());

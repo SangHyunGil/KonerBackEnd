@@ -27,9 +27,9 @@ public class StudyUpdateRequestDto {
     @ApiModelProperty(value = "스터디 주제", notes = "스터디 주제를 입력해주세요.", required = true, example = "백엔드")
     private List<String> tags;
 
-    @ApiModelProperty(value = "스터디 내용", notes = "스터디 내용을 입력해주세요.", required = true, example = "내용")
-    @NotBlank(message = "스터디 내용을 입력해주세요.")
-    private String content;
+    @ApiModelProperty(value = "스터디 설명", notes = "스터디 설명을 입력해주세요.", required = true, example = "내용")
+    @NotBlank(message = "스터디 설명을 입력해주세요.")
+    private String description;
 
     @ApiModelProperty(value = "스터디 시작 일정", notes = "스터디 시작 일정을 입력해주세요.", required = true, example = "2021-12-25")
     private String startDate;

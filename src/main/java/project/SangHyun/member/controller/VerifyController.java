@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
-import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyRequestDto;
+import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
+import project.SangHyun.member.controller.dto.request.VerifyRequestDto;
 import project.SangHyun.member.service.VerifyService;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class VerifyController {
 
     @ApiOperation(value = "검증 메일 발송", notes = "검증을 위해 메일을 발송한다.")
     @PostMapping("/email")
-    public SingleResult<String> sendEmail(@RequestBody MemberEmailAuthRequestDto requestDto) {
+    public SingleResult<String> sendEmail(@RequestBody EmailAuthRequestDto requestDto) {
         return responseService.getSingleResult(verifyService.send(requestDto.getEmail(), requestDto.getRedisKey()));
     }
 

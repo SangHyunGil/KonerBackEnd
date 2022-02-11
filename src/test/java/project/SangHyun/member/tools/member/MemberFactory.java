@@ -6,11 +6,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.config.security.member.MemberDetails;
+import project.SangHyun.member.controller.dto.request.MemberUpdateRequestDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.*;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberUpdateDto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,19 +36,23 @@ public class MemberFactory extends BasicFactory {
                 Collections.singletonList(new SimpleGrantedAuthority(MemberRole.ROLE_MEMBER.toString())));
     }
 
-    public static MemberUpdateRequestDto makeUpdateRequestDto(String nickname) {
-        return new MemberUpdateRequestDto("xptmxm1!", nickname, Department.CSE, multipartFile);
+    public static MemberUpdateRequestDto makeUpdateRequestDto(String nickname, String introduction) {
+        return new MemberUpdateRequestDto(nickname, Department.CSE, multipartFile, introduction);
+    }
+
+    public static MemberUpdateDto makeUpdateDto(String nickname, String introduction) {
+        return new MemberUpdateDto(nickname, Department.CSE, multipartFile, introduction);
     }
 
     public static MemberResponseDto makeInfoResponseDto(Member member) {
-        return MemberResponseDto.create(member);
+        return MemberResponseDto.create(MemberDto.create(member));
     }
 
     public static MemberResponseDto makeProfileResponseDto(Member member) {
-        return MemberResponseDto.create(member);
+        return MemberResponseDto.create(MemberDto.create(member));
     }
 
     public static MemberResponseDto makeUpdateResponseDto(Member member) {
-        return MemberResponseDto.create(member);
+        return MemberResponseDto.create(MemberDto.create(member));
     }
 }

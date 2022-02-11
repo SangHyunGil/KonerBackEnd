@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.VerifyRequestDto;
+import project.SangHyun.member.controller.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.helper.email.EmailHelper;
 import project.SangHyun.member.repository.MemberRepository;

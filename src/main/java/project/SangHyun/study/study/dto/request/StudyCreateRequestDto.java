@@ -41,9 +41,9 @@ public class StudyCreateRequestDto {
     @ApiModelProperty(value = "스터디 주제", notes = "스터디 주제를 입력해주세요.", required = true, example = "백엔드")
     private List<String> tags;
 
-    @ApiModelProperty(value = "스터디 내용", notes = "스터디 내용을 입력해주세요.", required = true, example = "내용")
-    @NotBlank(message = "스터디 내용을 입력해주세요.")
-    private String content;
+    @ApiModelProperty(value = "스터디 설명", notes = "스터디 설명을 입력해주세요.", required = true, example = "내용")
+    @NotBlank(message = "스터디 설명을 입력해주세요.")
+    private String description;
 
     @ApiModelProperty(value = "스터디 학과", notes = "스터디 학과를 입력해주세요.", required = true, example = "CSE")
     private StudyCategory department;
@@ -73,7 +73,7 @@ public class StudyCreateRequestDto {
     public Study toEntity(String profileImg) {
         Study study = Study.builder()
                 .title(title)
-                .introduction(content)
+                .description(description)
                 .category(department)
                 .tags(new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList())))
                 .schedule(new Schedule(startDate, endDate))

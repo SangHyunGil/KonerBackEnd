@@ -48,7 +48,7 @@ class StudyRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "상현입니다.");
         memberRepository.save(memberA);
 
         for (int i = 0; i < 10; i++) {

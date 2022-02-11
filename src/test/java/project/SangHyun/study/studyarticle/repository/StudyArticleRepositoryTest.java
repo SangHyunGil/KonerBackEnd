@@ -54,7 +54,7 @@ class StudyArticleRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "상현입니다.");
         Member storedMemberA = memberRepository.save(memberA);
 
         Study study = new Study("백엔드 모집", new Tags(List.of(new Tag("백엔드"))), "백엔드 모집합니다.",  "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE,

@@ -13,20 +13,20 @@ import java.util.UUID;
 
 @Slf4j
 @Component
-public class FileStoreHelper {
+public class AwsS3BucketHelper {
     private final AmazonS3Client awsS3Client;
     private final String bucket;
     private final String filePath;
 
-    public FileStoreHelper(AmazonS3Client awsS3Client,
-                           @Value("${cloud.aws.s3.bucket}") String bucket,
-                           @Value("${spring.file.dir}") String filePath) {
+    public AwsS3BucketHelper(AmazonS3Client awsS3Client,
+                             @Value("${cloud.aws.s3.bucket}") String bucket,
+                             @Value("${spring.file.dir}") String filePath) {
         this.filePath = filePath;
         this.bucket = bucket;
         this.awsS3Client = awsS3Client;
     }
 
-    public String storeFile(MultipartFile file) throws IOException {
+    public String store(MultipartFile file) throws IOException {
         if (file == null) {
             return null;
         }

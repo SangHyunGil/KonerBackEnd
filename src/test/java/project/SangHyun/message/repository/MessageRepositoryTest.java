@@ -37,16 +37,16 @@ class MessageRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm6!", passwordEncoder.encode("xptmxm6!"), "길쌍", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm6!", passwordEncoder.encode("xptmxm6!"), "길쌍", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "길쌍입니다.");
         testMemberA = memberRepository.save(memberA);
 
-        Member memberB = new Member("xptmxm7!", passwordEncoder.encode("xptmxm7!"), "상현", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberB = new Member("xptmxm7!", passwordEncoder.encode("xptmxm7!"), "상현", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "상현입니다.");
         testMemberB = memberRepository.save(memberB);
 
-        Member memberC = new Member("xptmxm8!", passwordEncoder.encode("xptmxm8!"), "현상", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberC = new Member("xptmxm8!", passwordEncoder.encode("xptmxm8!"), "현상", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "현상입니다.");
         testMemberC = memberRepository.save(memberC);
 
-        Member memberD = new Member("xptmxm9!", passwordEncoder.encode("xptmxm9!"), "현상길", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberD = new Member("xptmxm9!", passwordEncoder.encode("xptmxm9!"), "현상길", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "현상길입니다.");
         testMemberD = memberRepository.save(memberD);
 
     }

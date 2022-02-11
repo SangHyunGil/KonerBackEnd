@@ -5,19 +5,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.member.controller.dto.request.LoginRequestDto;
+import project.SangHyun.member.controller.dto.request.TokenRequestDto;
+import project.SangHyun.member.controller.dto.response.LoginResponseDto;
+import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.dto.request.MemberLoginRequestDto;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.LoginResponseDto;
-import project.SangHyun.member.dto.response.MemberResponseDto;
-import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.dto.JwtTokens;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberRegisterDto;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SignService {
 
-    private final FileStoreHelper fileStoreHelper;
+    private final AwsS3BucketHelper fileStoreHelper;
     private final JwtTokenHelper accessTokenHelper;
     private final JwtTokenHelper refreshTokenHelper;
     private final RedisHelper redisHelper;
@@ -34,15 +34,15 @@ public class SignService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberResponseDto registerMember(MemberRegisterRequestDto requestDto) throws IOException {
+    public MemberDto registerMember(MemberRegisterDto requestDto) throws IOException {
         validateDuplicated(requestDto.getEmail(), requestDto.getNickname());
         Member member = memberRepository.save(
-                requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), fileStoreHelper.storeFile(requestDto.getProfileImg()))
+                requestDto.toEntity(passwordEncoder.encode(requestDto.getPassword()), fileStoreHelper.store(requestDto.getProfileImg()))
         );
-        return MemberResponseDto.create(member);
+        return MemberDto.create(member);
     }
 
-    public LoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
+    public LoginResponseDto loginMember(LoginRequestDto requestDto) {
         Member member = findMemberByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, member);
         JwtTokens jwtTokens = makeJwtTokens(member.getEmail());
@@ -69,7 +69,7 @@ public class SignService {
             throw new MemberNicknameAlreadyExistsException();
     }
 
-    private void validateLoginInfo(MemberLoginRequestDto requestDto, Member member) {
+    private void validateLoginInfo(LoginRequestDto requestDto, Member member) {
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword()))
             throw new LoginFailureException();
         if (member.getMemberRole() == MemberRole.ROLE_NOT_PERMITTED)

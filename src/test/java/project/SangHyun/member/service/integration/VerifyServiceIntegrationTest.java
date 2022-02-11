@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
 import project.SangHyun.config.redis.RedisKey;
-import project.SangHyun.member.dto.request.MemberEmailAuthRequestDto;
-import project.SangHyun.member.dto.request.VerifyRequestDto;
+import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
+import project.SangHyun.member.controller.dto.request.VerifyRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.service.VerifyService;
 import project.SangHyun.member.tools.sign.SignFactory;
@@ -40,7 +40,7 @@ public class VerifyServiceIntegrationTest {
     @DisplayName("회원가입 후 인증을 위한 검증 메일을 전송한다.")
     public void sendMail_register() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
+        EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
 
         //when
         String ActualResult = verifyService.send(requestDto.getEmail(), requestDto.getRedisKey());
@@ -53,7 +53,7 @@ public class VerifyServiceIntegrationTest {
     @DisplayName("비밀번호 변경을 위한 검증 메일을 전송한다.")
     public void sendMail_pw() throws Exception {
         //given
-        MemberEmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
+        EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
 
         //when
         String ActualResult = verifyService.send(requestDto.getEmail(), requestDto.getRedisKey());

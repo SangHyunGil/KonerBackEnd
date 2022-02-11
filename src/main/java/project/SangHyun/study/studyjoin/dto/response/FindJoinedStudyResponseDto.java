@@ -54,7 +54,7 @@ public class FindJoinedStudyResponseDto {
     public static FindJoinedStudyResponseDto create(Study study) {
         return new FindJoinedStudyResponseDto(study.getId(),
                 StudyMemberProfile.create(study), study.getTitle(), study.getTagNames(),
-                study.getIntroduction(), study.getStartDate(), study.getEndDate(),
+                study.getDescription(), study.getStartDate(), study.getEndDate(),
                 study.getProfileImgUrl(), study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }
 }

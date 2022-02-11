@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import project.SangHyun.common.dto.SliceResponseDto;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
@@ -46,7 +46,7 @@ class StudyServiceUnitTest {
     @Mock
     StudyRepository studyRepository;
     @Mock
-    FileStoreHelper fileStoreHelper;
+    AwsS3BucketHelper awsS3BucketHelper;
 
     @BeforeEach
     public void init() {
@@ -59,7 +59,7 @@ class StudyServiceUnitTest {
     public void createStudy() throws Exception {
         //given
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
-        Study createdStudy = requestDto.toEntity(fileStoreHelper.storeFile(requestDto.getProfileImg()));
+        Study createdStudy = requestDto.toEntity(awsS3BucketHelper.store(requestDto.getProfileImg()));
         StudyCreateResponseDto ExpectResult = StudyFactory.makeCreateResponseDto(createdStudy);
 
         //mocking

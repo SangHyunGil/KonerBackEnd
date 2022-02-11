@@ -11,12 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.security.member.MemberDetails;
+import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.*;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.MemberService;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberUpdateDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -51,7 +51,7 @@ class MemberServiceIntegrationTest {
         MemberDetails memberDetails = MemberFactory.makeMemberDetails(testDB.findGeneralMember().getId());
 
         //when
-        MemberResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
+        MemberDto ActualResult = memberService.getMemberInfo(memberDetails);
 
         //then
         Assertions.assertEquals("xptmxm1!", ActualResult.getEmail());
@@ -64,7 +64,7 @@ class MemberServiceIntegrationTest {
         Member member = testDB.findGeneralMember();
 
         //when
-        MemberResponseDto ActualResult = memberService.getProfile(member.getId());
+        MemberDto ActualResult = memberService.getProfile(member.getId());
 
         //then
         Assertions.assertEquals(member.getId(), ActualResult.getId());
@@ -75,10 +75,10 @@ class MemberServiceIntegrationTest {
     public void updateMember() throws Exception {
         //given
         Member member = testDB.findGeneralMember();
-        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
+        MemberUpdateDto requestDto = MemberFactory.makeUpdateDto("철수", "철수 자기소개입니다.");
 
         //when
-        MemberResponseDto ActualResult = memberService.updateMember(member.getId(), requestDto);
+        MemberDto ActualResult = memberService.updateMember(member.getId(), requestDto);
 
         //then
 
@@ -106,7 +106,7 @@ class MemberServiceIntegrationTest {
     public void changePW() throws Exception {
         //given
         Member member = SignFactory.makeAuthTestMember();
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(member.getEmail(), "change");
+        ChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(member.getEmail(), "change");
 
         //when, then
         Assertions.assertDoesNotThrow(() -> memberService.changePassword(requestDto));

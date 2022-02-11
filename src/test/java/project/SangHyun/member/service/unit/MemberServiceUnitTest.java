@@ -9,15 +9,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.config.security.member.MemberDetails;
+import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberChangePwRequestDto;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.dto.response.*;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.MemberService;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberUpdateDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -37,7 +38,7 @@ class MemberServiceUnitTest {
     @Mock
     MemberRepository memberRepository;
     @Mock
-    FileStoreHelper fileStoreHelper;
+    AwsS3BucketHelper fileStoreHelper;
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
@@ -60,7 +61,7 @@ class MemberServiceUnitTest {
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
-        MemberResponseDto ActualResult = memberService.getMemberInfo(memberDetails);
+        MemberDto ActualResult = memberService.getMemberInfo(memberDetails);
 
         //then
         Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());
@@ -76,7 +77,7 @@ class MemberServiceUnitTest {
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
 
         //when
-        MemberResponseDto ActualResult = memberService.getProfile(authMember.getId());
+        MemberDto ActualResult = memberService.getProfile(authMember.getId());
 
         //then
         Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());
@@ -86,14 +87,14 @@ class MemberServiceUnitTest {
     @DisplayName("회원 프로필 정보를 수정한다.")
     public void updateMember() throws Exception {
         //given
-        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("테스터 변경");
+        MemberUpdateDto requestDto = MemberFactory.makeUpdateDto("테스터 변경", "테스터 변경 자기소개글입니다.");
 
         //mocking
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(authMember));
-        given(fileStoreHelper.storeFile(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
+        given(fileStoreHelper.store(requestDto.getProfileImg())).willReturn("C:\\Users\\Family\\Pictures\\Screenshots\\1.png");
 
         //when
-        MemberResponseDto ActualResult = memberService.updateMember(authMember.getId(), requestDto);
+        MemberDto ActualResult = memberService.updateMember(authMember.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스터 변경", ActualResult.getNickname());
@@ -116,7 +117,7 @@ class MemberServiceUnitTest {
     @DisplayName("비밀번호 변경을 진행한다.")
     public void changePW() throws Exception {
         //given
-        MemberChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change");
+        ChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto(authMember.getEmail(), "change");
 
         //mocking
         given(memberRepository.findByEmail(any())).willReturn(Optional.ofNullable(authMember));

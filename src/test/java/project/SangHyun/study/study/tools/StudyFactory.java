@@ -58,10 +58,10 @@ public class StudyFactory extends BasicFactory {
         return SliceResponseDto.create(study, StudyFindResponseDto::create);
     }
 
-    public static StudyUpdateResponseDto makeUpdateResponseDto(Study study, String title, String content) {
+    public static StudyUpdateResponseDto makeUpdateResponseDto(Study study, String title, String description) {
         StudyUpdateResponseDto responseDto = StudyUpdateResponseDto.create(study);
         responseDto.setTitle(title);
-        responseDto.setContent(content);
+        responseDto.setDescription(description);
         return responseDto;
     }
 

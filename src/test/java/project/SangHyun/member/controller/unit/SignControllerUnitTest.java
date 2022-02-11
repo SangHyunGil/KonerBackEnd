@@ -14,14 +14,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.member.controller.SignController;
+import project.SangHyun.member.controller.dto.request.LoginRequestDto;
+import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.controller.dto.request.TokenRequestDto;
+import project.SangHyun.member.controller.dto.response.LoginResponseDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
+import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberLoginRequestDto;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.LoginResponseDto;
-import project.SangHyun.member.dto.response.MemberResponseDto;
-import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.service.dto.MemberDto;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -56,12 +57,13 @@ class SignControllerUnitTest {
     public void register() throws Exception {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
-        Member createdMember = requestDto.toEntity("encodedPassword", "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
-        MemberResponseDto responseDto = MemberResponseDto.create(createdMember);
+        Member createdMember = requestDto.toServiceDto().toEntity("encodedPassword", "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
+        MemberDto memberDto = MemberDto.create(createdMember);
+        MemberResponseDto responseDto = SignFactory.makeRegisterResponseDto(createdMember);
         SingleResult<MemberResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(signService.registerMember(any())).willReturn(responseDto);
+        given(signService.registerMember(any())).willReturn(memberDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -83,7 +85,7 @@ class SignControllerUnitTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
         LoginResponseDto responseDto = SignFactory.makeLoginResponseDto(authMember);
         SingleResult<LoginResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 

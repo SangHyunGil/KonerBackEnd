@@ -1,13 +1,14 @@
 package project.SangHyun.member.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import project.SangHyun.common.EntityDate;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
 @Table(name = "MEMBERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
@@ -28,6 +29,9 @@ public class Member extends EntityDate {
     private Nickname nickname;
 
     @Embedded
+    private Introduction introduction;
+
+    @Embedded
     private MemberProfileImgUrl profileImgUrl;
 
     @Enumerated(EnumType.STRING)
@@ -42,22 +46,35 @@ public class Member extends EntityDate {
         this.id = id;
     }
 
+    public Member(String nickname, Department department, String introduction) {
+        this.nickname = new Nickname(nickname);
+        this.department = department;
+        this.introduction = new Introduction(introduction);
+    }
+
     @Builder
-    public Member(String email, String password, String nickname, Department department, String profileImgUrl, MemberRole memberRole) {
+    public Member(String email, String password, String nickname, Department department, String profileImgUrl, MemberRole memberRole, String introduction) {
         this.email = new Email(email);
         this.password = new Password(password);
         this.nickname = new Nickname(nickname);
         this.department = department;
         this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
         this.memberRole = memberRole;
+        this.introduction = new Introduction(introduction);
     }
 
-    public Member updateMemberInfo(MemberUpdateRequestDto requestDto, String profileImgUrl) {
-        this.email = new Email(requestDto.getEmail());
-        this.nickname = new Nickname(requestDto.getNickname());
-        this.department = requestDto.getDepartment();
-        this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
+    public Member update(Member member, String profileImgUrl) {
+        this.nickname = new Nickname(member.getNickname());
+        this.department = member.getDepartment();
+        if (updatedProfileImg(profileImgUrl)) {
+            this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
+        }
+        this.introduction = new Introduction(member.getIntroduction());
         return this;
+    }
+
+    private boolean updatedProfileImg(String profileImgUrl) {
+        return profileImgUrl != null;
     }
 
     public void authenticate() {
@@ -66,6 +83,10 @@ public class Member extends EntityDate {
 
     public void changePassword(String password) {
         this.password = new Password(password);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -80,11 +101,23 @@ public class Member extends EntityDate {
         return nickname.getNickname();
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
     public String getDepartmentName() {
         return department.getDesc();
     }
 
     public String getProfileImgUrl() {
         return profileImgUrl.getProfileImgUrl();
+    }
+
+    public MemberRole getMemberRole() {
+        return memberRole;
+    }
+
+    public String getIntroduction() {
+        return introduction.getIntroduction();
     }
 }

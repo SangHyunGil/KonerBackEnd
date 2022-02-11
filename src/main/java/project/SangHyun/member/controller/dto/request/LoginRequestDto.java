@@ -1,4 +1,4 @@
-package project.SangHyun.member.dto.request;
+package project.SangHyun.member.controller.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +13,8 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "로그인 요청")
-public class MemberLoginRequestDto {
+public class LoginRequestDto {
+
     @ApiModelProperty(value = "아이디", notes = "아이디를 입력해주세요", required = true, example = "GilSSang")
     @NotBlank(message = "아이디를 입력해주세요.")
     private String email;

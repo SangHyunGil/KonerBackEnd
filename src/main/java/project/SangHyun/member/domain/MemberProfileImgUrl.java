@@ -13,6 +13,7 @@ import java.util.Random;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberProfileImgUrl {
+
     private static final String MEMBER_DEFAULT_IMG_PREFIX = "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong";
     private static final String MEMBER_DEFAULT_IMG_POSTFIX = ".jpg";
     private static final int RANDOM_IMG_NUM_COUNT = 8;

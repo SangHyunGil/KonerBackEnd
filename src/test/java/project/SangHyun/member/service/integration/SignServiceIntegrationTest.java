@@ -12,16 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.member.controller.dto.request.LoginRequestDto;
+import project.SangHyun.member.controller.dto.request.TokenRequestDto;
+import project.SangHyun.member.controller.dto.response.LoginResponseDto;
+import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberLoginRequestDto;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.LoginResponseDto;
-import project.SangHyun.member.dto.response.MemberResponseDto;
-import project.SangHyun.member.dto.response.TokenResponseDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.MemberRegisterDto;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 @SpringBootTest
@@ -51,10 +51,10 @@ class SignServiceIntegrationTest {
     @DisplayName("회원 가입을 진행한다.")
     public void register() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
+        MemberRegisterDto requestDto = SignFactory.makeRegisterDto();
 
         //when
-        MemberResponseDto ActualResult = signService.registerMember(requestDto);
+        MemberDto ActualResult = signService.registerMember(requestDto);
 
         //then
         Assertions.assertEquals("xptmxm6!", ActualResult.getEmail());
@@ -64,7 +64,7 @@ class SignServiceIntegrationTest {
     @DisplayName("이메일중복으로 인해 회원가입에 실패한다.")
     public void register_fail1() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateEmailRequestDto();
+        MemberRegisterDto requestDto = SignFactory.makeDuplicateEmailDto();
 
         //when, then
         Assertions.assertThrows(MemberEmailAlreadyExistsException.class, ()->signService.registerMember(requestDto));
@@ -74,7 +74,7 @@ class SignServiceIntegrationTest {
     @DisplayName("닉네임중복으로 인해 회원가입에 실패한다.")
     public void register_fail2() throws Exception {
         //given
-        MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateNicknameRequestDto();
+        MemberRegisterDto requestDto = SignFactory.makeDuplicateNicknameDto();
 
         //when, then
         Assertions.assertThrows(MemberNicknameAlreadyExistsException.class, ()->signService.registerMember(requestDto));
@@ -84,7 +84,7 @@ class SignServiceIntegrationTest {
     @DisplayName("인증한 로그인 회원은 로그인에 성공한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //when
         LoginResponseDto ActualResult = signService.loginMember(requestDto);
@@ -97,7 +97,7 @@ class SignServiceIntegrationTest {
     @DisplayName("인증을 완료하지 못한 로그인 회원은 로그인에 실패한다.")
     public void login_fail1() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeNotAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeNotAuthMemberLoginRequestDto();
 
         //when, then
         Assertions.assertThrows(EmailNotAuthenticatedException.class, ()->signService.loginMember(requestDto));
@@ -107,7 +107,7 @@ class SignServiceIntegrationTest {
     @DisplayName("비밀번호를 틀린 회원은 로그인에 실패한다.")
     public void login_fail2() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeWrongPwMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeWrongPwMemberLoginRequestDto();
 
         //when, then
         Assertions.assertThrows(LoginFailureException.class, ()->signService.loginMember(requestDto));

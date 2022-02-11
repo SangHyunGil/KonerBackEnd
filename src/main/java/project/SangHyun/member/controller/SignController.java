@@ -8,13 +8,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
-import project.SangHyun.member.dto.request.MemberLoginRequestDto;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.member.dto.request.TokenRequestDto;
-import project.SangHyun.member.dto.response.LoginResponseDto;
-import project.SangHyun.member.dto.response.MemberResponseDto;
-import project.SangHyun.member.dto.response.TokenResponseDto;
+import project.SangHyun.member.controller.dto.request.LoginRequestDto;
+import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.controller.dto.request.TokenRequestDto;
+import project.SangHyun.member.controller.dto.response.LoginResponseDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
+import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
+import project.SangHyun.member.service.dto.MemberDto;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -35,12 +36,13 @@ public class SignController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        return responseService.getSingleResult(signService.registerMember(requestDto));
+        MemberDto memberDto = signService.registerMember(requestDto.toServiceDto());
+        return responseService.getSingleResult(MemberResponseDto.create(memberDto));
     }
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
-    public SingleResult<LoginResponseDto> login(@Valid @RequestBody MemberLoginRequestDto requestDto) {
+    public SingleResult<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto) {
         return responseService.getSingleResult(signService.loginMember(requestDto));
     }
 

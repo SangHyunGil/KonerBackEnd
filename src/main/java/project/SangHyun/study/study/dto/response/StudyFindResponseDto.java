@@ -31,7 +31,7 @@ public class StudyFindResponseDto {
     private List<String> tags;
 
     @ApiModelProperty(value = "스터디 내용")
-    private String content;
+    private String description;
 
     @ApiModelProperty(value = "스터디 시작 일정", notes = "스터디 시작 일정을 입력해주세요.", required = true, example = "2021-12-25")
     private String startDate;
@@ -67,7 +67,7 @@ public class StudyFindResponseDto {
 
         return new StudyFindResponseDto(study.getId(),
                 StudyMemberProfile.create(study), study.getTitle(), study.getTagNames(),
-                study.getIntroduction(), study.getStartDate(), study.getEndDate(),
+                study.getDescription(), study.getStartDate(), study.getEndDate(),
                 (long) participants.size(), study.getHeadCount(), study.getProfileImgUrl(), participants,
                 study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }

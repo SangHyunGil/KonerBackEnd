@@ -17,9 +17,9 @@ import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberLoginRequestDto;
-import project.SangHyun.member.dto.request.MemberRegisterRequestDto;
-import project.SangHyun.member.dto.request.TokenRequestDto;
+import project.SangHyun.member.controller.dto.request.LoginRequestDto;
+import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
+import project.SangHyun.member.controller.dto.request.TokenRequestDto;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.tools.sign.SignFactory;
 
@@ -139,7 +139,7 @@ class SignControllerIntegrationTest {
     @DisplayName("로그인을 진행한다.")
     public void login() throws Exception {
         //given
-        MemberLoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
+        LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //when, then
         mockMvc.perform(post("/sign/login")

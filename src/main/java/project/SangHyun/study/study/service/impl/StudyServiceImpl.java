@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.StudyNotFoundException;
 import project.SangHyun.common.dto.SliceResponseDto;
-import project.SangHyun.common.helper.FileStoreHelper;
+import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
@@ -28,12 +28,12 @@ import java.io.IOException;
 @Transactional(readOnly = true)
 public class StudyServiceImpl implements StudyService {
     private final StudyRepository studyRepository;
-    private final FileStoreHelper fileStoreHelper;
+    private final AwsS3BucketHelper awsS3BucketHelper;
 
     @Override
     @Transactional
     public StudyCreateResponseDto createStudy(StudyCreateRequestDto requestDto) throws IOException {
-        Study study = studyRepository.save(requestDto.toEntity(fileStoreHelper.storeFile(requestDto.getProfileImg())));
+        Study study = studyRepository.save(requestDto.toEntity(awsS3BucketHelper.store(requestDto.getProfileImg())));
         return StudyCreateResponseDto.create(study);
     }
 
@@ -53,7 +53,7 @@ public class StudyServiceImpl implements StudyService {
     @Transactional
     public StudyUpdateResponseDto updateStudy(Long studyId, StudyUpdateRequestDto requestDto) throws IOException {
         Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
-        return StudyUpdateResponseDto.create(study.update(requestDto, fileStoreHelper.storeFile(requestDto.getProfileImg())));
+        return StudyUpdateResponseDto.create(study.update(requestDto, awsS3BucketHelper.store(requestDto.getProfileImg())));
     }
 
     @Override
