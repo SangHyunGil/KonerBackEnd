@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MemberGuard {
+
     private final AuthHelper authHelper;
 
     public boolean check(Long id) {

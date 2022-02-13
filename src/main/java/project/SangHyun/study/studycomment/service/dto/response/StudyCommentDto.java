@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.common.helper.HierarchyHelper;
-import project.SangHyun.study.dto.StudyMemberProfile;
+import project.SangHyun.study.dto.MemberProfile;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class StudyCommentDto {
     private Long id;
 
     @ApiModelProperty(value = "회원 닉네임")
-    private StudyMemberProfile studyMemberProfile;
+    private MemberProfile memberProfile;
 
     @ApiModelProperty(value = "스터디 댓글 내용")
     private String content;
@@ -37,9 +37,9 @@ public class StudyCommentDto {
     }
 
     public static StudyCommentDto create(StudyComment studyComment) {
-        StudyMemberProfile studyMemberProfile = StudyMemberProfile.create(studyComment);
+        MemberProfile memberProfile = MemberProfile.create(studyComment);
         String content = studyComment.isDeleted() ? null : studyComment.getContent();
-        return new StudyCommentDto(studyComment.getId(), studyMemberProfile,
+        return new StudyCommentDto(studyComment.getId(), memberProfile,
                 content, new ArrayList<>());
     }
 }

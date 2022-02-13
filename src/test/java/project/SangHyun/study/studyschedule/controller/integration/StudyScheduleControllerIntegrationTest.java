@@ -69,6 +69,20 @@ public class StudyScheduleControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("웹 관리자는 스터디 스케줄을 모두 로드할 수 있다.")
+    public void findAllSchedules2() throws Exception {
+        //given
+        Member member = testDB.findAdminMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Study study = testDB.findBackEndStudy();
+
+        //when, then
+        mockMvc.perform(get("/study/{studyId}/schedules", study.getId())
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("스터디 멤버가 아니면 스케줄을 로드할 수 없다.")
     public void findAllSchedules_fail() throws Exception {
         //given
@@ -79,7 +93,7 @@ public class StudyScheduleControllerIntegrationTest {
         //when, then
         mockMvc.perform(get("/study/{studyId}/schedules", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -139,6 +153,26 @@ public class StudyScheduleControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("웹 관리자는 부적절한 스터디 스케줄을 수정할 수 있다.")
+    public void updateSchedule2() throws Exception {
+        //given
+        Member member = testDB.findAdminMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Study study = testDB.findBackEndStudy();
+        StudySchedule schedule = testDB.findSchedule();
+        StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.title").value("일정 수정"));
+    }
+
+    @Test
     @DisplayName("스터디 멤버가 아니면 스터디 스케줄을 수정할 수 없다.")
     public void updateSchedule_fail() throws Exception {
         //given
@@ -154,8 +188,7 @@ public class StudyScheduleControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(jsonPath("$.data.title").value("일정 수정"));
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -163,6 +196,23 @@ public class StudyScheduleControllerIntegrationTest {
     public void deleteSchedule() throws Exception {
         //given
         Member member = testDB.findStudyGeneralMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Study study = testDB.findBackEndStudy();
+        StudySchedule schedule = testDB.findSchedule();
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("웹 관리자는 부적절한 스터디 스케줄을 삭제할 수 있다.")
+    public void deleteSchedule2() throws Exception {
+        //given
+        Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
         StudySchedule schedule = testDB.findSchedule();
@@ -207,14 +257,32 @@ public class StudyScheduleControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value(schedule.getTitle()));
+                .andExpect(jsonPath("$.data.title").value(schedule.getTitle().getTitle()));
+    }
+
+    @Test
+    @DisplayName("웹 관리자는 스터디 스케줄의 세부사항을 조회할 수 있다.")
+    public void findSchedule2() throws Exception {
+        //given
+        Member member = testDB.findAdminMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Study study = testDB.findBackEndStudy();
+        StudySchedule schedule = testDB.findSchedule();
+
+        //when, then
+        mockMvc.perform(get("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.title").value(schedule.getTitle().getTitle()));
     }
 
     @Test
     @DisplayName("스터디 멤버가 아니면 스터디 스케줄의 세부사항을 조회할 수 없다.")
     public void findSchedule_fail() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
+        Member member = testDB.findNotStudyMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
         Study study = testDB.findBackEndStudy();
         StudySchedule schedule = testDB.findSchedule();

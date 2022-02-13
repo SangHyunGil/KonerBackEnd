@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.study.dto.StudyMemberProfile;
+import project.SangHyun.study.dto.MemberProfile;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
@@ -23,7 +23,7 @@ public class FindJoinedStudyDto {
     private Long id;
 
     @ApiModelProperty(value = "회원 ID(PK)")
-    private StudyMemberProfile creator;
+    private MemberProfile creator;
 
     @ApiModelProperty(value = "제목")
     private String title;
@@ -54,7 +54,7 @@ public class FindJoinedStudyDto {
 
     public static FindJoinedStudyDto create(Study study) {
         return new FindJoinedStudyDto(study.getId(),
-                StudyMemberProfile.create(study), study.getTitle(), study.getTagNames(),
+                MemberProfile.create(study), study.getTitle(), study.getTagNames(),
                 study.getDescription(), study.getStartDate(), study.getEndDate(),
                 study.getProfileImgUrl(), study.getStudyMethod(), study.getStudyState(), study.getRecruitState());
     }

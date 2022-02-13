@@ -7,6 +7,8 @@ import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -56,5 +58,11 @@ public class ResponseService {
         result.setMsg(msg);
 
         return result;
+    }
+
+    public <E, D> List<D> convertToControllerDto(List<E> object, Function<E, D> convertMethod) {
+        return object.stream()
+                .map(convertMethod::apply)
+                .collect(Collectors.toList());
     }
 }

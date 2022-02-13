@@ -70,6 +70,10 @@ public class StudyArticle extends EntityDate {
         return member.getNickname();
     }
 
+    public String getCreatorProfileUrlImg() {
+        return member.getProfileImgUrl();
+    }
+
     public String getTitle() {
         return title.getTitle();
     }

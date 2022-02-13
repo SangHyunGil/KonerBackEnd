@@ -92,6 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
 
+                .antMatchers("/study/{studyId}/schedules/**").access("@studyScheduleGuard.checkJoin(#studyId)")
+
+
                 .anyRequest().hasAnyRole("MEMBER", "ADMIN")
 
             .and()

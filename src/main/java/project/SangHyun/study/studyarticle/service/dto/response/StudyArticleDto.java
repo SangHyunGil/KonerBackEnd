@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.study.dto.MemberProfile;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 
 @Data
@@ -16,8 +17,8 @@ public class StudyArticleDto {
     @ApiModelProperty(value = "스터디 게시글 ID(PK)")
     private Long id;
 
-    @ApiModelProperty(value = "스터디 게시글 작성자 이름")
-    private String nickname;
+    @ApiModelProperty(value = "스터디 게시글 작성자")
+    private MemberProfile creator;
 
     @ApiModelProperty(value = "스터디 게시글 제목")
     private String title;
@@ -29,7 +30,7 @@ public class StudyArticleDto {
     private Long views;
 
     public static StudyArticleDto create(StudyArticle studyArticle) {
-        return new StudyArticleDto(studyArticle.getId(), studyArticle.getCreatorNickname(),
+        return new StudyArticleDto(studyArticle.getId(), MemberProfile.create(studyArticle),
                 studyArticle.getTitle(), studyArticle.getContent(), studyArticle.getViews());
     }
 }

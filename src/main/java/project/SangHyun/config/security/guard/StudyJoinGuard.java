@@ -10,6 +10,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 @Component
 @RequiredArgsConstructor
 public class StudyJoinGuard {
+
     private final AuthHelper authHelper;
     private final StudyJoinRepository studyJoinRepository;
 

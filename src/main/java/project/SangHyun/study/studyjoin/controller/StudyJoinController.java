@@ -18,8 +18,6 @@ import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -33,7 +31,7 @@ public class StudyJoinController {
     @GetMapping("/{studyId}/member")
     public MultipleResult<StudyMembersResponseDto> findStudyMembers(@PathVariable Long studyId) {
         List<StudyMembersDto> studyMembersDto = studyJoinService.findStudyMembers(studyId);
-        List<StudyMembersResponseDto> responseDto = convertToResponseDto(studyMembersDto, StudyMembersResponseDto::create);
+        List<StudyMembersResponseDto> responseDto = responseService.convertToControllerDto(studyMembersDto, StudyMembersResponseDto::create);
         return responseService.getMultipleResult(responseDto);
     }
 
@@ -41,7 +39,7 @@ public class StudyJoinController {
     @GetMapping("/join")
     public MultipleResult<FindJoinedStudyResponseDto> findJoinedStudy(@ApiIgnore @AuthenticationPrincipal MemberDetails memberDetails) {
         List<FindJoinedStudyDto> findJoinedStudyDto = studyJoinService.findJoinedStudies(memberDetails.getId());
-        List<FindJoinedStudyResponseDto> responseDto = convertToResponseDto(findJoinedStudyDto, FindJoinedStudyResponseDto::create);
+        List<FindJoinedStudyResponseDto> responseDto = responseService.convertToControllerDto(findJoinedStudyDto, FindJoinedStudyResponseDto::create);
         return responseService.getMultipleResult(responseDto);
     }
 
@@ -67,9 +65,5 @@ public class StudyJoinController {
         return responseService.getDefaultSuccessResult();
     }
 
-    private <E, D> List<D> convertToResponseDto(List<E> object, Function<E, D> convertMethod) {
-        return object.stream()
-                .map(convertMethod::apply)
-                .collect(Collectors.toList());
-    }
+
 }

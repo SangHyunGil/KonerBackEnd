@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.dto.StudyMemberProfile;
+import project.SangHyun.study.dto.MemberProfile;
 import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.controller.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.controller.dto.response.StudyResponseDto;
@@ -64,7 +64,7 @@ public class StudyFactory extends BasicFactory {
     // Response
     public static StudyDto makeDto(Study study) {
         StudyDto studyDto = StudyDto.create(study);
-        studyDto.setCreator(new StudyMemberProfile("테스터", "profileImgUrl"));
+        studyDto.setCreator(new MemberProfile("테스터", "profileImgUrl"));
         return studyDto;
     }
 

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.study.dto.StudyMemberProfile;
+import project.SangHyun.study.dto.MemberProfile;
 import project.SangHyun.study.studycomment.service.dto.response.StudyCommentDto;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class StudyCommentResponseDto {
     private Long id;
 
     @ApiModelProperty(value = "회원 닉네임")
-    private StudyMemberProfile studyMemberProfile;
+    private MemberProfile memberProfile;
 
     @ApiModelProperty(value = "스터디 댓글 내용")
     private String content;
@@ -36,7 +36,7 @@ public class StudyCommentResponseDto {
     }
 
     public static StudyCommentResponseDto create(StudyCommentDto studyCommentDto) {
-        return new StudyCommentResponseDto(studyCommentDto.getId(), studyCommentDto.getStudyMemberProfile(),
+        return new StudyCommentResponseDto(studyCommentDto.getId(), studyCommentDto.getMemberProfile(),
                 studyCommentDto.getContent(), studyCommentDto.getChildren());
     }
 }
