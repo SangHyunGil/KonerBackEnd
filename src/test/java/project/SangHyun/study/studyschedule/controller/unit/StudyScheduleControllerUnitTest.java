@@ -31,8 +31,11 @@ import project.SangHyun.study.studyschedule.tools.StudyScheduleFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -78,7 +81,7 @@ public class StudyScheduleControllerUnitTest {
 
         //mocking
         given(studyScheduleService.findAllSchedules(study.getId())).willReturn(studyScheduleDto);
-        given(responseService.convertToControllerDto(studyScheduleDto,StudyScheduleResponseDto::create)).willReturn(responseDto);
+        given(responseService.convertToControllerDto(anyList(), any(Function.class))).willReturn(responseDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then

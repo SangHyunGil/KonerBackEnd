@@ -31,8 +31,11 @@ import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -132,7 +135,7 @@ class StudyJoinControllerUnitTest {
 
         //mocking
         given(studyJoinService.findStudyMembers(study.getId())).willReturn(studyMembersDto);
-        given(responseService.convertToControllerDto(studyMembersDto, StudyMembersResponseDto::create)).willReturn(responseDto);
+        given(responseService.convertToControllerDto(anyList(), any(Function.class))).willReturn(responseDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
