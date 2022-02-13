@@ -15,7 +15,7 @@ import project.SangHyun.member.controller.dto.response.LoginResponseDto;
 import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.SignService;
-import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
 
 import javax.validation.Valid;
 import java.io.IOException;

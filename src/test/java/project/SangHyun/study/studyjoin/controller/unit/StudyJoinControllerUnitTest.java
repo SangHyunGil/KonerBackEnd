@@ -74,7 +74,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/"+study.getId()+"/join/"+member.getId())
+        mockMvc.perform(post("/study/"+ study.getId()+"/join/"+member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -96,7 +96,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/"+study.getId()+"/join/"+member.getId())
+        mockMvc.perform(put("/study/"+ study.getId()+"/join/"+member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))
@@ -115,7 +115,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/"+study.getId()+"/join/"+member.getId())
+        mockMvc.perform(delete("/study/"+ study.getId()+"/join/"+member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.studyJoinId").value(ExpectResult.getData().getStudyJoinId()))

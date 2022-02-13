@@ -1,4 +1,4 @@
-package project.SangHyun.study.study.dto.request;
+package project.SangHyun.study.study.controller.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,6 +10,7 @@ import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
+import project.SangHyun.study.study.service.dto.request.StudyUpdateDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @ApiModel(value = "스터디 정보 업데이트 요청")
 public class StudyUpdateRequestDto {
+
     @ApiModelProperty(value = "스터디 제목", notes = "스터디 제목을 입력해주세요.", required = true, example = "백엔드 스터디")
     @NotBlank(message = "스터디 제목을 입력해주세요.")
     private String title;
@@ -55,4 +57,10 @@ public class StudyUpdateRequestDto {
 
     @ApiModelProperty(value = "스터디 모집 상태", notes = "스터디 모집 상태를 입력해주세요.", required = true, example = "모집 중")
     private RecruitState recruitState;
+
+    public StudyUpdateDto toServiceDTO() {
+        return new StudyUpdateDto(title,tags,description,startDate,
+                endDate,department,headCount,profileImg,
+                studyMethod,studyState,recruitState);
+    }
 }

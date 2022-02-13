@@ -12,7 +12,6 @@ import java.util.List;
 import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
-import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,8 +22,6 @@ public class StudyCustomRepositoryImpl implements StudyCustomRepository {
     public Study findStudyById(Long studyId) {
         return jpaQueryFactory.selectFrom(study)
                 .innerJoin(study.member, member).fetchJoin()
-                .innerJoin(study.studyJoins, studyJoin).fetchJoin()
-                .innerJoin(studyJoin.member, member).fetchJoin()
                 .where(equalsStudyId(studyId))
                 .distinct()
                 .fetchOne();

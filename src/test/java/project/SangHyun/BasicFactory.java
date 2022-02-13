@@ -8,16 +8,12 @@ import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.study.study.domain.Schedule;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
-import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.domain.StudyRole;
-import project.SangHyun.study.study.domain.Tag.Tag;
-import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
@@ -80,9 +76,9 @@ public class BasicFactory {
 
     public static Study makeTestStudy(Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         Long studyId = 1L;
-        Study study = new Study("프론트엔드 스터디", new Tags(List.of(new Tag("프론트엔드"))),"프론트엔드모집입니다.",
-                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", StudyCategory.CSE, new StudyOptions(StudyState.STUDYING,
-                RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
+        Study study = new Study("프론트엔드 스터디", List.of("프론트엔드"),"프론트엔드모집입니다.",
+                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",  2L, "2021-10-01", "2021-12-25", StudyCategory.CSE,  StudyMethod.FACE, StudyState.STUDYING,
+                RecruitState.PROCEED, member, studyJoins, studyBoards);
         ReflectionTestUtils.setField(study, "id", studyId);
         return study;
     }

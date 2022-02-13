@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Department;
-import project.SangHyun.member.service.dto.MemberUpdateDto;
+import project.SangHyun.member.service.dto.request.MemberUpdateDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

@@ -9,16 +9,12 @@ import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.study.domain.Schedule;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
-import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.domain.StudyRole;
-import project.SangHyun.study.study.domain.Tag.Tag;
-import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
@@ -28,8 +24,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -69,15 +64,15 @@ public class TestData {
             Member memberB = new Member("xptmxm4!", passwordEncoder.encode("xptmxm5!"), "은둔", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong4.jpg", MemberRole.ROLE_MEMBER, "은둔 생활 중입니다.");
             memberRepository.save(memberB);
 
-            Study study = makeStudy(member, "백엔드 모집", "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));
+            Study study = makeStudy(member, "백엔드 모집", "백엔드 모집합니다.", List.of("백엔드", "JPA", "스프링"));
             makeTestDummyStudy(member);
 
             StudyJoin studyJoin2 = new StudyJoin(memberB, "빠르게 지원합니다.", study, StudyRole.APPLY);
             studyJoinRepository.save(studyJoin2);
         }
 
-        private Study makeStudy(Member member, String title, String content, Tags tags) {
-            Study study = new Study(title, tags, content, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/StudyDefaultImg.png", StudyCategory.CSE, new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 3L, new Schedule("2021-10-01", "2021-12-25"), member, new ArrayList<>(), new ArrayList<>());
+        private Study makeStudy(Member member, String title, String description, List<String> tags) {
+            Study study = new Study(title, tags, description, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/StudyDefaultImg.png", 3L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, member, new ArrayList<>(), new ArrayList<>());
 
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);
@@ -103,18 +98,12 @@ public class TestData {
             return study;
         }
 
-        private Tags makeTags(String ... tagNames) {
-            return new Tags(Arrays.stream(tagNames)
-                    .map(tagName -> new Tag(tagName))
-                    .collect(Collectors.toList()));
-        }
-
         private void makeTestDummyStudy(Member member) {
             for (int i = 0; i < 50; i++) {
                 if (i % 2 == 0)
-                    makeStudy(member, "백엔드 모집"+i, "백엔드 모집합니다.", makeTags("백엔드", "JPA", "스프링"));
+                    makeStudy(member, "백엔드 모집"+i, "백엔드 모집합니다.", List.of("백엔드", "JPA", "스프링"));
                 else
-                    makeStudy(member, "프론트엔드 모집"+i, "프론트엔드 모집합니다.", makeTags("프론트엔드", "REACT", "JS"));
+                    makeStudy(member, "프론트엔드 모집"+i, "프론트엔드 모집합니다.", List.of("프론트엔드", "REACT", "JS"));
             }
         }
     }

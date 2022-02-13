@@ -12,8 +12,8 @@ import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.dto.MemberDto;
-import project.SangHyun.member.service.dto.MemberUpdateDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
+import project.SangHyun.member.service.dto.request.MemberUpdateDto;
 
 import java.io.IOException;
 

@@ -6,16 +6,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.config.redis.RedisKey;
+import project.SangHyun.member.controller.dto.request.*;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.controller.dto.request.*;
 import project.SangHyun.member.controller.dto.response.LoginResponseDto;
 import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.service.dto.JwtTokens;
-import project.SangHyun.member.service.dto.MemberDto;
-import project.SangHyun.member.service.dto.MemberRegisterDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
+import project.SangHyun.member.service.dto.request.MemberRegisterDto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,8 +103,12 @@ public class SignFactory extends BasicFactory {
     }
 
     // Response
-    public static MemberResponseDto makeRegisterResponseDto(Member member) {
-        return MemberResponseDto.create(MemberDto.create(member));
+    public static MemberDto makeMemberDto(Member member) {
+        return MemberDto.create(member);
+    }
+
+    public static MemberResponseDto makeRegisterResponseDto(MemberDto memberDto) {
+        return MemberResponseDto.create(memberDto);
     }
 
     public static LoginResponseDto makeLoginResponseDto(Member member) {

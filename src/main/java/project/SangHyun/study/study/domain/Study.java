@@ -9,7 +9,6 @@ import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.domain.Tag.Tag;
 import project.SangHyun.study.study.domain.Tag.Tags;
-import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
@@ -68,30 +67,42 @@ public class Study extends EntityDate {
         this.id = id;
     }
 
-    @Builder
-    public Study(String title, Tags tags, String description, String profileImgUrl, StudyCategory category, StudyOptions studyOptions, Long headCount, Schedule schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+    public Study(String title, List<String> tags, String description, String startDate, String endDate, StudyCategory category, Long headCount, StudyMethod studyMethod, StudyState studyState, RecruitState recruitState) {
         this.title = new StudyTitle(title);
         this.description = new Description(description);
-        this.tags = tags;
-        this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
-        this.category = category;
-        this.studyOptions = studyOptions;
+        this.tags = new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
         this.headCount = new HeadCount(headCount);
-        this.schedule = schedule;
+        this.schedule = new Schedule(startDate, endDate);
+        this.studyOptions = new StudyOptions(studyState, recruitState, studyMethod);
+        this.category = category;
+    }
+
+    @Builder
+    public Study(String title, List<String> tags, String description, String profileImgUrl, Long headCount, String startDate, String endDate, StudyCategory category, StudyMethod studyMethod, StudyState studyState, RecruitState recruitState, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+        this.title = new StudyTitle(title);
+        this.description = new Description(description);
+        this.tags = new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
+        this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
+        this.headCount = new HeadCount(headCount);
+        this.schedule = new Schedule(startDate, endDate);
+        this.studyOptions = new StudyOptions(studyState, recruitState, studyMethod);
+        this.category = category;
         this.member = member;
         this.studyJoins = studyJoins;
         this.studyBoards = studyBoards;
     }
 
-    public Study update(StudyUpdateRequestDto requestDto, String profileImgUrl) {
-        this.title = new StudyTitle(requestDto.getTitle());
-        this.description = new Description(requestDto.getDescription());
-        this.tags = new Tags(requestDto.getTags().stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
-        this.schedule = new Schedule(requestDto.getStartDate(), requestDto.getEndDate());
-        this.studyOptions = new StudyOptions(requestDto.getStudyState(), requestDto.getRecruitState(), requestDto.getStudyMethod());
-        this.headCount = new HeadCount(requestDto.getHeadCount());
-        this.category = requestDto.getDepartment();
-        this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
+    public Study update(Study study, String profileImgUrl) {
+        this.title = new StudyTitle(study.getTitle());
+        this.description = new Description(study.getDescription());
+        this.tags = new Tags(study.getTagNames().stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
+        this.schedule = new Schedule(study.getStartDate(), study.getEndDate());
+        this.studyOptions = new StudyOptions(study.getStudyState(), study.getRecruitState(), study.getStudyMethod());
+        this.headCount = new HeadCount(study.getHeadCount());
+        this.category = study.getCategory();
+        if (profileImgUrl != null) {
+            this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
+        }
         return this;
     }
 

@@ -11,8 +11,8 @@ import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.service.dto.MemberDto;
-import project.SangHyun.member.service.dto.MemberUpdateDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
+import project.SangHyun.member.service.dto.request.MemberUpdateDto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +31,7 @@ public class MemberFactory extends BasicFactory {
         }
     }
 
+    // Request
     public static MemberDetails makeMemberDetails(Long id) {
         return new MemberDetails(id,"xptmxm1!", "encodedPW",
                 Collections.singletonList(new SimpleGrantedAuthority(MemberRole.ROLE_MEMBER.toString())));
@@ -44,6 +45,8 @@ public class MemberFactory extends BasicFactory {
         return new MemberUpdateDto(nickname, Department.CSE, multipartFile, introduction);
     }
 
+
+    // Response
     public static MemberResponseDto makeInfoResponseDto(Member member) {
         return MemberResponseDto.create(MemberDto.create(member));
     }

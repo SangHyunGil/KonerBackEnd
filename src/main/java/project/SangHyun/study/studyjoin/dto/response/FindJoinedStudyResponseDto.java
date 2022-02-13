@@ -9,7 +9,7 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
-import project.SangHyun.study.study.dto.response.StudyMemberProfile;
+import project.SangHyun.study.dto.StudyMemberProfile;
 
 import java.util.List;
 

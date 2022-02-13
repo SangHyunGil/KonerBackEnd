@@ -20,8 +20,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
-import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
+import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;
+import project.SangHyun.study.study.controller.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
@@ -83,7 +83,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(get("/study/{id}", study.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.studyId").value(study.getId()))
+                .andExpect(jsonPath("$.data.id").value(study.getId()))
                 .andExpect(jsonPath("$.data.title").value(study.getTitle()));
     }
 
@@ -145,7 +145,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{id}/board",study.getId())
+        mockMvc.perform(get("/study/{id}/board", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(3));

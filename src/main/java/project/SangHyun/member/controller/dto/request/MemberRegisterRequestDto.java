@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.member.domain.Department;
-import project.SangHyun.member.service.dto.MemberRegisterDto;
+import project.SangHyun.member.service.dto.request.MemberRegisterDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

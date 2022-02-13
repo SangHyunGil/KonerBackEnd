@@ -16,8 +16,8 @@ import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.dto.JwtTokens;
-import project.SangHyun.member.service.dto.MemberDto;
-import project.SangHyun.member.service.dto.MemberRegisterDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
+import project.SangHyun.member.service.dto.request.MemberRegisterDto;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package project.SangHyun.study.study.dto.response;
+package project.SangHyun.study.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

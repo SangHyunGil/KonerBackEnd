@@ -22,7 +22,7 @@ import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.service.SignService;
-import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -58,8 +58,8 @@ class SignControllerUnitTest {
         //given
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
         Member createdMember = requestDto.toServiceDto().toEntity("encodedPassword", "https://s3.console.aws.amazon.com/s3/object/koner-bucket?region=ap-northeast-2&prefix=profileImg/koryong1.jpg");
-        MemberDto memberDto = MemberDto.create(createdMember);
-        MemberResponseDto responseDto = SignFactory.makeRegisterResponseDto(createdMember);
+        MemberDto memberDto = SignFactory.makeMemberDto(createdMember);
+        MemberResponseDto responseDto = SignFactory.makeRegisterResponseDto(memberDto);
         SingleResult<MemberResponseDto> ExpectResult = SignFactory.makeSingleResult(responseDto);
 
         //mocking

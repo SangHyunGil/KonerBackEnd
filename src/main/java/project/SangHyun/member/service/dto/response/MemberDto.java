@@ -1,4 +1,4 @@
-package project.SangHyun.member.service.dto;
+package project.SangHyun.member.service.dto.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import project.SangHyun.member.domain.Member;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "멤버 반환 서비스 계층 DTO")
+@ApiModel(value = "회원 반환 서비스 계층 DTO")
 public class MemberDto {
 
     @ApiModelProperty(value = "회원 ID(PK)")

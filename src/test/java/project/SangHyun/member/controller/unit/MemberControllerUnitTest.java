@@ -21,7 +21,7 @@ import project.SangHyun.member.controller.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.service.MemberService;
-import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 import project.SangHyun.member.tools.sign.SignFactory;
 

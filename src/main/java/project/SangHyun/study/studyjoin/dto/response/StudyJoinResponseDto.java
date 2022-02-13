@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.impl.StudyInfoDto;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

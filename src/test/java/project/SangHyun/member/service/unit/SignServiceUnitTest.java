@@ -21,8 +21,8 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.service.SignService;
-import project.SangHyun.member.service.dto.MemberDto;
-import project.SangHyun.member.service.dto.MemberRegisterDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
+import project.SangHyun.member.service.dto.request.MemberRegisterDto;
 import project.SangHyun.member.tools.sign.SignFactory;
 
 import java.util.Optional;
@@ -64,7 +64,8 @@ class SignServiceUnitTest {
         //given
         MemberRegisterDto requestDto = SignFactory.makeRegisterDto();
         Member createdMember = requestDto.toEntity("encoded PW", null);
-        MemberResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(createdMember);
+        MemberDto memberDto = SignFactory.makeMemberDto(createdMember);
+        MemberResponseDto ExpectResult = SignFactory.makeRegisterResponseDto(memberDto);
 
         //mocking
         given(passwordEncoder.encode(any())).willReturn("encoded PW");

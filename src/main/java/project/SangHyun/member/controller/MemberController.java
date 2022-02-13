@@ -12,10 +12,10 @@ import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseServiceImpl;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
+import project.SangHyun.member.controller.dto.response.MemberResponseDto;
 import project.SangHyun.member.controller.dto.request.MemberUpdateRequestDto;
-import project.SangHyun.member.controller.dto.response.*;
 import project.SangHyun.member.service.MemberService;
-import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;

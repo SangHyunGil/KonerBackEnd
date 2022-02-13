@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
+import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 
 class StudyArticleTest {
@@ -19,7 +19,7 @@ class StudyArticleTest {
         StudyArticleUpdateRequestDto requestDto = new StudyArticleUpdateRequestDto("수정", "수정!");
 
         //when
-        studyArticle.updateArticleInfo(requestDto);
+        studyArticle.updateArticleInfo(requestDto.toServiceDto().toEntity());
 
         //then
         Assertions.assertEquals("수정", studyArticle.getTitle());

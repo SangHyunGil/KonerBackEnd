@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.common.helper.AwsS3BucketHelper;
-import project.SangHyun.member.service.dto.MemberUpdateDto;
+import project.SangHyun.member.service.dto.request.MemberUpdateDto;
 import project.SangHyun.member.tools.member.MemberFactory;
 
 import java.io.InputStream;

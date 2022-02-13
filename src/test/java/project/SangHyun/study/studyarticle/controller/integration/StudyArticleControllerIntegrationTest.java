@@ -20,8 +20,8 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
+import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleCreateRequestDto;
+import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleUpdateRequestDto;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
@@ -133,7 +133,7 @@ class StudyArticleControllerIntegrationTest {
         StudyBoard studyBoard = testDB.findAnnounceBoard();
         Member member = testDB.findStudyGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateDto(member);
+        StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateRequestDto(member);
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())

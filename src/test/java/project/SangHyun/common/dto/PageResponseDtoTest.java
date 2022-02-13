@@ -10,7 +10,7 @@ import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponseDto;
+import project.SangHyun.study.studyarticle.service.dto.StudyArticleDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 
 import java.util.List;
@@ -24,7 +24,7 @@ class PageResponseDtoTest {
         Page<StudyArticle> pageStudyArticle = new PageImpl<>(studyArticles, PageRequest.of(0, 10), studyArticles.size());
 
         //when
-        PageResponseDto responseDto = PageResponseDto.create(pageStudyArticle, StudyArticleFindResponseDto::create);
+        PageResponseDto responseDto = PageResponseDto.create(pageStudyArticle, StudyArticleDto::create);
 
         //then
         Assertions.assertEquals(1, responseDto.getTotalPages());

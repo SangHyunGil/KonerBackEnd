@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 
 import javax.persistence.*;
@@ -40,6 +39,15 @@ public class StudyArticle extends EntityDate {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyBoard studyBoard;
 
+    public StudyArticle(Long id) {
+        this.id = id;
+    }
+
+    public StudyArticle(String title, String content) {
+        this.title = new StudyArticleTitle(title);
+        this.content = new StudyArticleContent(content);
+    }
+
     @Builder
     public StudyArticle(String title, String content, Long views, Member member, StudyBoard studyBoard) {
         this.title = new StudyArticleTitle(title);
@@ -49,13 +57,9 @@ public class StudyArticle extends EntityDate {
         this.studyBoard = studyBoard;
     }
 
-    public StudyArticle(Long id) {
-        this.id = id;
-    }
-
-    public void updateArticleInfo(StudyArticleUpdateRequestDto requestDto) {
-        this.title = new StudyArticleTitle(requestDto.getTitle());
-        this.content = new StudyArticleContent(requestDto.getContent());
+    public void updateArticleInfo(StudyArticle studyArticle) {
+        this.title = new StudyArticleTitle(studyArticle.getTitle());
+        this.content = new StudyArticleContent(studyArticle.getContent());
     }
 
     public void updateViews() {

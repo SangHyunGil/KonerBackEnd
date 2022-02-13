@@ -6,12 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.member.service.dto.MemberDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "멤버 요청 결과")
+@ApiModel(value = "회원 요청 결과")
 public class MemberResponseDto {
 
     @ApiModelProperty(value = "회원 ID(PK)")

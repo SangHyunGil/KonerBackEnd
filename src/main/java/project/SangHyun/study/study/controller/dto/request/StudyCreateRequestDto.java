@@ -1,4 +1,4 @@
-package project.SangHyun.study.study.dto.request;
+package project.SangHyun.study.study.controller.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,31 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.domain.Schedule;
-import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
-import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
-import project.SangHyun.study.study.domain.StudyRole;
-import project.SangHyun.study.study.domain.Tag.Tag;
-import project.SangHyun.study.study.domain.Tag.Tags;
-import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.study.service.dto.request.StudyCreateDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "스터디 생성 요청")
 public class StudyCreateRequestDto {
+
     @ApiModelProperty(value = "스터디 생성자", notes = "스터디 생성자를 입력해주세요.", required = true, example = "1L")
     private Long memberId;
 
@@ -70,33 +61,8 @@ public class StudyCreateRequestDto {
     @ApiModelProperty(value = "스터디 모집 상태", notes = "스터디 모집 상태를 입력해주세요.", required = true, example = "모집 중")
     private RecruitState recruitState;
 
-    public Study toEntity(String profileImg) {
-        Study study = Study.builder()
-                .title(title)
-                .description(description)
-                .category(department)
-                .tags(new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList())))
-                .schedule(new Schedule(startDate, endDate))
-                .studyOptions(new StudyOptions(studyState, recruitState, studyMethod))
-                .member(new Member(memberId))
-                .studyJoins(new ArrayList<>())
-                .studyBoards(new ArrayList<>())
-                .profileImgUrl(profileImg)
-                .headCount(headCount)
-                .build();
-
-        initStudyJoins(study);
-        initStudyBoards(study);
-
-        return study;
-    }
-
-    private void initStudyJoins(Study study) {
-        study.join(new StudyJoin(new Member(memberId), null, study, StudyRole.CREATOR));
-    }
-
-    private void initStudyBoards(Study study) {
-        study.addBoard(new StudyBoard("공지사항", study));
-        study.addBoard(new StudyBoard("자유게시판", study));
+    public StudyCreateDto toServiceDto() {
+        return new StudyCreateDto(memberId, title, tags, description, department, startDate,
+                endDate, headCount, profileImg, studyMethod, studyState, recruitState);
     }
 }

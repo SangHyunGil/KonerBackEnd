@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteResponseDto;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
@@ -100,7 +99,7 @@ public class StudyCommentServiceIntegrationTest {
         StudyArticle announceArticle = testDB.findAnnounceArticle();
 
         //when
-        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(announceArticle.getId());
+        studyArticleService.deleteArticle(announceArticle.getId());
         persistContextClear();
 
         //then
