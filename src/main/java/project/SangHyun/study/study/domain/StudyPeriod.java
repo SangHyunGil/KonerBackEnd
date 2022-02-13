@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Period {
+public class StudyPeriod {
     @Column(nullable = false)
     private String startDate;
     @Column(nullable = false)

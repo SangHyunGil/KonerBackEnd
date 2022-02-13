@@ -306,4 +306,10 @@ public class ExceptionAdvice {
     protected Result InvalidIntroductionException() {
         return responseService.getFailureResult(-146, "적절하지 않은 회원 소개글입니다.");
     }
+
+    @ExceptionHandler(InvalidStudyScheduleTitle.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyScheduleTitle() {
+        return responseService.getFailureResult(-147, "적절하지 않은 스케줄 제목입니다.");
+    }
 }
