@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyRole;
@@ -51,7 +51,7 @@ class StudyJoinControllerUnitTest {
     @Mock
     StudyJoinService studyJoinService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     void beforeEach() {

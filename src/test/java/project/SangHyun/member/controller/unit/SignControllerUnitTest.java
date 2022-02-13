@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.controller.SignController;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
@@ -42,7 +42,7 @@ class SignControllerUnitTest {
     @Mock
     SignService signService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     void beforeEach() {

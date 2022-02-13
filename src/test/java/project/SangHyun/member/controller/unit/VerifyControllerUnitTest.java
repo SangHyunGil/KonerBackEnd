@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.advice.ExceptionAdvice;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.controller.VerifyController;
 import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
@@ -34,12 +34,12 @@ public class VerifyControllerUnitTest {
     @Mock
     VerifyService verifyService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(verifyController)
-                .setControllerAdvice(new ExceptionAdvice(new ResponseServiceImpl()))
+                .setControllerAdvice(new ExceptionAdvice(new ResponseService()))
                 .build();
     }
 

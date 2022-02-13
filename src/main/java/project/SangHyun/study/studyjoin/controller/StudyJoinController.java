@@ -7,7 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinCreateRequestDto;
 import project.SangHyun.study.studyjoin.controller.dto.response.FindJoinedStudyResponseDto;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/study")
 public class StudyJoinController {
     private final StudyJoinService studyJoinService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ApiOperation(value = "스터디원 정보 로드", notes = "스터디에 참여한 스터디원의 정보를 로드한다.")
     @GetMapping("/{studyId}/member")

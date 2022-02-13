@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.dto.PageResponseDto;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleUpdateRequestDto;
 import project.SangHyun.study.studyarticle.controller.dto.response.StudyArticleResponseDto;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public class StudyArticleController {
 
     public final StudyArticleService studyArticleService;
-    public final ResponseServiceImpl responseService;
+    public final ResponseService responseService;
 
     @ApiOperation(value = "스터디 게시글 모두 찾기", notes = "스터디에 포함된 게시글을 모두 찾는다.")
     @GetMapping

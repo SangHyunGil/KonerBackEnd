@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardCreateRequestDto;
 import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardUpdateRequestDto;
 import project.SangHyun.study.studyboard.controller.dto.response.StudyBoardResponseDto;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class StudyBoardController {
 
     private final StudyBoardService studyBoardService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ApiOperation(value = "스터디 게시판 로드", notes = "스터디에 포함된 게시판의 목록을 로드한다.")
     @GetMapping

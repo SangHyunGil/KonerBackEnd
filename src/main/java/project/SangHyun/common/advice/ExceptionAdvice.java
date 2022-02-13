@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 
 
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionAdvice {
 
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ExceptionHandler(MemberNicknameAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -311,5 +311,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected Result InvalidStudyScheduleTitle() {
         return responseService.getFailureResult(-147, "적절하지 않은 스케줄 제목입니다.");
+    }
+
+    @ExceptionHandler(StudyScheduleNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result StudyScheduleNotFoundException() {
+        return responseService.getFailureResult(-148, "존재하지 않는 스케줄입니다.");
     }
 }

@@ -37,7 +37,12 @@ public class StudySchedule {
         this.study = study;
     }
 
-    public String getTitle() {
+    public void update(StudySchedule studySchedule) {
+        this.title = studySchedule.getTitle();
+        this.period = studySchedule.getPeriod();
+    }
+
+    public String getTitleName() {
         return title.getTitle();
     }
 }

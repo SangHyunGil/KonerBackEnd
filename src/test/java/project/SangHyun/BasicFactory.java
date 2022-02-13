@@ -132,8 +132,8 @@ public class BasicFactory {
         return message;
     }
 
-    public static StudySchedule makeTestSchedule(Long studyScheduleId) {
-        StudySchedule schedule = new StudySchedule("백엔드 스터디 일정", "2021-12-15", "2022-03-01", "18:00", "22:00", new Study(1L));
+    public static StudySchedule makeTestSchedule(Long studyScheduleId, String title) {
+        StudySchedule schedule = new StudySchedule(title, "2021-12-15", "2022-03-01", "18:00", "22:00", new Study(1L));
         ReflectionTestUtils.setField(schedule, "id", studyScheduleId);
         return schedule;
     }

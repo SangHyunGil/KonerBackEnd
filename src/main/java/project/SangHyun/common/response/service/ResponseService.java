@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class ResponseServiceImpl {
+public class ResponseService {
 
     private static final String SUCCESS_MSG = "요청에 성공하였습니다.";
 

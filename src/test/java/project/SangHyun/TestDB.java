@@ -167,7 +167,7 @@ public class TestDB {
         Member memberE = new Member("xptmxm11!", passwordEncoder.encode("xptmxm11!"), "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "영탁입니다.");
         Member storedMemberE = memberRepository.save(memberE);
 
-        Study emptyStudy = new Study("임시용", List.of("임시용"), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", 0L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, storedMemberB, new ArrayList<>(), new ArrayList<>());
+        Study emptyStudy = new Study("임시용", List.of("임시용"), "임시용", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", 1L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, storedMemberB, new ArrayList<>(), new ArrayList<>());
 
         Study study = new Study("백엔드 모집", List.of("백엔드", "JPA", "스프링"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", 5L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, storedMemberA, new ArrayList<>(), new ArrayList<>());
 
@@ -188,6 +188,9 @@ public class TestDB {
 
         StudyJoin studyJoin5 = new StudyJoin(storedMemberE, "빠르게 진행합니다.", study, StudyRole.MEMBER);
         studyJoinRepository.save(studyJoin5);
+
+        StudyJoin studyJoin6 = new StudyJoin(storedMemberA, "", emptyStudy, StudyRole.CREATOR);
+        studyJoinRepository.save(studyJoin6);
 
         StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
         StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);

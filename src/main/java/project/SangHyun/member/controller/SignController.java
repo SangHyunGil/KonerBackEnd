@@ -7,7 +7,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.controller.dto.request.TokenRequestDto;
@@ -27,7 +27,7 @@ import java.io.IOException;
 public class SignController {
 
     private final SignService signService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")

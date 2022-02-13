@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
 import project.SangHyun.member.controller.dto.response.MemberResponseDto;
@@ -26,7 +26,7 @@ import java.io.IOException;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class MemberController {
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
     private final MemberService memberService;
 
     @ApiOperation(value = "회원 정보 로드", notes = "Access Token으로 유저에 대한 정보를 얻어온다.")

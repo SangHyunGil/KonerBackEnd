@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
@@ -57,7 +57,7 @@ public class StudyCommentControllerUnitTest {
     @Mock
     StudyCommentService studyCommentService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     void beforeEach() {

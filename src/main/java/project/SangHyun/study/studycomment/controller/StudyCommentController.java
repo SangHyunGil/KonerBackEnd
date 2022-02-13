@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.controller.dto.response.StudyCommentResponseDto;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/study/{studyId}/board/{boardId}/article/{articleId}/comment")
 public class StudyCommentController {
     private final StudyCommentService studyCommentService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @GetMapping
     public MultipleResult<StudyCommentResponseDto> findAllComments(@PathVariable Long studyId, @PathVariable Long boardId,

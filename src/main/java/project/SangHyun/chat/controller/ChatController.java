@@ -14,7 +14,7 @@ import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.chat.service.ChatRoomService;
 import project.SangHyun.chat.service.ChatService;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.chat.dto.request.ChatMessageRequestDto;
 import project.SangHyun.chat.dto.request.ChatRoomCreateRequestDto;
 
@@ -25,7 +25,7 @@ public class ChatController {
 
     private final ChatRoomService chatRoomService;
     private final ChatService chatService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ApiOperation(value = "Pub, Sub", notes = "Stomp의 메세지를 처리한다.")
     @MessageMapping("/chat/{roomId}")

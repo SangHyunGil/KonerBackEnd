@@ -42,7 +42,7 @@ class StudyScheduleServiceUnitTest {
     public void init() {
         member = StudyScheduleFactory.makeTestAuthMember();
         study = StudyScheduleFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
-        studySchedule = StudyScheduleFactory.makeTestSchedule(1L);
+        studySchedule = StudyScheduleFactory.makeTestSchedule(1L, "백엔드 스터디 일정");
     }
 
     @Test
@@ -84,7 +84,8 @@ class StudyScheduleServiceUnitTest {
         //given
 
         //mocking
-        willDoNothing().given(studyScheduleRepository).deleteById(studySchedule.getId());
+        given(studyScheduleRepository.findById(studySchedule.getId())).willReturn(Optional.ofNullable(studySchedule));
+        willDoNothing().given(studyScheduleRepository).delete(studySchedule);
 
         //when, then
         Assertions.assertDoesNotThrow(() -> studyScheduleService.deleteSchedule(studySchedule.getId()));
@@ -102,7 +103,7 @@ class StudyScheduleServiceUnitTest {
         StudyScheduleDto ActualResult = studyScheduleService.findSchedule(studySchedule.getId());
 
         //then
-        Assertions.assertEquals(studySchedule.getTitle(), ActualResult.getTitle());
+        Assertions.assertEquals(studySchedule.getTitleName(), ActualResult.getTitle());
     }
 
     @Test

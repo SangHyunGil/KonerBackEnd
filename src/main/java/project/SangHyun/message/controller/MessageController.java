@@ -6,7 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.MultipleResult;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.message.dto.request.MessageCreateRequestDto;
 import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
@@ -20,7 +20,7 @@ import project.SangHyun.message.service.MessageService;
 @RequestMapping("/messages")
 public class MessageController {
     private final MessageService messageService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ApiOperation(value = "쪽지 상대 전체 조회", notes = "쪽지 상대 전체를 조회한다.")
     @GetMapping

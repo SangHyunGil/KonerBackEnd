@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.controller.MemberController;
 import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
 import project.SangHyun.member.controller.dto.request.MemberUpdateRequestDto;
@@ -45,7 +45,7 @@ class MemberControllerUnitTest {
     @Mock
     MemberService memberService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     void beforeEach() {

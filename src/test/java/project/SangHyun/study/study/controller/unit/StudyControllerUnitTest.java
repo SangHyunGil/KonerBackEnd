@@ -17,7 +17,7 @@ import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.controller.StudyController;
 import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;
@@ -51,7 +51,7 @@ class StudyControllerUnitTest {
     @Mock
     StudyService studyService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
     @Mock
     AwsS3BucketHelper awsS3BucketHelper;
 

@@ -74,8 +74,8 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.save(any())).willReturn(studyJoin);
 
         //when, then
-        verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertDoesNotThrow(() -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
+        verify(publisher).publishEvent(eventCaptor.capture());
     }
 
     @Test
@@ -121,8 +121,8 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
 
         //when, then
-        verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertDoesNotThrow(() -> studyJoinService.acceptJoin(study.getId(), member.getId()));
+        verify(publisher).publishEvent(eventCaptor.capture());
     }
 
     @Test
@@ -196,8 +196,8 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
 
         //when, then
-        verify(publisher).publishEvent(eventCaptor.capture());
         Assertions.assertDoesNotThrow(() -> studyJoinService.rejectJoin(study.getId(), member.getId()));
+        verify(publisher).publishEvent(eventCaptor.capture());
     }
 
     @Test

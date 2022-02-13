@@ -20,8 +20,6 @@ import project.SangHyun.study.studyschedule.tools.StudyScheduleFactory;
 
 import java.util.List;
 
-import static org.mockito.BDDMockito.willDoNothing;
-
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
@@ -72,9 +70,6 @@ class StudyScheduleServiceIntegerationTest {
     public void delete() throws Exception {
         //given
         StudySchedule studySchedule = testDB.findSchedule();
-
-        //mocking
-        willDoNothing().given(studyScheduleRepository).deleteById(studySchedule.getId());
 
         //when, then
         Assertions.assertDoesNotThrow(() -> studyScheduleService.deleteSchedule(studySchedule.getId()));

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.dto.SliceResponseDto;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;
 import project.SangHyun.study.study.controller.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.controller.dto.response.StudyResponseDto;
@@ -26,7 +26,7 @@ import java.io.IOException;
 public class StudyController {
 
     private final StudyService studyService;
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ApiOperation(value = "스터디 정보 로드", notes = "모든 스터디 정보를 얻어온다.")
     @GetMapping
