@@ -9,8 +9,8 @@ import project.SangHyun.study.study.domain.StudyRole;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyMembersInfoDto {
-    private Long memberId;
-    private String memberName;
+    private String nickname;
+    private String profileImgUrl;
     private StudyRole studyRole;
     private String applyContent;
 }

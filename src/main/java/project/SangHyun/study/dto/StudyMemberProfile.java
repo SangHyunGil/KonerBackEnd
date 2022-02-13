@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.StudyRole;
+import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
 @Data
@@ -12,14 +12,17 @@ import project.SangHyun.study.studyjoin.domain.StudyJoin;
 @AllArgsConstructor
 public class StudyMemberProfile {
     private String nickname;
-    private StudyRole studyRole;
     private String profileImgUrl;
 
     public static StudyMemberProfile create(Study study) {
-        return new StudyMemberProfile(study.getCreatorNickname(), StudyRole.CREATOR, study.getCreatorProfileImgUrl());
+        return new StudyMemberProfile(study.getCreatorNickname(), study.getCreatorProfileImgUrl());
     }
 
     public static StudyMemberProfile create(StudyJoin studyJoin) {
-        return new StudyMemberProfile(studyJoin.getParticipantNickname(), studyJoin.getStudyRole(), studyJoin.getParticipantProfileImgUrl());
+        return new StudyMemberProfile(studyJoin.getParticipantNickname(), studyJoin.getParticipantProfileImgUrl());
+    }
+
+    public static StudyMemberProfile create(StudyComment studyComment) {
+        return new StudyMemberProfile(studyComment.getCreatorNickname(), studyComment.getCreatorProfileImgUrl());
     }
 }

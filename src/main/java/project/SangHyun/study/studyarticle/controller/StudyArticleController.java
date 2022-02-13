@@ -12,7 +12,7 @@ import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleCr
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleUpdateRequestDto;
 import project.SangHyun.study.studyarticle.controller.dto.response.StudyArticleResponseDto;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
-import project.SangHyun.study.studyarticle.service.dto.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
 
 import javax.validation.Valid;
 

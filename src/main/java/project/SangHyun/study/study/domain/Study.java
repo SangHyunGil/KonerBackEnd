@@ -44,7 +44,7 @@ public class Study extends EntityDate {
     private StudyOptions studyOptions;
 
     @Embedded
-    private Schedule schedule;
+    private Period period;
 
     @Embedded
     private Tags tags;
@@ -72,7 +72,7 @@ public class Study extends EntityDate {
         this.description = new Description(description);
         this.tags = new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
         this.headCount = new HeadCount(headCount);
-        this.schedule = new Schedule(startDate, endDate);
+        this.period = new Period(startDate, endDate);
         this.studyOptions = new StudyOptions(studyState, recruitState, studyMethod);
         this.category = category;
     }
@@ -84,7 +84,7 @@ public class Study extends EntityDate {
         this.tags = new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
         this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
         this.headCount = new HeadCount(headCount);
-        this.schedule = new Schedule(startDate, endDate);
+        this.period = new Period(startDate, endDate);
         this.studyOptions = new StudyOptions(studyState, recruitState, studyMethod);
         this.category = category;
         this.member = member;
@@ -96,7 +96,7 @@ public class Study extends EntityDate {
         this.title = new StudyTitle(study.getTitle());
         this.description = new Description(study.getDescription());
         this.tags = new Tags(study.getTagNames().stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
-        this.schedule = new Schedule(study.getStartDate(), study.getEndDate());
+        this.period = new Period(study.getStartDate(), study.getEndDate());
         this.studyOptions = new StudyOptions(study.getStudyState(), study.getRecruitState(), study.getStudyMethod());
         this.headCount = new HeadCount(study.getHeadCount());
         this.category = study.getCategory();
@@ -145,11 +145,11 @@ public class Study extends EntityDate {
     }
 
     public String getStartDate() {
-        return schedule.getStartDate();
+        return period.getStartDate();
     }
 
     public String getEndDate() {
-        return schedule.getEndDate();
+        return period.getEndDate();
     }
 
     public StudyMethod getStudyMethod() {

@@ -20,8 +20,8 @@ import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyboard.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.study.studyboard.dto.request.StudyBoardUpdateRequestDto;
+import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardCreateRequestDto;
+import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardUpdateRequestDto;
 import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 

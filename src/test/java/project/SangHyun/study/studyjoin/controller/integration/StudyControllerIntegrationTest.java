@@ -19,7 +19,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
+import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinCreateRequestDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
@@ -62,7 +62,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
+        StudyJoinCreateRequestDto requestDto = StudyJoinFactory.makeCreateRequestDto("빠르게 지원합니다.");
 
         //when, then
         mockMvc.perform(post("/study/" + study.getId() + "/join/" + member.getId())
@@ -70,8 +70,7 @@ class StudyControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(member.getId()));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -100,8 +99,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(put("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -116,8 +114,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(put("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -175,8 +172,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(applyMember.getId()));
+                .andExpect(status().isOk());
     }
 
     @Test

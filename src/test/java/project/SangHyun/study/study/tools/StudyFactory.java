@@ -16,10 +16,9 @@ import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
-import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.service.dto.request.StudyCreateDto;
-import project.SangHyun.study.study.service.dto.response.StudyDto;
 import project.SangHyun.study.study.service.dto.request.StudyUpdateDto;
+import project.SangHyun.study.study.service.dto.response.StudyDto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +64,7 @@ public class StudyFactory extends BasicFactory {
     // Response
     public static StudyDto makeDto(Study study) {
         StudyDto studyDto = StudyDto.create(study);
-        studyDto.setCreator(new StudyMemberProfile("테스터", StudyRole.MEMBER, "profileImgUrl"));
+        studyDto.setCreator(new StudyMemberProfile("테스터", "profileImgUrl"));
         return studyDto;
     }
 

@@ -17,9 +17,9 @@ import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
-import project.SangHyun.study.studyarticle.service.dto.StudyArticleCreateDto;
-import project.SangHyun.study.studyarticle.service.dto.StudyArticleDto;
-import project.SangHyun.study.studyarticle.service.dto.StudyArticleUpdateDto;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleCreateDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleUpdateDto;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 

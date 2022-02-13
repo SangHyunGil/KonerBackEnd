@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "스터디 생성 요청 서비스 계층 DTO")
-public class StudyCreateDto {
+    public class StudyCreateDto {
 
     @ApiModelProperty(value = "스터디 생성자")
     private Long memberId;

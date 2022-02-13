@@ -23,8 +23,8 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
+import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentCreateRequestDto;
+import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 

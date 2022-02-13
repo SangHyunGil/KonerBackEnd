@@ -10,7 +10,7 @@ import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.service.dto.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 
 import java.util.List;

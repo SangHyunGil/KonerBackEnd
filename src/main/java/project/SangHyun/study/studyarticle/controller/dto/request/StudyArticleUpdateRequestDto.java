@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.study.studyarticle.service.dto.StudyArticleUpdateDto;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleUpdateDto;
 
 import javax.validation.constraints.NotBlank;
 

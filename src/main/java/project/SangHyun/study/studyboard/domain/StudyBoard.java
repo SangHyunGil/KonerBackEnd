@@ -31,6 +31,10 @@ public class StudyBoard extends EntityDate {
         this.id = id;
     }
 
+    public StudyBoard(String title) {
+        this.title = new StudyBoardTitle(title);
+    }
+
     @Builder
     public StudyBoard(String title, Study study) {
         this.title = new StudyBoardTitle(title);
@@ -45,7 +49,7 @@ public class StudyBoard extends EntityDate {
         this.study = study;
     }
 
-    public void deleteInStudyCollections() {
+    public void deleteInStudy() {
         this.study.getStudyBoards().remove(this);
     }
 
