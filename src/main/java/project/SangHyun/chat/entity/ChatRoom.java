@@ -31,4 +31,8 @@ public class ChatRoom {
         this.roomName = roomName;
         this.member = member;
     }
+
+    public String getCreator() {
+        return member.getNickname();
+    }
 }

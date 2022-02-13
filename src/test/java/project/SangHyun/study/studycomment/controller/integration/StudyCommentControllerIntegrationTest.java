@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
@@ -24,14 +23,13 @@ import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
+import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentCreateRequestDto;
+import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentUpdateRequestDto;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @ActiveProfiles("test")
 class StudyCommentControllerIntegrationTest {
+
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -52,8 +51,6 @@ class StudyCommentControllerIntegrationTest {
     StudyArticleRepository studyArticleRepository;
     @Autowired
     StudyJoinRepository studyJoinRepository;
-    @Autowired
-    RedisHelper redisHelper;
     @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired

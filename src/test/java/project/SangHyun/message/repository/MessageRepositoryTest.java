@@ -10,11 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.repository.impl.MessageCount;
+import project.SangHyun.message.repository.impl.RecentMessageDto;
 
 import java.util.List;
 
@@ -36,16 +37,16 @@ class MessageRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm6!", passwordEncoder.encode("xptmxm6!"), "길쌍", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm6!", passwordEncoder.encode("xptmxm6!"), "길쌍", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "길쌍입니다.");
         testMemberA = memberRepository.save(memberA);
 
-        Member memberB = new Member("xptmxm7!", passwordEncoder.encode("xptmxm7!"), "상현", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberB = new Member("xptmxm7!", passwordEncoder.encode("xptmxm7!"), "상현", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "상현입니다.");
         testMemberB = memberRepository.save(memberB);
 
-        Member memberC = new Member("xptmxm8!", passwordEncoder.encode("xptmxm8!"), "현상", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberC = new Member("xptmxm8!", passwordEncoder.encode("xptmxm8!"), "현상", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "현상입니다.");
         testMemberC = memberRepository.save(memberC);
 
-        Member memberD = new Member("xptmxm9!", passwordEncoder.encode("xptmxm9!"), "현상길", "컴공", "profileImgUrl", MemberRole.ROLE_MEMBER);
+        Member memberD = new Member("xptmxm9!", passwordEncoder.encode("xptmxm9!"), "현상길", Department.CSE, "profileImgUrl", MemberRole.ROLE_MEMBER, "현상길입니다.");
         testMemberD = memberRepository.save(memberD);
 
     }
@@ -60,7 +61,7 @@ class MessageRepositoryTest {
         messageRepository.save(messageB);
 
         //when
-        List<MessageCount> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
+        List<RecentMessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
 
         //then
         Assertions.assertEquals(2,ActualResult.size());
@@ -69,7 +70,7 @@ class MessageRepositoryTest {
     }
 
     @Test
-    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다.")
+    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다. (1:N)")
     public void findSender2() throws Exception {
         //given
         Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);
@@ -88,7 +89,7 @@ class MessageRepositoryTest {
         messageRepository.save(messageG);
 
         //when
-        List<MessageCount> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
+        List<RecentMessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
 
         //then
         Assertions.assertEquals(3, ActualResult.size());
@@ -98,7 +99,7 @@ class MessageRepositoryTest {
     }
 
     @Test
-    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다.")
+    @DisplayName("보낸 회원들의 쪽지가 여러 개인 경우 최신의 것을 기준으로 정렬하여 반환한다. (1:1)")
     public void findAll() throws Exception {
         //given
         Message messageA = new Message("첫 번째 메세지 전송입니다.", testMemberB, testMemberA, false, false, false);

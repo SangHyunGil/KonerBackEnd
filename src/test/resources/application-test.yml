@@ -31,7 +31,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ENC(Hqntsjre7+AQBxi7VRlIi54rhdkHT0gL)
-    password: ENC(zufhnTGMPVbyBWisvjAAPjc6ZMa2Lyxg)
+    password: ENC(dIeh8wMyHQ2Jg8GUyzaia0hmkhy8Gtj9lJ7qjT0Z6n4=)
     properties:
       mail:
         smtp:
@@ -44,8 +44,8 @@ spring:
           writetimeout: 5000
 
   redis:
-    host: redis
-    port: 6379
+    host: koner.kr
+    port: 6380
 
   domain:
     http://koner.kr/

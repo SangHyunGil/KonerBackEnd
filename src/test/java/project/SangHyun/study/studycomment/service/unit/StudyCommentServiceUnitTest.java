@@ -9,18 +9,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
-import project.SangHyun.study.studycomment.service.impl.StudyCommentServiceImpl;
+import project.SangHyun.study.studycomment.service.StudyCommentService;
+import project.SangHyun.study.studycomment.service.dto.request.StudyCommentCreateDto;
+import project.SangHyun.study.studycomment.service.dto.request.StudyCommentUpdateDto;
+import project.SangHyun.study.studycomment.service.dto.response.StudyCommentDto;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
@@ -30,7 +30,6 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 public class StudyCommentServiceUnitTest {
@@ -41,7 +40,11 @@ public class StudyCommentServiceUnitTest {
     StudyComment studyReplyComment2;
 
     @InjectMocks
-    StudyCommentServiceImpl studyCommentService;
+    StudyCommentService studyCommentService;
+    @Mock
+    MemberRepository memberRepository;
+    @Mock
+    StudyArticleRepository studyArticleRepository;
     @Mock
     StudyCommentRepository studyCommentRepository;
 
@@ -62,15 +65,17 @@ public class StudyCommentServiceUnitTest {
     @DisplayName("새로운 댓글을 추가한다.")
     public void addComment() throws Exception {
         //given
-        StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, null);
-        StudyComment studyComment = requestDto.toEntity(studyArticle.getId());
-        StudyCommentCreateResponseDto ExpectResult = StudyCommentCreateResponseDto.create(studyComment);
+        StudyCommentCreateDto requestDto = StudyCommentFactory.makeCreateDto(member, null);
+        StudyComment studyComment = requestDto.toEntity(member, studyArticle);
+        StudyCommentDto ExpectResult = StudyCommentDto.create(studyComment);
 
         //mocking
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(member));
+        given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
         given(studyCommentRepository.save(any())).willReturn(this.studyComment);
 
         //when
-        StudyCommentCreateResponseDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
+        StudyCommentDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getContent(), ActualResult.getContent());
@@ -80,29 +85,31 @@ public class StudyCommentServiceUnitTest {
     @DisplayName("댓글에 답글을 추가한다.")
     public void addReplyComment() throws Exception {
         //given
-        StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, studyComment);
+        StudyCommentCreateDto requestDto = StudyCommentFactory.makeCreateDto(member, studyComment);
 
         //mocking
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(member));
+        given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
         given(studyCommentRepository.save(any())).willReturn(studyReplyComment);
 
         //when
-        StudyCommentCreateResponseDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
+        StudyCommentDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
 
         //then
-        Assertions.assertEquals(2L, ActualResult.getCommentId());
+        Assertions.assertEquals(2L, ActualResult.getId());
     }
 
     @Test
     @DisplayName("댓글을 수정한다.")
     public void updateComment() throws Exception {
         //given
-        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정입니다.");
+        StudyCommentUpdateDto requestDto = StudyCommentFactory.makeUpdateDto("테스트 댓글 수정입니다.");
 
         //mocking
         given(studyCommentRepository.findById(any())).willReturn(java.util.Optional.ofNullable(studyComment));
 
         //when
-        StudyCommentUpdateResponseDto ActualResult = studyCommentService.updateComment(studyComment.getId(), requestDto);
+        StudyCommentDto ActualResult = studyCommentService.updateComment(studyComment.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스트 댓글 수정입니다.", ActualResult.getContent());
@@ -112,17 +119,13 @@ public class StudyCommentServiceUnitTest {
     @DisplayName("댓글을 삭제한다.(부모가 삭제처리되지 않았다면 자신만 삭제처리된다.)")
     public void deleteComment() throws Exception {
         //given
-        StudyCommentDeleteResponseDto ExpectResult = StudyCommentDeleteResponseDto.create(studyReplyComment);
 
         //mocking
         given(studyCommentRepository.findById(any())).willReturn(Optional.ofNullable(studyReplyComment));
         willDoNothing().given(studyCommentRepository).delete(any());
 
-        //when
-        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyReplyComment.getId());
-
-        //then
-        Assertions.assertEquals(ExpectResult.getStudyCommentId(), ActualResult.getStudyCommentId());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyCommentService.deleteComment(studyReplyComment.getId()));
     }
 
     @Test
@@ -130,16 +133,12 @@ public class StudyCommentServiceUnitTest {
     public void deleteComment2() throws Exception {
         //given
         studyComment.delete();
-        StudyCommentDeleteResponseDto ExpectResult = StudyCommentDeleteResponseDto.create(studyReplyComment);
 
         //mocking
         given(studyCommentRepository.findById(any())).willReturn(Optional.ofNullable(studyReplyComment));
         willDoNothing().given(studyCommentRepository).delete(any());
 
         //when
-        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyReplyComment.getId());
-
-        //then
-        Assertions.assertEquals(ExpectResult.getStudyCommentId(), ActualResult.getStudyCommentId());
+        Assertions.assertDoesNotThrow(() -> studyCommentService.deleteComment(studyReplyComment.getId()));
     }
 }

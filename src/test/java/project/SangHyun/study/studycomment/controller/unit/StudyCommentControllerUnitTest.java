@@ -11,31 +11,33 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.member.domain.Member;
 import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.controller.StudyCommentController;
+import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentCreateRequestDto;
+import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentUpdateRequestDto;
+import project.SangHyun.study.studycomment.controller.dto.response.StudyCommentResponseDto;
 import project.SangHyun.study.studycomment.domain.StudyComment;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentUpdateRequestDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentFindResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentUpdateResponseDto;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
+import project.SangHyun.study.studycomment.service.dto.request.StudyCommentCreateDto;
+import project.SangHyun.study.studycomment.service.dto.request.StudyCommentUpdateDto;
+import project.SangHyun.study.studycomment.service.dto.response.StudyCommentDto;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,7 +57,7 @@ public class StudyCommentControllerUnitTest {
     @Mock
     StudyCommentService studyCommentService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     void beforeEach() {
@@ -75,11 +77,16 @@ public class StudyCommentControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 한 게시글의 댓글을 모두 조회한다.")
     public void findComments() throws Exception {
         //given
-        List<StudyCommentFindResponseDto> responseDto = StudyCommentFactory.makeFindAllResponseDto(List.of(studyComment, studyReplyComment));
-        MultipleResult<StudyCommentFindResponseDto> ExpectResult = StudyArticleFactory.makeMultipleResult(responseDto);
+        List<StudyCommentDto> studyCommentDto = List.of(studyComment, studyReplyComment).stream()
+                .map(StudyCommentFactory::makeDto)
+                .collect(Collectors.toList());
+        List<StudyCommentResponseDto> responseDto = studyCommentDto.stream()
+                .map(StudyCommentFactory::makeResponseDto)
+                .collect(Collectors.toList());
+        MultipleResult<StudyCommentResponseDto> ExpectResult = StudyArticleFactory.makeMultipleResult(responseDto);
 
         //mocking
-        given(studyCommentService.findComments(studyArticle.getId())).willReturn(responseDto);
+        given(studyCommentService.findComments(studyArticle.getId())).willReturn(studyCommentDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -92,20 +99,21 @@ public class StudyCommentControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 한 게시글의 댓글을 생성한다.")
     public void createComment() throws Exception {
         //given
-        StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, null);
-        StudyComment createdComment = requestDto.toEntity(studyArticle.getId());
-        StudyCommentCreateResponseDto responseDto = StudyCommentFactory.makeCreateResponseDto(createdComment);
-        SingleResult<StudyCommentCreateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
+        StudyCommentCreateRequestDto createRequestDto = StudyCommentFactory.makeCreateRequestDto(member, null);
+        StudyCommentCreateDto createDto = StudyCommentFactory.makeCreateDto(member, null);
+        StudyCommentDto studyCommentDto = StudyCommentFactory.makeDto(studyComment);
+        StudyCommentResponseDto responseDto = StudyCommentFactory.makeResponseDto(studyCommentDto);
+        SingleResult<StudyCommentResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyCommentService.createComment(studyArticle.getId(), requestDto)).willReturn(responseDto);
+        given(studyCommentService.createComment(studyArticle.getId(), createDto)).willReturn(studyCommentDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/{boardId}/article/{articleId}/comment", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+                        .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -114,20 +122,21 @@ public class StudyCommentControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 한 게시글의 대댓글을 생성한다.")
     public void createComment2() throws Exception {
         //given
-        StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, studyComment);
-        StudyComment createdComment = requestDto.toEntity(studyArticle.getId());
-        StudyCommentCreateResponseDto responseDto = StudyCommentFactory.makeCreateResponseDto(createdComment);
-        SingleResult<StudyCommentCreateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
+        StudyCommentCreateRequestDto createRequestDto = StudyCommentFactory.makeCreateRequestDto(member, studyComment);
+        StudyCommentCreateDto createDto = StudyCommentFactory.makeCreateDto(member, studyComment);
+        StudyCommentDto studyCommentDto = StudyCommentFactory.makeDto(studyComment);
+        StudyCommentResponseDto responseDto = StudyCommentFactory.makeResponseDto(studyCommentDto);
+        SingleResult<StudyCommentResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyCommentService.createComment(studyArticle.getId(), requestDto)).willReturn(responseDto);
+        given(studyCommentService.createComment(studyArticle.getId(), createDto)).willReturn(studyCommentDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/board/{boardId}/article/{articleId}/comment", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+                        .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -136,19 +145,22 @@ public class StudyCommentControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 한 게시글의 댓글을 수정한다.")
     public void updateComment() throws Exception {
         //given
-        StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정입니다.");
-        StudyCommentUpdateResponseDto responseDto = StudyCommentFactory.makeUpdateResponseDto(studyComment, "테스트 댓글 수정입니다.");
-        SingleResult<StudyCommentUpdateResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
+        StudyCommentUpdateRequestDto updateRequestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정입니다.");
+        StudyCommentUpdateDto updateDto = StudyCommentFactory.makeUpdateDto("테스트 댓글 수정입니다.");
+        studyComment.update("테스트 댓글 수정입니다.");
+        StudyCommentDto studyCommentDto = StudyCommentFactory.makeDto(studyComment);
+        StudyCommentResponseDto responseDto = StudyCommentFactory.makeResponseDto(studyCommentDto);
+        SingleResult<StudyCommentResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(studyCommentService.updateComment(studyComment.getId(), requestDto)).willReturn(responseDto);
+        given(studyCommentService.updateComment(studyComment.getId(), updateDto)).willReturn(studyCommentDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", study.getId(), studyBoard.getId(), studyArticle.getId(), studyComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+                        .content(new Gson().toJson(updateRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content").value(ExpectResult.getData().getContent()));
@@ -158,19 +170,17 @@ public class StudyCommentControllerUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 한 게시글의 대댓글을 삭제한다.")
     public void deleteComment() throws Exception {
         //given
-        StudyCommentDeleteResponseDto responseDto = StudyCommentFactory.makeDeleteResponseDto(studyReplyComment);
-        SingleResult<StudyCommentDeleteResponseDto> ExpectResult = StudyArticleFactory.makeSingleResult(responseDto);
+        Result ExpectResult = StudyArticleFactory.makeDefaultSuccessResult();
 
         //mocking
-        given(studyCommentService.deleteComment(studyReplyComment.getId())).willReturn(responseDto);
-        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+        willDoNothing().given(studyCommentService).deleteComment(studyReplyComment.getId());
+        given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", study.getId(), studyBoard.getId(), studyArticle.getId(), studyReplyComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.content").value(ExpectResult.getData().getContent()));
+                .andExpect(status().isOk());
     }
 }

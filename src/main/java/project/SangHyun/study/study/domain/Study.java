@@ -3,7 +3,12 @@ package project.SangHyun.study.study.domain;
 import lombok.*;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyOptions;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
+import project.SangHyun.study.study.domain.Tag.Tag;
+import project.SangHyun.study.study.domain.Tag.Tags;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 
@@ -17,34 +22,44 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Study extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_id")
     private Long id;
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = false, length = 1000)
-    private String content;
-    @Column(nullable = false)
-    private String profileImgUrl;
-    @Column(nullable = false)
-    private String department;
-    @Column(nullable = false)
-    private Long headCount;
+
     @Embedded
-    @Column(nullable = false)
+    private StudyTitle title;
+
+    @Embedded
+    private Description description;
+
+    @Embedded
+    private HeadCount headCount;
+
+    @Embedded
+    private StudyProfileImgUrl profileImgUrl;
+
+    @Embedded
     private StudyOptions studyOptions;
+
     @Embedded
-    @Column(nullable = false)
-    private Schedule schedule;
+    private StudyPeriod studyPeriod;
+
     @Embedded
+    private Tags tags;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Tags tags = new Tags();
+    private StudyCategory category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
     @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyJoin> studyJoins = new ArrayList<>();
+
     @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<StudyBoard> studyBoards = new ArrayList<>();
 
@@ -52,30 +67,42 @@ public class Study extends EntityDate {
         this.id = id;
     }
 
+    public Study(String title, List<String> tags, String description, String startDate, String endDate, StudyCategory category, Long headCount, StudyMethod studyMethod, StudyState studyState, RecruitState recruitState) {
+        this.title = new StudyTitle(title);
+        this.description = new Description(description);
+        this.tags = new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
+        this.headCount = new HeadCount(headCount);
+        this.studyPeriod = new StudyPeriod(startDate, endDate);
+        this.studyOptions = new StudyOptions(studyState, recruitState, studyMethod);
+        this.category = category;
+    }
+
     @Builder
-    public Study(String title, Tags tags, String content, String profileImgUrl, String department, StudyOptions studyOptions, Long headCount, Schedule schedule, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
-        this.title = title;
-        this.content = content;
-        this.tags = tags;
-        this.profileImgUrl = profileImgUrl;
-        this.department = department;
-        this.studyOptions = studyOptions;
-        this.headCount = headCount;
-        this.schedule = schedule;
+    public Study(String title, List<String> tags, String description, String profileImgUrl, Long headCount, String startDate, String endDate, StudyCategory category, StudyMethod studyMethod, StudyState studyState, RecruitState recruitState, Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
+        this.title = new StudyTitle(title);
+        this.description = new Description(description);
+        this.tags = new Tags(tags.stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
+        this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
+        this.headCount = new HeadCount(headCount);
+        this.studyPeriod = new StudyPeriod(startDate, endDate);
+        this.studyOptions = new StudyOptions(studyState, recruitState, studyMethod);
+        this.category = category;
         this.member = member;
         this.studyJoins = studyJoins;
         this.studyBoards = studyBoards;
     }
 
-    public Study update(StudyUpdateRequestDto requestDto, String profileImgUrl) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-        this.tags = new Tags(requestDto.getTags().stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
-        this.schedule = new Schedule(requestDto.getStartDate(), requestDto.getEndDate());
-        this.studyOptions = new StudyOptions(requestDto.getStudyState(), requestDto.getRecruitState(), requestDto.getStudyMethod());
-        this.headCount = requestDto.getHeadCount();
-        this.department = requestDto.getDepartment();
-        this.profileImgUrl = profileImgUrl;
+    public Study update(Study study, String profileImgUrl) {
+        this.title = new StudyTitle(study.getTitle());
+        this.description = new Description(study.getDescription());
+        this.tags = new Tags(study.getTagNames().stream().map(tag -> new Tag(tag)).collect(Collectors.toList()));
+        this.studyPeriod = new StudyPeriod(study.getStartDate(), study.getEndDate());
+        this.studyOptions = new StudyOptions(study.getStudyState(), study.getRecruitState(), study.getStudyMethod());
+        this.headCount = new HeadCount(study.getHeadCount());
+        this.category = study.getCategory();
+        if (profileImgUrl != null) {
+            this.profileImgUrl = new StudyProfileImgUrl(profileImgUrl);
+        }
         return this;
     }
 
@@ -87,5 +114,53 @@ public class Study extends EntityDate {
     public void addBoard(StudyBoard studyBoard) {
         this.studyBoards.add(studyBoard);
         studyBoard.setStudy(this);
+    }
+
+    public String getTitle() {
+        return title.getTitle();
+    }
+
+    public String getDescription() {
+        return description.getDescription();
+    }
+
+    public Long getHeadCount() {
+        return headCount.getHeadCount();
+    }
+
+    public String getProfileImgUrl() {
+        return profileImgUrl.getProfileImgUrl();
+    }
+
+    public String getCreatorNickname() {
+        return member.getNickname();
+    }
+
+    public String getCreatorProfileImgUrl() {
+        return member.getProfileImgUrl();
+    }
+
+    public List<String> getTagNames() {
+        return tags.getTagNames();
+    }
+
+    public String getStartDate() {
+        return studyPeriod.getStartDate();
+    }
+
+    public String getEndDate() {
+        return studyPeriod.getEndDate();
+    }
+
+    public StudyMethod getStudyMethod() {
+        return studyOptions.getStudyMethod();
+    }
+
+    public StudyState getStudyState() {
+        return studyOptions.getStudyState();
+    }
+
+    public RecruitState getRecruitState() {
+        return studyOptions.getRecruitState();
     }
 }

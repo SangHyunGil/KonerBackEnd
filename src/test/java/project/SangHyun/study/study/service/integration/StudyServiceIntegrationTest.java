@@ -10,18 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.dto.response.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
-import project.SangHyun.study.study.dto.response.StudyCreateResponseDto;
-import project.SangHyun.study.study.dto.response.StudyDeleteResponseDto;
-import project.SangHyun.study.study.dto.response.StudyFindResponseDto;
-import project.SangHyun.study.study.dto.response.StudyUpdateResponseDto;
+import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.study.service.impl.StudyServiceImpl;
+import project.SangHyun.study.study.service.dto.request.StudyCreateDto;
+import project.SangHyun.study.study.service.dto.response.StudyDto;
+import project.SangHyun.study.study.service.dto.request.StudyUpdateDto;
+import project.SangHyun.study.study.service.StudyService;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
@@ -34,7 +32,7 @@ import java.util.List;
 @ActiveProfiles("test")
 class StudyServiceIntegrationTest {
     @Autowired
-    StudyServiceImpl studyService;
+    StudyService studyService;
     @Autowired
     StudyRepository studyRepository;
     @Autowired
@@ -57,14 +55,14 @@ class StudyServiceIntegrationTest {
     public void createStudy() throws Exception {
         //given
         Member member = testDB.findGeneralMember();
-        StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(member);
+        StudyCreateDto requestDto = StudyFactory.makeCreateDto(member);
 
         //when
-        StudyCreateResponseDto ActualResult = studyService.createStudy(requestDto);
+        StudyDto ActualResult = studyService.createStudy(requestDto);
         Study study = studyRepository.findStudyByTitle("프론트엔드 모집").get(0);
 
         //then
-        Assertions.assertEquals(study.getId(), ActualResult.getStudyId());
+        Assertions.assertEquals(study.getId(), ActualResult.getId());
     }
 
     @Test
@@ -73,7 +71,7 @@ class StudyServiceIntegrationTest {
         //given
 
         //when
-        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, "컴퓨터공학과", 2);
+        SliceResponseDto ActualResult = studyService.findAllStudiesByDepartment(Long.MAX_VALUE, StudyCategory.CSE, 2);
 
         //then
         Assertions.assertEquals(2, ActualResult.getNumberOfElements());
@@ -88,10 +86,10 @@ class StudyServiceIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when
-        StudyFindResponseDto ActualResult = studyService.findStudy(study.getId());
+        StudyDto ActualResult = studyService.findStudy(study.getId());
 
         //then
-        Assertions.assertEquals(study.getId(), ActualResult.getStudyId());
+        Assertions.assertEquals(study.getId(), ActualResult.getId());
     }
 
     @Test
@@ -99,10 +97,10 @@ class StudyServiceIntegrationTest {
     public void updateStudy() throws Exception {
         //given
         Study study = testDB.findBackEndStudy();
-        StudyUpdateRequestDto updateRequestDto = StudyFactory.makeUpdateRequestDto("프론트엔드 스터디", List.of("프론트엔드"));
+        StudyUpdateDto updateRequestDto = StudyFactory.makeUpdateDto("프론트엔드 스터디", List.of("프론트엔드"));
 
         //when
-        StudyUpdateResponseDto ActualResult = studyService.updateStudy(study.getId(), updateRequestDto);
+        StudyDto ActualResult = studyService.updateStudy(study.getId(), updateRequestDto);
 
         //then
         Assertions.assertEquals("프론트엔드 스터디", ActualResult.getTitle());
@@ -115,10 +113,9 @@ class StudyServiceIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when
-        StudyDeleteResponseDto ActualResult = studyService.deleteStudy(study.getId());
+        studyService.deleteStudy(study.getId());
 
         //then
-        Assertions.assertEquals("백엔드 모집", ActualResult.getTitle());
         Assertions.assertEquals(1, studyRepository.findAll().size());
     }
 

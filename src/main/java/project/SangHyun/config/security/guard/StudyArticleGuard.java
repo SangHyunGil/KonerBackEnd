@@ -3,7 +3,7 @@ package project.SangHyun.config.security.guard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
-import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
@@ -12,6 +12,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 @Component
 @RequiredArgsConstructor
 public class StudyArticleGuard {
+
     private final AuthHelper authHelper;
     private final StudyJoinRepository studyJoinRepository;
     private final StudyArticleRepository studyArticleRepository;

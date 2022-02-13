@@ -64,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/study").permitAll()
                 .antMatchers(HttpMethod.GET, "/study/*").permitAll()
 
+                .antMatchers("/users/password").permitAll()
+
                 .antMatchers(HttpMethod.PUT, "/users/{userId}").access("@memberGuard.check(#userId)")
                 .antMatchers(HttpMethod.DELETE, "/users/{userId}").access("@memberGuard.check(#userId)")
 
@@ -89,6 +91,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
+
+                .antMatchers("/study/{studyId}/schedules/**").access("@studyScheduleGuard.checkJoin(#studyId)")
+
 
                 .anyRequest().hasAnyRole("MEMBER", "ADMIN")
 

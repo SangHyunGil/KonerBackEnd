@@ -1,31 +1,43 @@
 package project.SangHyun.member.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import project.SangHyun.common.EntityDate;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
 @Table(name = "MEMBERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Member extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
-    @Column(nullable = false, unique = true)
-    private String email;
+
+    @Embedded
+    private Email email;
+
+    @Embedded
+    private Password password;
+
+    @Embedded
+    private Nickname nickname;
+
+    @Embedded
+    private Introduction introduction;
+
+    @Embedded
+    private MemberProfileImgUrl profileImgUrl;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String password;
-    @Column(nullable = false, unique = true)
-    private String nickname;
-    @Column(nullable = false)
-    private String department;
-    @Column(nullable = false)
-    private String profileImgUrl;
+    private Department department;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberRole memberRole;
@@ -34,29 +46,78 @@ public class Member extends EntityDate {
         this.id = id;
     }
 
-    @Builder
-    public Member(String email, String password, String nickname, String department, String profileImgUrl, MemberRole memberRole) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
+    public Member(String nickname, Department department, String introduction) {
+        this.nickname = new Nickname(nickname);
         this.department = department;
-        this.profileImgUrl = profileImgUrl;
-        this.memberRole = memberRole;
+        this.introduction = new Introduction(introduction);
     }
 
-    public Member updateMemberInfo(MemberUpdateRequestDto requestDto, String profileImgUrl) {
-        this.email = requestDto.getEmail();
-        this.nickname = requestDto.getNickname();
-        this.department = requestDto.getDepartment();
-        this.profileImgUrl = profileImgUrl;
+    @Builder
+    public Member(String email, String password, String nickname, Department department, String profileImgUrl, MemberRole memberRole, String introduction) {
+        this.email = new Email(email);
+        this.password = new Password(password);
+        this.nickname = new Nickname(nickname);
+        this.department = department;
+        this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
+        this.memberRole = memberRole;
+        this.introduction = new Introduction(introduction);
+    }
+
+    public Member update(Member member, String profileImgUrl) {
+        this.nickname = new Nickname(member.getNickname());
+        this.department = member.getDepartment();
+        if (updatedProfileImg(profileImgUrl)) {
+            this.profileImgUrl = new MemberProfileImgUrl(profileImgUrl);
+        }
+        this.introduction = new Introduction(member.getIntroduction());
         return this;
     }
 
-    public void changeRole(MemberRole memberRole) {
-        this.memberRole = memberRole;
+    private boolean updatedProfileImg(String profileImgUrl) {
+        return profileImgUrl != null;
+    }
+
+    public void authenticate() {
+        this.memberRole = MemberRole.ROLE_MEMBER;
     }
 
     public void changePassword(String password) {
-        this.password = password;
+        this.password = new Password(password);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email.getEmail();
+    }
+
+    public String getPassword() {
+        return password.getPassword();
+    }
+
+    public String getNickname() {
+        return nickname.getNickname();
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public String getDepartmentName() {
+        return department.getDesc();
+    }
+
+    public String getProfileImgUrl() {
+        return profileImgUrl.getProfileImgUrl();
+    }
+
+    public MemberRole getMemberRole() {
+        return memberRole;
+    }
+
+    public String getIntroduction() {
+        return introduction.getIntroduction();
     }
 }

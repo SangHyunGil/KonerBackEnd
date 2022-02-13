@@ -17,28 +17,35 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class StudyComment extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private StudyArticle studyArticle;
+
+    @Embedded
+    private StudyCommentContent content;
+
+    @Column(nullable = false)
+    private Boolean deleted;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyComment parent;
+
     @OneToMany(mappedBy = "parent")
     private List<StudyComment> children = new ArrayList<>();
-    @Column(nullable = false, length = 1000)
-    private String content;
-    @Column(nullable = false)
-    private Boolean deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private StudyArticle studyArticle;
 
     public StudyComment(Long id) {
         this.id = id;
@@ -49,7 +56,7 @@ public class StudyComment extends EntityDate {
         this.member = member;
         this.studyArticle = studyArticle;
         this.parent = parent;
-        this.content = content;
+        this.content = new StudyCommentContent(content);
         this.deleted = isDeleted;
     }
 
@@ -62,12 +69,24 @@ public class StudyComment extends EntityDate {
         studyComment.setParent(this);
     }
 
+    public void update(String content) {
+        this.content = new StudyCommentContent(content);
+    }
+
     public void delete() {
         this.deleted = true;
     }
 
-    public void update(String content) {
-        this.content = content;
+    public String getContent() {
+        return content.getContent();
+    }
+
+    public String getCreatorNickname() {
+        return member.getNickname();
+    }
+
+    public String getCreatorProfileImgUrl() {
+        return member.getProfileImgUrl();
     }
 
     public Optional<StudyComment> findDeletableComment() {

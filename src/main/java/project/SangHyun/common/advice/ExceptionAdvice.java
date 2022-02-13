@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 
 
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionAdvice {
 
-    private final ResponseServiceImpl responseService;
+    private final ResponseService responseService;
 
     @ExceptionHandler(MemberNicknameAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -189,19 +189,133 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(InCorrectTagNameException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result InCorrectTagNameException(BindException e) {
+    protected Result InCorrectTagNameException() {
         return responseService.getFailureResult(-127, "잘못된 태그 이름입니다.");
     }
 
     @ExceptionHandler(DuplicateTagsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result DuplicateTagsException(BindException e) {
+    protected Result DuplicateTagsException() {
         return responseService.getFailureResult(-128, "중복된 태그가 존재합니다.");
     }
 
     @ExceptionHandler(MessageNotFountException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected Result MessageNotFountException(BindException e) {
+    protected Result MessageNotFountException() {
         return responseService.getFailureResult(-129, "존재하지 않는 쪽지입니다.");
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidEmailException() {
+        return responseService.getFailureResult(-130, "적절하지 않은 이메일입니다.");
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidPasswordException() {
+        return responseService.getFailureResult(-131, "적절하지 않은 비밀번호입니다.");
+    }
+
+    @ExceptionHandler(InvalidNicknameException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidNicknameException() {
+        return responseService.getFailureResult(-132, "적절하지 않은 닉네임입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyTitleException() {
+        return responseService.getFailureResult(-133, "적절하지 않은 스터디 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyDescriptionException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyIntroductionException() {
+        return responseService.getFailureResult(-134, "적절하지 않은 스터디 소개글입니다.");
+    }
+
+    @ExceptionHandler(InvalidHeadCountException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidHeadCountException() {
+        return responseService.getFailureResult(-135, "적절하지 않은 인원 수입니다.");
+    }
+
+    @ExceptionHandler(InvalidProfileUrlImg.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidProfileUrlImg() {
+        return responseService.getFailureResult(-136, "적절하지 않은 프로필 이미지입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyArticleTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyArticleTitleException() {
+        return responseService.getFailureResult(-137, "적절하지 않은 스터디 게시글 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyArticleContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyArticleContentException() {
+        return responseService.getFailureResult(-138, "적절하지 않은 스터디 게시글 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidViewsException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidViewsException() {
+        return responseService.getFailureResult(-139, "적절하지 않은 스터디 게시글 조회수입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyBoardTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyBoardTitleException() {
+        return responseService.getFailureResult(-140, "적절하지 않은 스터디 게시판 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyCommentContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyCommentContentException() {
+        return responseService.getFailureResult(-141, "적절하지 않은 스터디 댓글 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidApplyContentContent.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidApplyContentContent() {
+        return responseService.getFailureResult(-142, "적절하지 않은 스터디 지원 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidMessageContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidMessageContentException() {
+        return responseService.getFailureResult(-143, "적절하지 않은 쪽지 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidNotificationContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidNotificationContentException() {
+        return responseService.getFailureResult(-144, "적절하지 않은 알림 내용입니다.");
+    }
+
+    @ExceptionHandler(InvalidRelatedURLException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidRelatedURLException() {
+        return responseService.getFailureResult(-145, "적절하지 않은 알림 URL입니다.");
+    }
+
+    @ExceptionHandler(InvalidIntroductionException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidIntroductionException() {
+        return responseService.getFailureResult(-146, "적절하지 않은 회원 소개글입니다.");
+    }
+
+    @ExceptionHandler(InvalidStudyScheduleTitle.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidStudyScheduleTitle() {
+        return responseService.getFailureResult(-147, "적절하지 않은 스케줄 제목입니다.");
+    }
+
+    @ExceptionHandler(StudyScheduleNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result StudyScheduleNotFoundException() {
+        return responseService.getFailureResult(-148, "존재하지 않는 스케줄입니다.");
     }
 }

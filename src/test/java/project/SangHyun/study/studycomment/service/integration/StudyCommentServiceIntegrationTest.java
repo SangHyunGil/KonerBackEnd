@@ -11,15 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteResponseDto;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
 import project.SangHyun.study.studycomment.domain.StudyComment;
-import project.SangHyun.study.studycomment.dto.request.StudyCommentCreateRequestDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentCreateResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentDeleteResponseDto;
-import project.SangHyun.study.studycomment.dto.response.StudyCommentFindResponseDto;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studycomment.service.StudyCommentService;
+import project.SangHyun.study.studycomment.service.dto.request.StudyCommentCreateDto;
+import project.SangHyun.study.studycomment.service.dto.response.StudyCommentDto;
 import project.SangHyun.study.studycomment.tools.StudyCommentFactory;
 
 import javax.persistence.EntityManager;
@@ -51,10 +48,10 @@ public class StudyCommentServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         StudyArticle studyArticle = testDB.findAnnounceArticle();
-        StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, null);
+        StudyCommentCreateDto requestDto = StudyCommentFactory.makeCreateDto(member, null);
 
         //when
-        StudyCommentCreateResponseDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
+        StudyCommentDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스트 댓글입니다.", ActualResult.getContent());
@@ -67,7 +64,7 @@ public class StudyCommentServiceIntegrationTest {
         StudyArticle announceArticle = testDB.findAnnounceArticle();
 
         //when
-        List<StudyCommentFindResponseDto> comments = studyCommentService.findComments(announceArticle.getId());
+        List<StudyCommentDto> comments = studyCommentService.findComments(announceArticle.getId());
 
 
         //then
@@ -82,10 +79,10 @@ public class StudyCommentServiceIntegrationTest {
         StudyComment comment = testDB.findParentComment();
         Member member = testDB.findStudyGeneralMember();
         StudyArticle studyArticle = testDB.findAnnounceArticle();
-        StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(member, comment);
+        StudyCommentCreateDto requestDto = StudyCommentFactory.makeCreateDto(member, comment);
 
         //when
-        StudyCommentCreateResponseDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
+        StudyCommentDto ActualResult = studyCommentService.createComment(studyArticle.getId(), requestDto);
         persistContextClear();
 
         //then
@@ -100,7 +97,7 @@ public class StudyCommentServiceIntegrationTest {
         StudyArticle announceArticle = testDB.findAnnounceArticle();
 
         //when
-        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(announceArticle.getId());
+        studyArticleService.deleteArticle(announceArticle.getId());
         persistContextClear();
 
         //then
@@ -114,7 +111,7 @@ public class StudyCommentServiceIntegrationTest {
         StudyComment studyComment = testDB.findChildComment();
 
         //when
-        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyComment.getId());
+        studyCommentService.deleteComment(studyComment.getId());
 
         //then
         Assertions.assertEquals(1, studyCommentRepository.findAll().size());
@@ -130,7 +127,7 @@ public class StudyCommentServiceIntegrationTest {
         parentComment.delete();
 
         //when
-        StudyCommentDeleteResponseDto ActualResult = studyCommentService.deleteComment(studyComment.getId());
+        studyCommentService.deleteComment(studyComment.getId());
 
 
         //then

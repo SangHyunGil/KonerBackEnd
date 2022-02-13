@@ -11,18 +11,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseServiceImpl;
+import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.controller.MessageController;
+import project.SangHyun.message.controller.dto.request.MessageCreateRequestDto;
+import project.SangHyun.message.controller.dto.response.MessageResponseDto;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
-import project.SangHyun.message.dto.response.MessageCreateResponseDto;
-import project.SangHyun.message.dto.response.MessageDeleteResponseDto;
 import project.SangHyun.message.service.MessageService;
+import project.SangHyun.message.service.dto.request.MessageCreateDto;
+import project.SangHyun.message.service.dto.response.MessageDto;
 import project.SangHyun.message.tools.MessageFactory;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +42,7 @@ public class MessageControllerUnitTest {
     @Mock
     MessageService messageService;
     @Mock
-    ResponseServiceImpl responseService;
+    ResponseService responseService;
 
     @BeforeEach
     public void init() {
@@ -56,19 +59,21 @@ public class MessageControllerUnitTest {
         //given
         Long messageId = 1L;
         Message message = MessageFactory.makeTestMessage(messageId, memberA, memberB);
-        MessageCreateRequestDto requestDto = MessageFactory.makeCreateRequestDto(messageId, memberA, memberB);
-        MessageCreateResponseDto responseDto = MessageFactory.makeCreateResponseDto(message);
-        SingleResult<MessageCreateResponseDto> ExpectResult = MessageFactory.makeSingleResult(responseDto);
+        MessageCreateRequestDto createRequestDto = MessageFactory.makeCreateRequestDto(messageId, memberA, memberB);
+        MessageCreateDto createDto = MessageFactory.makeCreateDto(messageId, memberA, memberB);
+        MessageDto messageDto = MessageFactory.makeMessageDto(message);
+        MessageResponseDto responseDto = MessageFactory.makeMessageResponseDto(messageDto);
+        SingleResult<MessageResponseDto> ExpectResult = MessageFactory.makeSingleResult(responseDto);
 
         //mocking
-        given(messageService.createMessage(requestDto)).willReturn(responseDto);
+        given(messageService.createMessage(createDto)).willReturn(messageDto);
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(post("/messages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new Gson().toJson(requestDto))
+                        .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -78,13 +83,11 @@ public class MessageControllerUnitTest {
     public void deleteBySender() throws Exception {
         //given
         Long messageId = 1L;
-        Message message = MessageFactory.makeTestMessage(1L, memberA, memberB);
-        MessageDeleteResponseDto responseDto = MessageFactory.makeDeleteResponseDto(message);
-        SingleResult<MessageDeleteResponseDto> ExpectResult = MessageFactory.makeSingleResult(responseDto);
+        Result ExpectResult = MessageFactory.makeDefaultSuccessResult();
 
         //mocking
-        given(messageService.deleteBySender(messageId)).willReturn(responseDto);
-        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+        willDoNothing().given(messageService).deleteBySender(messageId);
+        given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(delete("/messages/sender/"+messageId)
@@ -97,13 +100,11 @@ public class MessageControllerUnitTest {
     public void deleteByReceiver() throws Exception {
         //given
         Long messageId = 1L;
-        Message message = MessageFactory.makeTestMessage(1L, memberA, memberB);
-        MessageDeleteResponseDto responseDto = MessageFactory.makeDeleteResponseDto(message);
-        SingleResult<MessageDeleteResponseDto> ExpectResult = MessageFactory.makeSingleResult(responseDto);
+        Result ExpectResult = MessageFactory.makeDefaultSuccessResult();
 
         //mocking
-        given(messageService.deleteByReceiver(messageId)).willReturn(responseDto);
-        given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
+        willDoNothing().given(messageService).deleteByReceiver(messageId);
+        given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
         mockMvc.perform(delete("/messages/receiver/"+messageId)

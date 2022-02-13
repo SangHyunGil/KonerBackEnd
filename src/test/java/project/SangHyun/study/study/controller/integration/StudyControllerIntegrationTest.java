@@ -15,13 +15,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.dto.request.StudyCreateRequestDto;
-import project.SangHyun.study.study.dto.request.StudyUpdateRequestDto;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;
+import project.SangHyun.study.study.controller.dto.request.StudyUpdateRequestDto;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
@@ -47,8 +47,6 @@ class StudyControllerIntegrationTest {
     @Autowired
     MemberRepository memberRepository;
     @Autowired
-    RedisHelper redisHelper;
-    @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired
     StudyJoinRepository studyJoinRepository;
@@ -69,7 +67,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(get("/study")
                         .param("studyId", String.valueOf(Long.MAX_VALUE))
-                        .param("department", "컴퓨터공학과")
+                        .param("department", String.valueOf(StudyCategory.CSE))
                         .param("size", "6"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.numberOfElements").value(2))
@@ -85,7 +83,7 @@ class StudyControllerIntegrationTest {
         //when, then
         mockMvc.perform(get("/study/{id}", study.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.studyId").value(study.getId()))
+                .andExpect(jsonPath("$.data.id").value(study.getId()))
                 .andExpect(jsonPath("$.data.title").value(study.getTitle()));
     }
 
@@ -102,11 +100,11 @@ class StudyControllerIntegrationTest {
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("memberId", String.valueOf(requestDto.getMemberId()))
                         .param("title", requestDto.getTitle())
-                        .param("content", requestDto.getContent())
+                        .param("description", requestDto.getDescription())
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
                         .param("headCount", String.valueOf(requestDto.getHeadCount()))
                         .param("studyMethod", String.valueOf(requestDto.getStudyMethod()))
                         .param("studyState", String.valueOf(requestDto.getStudyState()))
@@ -147,7 +145,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{id}/board",study.getId())
+        mockMvc.perform(get("/study/{id}/board", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(3));
@@ -166,7 +164,7 @@ class StudyControllerIntegrationTest {
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("title", requestDto.getTitle())
-                        .param("content", requestDto.getContent())
+                        .param("description", requestDto.getDescription())
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))
@@ -197,7 +195,7 @@ class StudyControllerIntegrationTest {
         mockMvc.perform(multipart("/study/{studyId}", study.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("title", requestDto.getTitle())
-                        .param("content", requestDto.getContent())
+                        .param("description", requestDto.getDescription())
                         .param("startDate", requestDto.getStartDate())
                         .param("endDate", requestDto.getEndDate())
                         .param("tags", requestDto.getTags().toArray(new String[requestDto.getTags().size()]))

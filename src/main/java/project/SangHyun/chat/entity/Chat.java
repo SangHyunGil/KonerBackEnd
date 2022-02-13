@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chat {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,5 +36,9 @@ public class Chat {
         this.member = member;
         this.chatRoom = chatRoom;
         this.content = content;
+    }
+
+    public String getSender() {
+        return member.getNickname();
     }
 }

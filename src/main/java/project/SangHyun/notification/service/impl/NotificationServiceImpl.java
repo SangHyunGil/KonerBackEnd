@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.notification.domain.Notification;
 import project.SangHyun.notification.domain.NotificationType;
-import project.SangHyun.notification.dto.response.NotificationResponseDto;
+import project.SangHyun.common.dto.response.NotificationResponseDto;
 import project.SangHyun.notification.repository.EmitterRepository;
 import project.SangHyun.notification.repository.NotificationRepository;
 import project.SangHyun.notification.service.NotificationService;

@@ -9,13 +9,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
-import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
-import project.SangHyun.message.dto.response.MessageCreateResponseDto;
-import project.SangHyun.message.dto.response.MessageFindResponseDto;
 import project.SangHyun.message.repository.MessageRepository;
-import project.SangHyun.message.repository.impl.MessageCount;
-import project.SangHyun.message.service.impl.MessageServiceImpl;
+import project.SangHyun.message.repository.impl.RecentMessageDto;
+import project.SangHyun.message.service.MessageService;
+import project.SangHyun.message.service.dto.request.MessageCreateDto;
+import project.SangHyun.message.service.dto.response.FindCommunicatorsDto;
+import project.SangHyun.message.service.dto.response.MessageDto;
 import project.SangHyun.message.tools.MessageFactory;
 
 import java.util.List;
@@ -27,7 +26,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 @ExtendWith(MockitoExtension.class)
 class MessageServiceUnitTest {
     @InjectMocks
-    MessageServiceImpl messageService;
+    MessageService messageService;
     @Mock
     MessageRepository messageRepository;
 
@@ -37,15 +36,15 @@ class MessageServiceUnitTest {
         //given
         Member memberA = MessageFactory.makeTestAuthMember();
         Member memberB = MessageFactory.makeTestAdminMember();
-        MessageCreateRequestDto requestDto = MessageFactory.makeCreateRequestDto(1L, memberA, memberB);
+        MessageCreateDto requestDto = MessageFactory.makeCreateDto(1L, memberA, memberB);
         Message message = requestDto.toEntity();
-        MessageCreateResponseDto ExpectResult = MessageFactory.makeCreateResponseDto(message);
+        MessageDto ExpectResult = MessageFactory.makeMessageDto(message);
 
         //mocking
         given(messageRepository.save(any())).willReturn(message);
 
         //when
-        MessageCreateResponseDto ActualResult = messageService.createMessage(requestDto);
+        MessageDto ActualResult = messageService.createMessage(requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getContent(), ActualResult.getContent());
@@ -64,14 +63,15 @@ class MessageServiceUnitTest {
         Message messageD = new Message("네 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
         Message messageE = new Message("다섯 번째 메세지 전송입니다.", testMemberC, testMemberA, true, false, false);
         Message messageF = new Message("여섯 번째 메세지 전송입니다.", testMemberA, testMemberC, false, false, false);
-        MessageCount messageCountC = new MessageCount(messageC.getId(), messageC.getSender(), messageC.getReceiver(), messageC.getContent(), 2L);
-        MessageCount messageCountF = new MessageCount(messageF.getId(), messageF.getSender(), messageF.getReceiver(), messageF.getContent(), 0L);
+
+        RecentMessageDto recentMessageDtoC = new RecentMessageDto(messageC.getId(), messageC.getSender(), messageC.getReceiver(), messageC.getContent(), 2L);
+        RecentMessageDto recentMessageDtoF = new RecentMessageDto(messageF.getId(), messageF.getSender(), messageF.getReceiver(), messageF.getContent(), 0L);
 
         //mocking
-        given(messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId())).willReturn(List.of(messageCountF, messageCountC));
+        given(messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId())).willReturn(List.of(recentMessageDtoF, recentMessageDtoC));
 
         //when
-        List<CommunicatorFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(testMemberA.getId());
+        List<FindCommunicatorsDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(testMemberA.getId());
 
         //then
         Assertions.assertEquals("여섯 번째 메세지 전송입니다.", ActualResult.get(0).getContent());
@@ -101,8 +101,8 @@ class MessageServiceUnitTest {
         given(messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(testMemberC.getId(), testMemberA.getId())).willReturn(List.of(messageG, messageE, messageD, messageB));
 
         //when
-        List<MessageFindResponseDto> ActualResultA = messageService.findAllMessages(testMemberB.getId(), testMemberA.getId());
-        List<MessageFindResponseDto> ActualResultB = messageService.findAllMessages(testMemberC.getId(), testMemberA.getId());
+        List<MessageDto> ActualResultA = messageService.findAllMessages(testMemberB.getId(), testMemberA.getId());
+        List<MessageDto> ActualResultB = messageService.findAllMessages(testMemberC.getId(), testMemberA.getId());
 
         //then
         Assertions.assertEquals(3, ActualResultA.size());

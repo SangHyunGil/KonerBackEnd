@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
-import project.SangHyun.notification.dto.request.NotificationRequestDto;
+import project.SangHyun.common.dto.request.NotificationRequestDto;
 import project.SangHyun.notification.service.NotificationService;
 
 @Component

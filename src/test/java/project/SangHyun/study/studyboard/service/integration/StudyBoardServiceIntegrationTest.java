@@ -9,30 +9,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardFindResponseDto;
-import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.studyboard.service.impl.StudyBoardServiceImpl;
-import project.SangHyun.study.studyboard.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.study.studyboard.dto.request.StudyBoardUpdateRequestDto;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardCreateResponseDto;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardDeleteResponseDto;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardUpdateResponseDto;
+import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardCreateRequestDto;
+import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardUpdateRequestDto;
+import project.SangHyun.study.studyboard.domain.StudyBoard;
+import project.SangHyun.study.studyboard.service.StudyBoardService;
+import project.SangHyun.study.studyboard.service.dto.response.StudyBoardDto;
+import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
+import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
 class StudyBoardServiceIntegrationTest {
     @Autowired
-    StudyBoardServiceImpl studyBoardService;
+    StudyBoardService studyBoardService;
     @Autowired
     StudyRepository studyRepository;
     @Autowired
@@ -54,7 +49,7 @@ class StudyBoardServiceIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when
-        List<StudyBoardFindResponseDto> ActualResult = studyBoardService.findAllBoards(study.getId());
+        List<StudyBoardDto> ActualResult = studyBoardService.findAllBoards(study.getId());
 
         //then
         Assertions.assertEquals(3, ActualResult.size());
@@ -68,7 +63,7 @@ class StudyBoardServiceIntegrationTest {
         StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
 
         //when
-        StudyBoardCreateResponseDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto);
+        StudyBoardDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto.toServiceDto());
 
         //then
         Assertions.assertEquals("테스트 게시판", ActualResult.getTitle());
@@ -83,7 +78,7 @@ class StudyBoardServiceIntegrationTest {
         StudyBoardUpdateRequestDto requestDto = StudyBoardFactory.makeUpdateRequestDto("테스트 게시판 수정");
 
         //when
-        StudyBoardUpdateResponseDto ActualResult = studyBoardService.updateBoard(study.getId(), studyBoard.getId(), requestDto);
+        StudyBoardDto ActualResult = studyBoardService.updateBoard(studyBoard.getId(), requestDto.toServiceDto());
 
         //then
         Assertions.assertEquals("테스트 게시판 수정", ActualResult.getTitle());
@@ -97,11 +92,9 @@ class StudyBoardServiceIntegrationTest {
         StudyBoard studyBoard = testDB.findAnnounceBoard();
 
         //when
-        StudyBoardDeleteResponseDto ActualResult = studyBoardService.deleteBoard(study.getId(), studyBoard.getId());
+        studyBoardService.deleteBoard(studyBoard.getId());
 
         //then
-        Assertions.assertEquals(studyBoard.getId(), ActualResult.getStudyBoardId());
-        Assertions.assertEquals(studyBoard.getTitle(), ActualResult.getTitle());
         Assertions.assertEquals(2, studyBoardService.findAllBoards(study.getId()).size());
     }
 }

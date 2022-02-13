@@ -10,15 +10,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.studyboard.controller.dto.request.StudyBoardUpdateRequestDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
-import project.SangHyun.study.studyboard.service.impl.StudyBoardServiceImpl;
-import project.SangHyun.study.studyboard.dto.request.StudyBoardCreateRequestDto;
-import project.SangHyun.study.studyboard.dto.request.StudyBoardUpdateRequestDto;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardCreateResponseDto;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardDeleteResponseDto;
-import project.SangHyun.study.studyboard.dto.response.StudyBoardUpdateResponseDto;
+import project.SangHyun.study.studyboard.service.StudyBoardService;
+import project.SangHyun.study.studyboard.service.dto.request.StudyBoardCreateDto;
+import project.SangHyun.study.studyboard.service.dto.response.StudyBoardDto;
+import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,9 @@ class StudyBoardServiceUnitTest {
     StudyBoard studyBoard;
 
     @InjectMocks
-    StudyBoardServiceImpl studyBoardService;
+    StudyBoardService studyBoardService;
+    @Mock
+    StudyRepository studyRepository;
     @Mock
     StudyBoardRepository studyBoardRepository;
 
@@ -65,15 +66,16 @@ class StudyBoardServiceUnitTest {
     @DisplayName("스터디에 속한 게시판을 생성한다.")
     public void createBoard() throws Exception {
         //given
-        StudyBoardCreateRequestDto requestDto = StudyBoardFactory.makeCreateRequestDto();
-        StudyBoard createdStudyBoard = requestDto.toEntity(study.getId());
-        StudyBoardCreateResponseDto ExpectResult = StudyBoardCreateResponseDto.create(createdStudyBoard);
+        StudyBoardCreateDto requestDto = StudyBoardFactory.makeCreateDto();
+        StudyBoard createdStudyBoard = requestDto.toEntity(study);
+        StudyBoardDto ExpectResult = StudyBoardDto.create(createdStudyBoard);
 
         //mocking
+        given(studyRepository.findStudyById(any())).willReturn(study);
         given(studyBoardRepository.save(any())).willReturn(createdStudyBoard);
 
         //when
-        StudyBoardCreateResponseDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto);
+        StudyBoardDto ActualResult = studyBoardService.createBoard(study.getId(), requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
@@ -89,10 +91,10 @@ class StudyBoardServiceUnitTest {
         given(studyBoardRepository.findById(study.getId())).willReturn(Optional.ofNullable(studyBoard));
 
         //when
-        StudyBoardUpdateResponseDto ActualResult = studyBoardService.updateBoard(studyBoard.getId(), study.getId(), updateRequestDto);
+        StudyBoardDto ActualResult = studyBoardService.updateBoard(study.getId(), updateRequestDto.toServiceDto());
 
         //then
-        Assertions.assertEquals(studyBoard.getId(), ActualResult.getStudyBoardId());
+        Assertions.assertEquals(studyBoard.getId(), ActualResult.getId());
         Assertions.assertEquals("테스트 게시판 수정", ActualResult.getTitle());
     }
 
@@ -105,11 +107,7 @@ class StudyBoardServiceUnitTest {
         given(studyBoardRepository.findById(study.getId())).willReturn(Optional.ofNullable(studyBoard));
         willDoNothing().given(studyBoardRepository).delete(studyBoard);
 
-        //when
-        StudyBoardDeleteResponseDto ActualResult = studyBoardService.deleteBoard(studyBoard.getId(), study.getId());
-
-        //then
-        Assertions.assertEquals(studyBoard.getId(), ActualResult.getStudyBoardId());
-        Assertions.assertEquals("테스트 게시판", ActualResult.getTitle());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyBoardService.deleteBoard(study.getId()));
     }
 }

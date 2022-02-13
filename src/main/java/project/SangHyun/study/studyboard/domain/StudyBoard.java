@@ -13,12 +13,15 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class StudyBoard extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
-    @Column(nullable = false)
-    private String title;
+
+    @Embedded
+    private StudyBoardTitle title;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -28,21 +31,29 @@ public class StudyBoard extends EntityDate {
         this.id = id;
     }
 
+    public StudyBoard(String title) {
+        this.title = new StudyBoardTitle(title);
+    }
+
     @Builder
     public StudyBoard(String title, Study study) {
-        this.title = title;
+        this.title = new StudyBoardTitle(title);
         this.study = study;
     }
 
     public void update(String title) {
-        this.title = title;
+        this.title = new StudyBoardTitle(title);
     }
 
     public void setStudy(Study study) {
         this.study = study;
     }
 
-    public void deleteInStudyCollections() {
+    public void deleteInStudy() {
         this.study.getStudyBoards().remove(this);
+    }
+
+    public String getTitle() {
+        return title.getTitle();
     }
 }

@@ -15,19 +15,16 @@ import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.studyjoin.dto.request.StudyJoinRequestDto;
-import project.SangHyun.study.studyjoin.dto.response.FindJoinedStudyResponseDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyFindMembersResponseDto;
-import project.SangHyun.study.studyjoin.dto.response.StudyJoinResponseDto;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
-import project.SangHyun.study.studyjoin.service.impl.StudyJoinServiceImpl;
+import project.SangHyun.study.studyjoin.service.StudyJoinService;
+import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinCreateDto;
+import project.SangHyun.study.studyjoin.service.dto.response.FindJoinedStudyDto;
+import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -35,7 +32,7 @@ import java.util.Optional;
 class StudyJoinServiceIntegrationTest {
 
     @Autowired
-    StudyJoinServiceImpl studyJoinService;
+    StudyJoinService studyJoinService;
     @Autowired
     StudyJoinRepository studyJoinRepository;
     @Autowired
@@ -58,15 +55,10 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findNotStudyMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
+        StudyJoinCreateDto requestDto = StudyJoinFactory.makeCreateDto("빠르게 지원합니다.");
 
-        //when
-        StudyJoinResponseDto ActualResult = studyJoinService.applyJoin(study.getId(), member.getId(), requestDto);
-        System.out.println("ActualResult = " + ActualResult.getStudyInfos());
-
-        //then
-        Assertions.assertEquals(StudyRole.APPLY, ActualResult.getStudyInfos().getStudyRole());
-        Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
     }
 
     @Test
@@ -76,7 +68,7 @@ class StudyJoinServiceIntegrationTest {
         Member member = testDB.findStudyMemberNotResourceOwner();
 
         //when
-        List<FindJoinedStudyResponseDto> ActualResult = studyJoinService.findJoinedStudies(member.getId());
+        List<FindJoinedStudyDto> ActualResult = studyJoinService.findJoinedStudies(member.getId());
 
         //then
         Assertions.assertEquals(1, ActualResult.size());
@@ -88,7 +80,7 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         Study study = testDB.findBackEndStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
+        StudyJoinCreateDto requestDto = StudyJoinFactory.makeCreateDto("빠르게 지원합니다.");
 
         //when, then
         Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
@@ -100,7 +92,7 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findGeneralMember();
         Study study = testDB.findZeroHeadCountStudy();
-        StudyJoinRequestDto requestDto = StudyJoinFactory.makeRequestDto("빠르게 지원합니다.");
+        StudyJoinCreateDto requestDto = StudyJoinFactory.makeCreateDto("빠르게 지원합니다.");
 
         //when, then
         Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
@@ -112,14 +104,9 @@ class StudyJoinServiceIntegrationTest {
         //given
         Member member = testDB.findStudyApplyMember();
         Study study = testDB.findBackEndStudy();
-        List<StudyFindMembersResponseDto> prevStudyMembers = studyJoinService.findStudyMembers(study.getId());
 
-        //when
-        StudyJoinResponseDto ActualResult = studyJoinService.acceptJoin(study.getId(), member.getId());
-
-        //then
-        Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
-        Assertions.assertEquals(StudyRole.MEMBER, ActualResult.getStudyInfos().getStudyRole());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyJoinService.acceptJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -162,13 +149,8 @@ class StudyJoinServiceIntegrationTest {
         Member member = testDB.findStudyApplyMember();
         Study study = testDB.findBackEndStudy();
 
-        //when
-        StudyJoinResponseDto ActualResult = studyJoinService.rejectJoin(study.getId(), member.getId());
-
-        //then
-        Assertions.assertEquals(Optional.empty(), studyJoinRepository.findApplyStudy(study.getId(), member.getId()));
-        Assertions.assertEquals(member.getId(), ActualResult.getMemberId());
-        Assertions.assertEquals(4, studyJoinRepository.findStudyMembers(study.getId()).size());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test
@@ -211,7 +193,7 @@ class StudyJoinServiceIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when
-        List<StudyFindMembersResponseDto> ActualResult = studyJoinService.findStudyMembers(study.getId());
+        List<StudyMembersDto> ActualResult = studyJoinService.findStudyMembers(study.getId());
 
         //then
         Assertions.assertEquals(5, ActualResult.size());

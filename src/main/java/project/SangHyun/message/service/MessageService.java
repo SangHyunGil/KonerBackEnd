@@ -1,18 +1,67 @@
 package project.SangHyun.message.service;
 
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
-import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
-import project.SangHyun.message.dto.response.MessageCreateResponseDto;
-import project.SangHyun.message.dto.response.MessageDeleteResponseDto;
-import project.SangHyun.message.dto.response.MessageFindResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.common.advice.exception.MessageNotFountException;
+import project.SangHyun.message.domain.Message;
+import project.SangHyun.message.repository.MessageRepository;
+import project.SangHyun.message.repository.impl.RecentMessageDto;
+import project.SangHyun.message.service.dto.request.MessageCreateDto;
+import project.SangHyun.message.service.dto.response.FindCommunicatorsDto;
+import project.SangHyun.message.service.dto.response.MessageDto;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-public interface MessageService {
-    MessageCreateResponseDto createMessage(MessageCreateRequestDto requestDto);
-    List<CommunicatorFindResponseDto> findAllCommunicatorsWithRecentMessage(Long receiverId);
-    List<MessageFindResponseDto> findAllMessages(Long senderId, Long receiverId);
-    Long countUnReadMessages(Long receiverId);
-    MessageDeleteResponseDto deleteBySender(Long messageId);
-    MessageDeleteResponseDto deleteByReceiver(Long messageId);
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class MessageService {
+    private final MessageRepository messageRepository;
+
+    @Transactional
+    public MessageDto createMessage(MessageCreateDto requestDto) {
+        Message message = messageRepository.save(requestDto.toEntity());
+        return MessageDto.create(message);
+    }
+
+    public List<FindCommunicatorsDto> findAllCommunicatorsWithRecentMessage(Long receiverId) {
+        List<RecentMessageDto> messages = messageRepository.findAllCommunicatorsWithRecentMessageDescById(receiverId);
+        return messages.stream()
+                .map(FindCommunicatorsDto::create)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<MessageDto> findAllMessages(Long senderId, Long receiverId) {
+        List<Message> messages = messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(senderId, receiverId);
+        return messages.stream()
+                .map(Message::read)
+                .map(MessageDto::create)
+                .collect(Collectors.toList());
+    }
+
+    public Long countUnReadMessages(Long receiverId) {
+        return messageRepository.countAllUnReadMessages(receiverId);
+    }
+
+    @Transactional
+    public void deleteBySender(Long messageId) {
+        Message message = messageRepository.findById(messageId).orElseThrow(MessageNotFountException::new);
+        deleteMessage(message, Message::deleteBySender);
+    }
+
+    @Transactional
+    public void deleteByReceiver(Long messageId) {
+        Message message = messageRepository.findById(messageId).orElseThrow(MessageNotFountException::new);
+        deleteMessage(message, Message::deleteByReceiver);
+    }
+
+    private void deleteMessage(Message message, Consumer<Message> delete) {
+        delete.accept(message);
+        if (message.isDeletable())
+            messageRepository.delete(message);
+    }
 }

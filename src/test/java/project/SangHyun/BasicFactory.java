@@ -2,15 +2,19 @@ package project.SangHyun;
 
 import org.springframework.test.util.ReflectionTestUtils;
 import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.study.study.domain.*;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyRole;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
+import project.SangHyun.study.study.domain.StudyRole;
+import project.SangHyun.study.studyschedule.domain.StudySchedule;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
@@ -19,6 +23,16 @@ import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import java.util.List;
 
 public class BasicFactory {
+
+    public static Result makeDefaultSuccessResult() {
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setCode(0);
+        result.setMsg("성공");
+
+        return result;
+    }
+
     public static <T> SingleResult<T> makeSingleResult(T responseDto) {
         SingleResult<T> singleResult = new SingleResult<>();
         singleResult.setCode(0); singleResult.setSuccess(true); singleResult.setMsg("성공");
@@ -35,37 +49,37 @@ public class BasicFactory {
 
     public static Member makeTestAdminMember() {
         Long memberId = 1L;
-        Member member = new Member("xptmxm1!", "encodedPW", "상현", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN);
+        Member member = new Member("xptmxm1!", "encodedPW", "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_ADMIN, "상현입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestAuthMember() {
         Long memberId = 2L;
-        Member member = new Member("xptmxm2!", "encodedPW", "유나", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm2!", "encodedPW", "유나", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "유나입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestNotAuthMember() {
         Long memberId = 3L;
-        Member member = new Member("xptmxm3!", "encodedPW", "동욱", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED);
+        Member member = new Member("xptmxm3!", "encodedPW", "동욱", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_NOT_PERMITTED, "동욱입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Member makeTestAuthMember2() {
         Long memberId = 4L;
-        Member member = new Member("xptmxm4!", "encodedPW", "영탁", "컴퓨터공학부", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member member = new Member("xptmxm4!", "encodedPW", "영탁", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "영탁입니다.");
         ReflectionTestUtils.setField(member, "id", memberId);
         return member;
     }
 
     public static Study makeTestStudy(Member member, List<StudyJoin> studyJoins, List<StudyBoard> studyBoards) {
         Long studyId = 1L;
-        Study study = new Study("프론트엔드 스터디", new Tags(List.of(new Tag("프론트엔드"))),null,
-                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과", new StudyOptions(StudyState.STUDYING,
-                RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), member, studyJoins, studyBoards);
+        Study study = new Study("프론트엔드 스터디", List.of("프론트엔드"),"프론트엔드모집입니다.",
+                "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",  2L, "2021-10-01", "2021-12-25", StudyCategory.CSE,  StudyMethod.FACE, StudyState.STUDYING,
+                RecruitState.PROCEED, member, studyJoins, studyBoards);
         ReflectionTestUtils.setField(study, "id", studyId);
         return study;
     }
@@ -116,5 +130,11 @@ public class BasicFactory {
         Message message = new Message("테스트 메세지", sender, receiver, false, false, false);
         ReflectionTestUtils.setField(message, "id", messageId);
         return message;
+    }
+
+    public static StudySchedule makeTestSchedule(Long studyScheduleId, String title) {
+        StudySchedule schedule = new StudySchedule(title, "2021-12-15", "2022-03-01", "18:00", "22:00", new Study(1L));
+        ReflectionTestUtils.setField(schedule, "id", studyScheduleId);
+        return schedule;
     }
 }

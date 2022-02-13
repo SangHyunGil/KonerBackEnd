@@ -1,0 +1,40 @@
+package project.SangHyun.study.studyschedule.service.dto.request;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import project.SangHyun.study.studyschedule.domain.StudySchedule;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value = "스터디 스케줄 수정 요청 서비스 계층 DTO")
+public class StudyScheduleUpdateDto {
+
+    @ApiModelProperty("스케줄 제목")
+    private String title;
+
+    @ApiModelProperty("스케줄 시작 날짜")
+    private String start;
+
+    @ApiModelProperty("스케줄 종료 날짜")
+    private String end;
+
+    @ApiModelProperty("스케줄 시작 시간")
+    private String startTime;
+
+    @ApiModelProperty("스케줄 종료 시간")
+    private String endTime;
+
+    public StudySchedule toEntity() {
+        return StudySchedule.builder()
+                .title(title)
+                .startDate(start)
+                .endDate(end)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
+    }
+}

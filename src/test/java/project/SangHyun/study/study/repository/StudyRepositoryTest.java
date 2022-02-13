@@ -12,13 +12,15 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.study.domain.*;
-import project.SangHyun.study.study.domain.enums.RecruitState;
-import project.SangHyun.study.study.domain.enums.StudyMethod;
-import project.SangHyun.study.study.domain.enums.StudyState;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyCategory;
+import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
+import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
+import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 
 import javax.persistence.EntityManager;
@@ -42,17 +44,17 @@ class StudyRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", "컴공", "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER);
+        Member memberA = new Member("xptmxm3!", passwordEncoder.encode("xptmxm3!"), "상현", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "상현입니다.");
         memberRepository.save(memberA);
 
         for (int i = 0; i < 10; i++) {
-            Study study = new Study("백엔드 모집"+i, new Tags(List.of(new Tag("백엔드"), new Tag("스프링"), new Tag("JPA"))), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "컴퓨터공학과",
-                    new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study("백엔드 모집"+i, List.of("백엔드", "스프링", "JPA"), "백엔드 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+                    2L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, memberA, new ArrayList<>(), new ArrayList<>());
             studyRepository.save(study);
         }
         for (int i = 0; i < 4; i++) {
-            Study study = new Study("역학 스터디 모집"+i, new Tags(List.of(new Tag("역학"))), "역학 스터디 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png", "기계공학과",
-                    new StudyOptions(StudyState.STUDYING, RecruitState.PROCEED, StudyMethod.FACE), 2L, new Schedule("2021-10-01", "2021-12-25"), memberA, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study("역학 스터디 모집"+i, List.of("역학"), "역학 스터디 모집합니다.", "C:\\Users\\Family\\Pictures\\Screenshots\\2.png",
+                    2L, "2021-10-01", "2021-12-25", StudyCategory.ME, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, memberA, new ArrayList<>(), new ArrayList<>());
             studyRepository.save(study);
         }
 
@@ -90,7 +92,7 @@ class StudyRepositoryTest {
         Pageable pageable = Pageable.ofSize(6);
 
         //when
-        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,"컴퓨터공학과", pageable);
+        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, StudyCategory.CSE, pageable);
 
         //then
         Assertions.assertEquals(6, studies.getNumberOfElements());
@@ -105,7 +107,7 @@ class StudyRepositoryTest {
         Pageable pageable = Pageable.ofSize(6);
 
         //when
-        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,"컴퓨터공학과", pageable);
+        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,StudyCategory.CSE, pageable);
 
         //then
         Assertions.assertEquals(4, studies.getNumberOfElements());
@@ -120,7 +122,7 @@ class StudyRepositoryTest {
         Pageable pageable = Pageable.ofSize(6);
 
         //when
-        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId,"기계공학과", pageable);
+        Slice<Study> studies = studyRepository.findAllOrderByStudyIdDesc(lastStudyId, StudyCategory.ME, pageable);
 
         //then
         Assertions.assertEquals(4, studies.getNumberOfElements());

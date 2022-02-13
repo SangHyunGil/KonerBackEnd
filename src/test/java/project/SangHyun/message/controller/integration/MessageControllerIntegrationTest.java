@@ -14,11 +14,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
-import project.SangHyun.common.helper.RedisHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
+import project.SangHyun.message.controller.dto.request.MessageCreateRequestDto;
 import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.message.tools.MessageFactory;
 
@@ -37,8 +36,6 @@ public class MessageControllerIntegrationTest {
     WebApplicationContext context;
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    RedisHelper redisHelper;
     @Autowired
     MessageRepository messageRepository;
     @Autowired

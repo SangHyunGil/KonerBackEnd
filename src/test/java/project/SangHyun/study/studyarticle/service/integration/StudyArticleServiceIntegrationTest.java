@@ -10,24 +10,18 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
-import project.SangHyun.common.dto.PageResponseDto;
+import project.SangHyun.common.dto.response.PageResponseDto;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
+import project.SangHyun.study.studyarticle.service.StudyArticleService;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleCreateDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleUpdateDto;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
-import project.SangHyun.study.study.repository.StudyRepository;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleCreateResponseDto;
-import project.SangHyun.study.studyarticle.service.impl.StudyArticleServiceImpl;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponseDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleUpdateResponseDto;
-
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @Transactional
@@ -35,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 class StudyArticleServiceIntegrationTest {
 
     @Autowired
-    StudyArticleServiceImpl studyArticleService;
+    StudyArticleService studyArticleService;
     @Autowired
     MemberRepository memberRepository;
     @Autowired
@@ -56,10 +50,10 @@ class StudyArticleServiceIntegrationTest {
         //given
         Member member = testDB.findStudyGeneralMember();
         StudyBoard studyBoard = testDB.findAnnounceBoard();
-        StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateDto(member);
+        StudyArticleCreateDto requestDto = StudyArticleFactory.makeCreateDto(member);
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
+        StudyArticleDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
         StudyArticle ExpectResult = studyArticleRepository.findAll().stream()
@@ -67,7 +61,7 @@ class StudyArticleServiceIntegrationTest {
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
 
-        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getArticleId());;
+        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());;
     }
 
     @Test
@@ -90,17 +84,17 @@ class StudyArticleServiceIntegrationTest {
     public void updateArticle() throws Exception {
         //given
         StudyArticle studyArticle = testDB.findAnnounceArticle();
-        StudyArticleUpdateRequestDto updateDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 내용 수정");
+        StudyArticleUpdateDto updateDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 내용 수정");
 
         //when
-        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(studyArticle.getId(), updateDto);
+        StudyArticleDto ActualResult = studyArticleService.updateArticle(studyArticle.getId(), updateDto);
 
         //then
         StudyArticle ExpectResult = studyArticleRepository.findArticleByTitle("테스트 글 수정").stream()
                 .filter(sa -> sa.getTitle().equals("테스트 글 수정"))
                 .findFirst()
                 .orElseThrow(StudyArticleNotFoundException::new);
-        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getArticleId());
+        Assertions.assertEquals(ExpectResult.getId(), ActualResult.getId());
     }
 
     @Test
@@ -124,9 +118,9 @@ class StudyArticleServiceIntegrationTest {
 
         //when
         Assertions.assertEquals(0, studyArticle.getViews());
-        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
+        StudyArticleDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
 
         //then`
-        Assertions.assertEquals(1,ActualResult.getViews());
+        Assertions.assertEquals(1, ActualResult.getViews());
     }
 }

@@ -17,12 +17,15 @@ import org.springframework.web.context.WebApplicationContext;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.dto.request.MemberUpdateRequestDto;
+import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
+import project.SangHyun.member.controller.dto.request.MemberUpdateRequestDto;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.member.tools.member.MemberFactory;
+import project.SangHyun.member.tools.sign.SignFactory;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -105,14 +108,14 @@ class MemberControllerIntegrationTest {
         //given
         Member member = testDB.findGeneralMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수", "철수입니다.");
 
         //when, then
         mockMvc.perform(multipart("/users/{id}", member.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
-                        .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
+                        .param("introduction", requestDto.getIntroduction())
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("PUT");
                             return requestPostProcessor;
@@ -120,7 +123,8 @@ class MemberControllerIntegrationTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.nickname").value("철수"));
+                .andExpect(jsonPath("$.data.nickname").value("철수"))
+                .andExpect(jsonPath("$.data.introduction").value("철수입니다."));
     }
 
     @Test
@@ -129,22 +133,24 @@ class MemberControllerIntegrationTest {
         //given
         Member member = testDB.findAdminMember();
         String accessToken = accessTokenHelper.createToken(member.getEmail());
-        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("적절한닉네임");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("적절한닉네임", "적절한닉네임의 수정글입니다.");
 
         //when, then
         mockMvc.perform(multipart("/users/{id}", member.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
-                        .param("email", requestDto.getEmail())
                         .param("nickname", requestDto.getNickname())
-                        .param("department", requestDto.getDepartment())
+                        .param("department", String.valueOf(requestDto.getDepartment()))
+                        .param("introduction", requestDto.getIntroduction())
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("PUT");
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.nickname").value("적절한닉네임"));
+                .andExpect(jsonPath("$.data.nickname").value("적절한닉네임"))
+                .andExpect(jsonPath("$.data.introduction").value("적절한닉네임의 수정글입니다."));
     }
 
     @Test
@@ -154,7 +160,7 @@ class MemberControllerIntegrationTest {
         Member memberA = testDB.findGeneralMember();
         Member memberB = testDB.findAnotherGeneralMember();
         String accessToken = accessTokenHelper.createToken(memberB.getEmail());
-        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수");
+        MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수", "철수입니다.");
 
         //when, then
         mockMvc.perform(put("/users/{id}", memberA.getId())
@@ -203,5 +209,19 @@ class MemberControllerIntegrationTest {
         mockMvc.perform(delete("/users/{id}", memberA.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경을 진행한다.")
+    public void changePW() throws Exception {
+        //given
+        ChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
+
+        //when, then
+        mockMvc.perform(post("/users/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto)))
+                .andExpect(status().isOk());
     }
 }

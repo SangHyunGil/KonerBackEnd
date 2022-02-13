@@ -7,9 +7,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.notification.domain.NotificationType;
-import project.SangHyun.notification.dto.request.NotificationRequestDto;
+import project.SangHyun.common.dto.request.NotificationRequestDto;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.domain.enums.StudyRole;
+import project.SangHyun.study.study.domain.StudyRole;
 
 import javax.persistence.*;
 
@@ -18,22 +18,28 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class StudyJoin extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "join_id")
     private Long id;
+
+    @Embedded
+    private ApplyContent applyContent;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StudyRole studyRole;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-    @Column(length = 1000)
-    private String applyContent;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
-    @Enumerated(EnumType.STRING)
-    private StudyRole studyRole;
 
     public StudyJoin(Long id) {
         this.id = id;
@@ -42,7 +48,7 @@ public class StudyJoin extends EntityDate {
     @Builder
     public StudyJoin(Member member, String applyContent, Study study, StudyRole studyRole) {
         this.member = member;
-        this.applyContent = applyContent;
+        this.applyContent = new ApplyContent(applyContent);
         this.study = study;
         this.studyRole = studyRole;
     }
@@ -58,5 +64,13 @@ public class StudyJoin extends EntityDate {
     public void publishEvent(ApplicationEventPublisher eventPublisher, NotificationType notificationType) {
         eventPublisher.publishEvent(new NotificationRequestDto(member, notificationType,
                 notificationType.makeContent(study.getTitle()), notificationType.makeUrl(study.getId())));
+    }
+
+    public String getParticipantNickname() {
+        return member.getNickname();
+    }
+
+    public String getParticipantProfileImgUrl() {
+        return member.getProfileImgUrl();
     }
 }

@@ -11,22 +11,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import project.SangHyun.common.dto.PageResponseDto;
-import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.dto.response.PageResponseDto;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
+import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
+import project.SangHyun.study.studyarticle.service.StudyArticleService;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleCreateDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleUpdateDto;
 import project.SangHyun.study.studyarticle.tools.StudyArticleFactory;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
-import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleUpdateRequestDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleCreateResponseDto;
-import project.SangHyun.study.studyarticle.service.impl.StudyArticleServiceImpl;
-import project.SangHyun.study.studyarticle.dto.request.StudyArticleCreateRequestDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleDeleteResponseDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleFindResponseDto;
-import project.SangHyun.study.studyarticle.dto.response.StudyArticleUpdateResponseDto;
+import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,11 @@ class StudyArticleServiceUnitTest {
     List<StudyArticle> studyArticles;
 
     @InjectMocks
-    StudyArticleServiceImpl studyArticleService;
+    StudyArticleService studyArticleService;
+    @Mock
+    MemberRepository memberRepository;
+    @Mock
+    StudyBoardRepository studyBoardRepository;
     @Mock
     StudyArticleRepository studyArticleRepository;
 
@@ -63,15 +65,17 @@ class StudyArticleServiceUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 생성한다.")
     public void createArticle() throws Exception {
         //given
-        StudyArticleCreateRequestDto requestDto = StudyArticleFactory.makeCreateDto(member);
-        StudyArticle createdArticle = requestDto.toEntity(studyBoard.getId());
-        StudyArticleCreateResponseDto ExpectResult = StudyArticleFactory.makeCreateResponseDto(createdArticle);
+        StudyArticleCreateDto requestDto = StudyArticleFactory.makeCreateDto(member);
+        StudyArticle createdArticle = requestDto.toEntity(member, studyBoard);
+        StudyArticleDto ExpectResult = StudyArticleFactory.makeDto(createdArticle);
 
         //mocking
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(member));
+        given(studyBoardRepository.findById(any())).willReturn(Optional.ofNullable(studyBoard));
         given(studyArticleRepository.save(any())).willReturn(createdArticle);
 
         //when
-        StudyArticleCreateResponseDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
+        StudyArticleDto ActualResult = studyArticleService.createArticle(studyBoard.getId(), requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getTitle(), ActualResult.getTitle());
@@ -104,7 +108,7 @@ class StudyArticleServiceUnitTest {
         given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
 
         //when
-        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
+        StudyArticleDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
 
         //then
         Assertions.assertEquals("테스트 글", ActualResult.getTitle());
@@ -115,13 +119,13 @@ class StudyArticleServiceUnitTest {
     @DisplayName("스터디의 한 카테고리에 해당하는 게시글을 수정한다.")
     public void updateArticle() throws Exception {
         //given
-        StudyArticleUpdateRequestDto requestDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 내용 수정");
+        StudyArticleUpdateDto requestDto = StudyArticleFactory.makeUpdateDto("테스트 글 수정", "테스트 내용 수정");
 
         //mocking
         given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
 
         //when
-        StudyArticleUpdateResponseDto ActualResult = studyArticleService.updateArticle(studyBoard.getId(), requestDto);
+        StudyArticleDto ActualResult = studyArticleService.updateArticle(studyBoard.getId(), requestDto);
 
         //then
         Assertions.assertEquals("테스트 글 수정", ActualResult.getTitle());
@@ -137,11 +141,8 @@ class StudyArticleServiceUnitTest {
         given(studyArticleRepository.findById(any())).willReturn(Optional.ofNullable(studyArticle));
         willDoNothing().given(studyArticleRepository).delete(studyArticle);
 
-        //when
-        StudyArticleDeleteResponseDto ActualResult = studyArticleService.deleteArticle(studyArticle.getId());
-
-        //then
-        Assertions.assertEquals("테스트 글", ActualResult.getTitle());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyArticleService.deleteArticle(studyArticle.getId()));
     }
 
     @Test
@@ -154,7 +155,7 @@ class StudyArticleServiceUnitTest {
 
         //when
         Assertions.assertEquals(0, studyArticle.getViews());
-        StudyArticleFindResponseDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
+        StudyArticleDto ActualResult = studyArticleService.findArticle(studyArticle.getId());
 
         //then
         Assertions.assertEquals(1,ActualResult.getViews());

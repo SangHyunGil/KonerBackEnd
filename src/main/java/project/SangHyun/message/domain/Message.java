@@ -15,26 +15,33 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message extends EntityDate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
-    @Column(nullable = false, length = 1000)
-    private String content;
+
+    @Embedded
+    private MessageContent content;
+
+    @Column(nullable = false)
+    private Boolean isRead;
+
+    @Column(nullable = false)
+    private Boolean deletedBySender;
+
+    @Column(nullable = false)
+    private Boolean deletedByReceiver;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member sender;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member receiver;
-    @Column(nullable = false)
-    private Boolean isRead;
-    @Column(nullable = false)
-    private Boolean deletedBySender;
-    @Column(nullable = false)
-    private Boolean deletedByReceiver;
 
     public Message(Long id) {
         this.id = id;
@@ -42,7 +49,7 @@ public class Message extends EntityDate {
 
     @Builder
     public Message(String content, Member sender, Member receiver, Boolean isRead, Boolean deletedBySender, Boolean deletedByReceiver) {
-        this.content = content;
+        this.content = new MessageContent(content);
         this.sender = sender;
         this.receiver = receiver;
         this.isRead = isRead;
@@ -73,5 +80,9 @@ public class Message extends EntityDate {
     public Message read() {
         this.isRead = true;
         return this;
+    }
+
+    public String getContent() {
+        return content.getContent();
     }
 }
