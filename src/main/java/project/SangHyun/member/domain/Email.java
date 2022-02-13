@@ -27,7 +27,8 @@ public class Email {
     }
 
     private boolean isNotValidEmail(String email) {
-        return Objects.isNull(email) || email.isBlank();
+        return Objects.isNull(email) || email.isBlank() ||
+                email.length() > MAX_LENGTH;
     }
 
     @Override

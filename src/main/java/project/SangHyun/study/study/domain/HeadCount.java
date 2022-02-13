@@ -14,7 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HeadCount {
 
-    private static final int MIN_COUNT = 0;
+    private static final int MIN_COUNT = 1;
     private static final int MAX_COUNT = 99;
 
     @Column(nullable = false)

@@ -13,7 +13,7 @@ class StudyScheduleTitleTest {
         //given
 
         //when, then
-        Assertions.assertDoesNotThrow(() -> new StudyScheduleTitle("hi".repeat(2)));
+        Assertions.assertDoesNotThrow(() -> new StudyScheduleTitle("h".repeat(2)));
     }
 
     @Test
@@ -22,7 +22,7 @@ class StudyScheduleTitleTest {
         //given
 
         //when, then
-        Assertions.assertThrows(InvalidStudyScheduleTitle.class, () -> new StudyScheduleTitle("hi".repeat(20)));
+        Assertions.assertThrows(InvalidStudyScheduleTitle.class, () -> new StudyScheduleTitle("h".repeat(31)));
     }
 
     @Test

@@ -35,7 +35,7 @@ public class ApplyContent {
     }
 
     private boolean isStudyCreator(String applyContent) {
-        return applyContent == null;
+        return Objects.isNull(applyContent);
     }
 
     @Override
