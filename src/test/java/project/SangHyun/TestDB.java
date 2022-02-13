@@ -26,6 +26,8 @@ import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studycomment.repository.StudyCommentRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
+import project.SangHyun.study.studyschedule.domain.StudySchedule;
+import project.SangHyun.study.studyschedule.repository.StudyScheduleRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class TestDB {
     StudyJoinRepository studyJoinRepository;
     @Autowired
     MessageRepository messageRepository;
+    @Autowired
+    StudyScheduleRepository studyScheduleRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -131,6 +135,11 @@ public class TestDB {
         return studyCommentRepository.findAllByMemberId(memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new).getId()).get(0);
     }
 
+    @Transactional(readOnly = true)
+    public StudySchedule findSchedule() {
+        return studyScheduleRepository.findAll().get(0);
+    }
+
     private void initMember() {
         Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "승범입니다.");
         memberRepository.save(memberA);
@@ -201,6 +210,9 @@ public class TestDB {
         study.addBoard(studyBoard1);
         study.addBoard(studyBoard2);
         study.addBoard(studyBoard3);
+
+        StudySchedule studySchedule = new StudySchedule("JPA 스터디", "2021-09-10", "2022-09-10", "18:00", "22:00", study);
+        studyScheduleRepository.save(studySchedule);
 
         // findStudyGeneralMember, findStudyApplyMember, findStudyMemberNotResourceOwner
         initMessage(storedMemberC, storedMemberD, storedMemberE);

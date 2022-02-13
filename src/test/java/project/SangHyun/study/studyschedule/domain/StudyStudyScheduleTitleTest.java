@@ -1,11 +1,11 @@
-package project.SangHyun.study.studySchedule.domain;
+package project.SangHyun.study.studyschedule.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.SangHyun.common.advice.exception.InvalidStudyScheduleTitle;
 
-class StudyScheduleTitleTest {
+class StudyStudyScheduleTitleTest {
 
     @Test
     @DisplayName("제목이 30자 이내일 경우 성공한다.")

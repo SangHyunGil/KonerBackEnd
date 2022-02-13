@@ -14,6 +14,7 @@ import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.domain.StudyRole;
+import project.SangHyun.study.studyschedule.domain.StudySchedule;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
@@ -129,5 +130,11 @@ public class BasicFactory {
         Message message = new Message("테스트 메세지", sender, receiver, false, false, false);
         ReflectionTestUtils.setField(message, "id", messageId);
         return message;
+    }
+
+    public static StudySchedule makeTestSchedule(Long studyScheduleId) {
+        StudySchedule schedule = new StudySchedule("백엔드 스터디 일정", "2021-12-15", "2022-03-01", "18:00", "22:00", new Study(1L));
+        ReflectionTestUtils.setField(schedule, "id", studyScheduleId);
+        return schedule;
     }
 }

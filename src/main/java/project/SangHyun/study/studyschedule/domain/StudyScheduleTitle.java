@@ -1,4 +1,4 @@
-package project.SangHyun.study.studySchedule.domain;
+package project.SangHyun.study.studyschedule.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;

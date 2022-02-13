@@ -1,6 +1,7 @@
-package project.SangHyun.study.studySchedule.domain;
+package project.SangHyun.study.studyschedule.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Schedule {
+public class StudySchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +30,14 @@ public class Schedule {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Study study;
 
-    public Schedule(String title, String startDate, String endDate, String startTime, String endTime, Study study) {
+    @Builder
+    public StudySchedule(String title, String startDate, String endDate, String startTime, String endTime, Study study) {
         this.title = new StudyScheduleTitle(title);
         this.period = new SchedulePeriod(startDate, endDate, startTime, endTime);
         this.study = study;
+    }
+
+    public String getTitle() {
+        return title.getTitle();
     }
 }
