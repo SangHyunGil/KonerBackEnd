@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
 import project.SangHyun.common.advice.exception.StudyBoardNotFoundException;
-import project.SangHyun.common.dto.PageResponseDto;
+import project.SangHyun.common.dto.response.PageResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;

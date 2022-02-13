@@ -1,17 +1,17 @@
-package project.SangHyun.message.dto.response;
+package project.SangHyun.message.service.dto.request;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "쪽지 조회 결과")
-public class MessageFindResponseDto {
+public class MessageCreateDto {
+
     @ApiModelProperty(value = "전송자 ID(PK)")
     private Long senderId;
 
@@ -21,8 +21,14 @@ public class MessageFindResponseDto {
     @ApiModelProperty(value = "쪽지 내용")
     private String content;
 
-    public static MessageFindResponseDto create(Message message) {
-        return new MessageFindResponseDto(message.getSender().getId(),
-                message.getReceiver().getId(), message.getContent());
+    public Message toEntity() {
+        return Message.builder()
+                .content(content)
+                .sender(new Member(senderId))
+                .receiver(new Member(receiverId))
+                .deletedBySender(false)
+                .deletedByReceiver(false)
+                .isRead(false)
+                .build();
     }
 }

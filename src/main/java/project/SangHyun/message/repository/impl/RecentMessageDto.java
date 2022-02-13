@@ -8,18 +8,18 @@ import project.SangHyun.member.domain.Member;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDto {
+public class RecentMessageDto {
     private Long id;
     private Member sender;
     private Member receiver;
     private String content;
     private Long unReadCount;
 
-    public MessageDto(Long id) {
+    public RecentMessageDto(Long id) {
         this.id = id;
     }
 
-    public boolean isMoreRecentlyThan(MessageDto message) {
+    public boolean isMoreRecentlyThan(RecentMessageDto message) {
         return this.id > message.getId();
     }
 }

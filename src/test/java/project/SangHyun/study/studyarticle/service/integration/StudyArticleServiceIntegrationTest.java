@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
-import project.SangHyun.common.dto.PageResponseDto;
+import project.SangHyun.common.dto.response.PageResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.repository.StudyRepository;

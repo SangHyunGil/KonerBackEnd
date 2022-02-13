@@ -1,4 +1,4 @@
-package project.SangHyun.notification.dto.response;
+package project.SangHyun.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

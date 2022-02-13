@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
-import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
-import project.SangHyun.message.dto.response.MessageCreateResponseDto;
-import project.SangHyun.message.dto.response.MessageFindResponseDto;
 import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.message.service.MessageService;
+import project.SangHyun.message.service.dto.request.MessageCreateDto;
+import project.SangHyun.message.service.dto.response.FindCommunicatorsDto;
+import project.SangHyun.message.service.dto.response.MessageDto;
 import project.SangHyun.message.tools.MessageFactory;
 
 import javax.persistence.EntityManager;
@@ -46,10 +45,10 @@ public class MessageServiceIntegrationTest {
         //given
         Member memberA = testDB.findGeneralMember();
         Member memberB = testDB.findAdminMember();
-        MessageCreateRequestDto requestDto = MessageFactory.makeCreateRequestDto(null, memberA, memberB);
+        MessageCreateDto requestDto = MessageFactory.makeCreateDto(null, memberA, memberB);
 
         //when
-        MessageCreateResponseDto ActualResult = messageService.createMessage(requestDto);
+        MessageDto ActualResult = messageService.createMessage(requestDto);
 
         //then
         Assertions.assertEquals("테스트 쪽지입니다.", ActualResult.getContent());
@@ -62,7 +61,7 @@ public class MessageServiceIntegrationTest {
         Member receiver = testDB.findStudyGeneralMember();
 
         //when
-        List<CommunicatorFindResponseDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
+        List<FindCommunicatorsDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
 
         //then
         Assertions.assertEquals(2, ActualResult.size());
@@ -78,7 +77,7 @@ public class MessageServiceIntegrationTest {
         Member sender = testDB.findStudyMemberNotResourceOwner();
 
         //when
-        List<MessageFindResponseDto> ActualResult = messageService.findAllMessages(sender.getId(), receiver.getId());
+        List<MessageDto> ActualResult = messageService.findAllMessages(sender.getId(), receiver.getId());
 
         //then
         Assertions.assertEquals(4, ActualResult.size());
@@ -100,7 +99,7 @@ public class MessageServiceIntegrationTest {
         persistenceContextClear();
 
         List<Message> ActualResult = messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(sender.getId(), receiver.getId());
-        List<CommunicatorFindResponseDto> messages = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
+        List<FindCommunicatorsDto> messages = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
 
         //then
         Assertions.assertEquals(4, ActualResult.size());

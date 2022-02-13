@@ -15,7 +15,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.repository.impl.MessageDto;
+import project.SangHyun.message.repository.impl.RecentMessageDto;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ class MessageRepositoryTest {
         messageRepository.save(messageB);
 
         //when
-        List<MessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
+        List<RecentMessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
 
         //then
         Assertions.assertEquals(2,ActualResult.size());
@@ -89,7 +89,7 @@ class MessageRepositoryTest {
         messageRepository.save(messageG);
 
         //when
-        List<MessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
+        List<RecentMessageDto> ActualResult = messageRepository.findAllCommunicatorsWithRecentMessageDescById(testMemberA.getId());
 
         //then
         Assertions.assertEquals(3, ActualResult.size());

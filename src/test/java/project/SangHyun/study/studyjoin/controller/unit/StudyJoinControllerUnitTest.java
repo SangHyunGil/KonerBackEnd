@@ -132,6 +132,7 @@ class StudyJoinControllerUnitTest {
 
         //mocking
         given(studyJoinService.findStudyMembers(study.getId())).willReturn(studyMembersDto);
+        given(responseService.convertToControllerDto(studyMembersDto, StudyMembersResponseDto::create)).willReturn(responseDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then

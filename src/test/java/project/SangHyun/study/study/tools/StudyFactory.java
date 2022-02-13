@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.SangHyun.BasicFactory;
-import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.dto.response.SliceResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.dto.MemberProfile;
 import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;

@@ -13,7 +13,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.dto.response.SliceResponseDto;
 import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;

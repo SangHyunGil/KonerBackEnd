@@ -28,9 +28,9 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<MessageDto> findAllCommunicatorsWithRecentMessageDescById(Long memberId) {
-        List<MessageDto> receiveMessages = jpaQueryFactory
-                .select(Projections.constructor(MessageDto.class,
+    public List<RecentMessageDto> findAllCommunicatorsWithRecentMessageDescById(Long memberId) {
+        List<RecentMessageDto> receiveMessages = jpaQueryFactory
+                .select(Projections.constructor(RecentMessageDto.class,
                         message.id, message.sender, message.receiver,
                         message.content.content, as(constant(0L),"unReadCount")))
                 .from(message)
@@ -42,8 +42,8 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
-        List<MessageDto> sendMessages = jpaQueryFactory
-                .select(Projections.constructor(MessageDto.class,
+        List<RecentMessageDto> sendMessages = jpaQueryFactory
+                .select(Projections.constructor(RecentMessageDto.class,
                         message.id, message.sender, message.receiver,
                         message.content.content, as(constant(0L),"unReadCount")))
                 .from(message)
@@ -55,8 +55,8 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                                 .groupBy(message.sender, message.receiver)))
                 .fetch();
 
-        List<MessageDto> countMessages = jpaQueryFactory
-                .select(Projections.constructor(MessageDto.class,
+        List<RecentMessageDto> countMessages = jpaQueryFactory
+                .select(Projections.constructor(RecentMessageDto.class,
                         message.id, message.sender, message.receiver,
                         message.content.content, message.count()))
                 .from(message)
@@ -105,9 +105,9 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         return message.receiver.id.eq(memberId);
     }
 
-    private List<MessageDto> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<MessageDto> receiveMessages,
-                                                                                   List<MessageDto> sendMessages, List<MessageDto> countMessages) {
-        Map<Member, MessageDto> store = new HashMap<>();
+    private List<RecentMessageDto> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<RecentMessageDto> receiveMessages,
+                                                                                         List<RecentMessageDto> sendMessages, List<RecentMessageDto> countMessages) {
+        Map<Member, RecentMessageDto> store = new HashMap<>();
 
         // 보낸 메세지 중 최신 메세지 기록
         receiveMessages
@@ -120,18 +120,18 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         // 안읽은 메세지 개수 갱신
         countMessages
                 .forEach(countMessage -> {
-                    MessageDto messageCount = store.get(countMessage.getSender());
+                    RecentMessageDto messageCount = store.get(countMessage.getSender());
                     messageCount.setUnReadCount(countMessage.getUnReadCount());
                 });
 
         return store.values().stream()
-                .sorted(comparing(MessageDto::getId, Comparator.reverseOrder()))
+                .sorted(comparing(RecentMessageDto::getId, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
     }
 
-    private void compareAndUpdate(Map<Member, MessageDto> store, MessageDto sendMessage) {
+    private void compareAndUpdate(Map<Member, RecentMessageDto> store, RecentMessageDto sendMessage) {
         Member receiver = sendMessage.getReceiver();
-        MessageDto message = store.getOrDefault(receiver, new MessageDto(Long.MIN_VALUE));
+        RecentMessageDto message = store.getOrDefault(receiver, new RecentMessageDto(Long.MIN_VALUE));
         if (sendMessage.isMoreRecentlyThan(message))
             store.put(receiver, sendMessage);
     }

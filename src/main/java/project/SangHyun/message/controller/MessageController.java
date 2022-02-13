@@ -5,15 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.SangHyun.common.response.domain.MultipleResult;
+import project.SangHyun.common.response.domain.Result;
 import project.SangHyun.common.response.domain.SingleResult;
 import project.SangHyun.common.response.service.ResponseService;
 import project.SangHyun.config.security.member.MemberDetails;
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
-import project.SangHyun.message.dto.response.CommunicatorFindResponseDto;
-import project.SangHyun.message.dto.response.MessageCreateResponseDto;
-import project.SangHyun.message.dto.response.MessageDeleteResponseDto;
-import project.SangHyun.message.dto.response.MessageFindResponseDto;
+import project.SangHyun.message.controller.dto.request.MessageCreateRequestDto;
+import project.SangHyun.message.controller.dto.response.FindCommunicatorsResponseDto;
+import project.SangHyun.message.controller.dto.response.MessageResponseDto;
 import project.SangHyun.message.service.MessageService;
+import project.SangHyun.message.service.dto.response.FindCommunicatorsDto;
+import project.SangHyun.message.service.dto.response.MessageDto;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,15 +27,19 @@ public class MessageController {
 
     @ApiOperation(value = "쪽지 상대 전체 조회", notes = "쪽지 상대 전체를 조회한다.")
     @GetMapping
-    public MultipleResult<CommunicatorFindResponseDto> findCommunicators(@AuthenticationPrincipal MemberDetails memberDetails) {
-        return responseService.getMultipleResult(messageService.findAllCommunicatorsWithRecentMessage(memberDetails.getId()));
+    public MultipleResult<FindCommunicatorsResponseDto> findCommunicators(@AuthenticationPrincipal MemberDetails memberDetails) {
+        List<FindCommunicatorsDto> findCommunicatorsDto = messageService.findAllCommunicatorsWithRecentMessage(memberDetails.getId());
+        List<FindCommunicatorsResponseDto> responseDto = responseService.convertToControllerDto(findCommunicatorsDto, FindCommunicatorsResponseDto::create);
+        return responseService.getMultipleResult(responseDto);
     }
 
     @ApiOperation(value = "쪽지 상대 대화 내용 조회", notes = "쪽지 상대 대화 내용 조회한다.")
     @GetMapping("/sender")
-    public MultipleResult<MessageFindResponseDto> findMessages(@AuthenticationPrincipal MemberDetails memberDetails,
-                                                               @RequestParam Long senderId) {
-        return responseService.getMultipleResult(messageService.findAllMessages(senderId, memberDetails.getId()));
+    public MultipleResult<MessageResponseDto> findMessages(@AuthenticationPrincipal MemberDetails memberDetails,
+                                                           @RequestParam Long senderId) {
+        List<MessageDto> messageDto = messageService.findAllMessages(senderId, memberDetails.getId());
+        List<MessageResponseDto> responseDto = responseService.convertToControllerDto(messageDto, MessageResponseDto::create);
+        return responseService.getMultipleResult(responseDto);
     }
 
     @ApiOperation(value = "읽지 않은 쪽지 개수 전체 조회", notes = "읽지 않은 쪽지 개수 전체 조회한다.")
@@ -43,19 +50,22 @@ public class MessageController {
 
     @ApiOperation(value = "쪽지 전송", notes = "쪽지를 전송한다.")
     @PostMapping
-    public SingleResult<MessageCreateResponseDto> createMessage(@RequestBody MessageCreateRequestDto messageCreateRequestDto) {
-        return responseService.getSingleResult(messageService.createMessage(messageCreateRequestDto));
+    public SingleResult<MessageResponseDto> createMessage(@RequestBody MessageCreateRequestDto requestDto) {
+        MessageDto messageDto = messageService.createMessage(requestDto.toServiceDto());
+        return responseService.getSingleResult(MessageResponseDto.create(messageDto));
     }
 
     @ApiOperation(value = "전송자 쪽지 삭제", notes = "전송자가 쪽지를 삭제한다.")
     @DeleteMapping("/sender/{messageId}")
-    public SingleResult<MessageDeleteResponseDto> deleteMessageBySender(@PathVariable Long messageId) {
-        return responseService.getSingleResult(messageService.deleteBySender(messageId));
+    public Result deleteMessageBySender(@PathVariable Long messageId) {
+        messageService.deleteBySender(messageId);
+        return responseService.getDefaultSuccessResult();
     }
 
     @ApiOperation(value = "수신자 쪽지 삭제", notes = "수신자가 쪽지를 삭제한다.")
     @DeleteMapping("/receiver/{messageId}")
-    public SingleResult<MessageDeleteResponseDto> deleteMessageByReceiver(@PathVariable Long messageId) {
-        return responseService.getSingleResult(messageService.deleteByReceiver(messageId));
+    public Result deleteMessageByReceiver(@PathVariable Long messageId) {
+        messageService.deleteByReceiver(messageId);
+        return responseService.getDefaultSuccessResult();
     }
 }

@@ -17,7 +17,7 @@ import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.dto.request.MessageCreateRequestDto;
+import project.SangHyun.message.controller.dto.request.MessageCreateRequestDto;
 import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.message.tools.MessageFactory;
 

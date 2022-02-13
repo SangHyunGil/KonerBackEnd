@@ -1,10 +1,9 @@
-package project.SangHyun.common.dto;
+package project.SangHyun.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.function.Function;

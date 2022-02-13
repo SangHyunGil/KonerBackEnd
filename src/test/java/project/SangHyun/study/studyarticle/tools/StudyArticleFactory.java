@@ -2,7 +2,7 @@ package project.SangHyun.study.studyarticle.tools;
 
 import org.springframework.data.domain.Page;
 import project.SangHyun.BasicFactory;
-import project.SangHyun.common.dto.PageResponseDto;
+import project.SangHyun.common.dto.response.PageResponseDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleCreateRequestDto;
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleUpdateRequestDto;

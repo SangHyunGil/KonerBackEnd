@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import project.SangHyun.common.dto.SliceResponseDto;
+import project.SangHyun.common.dto.response.SliceResponseDto;
 import project.SangHyun.common.helper.AwsS3BucketHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;

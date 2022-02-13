@@ -20,8 +20,8 @@ public class StudyCommentResponseDto {
     @ApiModelProperty(value = "스터디 댓글 ID(PK)")
     private Long id;
 
-    @ApiModelProperty(value = "회원 닉네임")
-    private MemberProfile memberProfile;
+    @ApiModelProperty(value = "스터디 댓글 작성자")
+    private MemberProfile creator;
 
     @ApiModelProperty(value = "스터디 댓글 내용")
     private String content;
@@ -36,7 +36,7 @@ public class StudyCommentResponseDto {
     }
 
     public static StudyCommentResponseDto create(StudyCommentDto studyCommentDto) {
-        return new StudyCommentResponseDto(studyCommentDto.getId(), studyCommentDto.getMemberProfile(),
+        return new StudyCommentResponseDto(studyCommentDto.getId(), studyCommentDto.getCreator(),
                 studyCommentDto.getContent(), studyCommentDto.getChildren());
     }
 }

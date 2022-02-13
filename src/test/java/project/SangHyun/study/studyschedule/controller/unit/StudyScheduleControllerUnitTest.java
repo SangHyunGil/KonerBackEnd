@@ -78,6 +78,7 @@ public class StudyScheduleControllerUnitTest {
 
         //mocking
         given(studyScheduleService.findAllSchedules(study.getId())).willReturn(studyScheduleDto);
+        given(responseService.convertToControllerDto(studyScheduleDto,StudyScheduleResponseDto::create)).willReturn(responseDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
