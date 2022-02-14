@@ -336,4 +336,10 @@ public class ExceptionAdvice {
     protected Result InvalidPinException() {
         return responseService.getFailureResult(-151, "적절하지 않은 방 비밀번호입니다.");
     }
+
+    @ExceptionHandler(JanusRequestException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result JanusRequestException() {
+        return responseService.getFailureResult(-151, "Janus 요청에 실패했습니다.");
+    }
 }
