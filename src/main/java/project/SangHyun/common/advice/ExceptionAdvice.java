@@ -318,4 +318,22 @@ public class ExceptionAdvice {
     protected Result StudyScheduleNotFoundException() {
         return responseService.getFailureResult(-148, "존재하지 않는 스케줄입니다.");
     }
+
+    @ExceptionHandler(InvalidVideoRoomIdException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidVideoRoomIdException() {
+        return responseService.getFailureResult(-149, "적절하지 않은 방 번호입니다.");
+    }
+
+    @ExceptionHandler(InvalidVideoRoomTitleException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidVideoRoomTitleException() {
+        return responseService.getFailureResult(-150, "적절하지 않은 방 제목입니다.");
+    }
+
+    @ExceptionHandler(InvalidPinException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Result InvalidPinException() {
+        return responseService.getFailureResult(-151, "적절하지 않은 방 비밀번호입니다.");
+    }
 }
