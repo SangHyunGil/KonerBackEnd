@@ -7,6 +7,7 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.videoroom.domain.VideoRoom;
 
 @Data
 @NoArgsConstructor
@@ -29,5 +30,9 @@ public class MemberProfile {
 
     public static MemberProfile create(StudyComment studyComment) {
         return new MemberProfile(studyComment.getCreatorNickname(), studyComment.getCreatorProfileImgUrl());
+    }
+
+    public static MemberProfile create(VideoRoom videoRoom) {
+        return new MemberProfile(videoRoom.getCreatorNickname(), videoRoom.getCreatorProfileImgUrl());
     }
 }

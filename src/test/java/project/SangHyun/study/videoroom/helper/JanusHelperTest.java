@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.study.videoroom.service.dto.request.CreateRoomRequestDto;
-import project.SangHyun.study.videoroom.service.dto.request.DestroyRoomRequestDto;
-import project.SangHyun.study.videoroom.service.dto.request.EditRoomRequestDto;
-import project.SangHyun.study.videoroom.service.dto.response.CreateRoomResultDto;
-import project.SangHyun.study.videoroom.service.dto.response.DestroyRoomResultDto;
-import project.SangHyun.study.videoroom.service.dto.response.EditRoomResultDto;
-import project.SangHyun.study.videoroom.tools.RoomTestCaseFactory;
+import project.SangHyun.study.videoroom.service.dto.request.VideoRoomDeleteDto;
+import project.SangHyun.study.videoroom.service.dto.request.VideoRoomUpdateDto;
+import project.SangHyun.study.videoroom.service.dto.response.VideoRoomCreateResultDto;
+import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDeleteResultDto;
+import project.SangHyun.study.videoroom.service.dto.response.VideoRoomUpdateResultDto;
+import project.SangHyun.study.videoroom.tools.VideoRoomFactory;
 
 @SpringBootTest
 @Transactional
@@ -22,28 +21,28 @@ class JanusHelperTest {
     @Test
     public void createPost() throws Exception {
         //given
-        CreateRoomRequestDto requestDto = RoomTestCaseFactory.createRoomRequestDto();
+        project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto requestDto = VideoRoomFactory.createDto();
 
         //when
-        CreateRoomResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, CreateRoomResultDto.class);
+        VideoRoomCreateResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, VideoRoomCreateResultDto.class);
 
         //then
         Assertions.assertNotNull(resultDto);
 
         //destroy
-        DestroyRoomRequestDto destroyRequestDto = RoomTestCaseFactory.destroyRoomRequestDto(resultDto.getResponse().getRoom());
-        janusHelper.postAndGetResponseDto(destroyRequestDto, DestroyRoomResultDto.class);
+        VideoRoomDeleteDto destroyRequestDto = VideoRoomFactory.deleteDto(resultDto.getResult().getRoom());
+        janusHelper.postAndGetResponseDto(destroyRequestDto, VideoRoomDeleteResultDto.class);
     }
 
     @Test
     public void editPost() throws Exception {
         //given
-        CreateRoomRequestDto createRequestDto = RoomTestCaseFactory.createRoomRequestDto();
-        janusHelper.postAndGetResponseDto(createRequestDto, CreateRoomResultDto.class);
-        EditRoomRequestDto editRequestDto = RoomTestCaseFactory.editRoomRequestDto();
+        project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto createRequestDto = VideoRoomFactory.createDto();
+        janusHelper.postAndGetResponseDto(createRequestDto, VideoRoomCreateResultDto.class);
+        VideoRoomUpdateDto editRequestDto = VideoRoomFactory.updateDto();
 
         //when
-        EditRoomResultDto editResultDto = janusHelper.postAndGetResponseDto(editRequestDto, EditRoomResultDto.class);
+        VideoRoomUpdateResultDto editResultDto = janusHelper.postAndGetResponseDto(editRequestDto, VideoRoomUpdateResultDto.class);
 
         //then
         Assertions.assertNotNull(editResultDto);
@@ -51,12 +50,12 @@ class JanusHelperTest {
 
     @Test
     public void DestroyPost() throws Exception {
-        CreateRoomRequestDto createRequestDto = RoomTestCaseFactory.createRoomRequestDto();
-        CreateRoomResultDto createResultDto = janusHelper.postAndGetResponseDto(createRequestDto, CreateRoomResultDto.class);
-        DestroyRoomRequestDto destroyRequestDto = RoomTestCaseFactory.destroyRoomRequestDto(createResultDto.getResponse().getRoom());
+        project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto createRequestDto = VideoRoomFactory.createDto();
+        VideoRoomCreateResultDto createResultDto = janusHelper.postAndGetResponseDto(createRequestDto, VideoRoomCreateResultDto.class);
+        VideoRoomDeleteDto destroyRequestDto = VideoRoomFactory.deleteDto(createResultDto.getResult().getRoom());
 
         //when
-        DestroyRoomResultDto destroyResultDto = janusHelper.postAndGetResponseDto(destroyRequestDto, DestroyRoomResultDto.class);
+        VideoRoomDeleteResultDto destroyResultDto = janusHelper.postAndGetResponseDto(destroyRequestDto, VideoRoomDeleteResultDto.class);
 
         //then
         Assertions.assertNotNull(destroyResultDto);

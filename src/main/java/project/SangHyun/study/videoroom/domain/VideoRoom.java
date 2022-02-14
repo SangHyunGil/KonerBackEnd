@@ -14,9 +14,9 @@ public class VideoRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
-    private VideoRoomId videoRoomId;
+    private VideoRoomId roomId;
     @Embedded
-    private VideoRoomTitle description;
+    private VideoRoomTitle title;
     @Embedded
     private Pin pin;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,10 +24,30 @@ public class VideoRoom {
     private Member member;
 
     @Builder
-    public VideoRoom(Long roomId, String description, String pin, Member member) {
-        this.videoRoomId = new VideoRoomId(roomId);
-        this.description = new VideoRoomTitle(description);
+    public VideoRoom(Long roomId, String title, String pin, Member member) {
+        this.roomId = new VideoRoomId(roomId);
+        this.title = new VideoRoomTitle(title);
         this.pin = new Pin(pin);
         this.member = member;
+    }
+
+    public Long getRoomId() {
+        return roomId.getRoomId();
+    }
+
+    public String getTitle() {
+        return title.getTitle();
+    }
+
+    public String getPin() {
+        return pin.getPin();
+    }
+
+    public String getCreatorNickname() {
+        return member.getNickname();
+    }
+
+    public String getCreatorProfileImgUrl() {
+        return member.getProfileImgUrl();
     }
 }
