@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomDeleteDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomUpdateDto;
@@ -14,6 +15,7 @@ import project.SangHyun.study.videoroom.tools.VideoRoomFactory;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 class JanusHelperTest {
     @Autowired
     JanusHelper janusHelper;
@@ -30,7 +32,7 @@ class JanusHelperTest {
         Assertions.assertNotNull(resultDto);
 
         //destroy
-        VideoRoomDeleteDto destroyRequestDto = VideoRoomFactory.deleteDto(resultDto.getResult().getRoom());
+        VideoRoomDeleteDto destroyRequestDto = VideoRoomFactory.deleteDto(resultDto.getResponse().getRoom());
         janusHelper.postAndGetResponseDto(destroyRequestDto, VideoRoomDeleteResultDto.class);
     }
 
@@ -52,7 +54,7 @@ class JanusHelperTest {
     public void DestroyPost() throws Exception {
         project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto createRequestDto = VideoRoomFactory.createDto();
         VideoRoomCreateResultDto createResultDto = janusHelper.postAndGetResponseDto(createRequestDto, VideoRoomCreateResultDto.class);
-        VideoRoomDeleteDto destroyRequestDto = VideoRoomFactory.deleteDto(createResultDto.getResult().getRoom());
+        VideoRoomDeleteDto destroyRequestDto = VideoRoomFactory.deleteDto(createResultDto.getResponse().getRoom());
 
         //when
         VideoRoomDeleteResultDto destroyResultDto = janusHelper.postAndGetResponseDto(destroyRequestDto, VideoRoomDeleteResultDto.class);

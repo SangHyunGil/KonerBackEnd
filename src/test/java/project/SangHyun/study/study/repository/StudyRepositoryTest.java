@@ -57,7 +57,6 @@ class StudyRepositoryTest {
                     2L, "2021-10-01", "2021-12-25", StudyCategory.ME, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, memberA, new ArrayList<>(), new ArrayList<>());
             studyRepository.save(study);
         }
-
     }
 
     @Test

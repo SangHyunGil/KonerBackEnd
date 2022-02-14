@@ -23,6 +23,7 @@ public class VideoRoomTitle {
         if (isNotValidVideoRoomTitle(title)) {
             throw new InvalidVideoRoomTitleException();
         }
+        this.title = title;
     }
 
     private boolean isNotValidVideoRoomTitle(String title) {

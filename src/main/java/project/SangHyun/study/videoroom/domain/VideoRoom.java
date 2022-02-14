@@ -31,11 +31,16 @@ public class VideoRoom {
         this.member = member;
     }
 
+    public void update(String title, String pin) {
+        this.title = new VideoRoomTitle(title);
+        this.pin = new Pin(pin);
+    }
+
     public Long getRoomId() {
         return roomId.getRoomId();
     }
 
-    public String getTitle() {
+    public String getTitleName() {
         return title.getTitle();
     }
 

@@ -21,6 +21,7 @@ public class VideoRoomId {
         if (isNotValidVideoRoomId(roomId)) {
             throw new InvalidVideoRoomIdException();
         }
+        this.roomId = roomId;
     }
 
     private boolean isNotValidVideoRoomId(Long roomId) {

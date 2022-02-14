@@ -88,6 +88,6 @@ jasypt:
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
 
 janus:
-  server: ENC(wiTcxzpBRspW+RvyawKRQkGuoFCHkC/RgcQX242zgFOJSBKgX3Q8Aw==)
+  server: ENC(H6up5neCg2kjSg54kUq7rRxocDWq65513Tnq9RKP4fRyllBaNnFocg==)
   admin:
-    secret: ENC(mtw5NcFUNCQMRQrs1fG4o5g2BSLhIR1B)
+    secret: ENC(0xz2rIeZb6jQwQ0XJKFjFCEuyydFK1eM)

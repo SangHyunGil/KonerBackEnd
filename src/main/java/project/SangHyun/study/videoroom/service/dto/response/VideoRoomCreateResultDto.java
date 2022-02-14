@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.study.videoroom.service.dto.response.result.VideoRoomResult;
 
 @Data
 @NoArgsConstructor
@@ -19,13 +20,5 @@ public class VideoRoomCreateResultDto {
     private String transaction;
 
     @ApiModelProperty(name = "화상회의 방 요청 결과")
-    private VideoRoomCreateResult result;
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class VideoRoomCreateResult {
-        private Long room;
-        private String videoroom;
-    }
+    private VideoRoomResult response;
 }

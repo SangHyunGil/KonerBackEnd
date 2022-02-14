@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.videoroom.domain.VideoRoom;
 import project.SangHyun.study.videoroom.helper.JanusHelper;
 import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
@@ -23,6 +24,7 @@ import project.SangHyun.study.videoroom.service.dto.response.VideoRoomUpdateResu
 import project.SangHyun.study.videoroom.tools.VideoRoomFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -38,6 +40,8 @@ class VideoRoomServiceUnitTest {
     VideoRoomService videoRoomService;
     @Mock
     JanusHelper janusHelper;
+    @Mock
+    MemberRepository memberRepository;
     @Mock
     VideoRoomRepository videoRoomRepository;
 
@@ -56,13 +60,14 @@ class VideoRoomServiceUnitTest {
 
         //mocking
         given(janusHelper.postAndGetResponseDto(createDto, VideoRoomCreateResultDto.class)).willReturn(resultDto);
+        given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
         given(videoRoomRepository.save(any())).willReturn(videoRoom);
 
         //when
-        VideoRoomDto responseDto = videoRoomService.createRoom(createDto);
+        VideoRoomDto responseDto = videoRoomService.createRoom(member.getId(), createDto);
 
         //then
-        Assertions.assertEquals("백엔드 화상회의", responseDto.getTitle());
+        Assertions.assertEquals("백엔드 스터디 화상회의 방", responseDto.getTitle());
     }
 
     @Test
@@ -76,11 +81,8 @@ class VideoRoomServiceUnitTest {
         given(janusHelper.postAndGetResponseDto(updateDto, VideoRoomUpdateResultDto.class)).willReturn(resultDto);
         given(videoRoomRepository.findByRoomId(any())).willReturn(videoRoom);
 
-        //when
-        VideoRoomDto responseDto = videoRoomService.updateRoom(videoRoom.getRoomId(), updateDto);
-
-        //then
-        Assertions.assertEquals("프론드엔드 화상회의", responseDto.getTitle());
+        //when, then
+        Assertions.assertDoesNotThrow(() -> videoRoomService.updateRoom(videoRoom.getRoomId(), updateDto));
     }
 
     @Test
@@ -103,8 +105,6 @@ class VideoRoomServiceUnitTest {
     @DisplayName("방을 모두 조회한다.")
     public void findRooms() throws Exception {
         //given
-        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto();
-        videoRoomService.createRoom(requestDto);
 
         //mocking
         given(videoRoomRepository.findAll()).willReturn(List.of(videoRoom));

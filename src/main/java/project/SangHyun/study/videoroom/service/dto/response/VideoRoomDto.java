@@ -25,7 +25,7 @@ public class VideoRoomDto {
     private MemberProfile creator;
 
     public static VideoRoomDto create(VideoRoom room) {
-        return new VideoRoomDto(room.getRoomId(), room.getTitle(),
+        return new VideoRoomDto(room.getRoomId(), room.getTitleName(),
                 room.getPin(), MemberProfile.create(room));
     }
 

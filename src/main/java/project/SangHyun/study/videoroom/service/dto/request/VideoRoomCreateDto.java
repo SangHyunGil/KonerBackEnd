@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.videoroom.domain.VideoRoom;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -26,4 +28,13 @@ public class VideoRoomCreateDto {
 
     @ApiModelProperty(name = "화상회의 방 비밀번호")
     private String pin;
+
+    public VideoRoom toEntity(Long roomId, Member member) {
+        return VideoRoom.builder()
+                .title(title)
+                .pin(pin)
+                .roomId(roomId)
+                .member(member)
+                .build();
+    }
 }
