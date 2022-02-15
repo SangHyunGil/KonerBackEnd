@@ -3,6 +3,7 @@ package project.SangHyun.member.controller;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class SignController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public SingleResult<MemberResponseDto> register(@Valid @ModelAttribute MemberRegisterRequestDto requestDto,
                                                     BindingResult bindingResult) throws IOException, BindException {
         if (bindingResult.hasErrors()) {
@@ -42,12 +44,14 @@ public class SignController {
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public SingleResult<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto) {
         return responseService.getSingleResult(signService.loginMember(requestDto));
     }
 
     @ApiOperation(value = "토큰 재발급", notes = "Refresh Token을 통해 토큰을 재발급받는다.")
     @PostMapping("/reissue")
+    @ResponseStatus(HttpStatus.OK)
     public SingleResult<TokenResponseDto> reIssue(@RequestBody TokenRequestDto requestDto) {
         return responseService.getSingleResult(signService.tokenReIssue(requestDto));
     }
