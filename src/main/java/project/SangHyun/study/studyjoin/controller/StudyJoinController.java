@@ -24,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/study")
 public class StudyJoinController {
+
     private final StudyJoinService studyJoinService;
     private final ResponseService responseService;
 

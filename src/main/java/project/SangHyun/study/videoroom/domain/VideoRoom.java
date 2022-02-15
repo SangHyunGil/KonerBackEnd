@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.domain.Study;
 
 import javax.persistence.*;
 
@@ -22,13 +23,17 @@ public class VideoRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private Study study;
 
     @Builder
-    public VideoRoom(Long roomId, String title, String pin, Member member) {
+    public VideoRoom(Long roomId, String title, String pin, Member member, Study study) {
         this.roomId = new VideoRoomId(roomId);
         this.title = new VideoRoomTitle(title);
         this.pin = new Pin(pin);
         this.member = member;
+        this.study = study;
     }
 
     public void update(String title, String pin) {

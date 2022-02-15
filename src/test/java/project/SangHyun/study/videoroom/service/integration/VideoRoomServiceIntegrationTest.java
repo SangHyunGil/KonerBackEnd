@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
 import project.SangHyun.study.videoroom.service.VideoRoomService;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto;
@@ -39,14 +40,15 @@ class VideoRoomServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("방을 생성한다.")
+    @DisplayName("화상회의 방을 생성한다.")
     public void createRoom() throws Exception {
         //given
         Member member = testDB.findStudyGeneralMember();
-        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto();
+        Study study = testDB.findBackEndStudy();
+        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto(member.getId());
 
         //when
-        VideoRoomDto responseDto = videoRoomService.createRoom(member.getId(), requestDto);
+        VideoRoomDto responseDto = videoRoomService.createRoom(study.getId(), requestDto);
 
         //then
         Assertions.assertNotNull(videoRoomRepository.findByRoomId(responseDto.getRoomId()));
@@ -56,13 +58,14 @@ class VideoRoomServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("방을 수정한다.")
+    @DisplayName("화상회의 방을 수정한다.")
     public void editRoom() throws Exception {
         //given
         Member member = testDB.findStudyGeneralMember();
-        VideoRoomCreateDto createRequestDto = VideoRoomFactory.createDto();
-        VideoRoomDto room = videoRoomService.createRoom(member.getId(), createRequestDto);
-        VideoRoomUpdateDto updateRequestDto = VideoRoomFactory.updateDto();
+        Study study = testDB.findBackEndStudy();
+        VideoRoomCreateDto createRequestDto = VideoRoomFactory.createDto(member.getId());
+        VideoRoomDto room = videoRoomService.createRoom(study.getId(), createRequestDto);
+        VideoRoomUpdateDto updateRequestDto = VideoRoomFactory.updateDto("프론트엔드 화상회의");
 
         //when, then
         Assertions.assertDoesNotThrow(() -> videoRoomService.updateRoom(room.getRoomId(), updateRequestDto));
@@ -72,27 +75,29 @@ class VideoRoomServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("방을 제거한다.")
+    @DisplayName("화상회의 방을 제거한다.")
     public void destroyRoom() throws Exception {
         //given
         Member member = testDB.findStudyGeneralMember();
-        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto();
-        VideoRoomDto room = videoRoomService.createRoom(member.getId(), requestDto);
+        Study study = testDB.findBackEndStudy();
+        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto(member.getId());
+        VideoRoomDto room = videoRoomService.createRoom(study.getId(), requestDto);
 
         //when, then
         Assertions.assertDoesNotThrow(() -> videoRoomService.deleteRoom(room.getRoomId()));
     }
 
     @Test
-    @DisplayName("방을 모두 조회한다.")
+    @DisplayName("화상회의 방을 모두 조회한다.")
     public void findRooms() throws Exception {
         //given
         Member member = testDB.findStudyGeneralMember();
-        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto();
-        VideoRoomDto room = videoRoomService.createRoom(member.getId(), requestDto);
+        Study study = testDB.findBackEndStudy();
+        VideoRoomCreateDto requestDto = VideoRoomFactory.createDto(member.getId());
+        VideoRoomDto room = videoRoomService.createRoom(study.getId(), requestDto);
 
         //when
-        List<VideoRoomDto> rooms = videoRoomService.findRooms();
+        List<VideoRoomDto> rooms = videoRoomService.findRooms(study.getId());
 
         // then
         Assertions.assertEquals(1, rooms.size());

@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.videoroom.domain.VideoRoom;
 import project.SangHyun.study.videoroom.helper.JanusHelper;
 import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
@@ -27,11 +29,13 @@ public class VideoRoomService {
 
     private final JanusHelper janusHelper;
     private final MemberRepository memberRepository;
+    private final StudyRepository studyRepository;
     private final VideoRoomRepository videoRoomRepository;
 
-    public VideoRoomDto createRoom(Long memberId, VideoRoomCreateDto requestDto) {
+    public VideoRoomDto createRoom(Long studyId, VideoRoomCreateDto requestDto) {
         VideoRoomCreateResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, VideoRoomCreateResultDto.class);
-        Member member = findMemberById(memberId);
+        Member member = findMemberById(requestDto.getMemberId());
+        Study study = findStudyById(studyId);
         VideoRoom videoRoom = videoRoomRepository.save(requestDto.toEntity(resultDto.getResponse().getRoom(), member));
         return VideoRoomDto.create(videoRoom);
     }
@@ -49,7 +53,7 @@ public class VideoRoomService {
         videoRoomRepository.delete(videoRoom);
     }
 
-    public List<VideoRoomDto> findRooms() {
+    public List<VideoRoomDto> findRooms(Long studyId) {
         List<VideoRoom> videoRooms = videoRoomRepository.findAll();
         return videoRooms.stream()
                 .map(VideoRoomDto::create)
@@ -58,5 +62,9 @@ public class VideoRoomService {
 
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Study findStudyById(Long studyId) {
+        return studyRepository.findStudyById(studyId);
     }
 }

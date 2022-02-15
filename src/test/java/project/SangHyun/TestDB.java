@@ -28,6 +28,8 @@ import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyschedule.domain.StudySchedule;
 import project.SangHyun.study.studyschedule.repository.StudyScheduleRepository;
+import project.SangHyun.study.videoroom.domain.VideoRoom;
+import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,8 @@ public class TestDB {
     MessageRepository messageRepository;
     @Autowired
     StudyScheduleRepository studyScheduleRepository;
+    @Autowired
+    VideoRoomRepository videoRoomRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -140,6 +144,11 @@ public class TestDB {
         return studyScheduleRepository.findAll().get(0);
     }
 
+    @Transactional(readOnly = true)
+    public VideoRoom findJPAVideoRoom() {
+        return videoRoomRepository.findByRoomId(1234L);
+    }
+
     private void initMember() {
         Member memberA = new Member("xptmxm1!", passwordEncoder.encode("xptmxm1!"), "승범", Department.CSE, "C:\\Users\\Family\\Pictures\\Screenshots\\1.png", MemberRole.ROLE_MEMBER, "승범입니다.");
         memberRepository.save(memberA);
@@ -216,6 +225,9 @@ public class TestDB {
 
         StudySchedule studySchedule = new StudySchedule("JPA 스터디", "2021-09-10", "2022-09-10", "18:00", "22:00", study);
         studyScheduleRepository.save(studySchedule);
+
+        VideoRoom videoRoom = new VideoRoom(1234L, "JPA 스터디", null, memberC, study);
+        videoRoomRepository.save(videoRoom);
 
         // findStudyGeneralMember, findStudyApplyMember, findStudyMemberNotResourceOwner
         initMessage(storedMemberC, storedMemberD, storedMemberE);

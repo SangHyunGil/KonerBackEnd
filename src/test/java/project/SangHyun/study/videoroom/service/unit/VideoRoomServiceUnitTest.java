@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
+import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.videoroom.domain.VideoRoom;
 import project.SangHyun.study.videoroom.helper.JanusHelper;
 import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
@@ -23,6 +24,7 @@ import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDto;
 import project.SangHyun.study.videoroom.service.dto.response.VideoRoomUpdateResultDto;
 import project.SangHyun.study.videoroom.tools.VideoRoomFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +36,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 class VideoRoomServiceUnitTest {
 
     Member member;
+    Study study;
     VideoRoom videoRoom;
 
     @InjectMocks
@@ -48,14 +51,15 @@ class VideoRoomServiceUnitTest {
     @BeforeEach
     public void init() {
         member = VideoRoomFactory.makeTestAuthMember();
+        study = VideoRoomFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
         videoRoom =VideoRoomFactory.makeTestVideoRoom(1L, "백엔드 스터디 화상회의 방", member);
     }
 
     @Test
-    @DisplayName("방을 생성한다.")
+    @DisplayName("화상회의 방을 생성한다.")
     public void createRoom() throws Exception {
         //given
-        VideoRoomCreateDto createDto = VideoRoomFactory.createDto();
+        VideoRoomCreateDto createDto = VideoRoomFactory.createDto(member.getId());
         VideoRoomCreateResultDto resultDto = VideoRoomFactory.createResultDto();
 
         //mocking
@@ -64,17 +68,17 @@ class VideoRoomServiceUnitTest {
         given(videoRoomRepository.save(any())).willReturn(videoRoom);
 
         //when
-        VideoRoomDto responseDto = videoRoomService.createRoom(member.getId(), createDto);
+        VideoRoomDto responseDto = videoRoomService.createRoom(study.getId(), createDto);
 
         //then
         Assertions.assertEquals("백엔드 스터디 화상회의 방", responseDto.getTitle());
     }
 
     @Test
-    @DisplayName("방을 수정한다.")
+    @DisplayName("화상회의 방을 수정한다.")
     public void editRoom() throws Exception {
         //given
-        VideoRoomUpdateDto updateDto = VideoRoomFactory.updateDto();
+        VideoRoomUpdateDto updateDto = VideoRoomFactory.updateDto("프론트엔드 화상회의");
         VideoRoomUpdateResultDto resultDto = VideoRoomFactory.updateResultDto();
 
         //mocking
@@ -86,7 +90,7 @@ class VideoRoomServiceUnitTest {
     }
 
     @Test
-    @DisplayName("방을 제거한다.")
+    @DisplayName("화상회의 방을 제거한다.")
     public void destroyRoom() throws Exception {
         //given
         VideoRoomDeleteDto deleteDto = VideoRoomFactory.deleteDto(videoRoom.getRoomId());
@@ -102,7 +106,7 @@ class VideoRoomServiceUnitTest {
     }
 
     @Test
-    @DisplayName("방을 모두 조회한다.")
+    @DisplayName("화상회의 방을 모두 조회한다.")
     public void findRooms() throws Exception {
         //given
 
@@ -110,7 +114,7 @@ class VideoRoomServiceUnitTest {
         given(videoRoomRepository.findAll()).willReturn(List.of(videoRoom));
 
         //when
-        List<VideoRoomDto> rooms = videoRoomService.findRooms();
+        List<VideoRoomDto> rooms = videoRoomService.findRooms(study.getId());
 
         // then
         Assertions.assertEquals(1, rooms.size());

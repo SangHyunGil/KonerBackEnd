@@ -19,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/study/{studyId}/board/{boardId}/article/{articleId}/comment")
 public class StudyCommentController {
+
     private final StudyCommentService studyCommentService;
     private final ResponseService responseService;
 

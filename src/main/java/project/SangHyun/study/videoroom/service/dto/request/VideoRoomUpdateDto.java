@@ -5,10 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.study.videoroom.domain.VideoRoom;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +19,6 @@ public class VideoRoomUpdateDto {
     private String request;
 
     @ApiModelProperty(name = "화상회의 방 제목")
-    @NotBlank(message = "방 제목을 입력해주세요.")
-    @Size(min=2, message = "방 제목이 너무 짧습니다.")
     private String title;
 
     @ApiModelProperty(name = "화상회의 방 비밀번호")
