@@ -26,7 +26,7 @@ public class StudyCommentGuard {
     }
 
     private boolean isStudyMember(Long studyId) {
-        return studyJoinRepository.exist(studyId, authHelper.extractMemberId());
+        return studyJoinRepository.isStudyMember(studyId, authHelper.extractMemberId());
     }
 
     public boolean checkJoinAndAuth(Long studyId, Long articleId) {

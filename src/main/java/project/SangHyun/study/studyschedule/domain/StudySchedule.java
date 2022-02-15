@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import project.SangHyun.common.EntityDate;
 import project.SangHyun.study.study.domain.Study;
 
 import javax.persistence.*;
@@ -13,10 +14,11 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudySchedule {
+public class StudySchedule extends EntityDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id")
     private Long id;
 
     @Embedded

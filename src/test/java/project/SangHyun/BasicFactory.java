@@ -14,11 +14,12 @@ import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
 import project.SangHyun.study.study.domain.StudyRole;
-import project.SangHyun.study.studyschedule.domain.StudySchedule;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
+import project.SangHyun.study.studyschedule.domain.StudySchedule;
+import project.SangHyun.study.videoroom.domain.VideoRoom;
 
 import java.util.List;
 
@@ -135,6 +136,12 @@ public class BasicFactory {
     public static StudySchedule makeTestSchedule(Long studyScheduleId, String title) {
         StudySchedule schedule = new StudySchedule(title, "2021-12-15", "2022-03-01", "18:00", "22:00", new Study(1L));
         ReflectionTestUtils.setField(schedule, "id", studyScheduleId);
+        return schedule;
+    }
+
+    public static VideoRoom makeTestVideoRoom(Long videoRoomId, String title, Member member, Study study) {
+        VideoRoom schedule = new VideoRoom(1234L, title, null, member, study);
+        ReflectionTestUtils.setField(schedule, "id", videoRoomId);
         return schedule;
     }
 }

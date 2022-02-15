@@ -85,7 +85,7 @@ public class StudyScheduleControllerUnitTest {
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules/", study.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule/", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -103,7 +103,7 @@ public class StudyScheduleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules/{scheduleId}", study.getId(), studySchedule.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", study.getId(), studySchedule.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -123,7 +123,7 @@ public class StudyScheduleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/schedules", study.getId())
+        mockMvc.perform(post("/study/{studyId}/schedule", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -147,7 +147,7 @@ public class StudyScheduleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedules/{scheduleId}", study.getId(), studySchedule.getId())
+        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", study.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -167,7 +167,7 @@ public class StudyScheduleControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedules/{scheduleId}", study.getId(), studySchedule.getId())
+        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", study.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))

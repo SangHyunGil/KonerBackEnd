@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface StudyJoinCustomRepository {
     Long findStudyJoinCount(Long studyId);
-    Boolean exist(Long studyId, Long memberId);
+    Boolean isStudyMember(Long studyId, Long memberId);
     Optional<StudyJoin> findStudyRole(Long memberId, Long studyId);
     List<StudyMembersInfoDto> findStudyMembers(Long studyId);
     List<Study> findStudiesByMemberId(Long memberId);

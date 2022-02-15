@@ -67,7 +67,7 @@ class StudyJoinServiceUnitTest {
         List<StudyJoin> admins = List.of(StudyJoinFactory.makeTestStudyJoinCreator(member, study));
 
         //mocking
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
         given(studyJoinRepository.findAdminAndCreator(any())).willReturn(admins);
@@ -85,7 +85,7 @@ class StudyJoinServiceUnitTest {
         StudyJoinCreateDto requestDto = StudyJoinFactory.makeCreateDto("빠르게 지원합니다.");
 
         //mocking
-        given(studyJoinRepository.exist(any(), any())).willReturn(true);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(true);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
 
         //when, then
@@ -99,7 +99,7 @@ class StudyJoinServiceUnitTest {
         StudyJoinCreateDto requestDto = StudyJoinFactory.makeCreateDto("빠르게 지원합니다.");
 
         //mocking
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
 
@@ -116,7 +116,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
 
@@ -147,7 +147,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(true);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(true);
 
         //when, then
         Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
@@ -160,7 +160,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
 
         //when, then
@@ -174,7 +174,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.empty());
 
@@ -191,7 +191,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
 
@@ -207,7 +207,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(true);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(true);
 
         //when, then
         Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
@@ -220,7 +220,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
 
         //when, then
@@ -234,7 +234,7 @@ class StudyJoinServiceUnitTest {
 
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.exist(any(), any())).willReturn(false);
+        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.empty());
 

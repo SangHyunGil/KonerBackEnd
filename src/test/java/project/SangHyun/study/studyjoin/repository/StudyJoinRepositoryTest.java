@@ -112,7 +112,7 @@ class StudyJoinRepositoryTest {
         Member member = memberRepository.findByEmail("xptmxm3!").get();
 
         //when
-        Boolean exist = studyJoinRepository.exist(study.getId(), member.getId());
+        Boolean exist = studyJoinRepository.isStudyMember(study.getId(), member.getId());
 
         //then
         Assertions.assertEquals(true, exist);

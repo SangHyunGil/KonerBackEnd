@@ -17,11 +17,9 @@ import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
-import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyschedule.controller.dto.request.StudyScheduleCreateRequestDto;
 import project.SangHyun.study.studyschedule.controller.dto.request.StudyScheduleUpdateRequestDto;
 import project.SangHyun.study.studyschedule.domain.StudySchedule;
-import project.SangHyun.study.studyschedule.repository.StudyScheduleRepository;
 import project.SangHyun.study.studyschedule.tools.StudyScheduleFactory;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -39,10 +37,6 @@ public class StudyScheduleControllerIntegrationTest {
     WebApplicationContext context;
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    StudyScheduleRepository studyScheduleRepository;
-    @Autowired
-    StudyRepository studyRepository;
     @Autowired
     JwtTokenHelper accessTokenHelper;
     @Autowired
@@ -63,7 +57,7 @@ public class StudyScheduleControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules", study.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -77,7 +71,7 @@ public class StudyScheduleControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules", study.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -91,7 +85,7 @@ public class StudyScheduleControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules", study.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule", study.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -106,7 +100,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudyScheduleCreateRequestDto requestDto = StudyScheduleFactory.makeCreateRequestDto();
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/schedules", study.getId())
+        mockMvc.perform(post("/study/{studyId}/schedule", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -124,7 +118,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudyScheduleCreateRequestDto requestDto = StudyScheduleFactory.makeCreateRequestDto();
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/schedules", study.getId())
+        mockMvc.perform(post("/study/{studyId}/schedule", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -143,7 +137,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -163,7 +157,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -183,7 +177,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -201,7 +195,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudySchedule schedule = testDB.findSchedule();
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -218,7 +212,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudySchedule schedule = testDB.findSchedule();
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -235,7 +229,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudySchedule schedule = testDB.findSchedule();
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -252,7 +246,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudySchedule schedule = testDB.findSchedule();
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -270,7 +264,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudySchedule schedule = testDB.findSchedule();
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -288,7 +282,7 @@ public class StudyScheduleControllerIntegrationTest {
         StudySchedule schedule = testDB.findSchedule();
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedules/{scheduleId}", study.getId(), schedule.getId())
+        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", study.getId(), schedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
