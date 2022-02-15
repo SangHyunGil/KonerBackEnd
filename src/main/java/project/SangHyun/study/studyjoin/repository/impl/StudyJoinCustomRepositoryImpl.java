@@ -33,7 +33,7 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     }
 
     @Override
-    public Boolean exist(Long studyId, Long memberId) {
+    public Boolean isStudyMember(Long studyId, Long memberId) {
         StudyJoin findStudyJoin = jpaQueryFactory
                 .selectFrom(studyJoin)
                 .where(equalsStudyId(studyId),

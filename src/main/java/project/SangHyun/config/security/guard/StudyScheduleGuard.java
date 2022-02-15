@@ -20,7 +20,7 @@ public class StudyScheduleGuard {
     }
 
     private boolean isStudyMember(Long studyId) {
-        return studyJoinRepository.exist(studyId, authHelper.extractMemberId());
+        return studyJoinRepository.isStudyMember(studyId, authHelper.extractMemberId());
     }
 
     private Boolean isMember() {

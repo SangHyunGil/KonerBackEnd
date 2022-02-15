@@ -93,7 +93,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
                 .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
 
-                .antMatchers("/study/{studyId}/schedules/**").access("@studyScheduleGuard.checkJoin(#studyId)")
+                .antMatchers("/study/{studyId}/schedule/**").access("@studyScheduleGuard.checkJoin(#studyId)")
+
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/videoroom").access("@videoRoomGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/videoroom").access("@videoRoomGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/videoroom/{videoRoomId}").access("@videoRoomGuard.checkJoinAndAuth(#studyId, #videoRoomId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/videoroom/{videoRoomId}").access("@videoRoomGuard.checkJoinAndAuth(#studyId, #videoRoomId)")
 
 
                 .anyRequest().hasAnyRole("MEMBER", "ADMIN")

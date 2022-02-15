@@ -71,7 +71,7 @@ public class StudyJoinService {
 
     private void validateJoinCondition(Long studyId, Long memberId) {
         Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
-        if (studyJoinRepository.exist(studyId, memberId))
+        if (studyJoinRepository.isStudyMember(studyId, memberId))
             throw new AlreadyJoinStudyMember();
         if (study.getHeadCount() <= studyJoinRepository.findStudyJoinCount(studyId))
             throw new ExceedMaximumStudyMember();

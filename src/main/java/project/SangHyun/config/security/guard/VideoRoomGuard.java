@@ -4,18 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 import project.SangHyun.study.study.domain.StudyRole;
-import project.SangHyun.study.studyarticle.domain.StudyArticle;
-import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
+import project.SangHyun.study.videoroom.domain.VideoRoom;
+import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
 
 @Component
 @RequiredArgsConstructor
-public class StudyArticleGuard {
+public class VideoRoomGuard {
 
     private final AuthHelper authHelper;
     private final StudyJoinRepository studyJoinRepository;
-    private final StudyArticleRepository studyArticleRepository;
+    private final VideoRoomRepository videoRoomRepository;
 
     public boolean checkJoin(Long studyId) {
         return authHelper.isAuthenticated() && isJoinMember(studyId);
@@ -29,21 +29,21 @@ public class StudyArticleGuard {
         return studyJoinRepository.isStudyMember(studyId, authHelper.extractMemberId());
     }
 
-    public boolean checkJoinAndAuth(Long studyId, Long articleId) {
-        return authHelper.isAuthenticated() && hasAuthority(studyId, articleId);
+    public boolean checkJoinAndAuth(Long studyId, Long videoRoomId) {
+        return authHelper.isAuthenticated() && hasAuthority(studyId, videoRoomId);
     }
 
-    private boolean hasAuthority(Long studyId, Long articleId) {
-        return (isMember() && isStudyMember(studyId) && hasResourceAuthority(studyId, articleId)) || isAdmin();
+    private boolean hasAuthority(Long studyId, Long videoRoomId) {
+        return (isMember() && isStudyMember(studyId) && hasResourceAuthority(studyId, videoRoomId)) || isAdmin();
     }
 
-    private boolean hasResourceAuthority(Long studyId, Long articleId) {
-        return isStudyArticleOwner(articleId) || isStudyAdminOrCreator(studyId);
+    private boolean hasResourceAuthority(Long studyId, Long roomId) {
+        return isVideoRoomOwner(roomId) || isStudyAdminOrCreator(studyId);
     }
 
-    private boolean isStudyArticleOwner(Long articleId) {
-        StudyArticle studyArticle = studyArticleRepository.findById(articleId).orElseThrow(() -> new AccessDeniedException(""));
-        return studyArticle.getMember().getId().equals(authHelper.extractMemberId());
+    private boolean isVideoRoomOwner(Long roomId) {
+        VideoRoom videoRoom = videoRoomRepository.findByRoomId(roomId);
+        return videoRoom.getCreatorId().equals(authHelper.extractMemberId());
     }
 
     private boolean isStudyAdminOrCreator(Long studyId) {

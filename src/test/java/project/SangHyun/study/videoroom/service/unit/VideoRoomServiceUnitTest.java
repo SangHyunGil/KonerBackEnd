@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.videoroom.domain.VideoRoom;
 import project.SangHyun.study.videoroom.helper.JanusHelper;
 import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
@@ -46,13 +47,15 @@ class VideoRoomServiceUnitTest {
     @Mock
     MemberRepository memberRepository;
     @Mock
+    StudyRepository studyRepository;
+    @Mock
     VideoRoomRepository videoRoomRepository;
 
     @BeforeEach
     public void init() {
         member = VideoRoomFactory.makeTestAuthMember();
         study = VideoRoomFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
-        videoRoom =VideoRoomFactory.makeTestVideoRoom(1L, "백엔드 스터디 화상회의 방", member);
+        videoRoom =VideoRoomFactory.makeTestVideoRoom(1L, "백엔드 스터디 화상회의 방", member, study);
     }
 
     @Test
@@ -65,6 +68,7 @@ class VideoRoomServiceUnitTest {
         //mocking
         given(janusHelper.postAndGetResponseDto(createDto, VideoRoomCreateResultDto.class)).willReturn(resultDto);
         given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
+        given(studyRepository.findStudyById(study.getId())).willReturn(study);
         given(videoRoomRepository.save(any())).willReturn(videoRoom);
 
         //when

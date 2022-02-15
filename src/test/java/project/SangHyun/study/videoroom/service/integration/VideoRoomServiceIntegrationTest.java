@@ -24,8 +24,8 @@ import java.util.List;
 @Transactional
 @ActiveProfiles("test")
 class VideoRoomServiceIntegrationTest {
-
     Member member;
+    Study study;
 
     @Autowired
     VideoRoomService videoRoomService;
@@ -37,14 +37,14 @@ class VideoRoomServiceIntegrationTest {
     @BeforeEach
     public void init() {
         testDB.init();
+        member = testDB.findStudyGeneralMember();
+        study = testDB.findBackEndStudy();
     }
 
     @Test
     @DisplayName("화상회의 방을 생성한다.")
     public void createRoom() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoomCreateDto requestDto = VideoRoomFactory.createDto(member.getId());
 
         //when
@@ -61,8 +61,6 @@ class VideoRoomServiceIntegrationTest {
     @DisplayName("화상회의 방을 수정한다.")
     public void editRoom() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoomCreateDto createRequestDto = VideoRoomFactory.createDto(member.getId());
         VideoRoomDto room = videoRoomService.createRoom(study.getId(), createRequestDto);
         VideoRoomUpdateDto updateRequestDto = VideoRoomFactory.updateDto("프론트엔드 화상회의");
@@ -78,8 +76,6 @@ class VideoRoomServiceIntegrationTest {
     @DisplayName("화상회의 방을 제거한다.")
     public void destroyRoom() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoomCreateDto requestDto = VideoRoomFactory.createDto(member.getId());
         VideoRoomDto room = videoRoomService.createRoom(study.getId(), requestDto);
 
@@ -91,8 +87,6 @@ class VideoRoomServiceIntegrationTest {
     @DisplayName("화상회의 방을 모두 조회한다.")
     public void findRooms() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoomCreateDto requestDto = VideoRoomFactory.createDto(member.getId());
         VideoRoomDto room = videoRoomService.createRoom(study.getId(), requestDto);
 
@@ -100,7 +94,7 @@ class VideoRoomServiceIntegrationTest {
         List<VideoRoomDto> rooms = videoRoomService.findRooms(study.getId());
 
         // then
-        Assertions.assertEquals(1, rooms.size());
+        Assertions.assertEquals(2, rooms.size());
 
         //destroy
         videoRoomService.deleteRoom(room.getRoomId());

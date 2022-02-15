@@ -32,6 +32,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @ActiveProfiles("test")
 public class VideoRoomControllerIntegrationTest {
+    Member studyMember;
+    Member notStudyMember;
+    Study study;
+    Member webAdminMember;
+    Member studyAdminMember;
+    Member hasNoResourceMember;
 
     @Autowired
     WebApplicationContext context;
@@ -46,16 +52,21 @@ public class VideoRoomControllerIntegrationTest {
     void beforeEach() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         testDB.init();
+
+        studyMember = testDB.findStudyGeneralMember();
+        notStudyMember = testDB.findNotStudyMember();
+        study = testDB.findBackEndStudy();
+        webAdminMember = testDB.findAdminMember();
+        studyAdminMember = testDB.findStudyAdminMember();
+        hasNoResourceMember = testDB.findStudyMemberNotResourceOwner();
     }
 
     @Test
     @DisplayName("화상회의 방을 생성한다.")
     public void createRoom() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
-        VideoRoomCreateRequestDto createRequestDto = VideoRoomFactory.createRequestDto(member.getId());
+        String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
+        VideoRoomCreateRequestDto createRequestDto = VideoRoomFactory.createRequestDto(studyMember.getId());
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/videoroom", study.getId())
@@ -64,17 +75,15 @@ public class VideoRoomControllerIntegrationTest {
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value("백엔드 화상회의 방"));
+                .andExpect(jsonPath("$.data.title").value("백엔드 화상회의"));
     }
 
     @Test
     @DisplayName("스터디 멤버가 아닌 회원은 해당 스터디에 화상회의 방을 생성할 수 없다.")
     public void createRoom_fail() throws Exception {
         //given
-        Member member = testDB.findNotStudyMember();
-        Study study = testDB.findBackEndStudy();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
-        VideoRoomCreateRequestDto createRequestDto = VideoRoomFactory.createRequestDto(member.getId());
+        String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
+        VideoRoomCreateRequestDto createRequestDto = VideoRoomFactory.createRequestDto(notStudyMember.getId());
 
         //when, then
         mockMvc.perform(post("/study/{studyId}/videoroom", study.getId())
@@ -89,10 +98,8 @@ public class VideoRoomControllerIntegrationTest {
     @DisplayName("화상회의 방을 수정한다.")
     public void editRoom() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoom videoRoom = testDB.findJPAVideoRoom();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
         VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
 
         //when, then
@@ -101,19 +108,33 @@ public class VideoRoomControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value("React Query 회의 방"));
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("스터디 관리자는 어떤 스터디 화상회의 방이든 수정할 수 있다.")
+    public void editRoom2() throws Exception {
+        //given
+        VideoRoom videoRoom = testDB.findJPAVideoRoom();
+        String accessToken = accessTokenHelper.createToken(studyAdminMember.getEmail());
+        VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(updateRequestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("웹 관리자는 어떤 스터디 화상회의 방이든 수정할 수 있다.")
-    public void editRoom2() throws Exception {
+    public void editRoom3() throws Exception {
         //given
-        Member member = testDB.findAdminMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoom videoRoom = testDB.findJPAVideoRoom();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
-        VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
+        String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
+        VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의");
 
         //when, then
         mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
@@ -121,18 +142,15 @@ public class VideoRoomControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value("React Query 회의 방"));
+                .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("스터디 화상회의 방 생성자가 아니라면 해당 방을 수정할 수 없다.")
     public void editRoom_fail2() throws Exception {
         //given
-        Member member = testDB.findStudyMemberNotResourceOwner();
-        Study study = testDB.findBackEndStudy();
         VideoRoom videoRoom = testDB.findJPAVideoRoom();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(hasNoResourceMember.getEmail());
         VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
 
         //when, then
@@ -148,10 +166,23 @@ public class VideoRoomControllerIntegrationTest {
     @DisplayName("화상회의 방을 제거한다.")
     public void destroyRoom() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoom videoRoom = testDB.findJPAVideoRoom();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
+
+        //when, then
+        mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("스터디 관리자는 어떤 화상회의 방이든 제거할 수 있다.")
+    public void destroyRoom2() throws Exception {
+        //given
+        VideoRoom videoRoom = testDB.findJPAVideoRoom();
+        String accessToken = accessTokenHelper.createToken(studyAdminMember.getEmail());
 
         //when, then
         mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
@@ -163,12 +194,10 @@ public class VideoRoomControllerIntegrationTest {
 
     @Test
     @DisplayName("웹 관리자는 어떤 화상회의 방이든 제거할 수 있다.")
-    public void destroyRoom2() throws Exception {
+    public void destroyRoom3() throws Exception {
         //given
-        Member member = testDB.findAdminMember();
-        Study study = testDB.findBackEndStudy();
         VideoRoom videoRoom = testDB.findJPAVideoRoom();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
         mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
@@ -182,10 +211,8 @@ public class VideoRoomControllerIntegrationTest {
     @DisplayName("스터디 화상회의 방 생성자가 아니라면 화상회의 방을 제거할 수 없다.")
     public void destroyRoom_fail() throws Exception {
         //given
-        Member member = testDB.findStudyMemberNotResourceOwner();
-        Study study = testDB.findBackEndStudy();
         VideoRoom videoRoom = testDB.findJPAVideoRoom();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(hasNoResourceMember.getEmail());
 
         //when, then
         mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
@@ -199,9 +226,7 @@ public class VideoRoomControllerIntegrationTest {
     @DisplayName("화상회의 방을 모두 조회한다.")
     public void findRooms() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
-        Study study = testDB.findBackEndStudy();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
         mockMvc.perform(get("/study/{studyId}/videoroom", study.getId())
@@ -215,9 +240,7 @@ public class VideoRoomControllerIntegrationTest {
     @DisplayName("스터디 멤버가 아닌 회원은 해당 스터디 화상회의 방을 조회할 수 없다.")
     public void findRooms_fail() throws Exception {
         //given
-        Member member = testDB.findNotStudyMember();
-        Study study = testDB.findBackEndStudy();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
         mockMvc.perform(get("/study/{studyId}/videoroom", study.getId())

@@ -27,7 +27,7 @@ public class VideoRoomFactory extends BasicFactory {
     }
 
     public static VideoRoomUpdateRequestDto updateRequestDto(String title) {
-        return new VideoRoomUpdateRequestDto("create", title, "22");
+        return new VideoRoomUpdateRequestDto("edit", title, "22");
     }
 
     public static VideoRoomUpdateDto updateDto(String title) {

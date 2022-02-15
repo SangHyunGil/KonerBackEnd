@@ -30,8 +30,10 @@ import project.SangHyun.study.videoroom.tools.VideoRoomFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -62,8 +64,8 @@ public class VideoRoomControllerUnitTest {
         accessToken = "accessToken";
         member = VideoRoomFactory.makeTestAdminMember();
         study = VideoRoomFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
-        videoRoom = VideoRoomFactory.makeTestVideoRoom(1L, "백엔드 화상회의 방", member);
-        updatedVideoRoom = VideoRoomFactory.makeTestVideoRoom(1L, "프론트엔드 화상회의 방", member);
+        videoRoom = VideoRoomFactory.makeTestVideoRoom(1L, "백엔드 화상회의", member, study);
+        updatedVideoRoom = VideoRoomFactory.makeTestVideoRoom(1L, "프론트엔드 화상회의", member, study);
     }
 
     @Test
@@ -87,7 +89,7 @@ public class VideoRoomControllerUnitTest {
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value("백엔드 화상회의 방"));
+                .andExpect(jsonPath("$.data.title").value("백엔드 화상회의"));
     }
 
     @Test
@@ -108,8 +110,7 @@ public class VideoRoomControllerUnitTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title").value("프론트엔드 화상회의 방"));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -142,6 +143,7 @@ public class VideoRoomControllerUnitTest {
 
         //mocking
         given(videoRoomService.findRooms(study.getId())).willReturn(videoRoomDto);
+        given(responseService.convertToControllerDto(any(List.class), any(Function.class))).willReturn(responseDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then

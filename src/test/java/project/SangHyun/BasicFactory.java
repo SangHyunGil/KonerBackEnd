@@ -139,8 +139,8 @@ public class BasicFactory {
         return schedule;
     }
 
-    public static VideoRoom makeTestVideoRoom(Long videoRoomId, String title, Member member) {
-        VideoRoom schedule = new VideoRoom(1234L, title, null, member);
+    public static VideoRoom makeTestVideoRoom(Long videoRoomId, String title, Member member, Study study) {
+        VideoRoom schedule = new VideoRoom(1234L, title, null, member, study);
         ReflectionTestUtils.setField(schedule, "id", videoRoomId);
         return schedule;
     }
