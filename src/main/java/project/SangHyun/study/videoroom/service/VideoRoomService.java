@@ -32,6 +32,7 @@ public class VideoRoomService {
     private final StudyRepository studyRepository;
     private final VideoRoomRepository videoRoomRepository;
 
+    @Transactional
     public VideoRoomDto createRoom(Long studyId, VideoRoomCreateDto requestDto) {
         VideoRoomCreateResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, VideoRoomCreateResultDto.class);
         Member member = findMemberById(requestDto.getMemberId());
@@ -40,12 +41,14 @@ public class VideoRoomService {
         return VideoRoomDto.create(videoRoom);
     }
 
+    @Transactional
     public void updateRoom(Long roomId, VideoRoomUpdateDto requestDto) {
         janusHelper.postAndGetResponseDto(requestDto, VideoRoomUpdateResultDto.class);
         VideoRoom videoRoom = videoRoomRepository.findByRoomId(roomId);
         videoRoom.update(requestDto.getTitle(), requestDto.getPin());
     }
 
+    @Transactional
     public void deleteRoom(Long roomId) {
         VideoRoomDeleteDto requestDto = VideoRoomDeleteDto.create(roomId);
         janusHelper.postAndGetResponseDto(requestDto, VideoRoomDeleteResultDto.class);

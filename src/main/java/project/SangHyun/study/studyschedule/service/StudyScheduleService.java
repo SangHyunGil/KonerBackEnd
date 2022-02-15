@@ -20,17 +20,20 @@ public class StudyScheduleService {
 
     private final StudyScheduleRepository studyScheduleRepository;
 
+    @Transactional
     public StudyScheduleDto createSchedule(Long studyId, StudyScheduleCreateDto requestDto) {
         StudySchedule studySchedule = studyScheduleRepository.save(requestDto.toEntity(studyId));
         return StudyScheduleDto.create(studySchedule);
     }
 
+    @Transactional
     public StudyScheduleDto updateSchedule(Long scheduleId, StudyScheduleUpdateDto requestDto) {
         StudySchedule studySchedule = findStudyScheduleById(scheduleId);
         studySchedule.update(requestDto.toEntity());
         return StudyScheduleDto.create(studySchedule);
     }
 
+    @Transactional
     public void deleteSchedule(Long scheduleId) {
         StudySchedule studySchedule = findStudyScheduleById(scheduleId);
         studyScheduleRepository.delete(studySchedule);
