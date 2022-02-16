@@ -66,6 +66,10 @@ public class StudyJoin extends EntityDate {
                 notificationType.makeContent(study.getTitle()), notificationType.makeUrl(study.getId())));
     }
 
+    public Long getParticipantId() {
+        return member.getId();
+    }
+
     public String getParticipantNickname() {
         return member.getNickname();
     }

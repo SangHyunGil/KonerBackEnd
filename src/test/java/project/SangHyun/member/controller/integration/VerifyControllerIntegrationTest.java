@@ -102,7 +102,7 @@ public class VerifyControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class VerifyControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
     }
 

@@ -74,7 +74,7 @@ public class VideoRoomControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.title").value("백엔드 화상회의"));
     }
 

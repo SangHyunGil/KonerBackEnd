@@ -69,7 +69,7 @@ class SignControllerIntegrationTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -111,7 +111,7 @@ class SignControllerIntegrationTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -132,7 +132,7 @@ class SignControllerIntegrationTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

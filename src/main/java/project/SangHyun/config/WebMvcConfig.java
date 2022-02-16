@@ -7,13 +7,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
     @Value("${spring.domain}")
-    private String prodOrigin;
+    private String crossOrigin;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(prodOrigin)
+                .allowedOrigins(crossOrigin)
                 .allowCredentials(true)
                 .allowedMethods("*")
                 .allowedHeaders("*");

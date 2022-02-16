@@ -64,7 +64,7 @@ public class StudyFactory extends BasicFactory {
     // Response
     public static StudyDto makeDto(Study study) {
         StudyDto studyDto = StudyDto.create(study);
-        studyDto.setCreator(new MemberProfile("테스터", "profileImgUrl"));
+        studyDto.setCreator(new MemberProfile(1L, "테스터", "profileImgUrl"));
         return studyDto;
     }
 

@@ -66,6 +66,10 @@ public class StudyArticle extends EntityDate {
         this.views.increase();
     }
 
+    public Long getCreatorId() {
+        return member.getId();
+    }
+
     public String getCreatorNickname() {
         return member.getNickname();
     }

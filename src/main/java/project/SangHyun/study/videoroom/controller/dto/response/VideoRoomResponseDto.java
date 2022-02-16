@@ -11,7 +11,7 @@ import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDto;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("화상회의 방 조회 결과 서비스 계층 DTO")
+@ApiModel("화상회의 방 조회 결과")
 public class VideoRoomResponseDto {
 
     @ApiModelProperty(name = "화상회의 방 ID")

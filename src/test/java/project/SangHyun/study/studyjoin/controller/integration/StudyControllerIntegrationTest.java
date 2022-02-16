@@ -70,7 +70,7 @@ class StudyControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

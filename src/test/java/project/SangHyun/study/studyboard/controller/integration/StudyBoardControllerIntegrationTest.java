@@ -85,7 +85,7 @@ class StudyBoardControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("스터디에 속한 게시판을 생성한다.")
+    @DisplayName("관리자가 아닌 스터디원은 게시판을 생성할 수 없다.")
     public void createBoard() throws Exception {
         //given
         Member member = testDB.findStudyGeneralMember();
@@ -99,7 +99,7 @@ class StudyBoardControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -135,7 +135,7 @@ class StudyBoardControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -153,7 +153,7 @@ class StudyBoardControllerIntegrationTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

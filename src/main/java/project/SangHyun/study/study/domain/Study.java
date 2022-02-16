@@ -132,6 +132,10 @@ public class Study extends EntityDate {
         return profileImgUrl.getProfileImgUrl();
     }
 
+    public Long getCreatorId() {
+        return member.getId();
+    }
+
     public String getCreatorNickname() {
         return member.getNickname();
     }

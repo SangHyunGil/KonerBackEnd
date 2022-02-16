@@ -20,7 +20,7 @@ public class VideoRoomCreateRequestDto {
     @NotBlank(message = "화상회의 요청 구분을 입력해주세요.")
     private String request;
 
-    @ApiModelProperty(name = "화상회의 방 생성자 ID(PK)")
+    @ApiModelProperty(name = "화상회의 방 생성자 ID(PK)", value = "화상회의 방을 생성하는 회원의 ID를 입력해주세요", example = "1L")
     private Long memberId;
 
     @ApiModelProperty(name = "화상회의 방 제목", value = "화상회의 방 구분을 위한 제목을 입력해주세요.", example = "백엔드 화상회의 방")

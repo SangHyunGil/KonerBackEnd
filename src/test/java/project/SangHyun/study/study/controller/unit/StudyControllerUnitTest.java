@@ -138,7 +138,7 @@ class StudyControllerUnitTest {
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.id").value(ExpectResult.getData().getId()));
     }
 

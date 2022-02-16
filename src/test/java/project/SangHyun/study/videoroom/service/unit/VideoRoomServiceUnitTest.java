@@ -115,7 +115,7 @@ class VideoRoomServiceUnitTest {
         //given
 
         //mocking
-        given(videoRoomRepository.findAll()).willReturn(List.of(videoRoom));
+        given(videoRoomRepository.findAllByStudyId(study.getId())).willReturn(List.of(videoRoom));
 
         //when
         List<VideoRoomDto> rooms = videoRoomService.findRooms(study.getId());

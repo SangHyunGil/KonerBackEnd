@@ -78,7 +78,7 @@ class SignControllerUnitTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

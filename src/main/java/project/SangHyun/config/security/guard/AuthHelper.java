@@ -9,28 +9,36 @@ import project.SangHyun.config.security.member.MemberDetails;
 @Component
 public class AuthHelper {
 
-    public boolean isAuthenticated() {
-        return getAuthentication() instanceof UsernamePasswordAuthenticationToken &&
-                getAuthentication().isAuthenticated();
+    public boolean isRegularMember() {
+        return extractMemberRole().equals("ROLE_MEMBER");
     }
 
-    public Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
+    public Boolean isAdmin() {
+        return extractMemberRole().equals("ROLE_ADMIN");
     }
 
     public Long extractMemberId() {
         return Long.valueOf(getMemberDetails().getId());
     }
 
-    private MemberDetails getMemberDetails() {
-        return (MemberDetails) getAuthentication().getPrincipal();
+    public boolean isAuthenticated() {
+        return getAuthentication() instanceof UsernamePasswordAuthenticationToken &&
+                getAuthentication().isAuthenticated();
     }
 
-    public String extractMemberRole() {
+    private String extractMemberRole() {
        return getMemberDetails().getAuthorities()
                    .stream()
                    .map(auth -> auth.getAuthority())
                    .findFirst()
                    .orElseGet(() -> "Anonymous");
+    }
+
+    private Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    private MemberDetails getMemberDetails() {
+        return (MemberDetails) getAuthentication().getPrincipal();
     }
 }

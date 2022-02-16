@@ -30,8 +30,10 @@ import project.SangHyun.study.studyboard.tools.StudyBoardFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -76,6 +78,7 @@ class StudyBoardControllerUnitTest {
 
         //mocking
         given(studyBoardService.findAllBoards(study.getId())).willReturn(studyBoardDto);
+        given(responseService.convertToControllerDto(any(List.class), any(Function.class))).willReturn(responseDto);
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
@@ -104,7 +107,7 @@ class StudyBoardControllerUnitTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.id").value(ExpectResult.getData().getId()));
     }
 

@@ -114,7 +114,7 @@ public class VerifyControllerUnitTest {
         mockMvc.perform(post("/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -151,6 +151,6 @@ public class VerifyControllerUnitTest {
         mockMvc.perform(post("/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }

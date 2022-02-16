@@ -16,8 +16,8 @@ import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.study.service.dto.request.StudyCreateDto;
-import project.SangHyun.study.study.service.dto.response.StudyDto;
 import project.SangHyun.study.study.service.dto.request.StudyUpdateDto;
+import project.SangHyun.study.study.service.dto.response.StudyDto;
 
 import java.io.IOException;
 

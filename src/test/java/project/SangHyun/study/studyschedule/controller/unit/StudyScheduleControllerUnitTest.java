@@ -128,7 +128,7 @@ public class StudyScheduleControllerUnitTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

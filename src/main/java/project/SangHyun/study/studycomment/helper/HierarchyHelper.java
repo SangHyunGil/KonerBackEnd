@@ -1,4 +1,4 @@
-package project.SangHyun.common.helper;
+package project.SangHyun.study.studycomment.helper;
 
 import project.SangHyun.common.advice.exception.HierarchyStructureException;
 

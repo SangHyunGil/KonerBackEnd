@@ -37,7 +37,7 @@ public class VideoRoomService {
         VideoRoomCreateResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, VideoRoomCreateResultDto.class);
         Member member = findMemberById(requestDto.getMemberId());
         Study study = findStudyById(studyId);
-        VideoRoom videoRoom = videoRoomRepository.save(requestDto.toEntity(resultDto.getResponse().getRoom(), member));
+        VideoRoom videoRoom = videoRoomRepository.save(requestDto.toEntity(resultDto.getResponse().getRoom(), member, study));
         return VideoRoomDto.create(videoRoom);
     }
 
@@ -57,7 +57,7 @@ public class VideoRoomService {
     }
 
     public List<VideoRoomDto> findRooms(Long studyId) {
-        List<VideoRoom> videoRooms = videoRoomRepository.findAll();
+        List<VideoRoom> videoRooms = videoRoomRepository.findAllByStudyId(studyId);
         return videoRooms.stream()
                 .map(VideoRoomDto::create)
                 .collect(Collectors.toList());
