@@ -1,4 +1,4 @@
-package project.SangHyun.study.videoroom.service.dto.response.result;
+package project.SangHyun.study.videoroom.service.dto.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -30,5 +30,4 @@ public class VideoRoomDto {
         return new VideoRoomDto(room.getRoomId(), room.getTitleName(),
                 room.getPin(), MemberProfile.create(room));
     }
-
 }

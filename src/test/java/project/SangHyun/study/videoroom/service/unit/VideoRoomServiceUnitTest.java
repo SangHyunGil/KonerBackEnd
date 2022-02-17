@@ -19,10 +19,8 @@ import project.SangHyun.study.videoroom.service.VideoRoomService;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomDeleteDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomUpdateDto;
-import project.SangHyun.study.videoroom.service.dto.response.VideoRoomCreateResultDto;
-import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDeleteResultDto;
+import project.SangHyun.study.videoroom.service.dto.response.VideoRoomResultDto;
 import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDto;
-import project.SangHyun.study.videoroom.service.dto.response.VideoRoomUpdateResultDto;
 import project.SangHyun.study.videoroom.tools.VideoRoomFactory;
 
 import java.util.ArrayList;
@@ -63,10 +61,10 @@ class VideoRoomServiceUnitTest {
     public void createRoom() throws Exception {
         //given
         VideoRoomCreateDto createDto = VideoRoomFactory.createDto(member.getId());
-        VideoRoomCreateResultDto resultDto = VideoRoomFactory.createResultDto();
+        VideoRoomResultDto resultDto = VideoRoomFactory.createResultDto();
 
         //mocking
-        given(janusHelper.postAndGetResponseDto(createDto, VideoRoomCreateResultDto.class)).willReturn(resultDto);
+        given(janusHelper.postAndGetResponseDto(createDto, VideoRoomResultDto.class)).willReturn(resultDto);
         given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
         given(studyRepository.findStudyById(study.getId())).willReturn(study);
         given(videoRoomRepository.save(any())).willReturn(videoRoom);
@@ -83,10 +81,10 @@ class VideoRoomServiceUnitTest {
     public void editRoom() throws Exception {
         //given
         VideoRoomUpdateDto updateDto = VideoRoomFactory.updateDto("프론트엔드 화상회의");
-        VideoRoomUpdateResultDto resultDto = VideoRoomFactory.updateResultDto();
+        VideoRoomResultDto resultDto = VideoRoomFactory.updateResultDto();
 
         //mocking
-        given(janusHelper.postAndGetResponseDto(updateDto, VideoRoomUpdateResultDto.class)).willReturn(resultDto);
+        given(janusHelper.postAndGetResponseDto(updateDto, VideoRoomResultDto.class)).willReturn(resultDto);
         given(videoRoomRepository.findByRoomId(any())).willReturn(videoRoom);
 
         //when, then
@@ -98,10 +96,10 @@ class VideoRoomServiceUnitTest {
     public void destroyRoom() throws Exception {
         //given
         VideoRoomDeleteDto deleteDto = VideoRoomFactory.deleteDto(videoRoom.getRoomId());
-        VideoRoomDeleteResultDto resultDto = VideoRoomFactory.deleteResultDto();
+        VideoRoomResultDto resultDto = VideoRoomFactory.deleteResultDto();
 
         //mocking
-        given(janusHelper.postAndGetResponseDto(deleteDto, VideoRoomDeleteResultDto.class)).willReturn(resultDto);
+        given(janusHelper.postAndGetResponseDto(deleteDto, VideoRoomResultDto.class)).willReturn(resultDto);
         given(videoRoomRepository.findByRoomId(any())).willReturn(videoRoom);
         willDoNothing().given(videoRoomRepository).delete(videoRoom);
 

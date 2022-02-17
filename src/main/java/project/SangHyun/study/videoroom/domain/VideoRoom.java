@@ -10,6 +10,7 @@ import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -57,7 +58,7 @@ public class VideoRoom extends EntityDate {
     }
 
     public String getPin() {
-        return pin.getPin();
+        return Objects.isNull(pin) ? null : pin.getPin();
     }
 
     public Long getCreatorId() {

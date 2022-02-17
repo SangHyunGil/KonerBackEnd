@@ -25,4 +25,12 @@ class PinTest {
         Assertions.assertThrows(InvalidPinException.class, () -> new Pin("h".repeat(31)));
     }
 
+    @Test
+    @DisplayName("화상회의 방 비밀번호가 비어있어도 성공한다.")
+    public void test3() throws Exception {
+        //given
+
+        //when, then
+        Assertions.assertDoesNotThrow(() -> new Pin(null));
+    }
 }
