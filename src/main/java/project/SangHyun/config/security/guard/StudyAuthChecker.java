@@ -23,7 +23,7 @@ public class StudyAuthChecker {
     }
 
     private boolean isStudyCreatorOrAdminOrResourceOwner(Long accessMemberId, Long studyId, Long resourceId) {
-        return isStudyCreatorOrAdmin(studyId) || (isJoined(studyId) && authStrategy.check(accessMemberId, resourceId));
+        return isStudyCreatorOrAdmin(studyId) || (isStudyMember(studyId) && authStrategy.check(accessMemberId, resourceId));
     }
 
     private boolean isStudyCreatorOrAdmin(Long studyId) {
@@ -31,7 +31,7 @@ public class StudyAuthChecker {
         return studyJoin.getStudyRole().equals(StudyRole.ADMIN) || studyJoin.getStudyRole().equals(StudyRole.CREATOR);
     }
 
-    private boolean isJoined(Long studyId) {
+    private boolean isStudyMember(Long studyId) {
         return studyJoinRepository.isStudyMember(studyId, authHelper.extractMemberId());
     }
 }

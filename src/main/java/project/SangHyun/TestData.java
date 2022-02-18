@@ -72,7 +72,7 @@ public class TestData {
         }
 
         private Study makeStudy(Member member, String title, String description, List<String> tags) {
-            Study study = new Study(title, tags, description, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/StudyDefaultImg.png", 3L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, member, new ArrayList<>(), new ArrayList<>());
+            Study study = new Study(title, tags, description, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/logo/KakaoTalk_20220128_143615435.png", 3L, "2021-10-01", "2021-12-25", StudyCategory.CSE, StudyMethod.FACE, StudyState.STUDYING, RecruitState.PROCEED, member, new ArrayList<>(), new ArrayList<>());
 
             StudyBoard studyBoard1 = new StudyBoard("공지사항", study);
             StudyBoard studyBoard2 = new StudyBoard("자유게시판", study);

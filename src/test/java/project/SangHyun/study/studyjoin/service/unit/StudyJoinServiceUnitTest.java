@@ -248,9 +248,9 @@ class StudyJoinServiceUnitTest {
         //given
         Long studyId = 1L;
 
-        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto("테스터1", "profileUrlImg", StudyRole.MEMBER, "빠르게 지원합니다.");
-        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto("테스터2", "profileUrlImg", StudyRole.ADMIN, "빠르게 지원합니다.");
-        StudyMembersInfoDto studyMember3 = new StudyMembersInfoDto("테스터3", "profileUrlImg", StudyRole.CREATOR, "빠르게 지원합니다.");
+        StudyMembersInfoDto studyMember1 = new StudyMembersInfoDto(1L, "테스터1", "profileUrlImg", StudyRole.MEMBER, "빠르게 지원합니다.");
+        StudyMembersInfoDto studyMember2 = new StudyMembersInfoDto(2L, "테스터2", "profileUrlImg", StudyRole.ADMIN, "빠르게 지원합니다.");
+        StudyMembersInfoDto studyMember3 = new StudyMembersInfoDto(3L, "테스터3", "profileUrlImg", StudyRole.CREATOR, "빠르게 지원합니다.");
         ArrayList<StudyMembersInfoDto> studyMembersInfoDto = new ArrayList<>(Arrays.asList(studyMember1, studyMember2, studyMember3));
 
         //mocking

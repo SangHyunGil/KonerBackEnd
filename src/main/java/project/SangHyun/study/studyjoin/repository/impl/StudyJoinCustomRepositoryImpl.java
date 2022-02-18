@@ -57,7 +57,7 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     public List<StudyMembersInfoDto> findStudyMembers(Long studyId) {
         return jpaQueryFactory
                 .select(Projections.constructor(StudyMembersInfoDto.class,
-                        member.nickname.nickname, member.profileImgUrl.profileImgUrl,
+                        member.id, member.nickname.nickname, member.profileImgUrl.profileImgUrl,
                         studyJoin.studyRole, studyJoin.applyContent.applyContent))
                 .from(studyJoin)
                 .innerJoin(studyJoin.member, member)
