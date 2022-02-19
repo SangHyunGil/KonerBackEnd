@@ -1,4 +1,4 @@
-package project.SangHyun.common.response.domain;
+package project.SangHyun.common.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

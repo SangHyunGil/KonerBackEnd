@@ -11,10 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.common.response.domain.MultipleResult;
-import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseService;
+import project.SangHyun.common.dto.response.MultipleResult;
+import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.videoroom.controller.VideoRoomController;
@@ -88,7 +88,7 @@ public class VideoRoomControllerUnitTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.title").value("백엔드 화상회의"));
     }
 

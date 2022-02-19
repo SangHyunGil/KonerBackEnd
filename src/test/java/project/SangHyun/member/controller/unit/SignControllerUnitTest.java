@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseService;
+import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.controller.SignController;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
@@ -78,7 +78,7 @@ class SignControllerUnitTest {
                             return requestPostProcessor;
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

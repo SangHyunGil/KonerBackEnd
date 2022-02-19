@@ -11,9 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseService;
+import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.controller.MessageController;
 import project.SangHyun.message.controller.dto.request.MessageCreateRequestDto;
@@ -75,7 +75,7 @@ public class MessageControllerUnitTest {
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

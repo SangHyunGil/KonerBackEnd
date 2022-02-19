@@ -17,6 +17,7 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
+
     private final JwtTokenHelper accessTokenHelper;
 
     @Override

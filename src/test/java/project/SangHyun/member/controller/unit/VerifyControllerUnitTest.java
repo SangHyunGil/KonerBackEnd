@@ -13,8 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.advice.ExceptionAdvice;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseService;
+import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.controller.VerifyController;
 import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
@@ -114,7 +114,7 @@ public class VerifyControllerUnitTest {
         mockMvc.perform(post("/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -151,6 +151,6 @@ public class VerifyControllerUnitTest {
         mockMvc.perform(post("/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }

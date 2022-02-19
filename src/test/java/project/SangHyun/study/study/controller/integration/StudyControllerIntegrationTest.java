@@ -115,7 +115,7 @@ class StudyControllerIntegrationTest {
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.title").value("프론트엔드 모집"));
     }
 

@@ -1,6 +1,7 @@
 package project.SangHyun.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +13,8 @@ import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.helper.RedisHelper;
 import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.dto.response.MemberDto;
 import project.SangHyun.member.service.dto.request.MemberUpdateDto;
+import project.SangHyun.member.service.dto.response.MemberDto;
 
 import java.io.IOException;
 
@@ -45,6 +46,7 @@ public class MemberService {
     }
 
     @Transactional
+    @PreAuthorize("@MemberOwner.check(memberId)")
     public void deleteMember(Long memberId) {
         Member member = findMemberById(memberId);
         memberRepository.delete(member);

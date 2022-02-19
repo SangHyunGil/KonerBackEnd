@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.SangHyun.common.advice.exception.HierarchyStructureException;
+import project.SangHyun.study.studycomment.helper.HierarchyHelper;
 
 import java.util.ArrayList;
 import java.util.List;

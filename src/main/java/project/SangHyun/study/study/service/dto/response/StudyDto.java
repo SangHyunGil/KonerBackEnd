@@ -22,7 +22,7 @@ public class StudyDto {
     @ApiModelProperty(value = "스터디 ID(PK)")
     private Long id;
 
-    @ApiModelProperty(value = "회원 ID(PK)")
+    @ApiModelProperty(value = "회원 정보")
     private MemberProfile creator;
 
     @ApiModelProperty(value = "제목")

@@ -17,6 +17,7 @@ import java.util.Random;
 public class JanusHelper {
 
     private final Integer RANDOM_NUMBER_DIGIT = 12;
+
     private final RestTemplate restTemplate;
     private final Gson gson;
     @Value("${janus.server}")

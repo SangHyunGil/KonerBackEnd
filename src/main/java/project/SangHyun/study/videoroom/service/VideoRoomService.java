@@ -14,10 +14,8 @@ import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomDeleteDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomUpdateDto;
-import project.SangHyun.study.videoroom.service.dto.response.VideoRoomCreateResultDto;
-import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDeleteResultDto;
 import project.SangHyun.study.videoroom.service.dto.response.VideoRoomDto;
-import project.SangHyun.study.videoroom.service.dto.response.VideoRoomUpdateResultDto;
+import project.SangHyun.study.videoroom.service.dto.response.VideoRoomResultDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,29 +30,32 @@ public class VideoRoomService {
     private final StudyRepository studyRepository;
     private final VideoRoomRepository videoRoomRepository;
 
+    @Transactional
     public VideoRoomDto createRoom(Long studyId, VideoRoomCreateDto requestDto) {
-        VideoRoomCreateResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, VideoRoomCreateResultDto.class);
+        VideoRoomResultDto resultDto = janusHelper.postAndGetResponseDto(requestDto, VideoRoomResultDto.class);
         Member member = findMemberById(requestDto.getMemberId());
         Study study = findStudyById(studyId);
-        VideoRoom videoRoom = videoRoomRepository.save(requestDto.toEntity(resultDto.getResponse().getRoom(), member));
+        VideoRoom videoRoom = videoRoomRepository.save(requestDto.toEntity(resultDto.getResponse().getRoom(), member, study));
         return VideoRoomDto.create(videoRoom);
     }
 
+    @Transactional
     public void updateRoom(Long roomId, VideoRoomUpdateDto requestDto) {
-        janusHelper.postAndGetResponseDto(requestDto, VideoRoomUpdateResultDto.class);
+        janusHelper.postAndGetResponseDto(requestDto, VideoRoomResultDto.class);
         VideoRoom videoRoom = videoRoomRepository.findByRoomId(roomId);
         videoRoom.update(requestDto.getTitle(), requestDto.getPin());
     }
 
+    @Transactional
     public void deleteRoom(Long roomId) {
         VideoRoomDeleteDto requestDto = VideoRoomDeleteDto.create(roomId);
-        janusHelper.postAndGetResponseDto(requestDto, VideoRoomDeleteResultDto.class);
+        janusHelper.postAndGetResponseDto(requestDto, VideoRoomResultDto.class);
         VideoRoom videoRoom = videoRoomRepository.findByRoomId(roomId);
         videoRoomRepository.delete(videoRoom);
     }
 
     public List<VideoRoomDto> findRooms(Long studyId) {
-        List<VideoRoom> videoRooms = videoRoomRepository.findAll();
+        List<VideoRoom> videoRooms = videoRoomRepository.findAllByStudyId(studyId);
         return videoRooms.stream()
                 .map(VideoRoomDto::create)
                 .collect(Collectors.toList());

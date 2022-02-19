@@ -15,9 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.dto.response.SliceResponseDto;
 import project.SangHyun.common.helper.AwsS3BucketHelper;
-import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.domain.SingleResult;
-import project.SangHyun.common.response.service.ResponseService;
+import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.controller.StudyController;
 import project.SangHyun.study.study.controller.dto.request.StudyCreateRequestDto;
@@ -138,7 +138,7 @@ class StudyControllerUnitTest {
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.id").value(ExpectResult.getData().getId()));
     }
 

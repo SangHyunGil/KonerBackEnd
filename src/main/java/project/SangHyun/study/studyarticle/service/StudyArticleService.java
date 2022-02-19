@@ -32,7 +32,7 @@ public class StudyArticleService {
 
     @Transactional
     public StudyArticleDto createArticle(Long boardId, StudyArticleCreateDto requestDto) {
-        Member member = findMemberById(requestDto);
+        Member member = findMemberById(requestDto.getMemberId());
         StudyBoard studyBoard = findStudyBoardById(boardId);
         StudyArticle studyArticle = studyArticleRepository.save(requestDto.toEntity(member, studyBoard));
         return StudyArticleDto.create(studyArticle);
@@ -45,7 +45,7 @@ public class StudyArticleService {
 
     public StudyArticleDto findArticle(Long articleId) {
         StudyArticle studyArticle = findStudyArticleById(articleId);
-        studyArticle.updateViews();
+        studyArticle.increaseView();
         return StudyArticleDto.create(studyArticle);
     }
 
@@ -62,8 +62,8 @@ public class StudyArticleService {
         studyArticleRepository.delete(studyArticle);
     }
 
-    private Member findMemberById(StudyArticleCreateDto requestDto) {
-        return memberRepository.findById(requestDto.getMemberId()).orElseThrow(MemberNotFoundException::new);
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private StudyBoard findStudyBoardById(Long boardId) {

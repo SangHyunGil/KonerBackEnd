@@ -81,6 +81,10 @@ public class StudyComment extends EntityDate {
         return content.getContent();
     }
 
+    public Long getCreatorId() {
+        return member.getId();
+    }
+
     public String getCreatorNickname() {
         return member.getNickname();
     }

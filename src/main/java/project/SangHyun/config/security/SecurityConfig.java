@@ -67,38 +67,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/users/password").permitAll()
 
-                .antMatchers(HttpMethod.PUT, "/users/{userId}").access("@memberGuard.check(#userId)")
-                .antMatchers(HttpMethod.DELETE, "/users/{userId}").access("@memberGuard.check(#userId)")
+                .antMatchers(HttpMethod.PUT, "/users/{userId}").access("@MemberOwner.check(#userId)")
+                .antMatchers(HttpMethod.DELETE, "/users/{userId}").access("@MemberOwner.check(#userId)")
 
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}").access("@studyGuard.check(#studyId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}").access("@studyGuard.check(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}").access("@StudyCreator.check(#studyId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}").access("@StudyCreator.check(#studyId)")
 
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}/join/{memberId}").access("@studyJoinGuard.check(#studyId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/join/{memberId}").access("@studyJoinGuard.check(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/join/{memberId}").access("@StudyCreatorOrAdmin.check(#studyId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/join/{memberId}").access("@StudyCreatorOrAdmin.check(#studyId)")
 
-                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*").access("@studyBoardGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*").access("@studyBoardGuard.checkJoinAndAuth(#studyId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*").access("@studyBoardGuard.checkJoinAndAuth(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*").access("@StudyCreatorOrAdmin.check(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*").access("@StudyCreatorOrAdmin.check(#studyId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*").access("@StudyCreatorOrAdmin.check(#studyId)")
 
-                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article").access("@studyArticleGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article").access("@studyArticleGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*").access("@studyArticleGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article").access("@StudyMember.check(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article").access("@StudyMember.check(#studyId)")
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*").access("@StudyMember.check(#studyId)")
 
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/{articleId}").access("@studyArticleGuard.checkJoinAndAuth(#studyId, #articleId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/{articleId}").access("@studyArticleGuard.checkJoinAndAuth(#studyId, #articleId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/{articleId}").access("@StudyArticleOwner.check(#studyId, #articleId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/{articleId}").access("@StudyArticleOwner.check(#studyId, #articleId)")
 
-                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*/comment").access("@studyCommentGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article/*/comment").access("@studyCommentGuard.checkJoin(#studyId)")
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/board/*/article/*/comment").access("@StudyMember.check(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/board/*/article/*/comment").access("@StudyMember.check(#studyId)")
 
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@studyCommentGuard.checkJoinAndAuth(#studyId, #commentId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@StudyCommentOwner.check(#studyId, #commentId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/board/*/article/*/comment/{commentId}").access("@StudyCommentOwner.check(#studyId, #commentId)")
 
-                .antMatchers("/study/{studyId}/schedule/**").access("@studyScheduleGuard.checkJoin(#studyId)")
+                .antMatchers("/study/{studyId}/schedule/**").access("@StudyMember.check(#studyId)")
 
-                .antMatchers(HttpMethod.GET, "/study/{studyId}/videoroom").access("@videoRoomGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.POST, "/study/{studyId}/videoroom").access("@videoRoomGuard.checkJoin(#studyId)")
-                .antMatchers(HttpMethod.PUT, "/study/{studyId}/videoroom/{videoRoomId}").access("@videoRoomGuard.checkJoinAndAuth(#studyId, #videoRoomId)")
-                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/videoroom/{videoRoomId}").access("@videoRoomGuard.checkJoinAndAuth(#studyId, #videoRoomId)")
+                .antMatchers(HttpMethod.GET, "/study/{studyId}/videoroom").access("@StudyMember.check(#studyId)")
+                .antMatchers(HttpMethod.POST, "/study/{studyId}/videoroom").access("@StudyMember.check(#studyId)")
+                .antMatchers(HttpMethod.PUT, "/study/{studyId}/videoroom/{videoRoomId}").access("@VideoRoomOwner.check(#studyId, #videoRoomId)")
+                .antMatchers(HttpMethod.DELETE, "/study/{studyId}/videoroom/{videoRoomId}").access("@VideoRoomOwner.check(#studyId, #videoRoomId)")
 
 
                 .anyRequest().hasAnyRole("MEMBER", "ADMIN")
