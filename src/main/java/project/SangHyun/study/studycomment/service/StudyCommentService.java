@@ -29,8 +29,8 @@ public class StudyCommentService {
 
     @Transactional
     public StudyCommentDto createComment(Long studyArticleId, StudyCommentCreateDto requestDto) {
-        Member member = memberRepository.findById(requestDto.getMemberId()).orElseThrow(MemberNotFoundException::new);
-        StudyArticle studyArticle = studyArticleRepository.findById(studyArticleId).orElseThrow(StudyNotFoundException::new);
+        Member member = findMemberById(requestDto.getMemberId());
+        StudyArticle studyArticle = findArticleById(studyArticleId);
         StudyComment studyComment = studyCommentRepository.save(requestDto.toEntity(member, studyArticle));
         return StudyCommentDto.create(studyComment);
     }
@@ -51,6 +51,14 @@ public class StudyCommentService {
     public List<StudyCommentDto> findComments(Long studyArticleId) {
         List<StudyComment> studyComments = studyCommentRepository.findAllByStudyArticleId(studyArticleId);
         return StudyCommentDto.create(studyComments);
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private StudyArticle findArticleById(Long studyArticleId) {
+        return studyArticleRepository.findById(studyArticleId).orElseThrow(StudyNotFoundException::new);
     }
 
     private StudyComment findStudyCommentById(Long studyCommentId) {

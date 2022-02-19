@@ -62,7 +62,7 @@ public class StudyArticle extends EntityDate {
         this.content = new StudyArticleContent(studyArticle.getContent());
     }
 
-    public void updateViews() {
+    public void increaseView() {
         this.views.increase();
     }
 

@@ -49,14 +49,18 @@ public class MessageService {
 
     @Transactional
     public void deleteBySender(Long messageId) {
-        Message message = messageRepository.findById(messageId).orElseThrow(MessageNotFountException::new);
+        Message message = findMessageById(messageId);
         deleteMessage(message, Message::deleteBySender);
     }
 
     @Transactional
     public void deleteByReceiver(Long messageId) {
-        Message message = messageRepository.findById(messageId).orElseThrow(MessageNotFountException::new);
+        Message message = findMessageById(messageId);
         deleteMessage(message, Message::deleteByReceiver);
+    }
+
+    private Message findMessageById(Long messageId) {
+        return messageRepository.findById(messageId).orElseThrow(MessageNotFountException::new);
     }
 
     private void deleteMessage(Message message, Consumer<Message> delete) {

@@ -1,10 +1,10 @@
-package project.SangHyun.common.response.service;
+package project.SangHyun.common.response;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.common.response.domain.MultipleResult;
-import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.dto.response.MultipleResult;
+import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.common.dto.response.SingleResult;
 
 import java.util.List;
 import java.util.function.Function;

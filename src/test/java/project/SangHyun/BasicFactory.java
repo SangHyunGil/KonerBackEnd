@@ -1,9 +1,9 @@
 package project.SangHyun;
 
 import org.springframework.test.util.ReflectionTestUtils;
-import project.SangHyun.common.response.domain.MultipleResult;
-import project.SangHyun.common.response.domain.Result;
-import project.SangHyun.common.response.domain.SingleResult;
+import project.SangHyun.common.dto.response.MultipleResult;
+import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.common.dto.response.SingleResult;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
