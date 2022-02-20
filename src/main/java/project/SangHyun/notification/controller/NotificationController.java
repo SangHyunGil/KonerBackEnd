@@ -17,6 +17,7 @@ import project.SangHyun.notification.service.NotificationService;
 @RestController
 @RequiredArgsConstructor
 public class NotificationController {
+
     private final NotificationService notificationService;
 
     @ApiOperation(value = "알림 구독", notes = "알림을 구독한다.")

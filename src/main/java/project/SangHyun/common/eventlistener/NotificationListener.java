@@ -10,6 +10,7 @@ import project.SangHyun.notification.service.NotificationService;
 @Component
 @RequiredArgsConstructor
 public class NotificationListener {
+
     private final NotificationService notificationService;
 
     @TransactionalEventListener
