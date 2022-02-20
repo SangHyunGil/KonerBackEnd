@@ -20,6 +20,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
+
     @Value("${spring.sse.time}")
     private Long timeout;
     private final NotificationRepository notificationRepository;
@@ -28,14 +29,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public SseEmitter subscribe(Long memberId, String lastEventId) {
-        String emitterId = memberId + "_" + System.currentTimeMillis();
+        String emitterId = makeTimeIncludeId(memberId);
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));
-
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
 
         // 503 에러를 방지하기 위한 더미 이벤트 전송
-        sendNotification(emitter, emitterId, emitterId, "EventStream Created. [userId=" + memberId + "]");
+        String eventId = makeTimeIncludeId(memberId);
+        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + memberId + "]");
 
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (hasLostData(lastEventId)) {
@@ -43,6 +44,10 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         return emitter;
+    }
+
+    private String makeTimeIncludeId(Long memberId) {
+        return memberId + "_" + System.currentTimeMillis();
     }
 
     private void sendNotification(SseEmitter emitter, String eventId, String emitterId, Object data) {
