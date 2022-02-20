@@ -32,7 +32,7 @@ public class ProdTestData {
         private final PasswordEncoder passwordEncoder;
 
         private void initMember() {
-            Member memberA = new Member("KonerAdmin", passwordEncoder.encode("KonerAdmin!"), "상현", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong1.jpg", MemberRole.ROLE_ADMIN, "상현입니다.");
+            Member memberA = new Member("KonerAdmin", passwordEncoder.encode("KonerAdmin1!"), "상현", Department.CSE, "https://koner-bucket.s3.ap-northeast-2.amazonaws.com/profileImg/koryong1.jpg", MemberRole.ROLE_ADMIN, "상현입니다.");
             memberRepository.save(memberA);
         }
     }
