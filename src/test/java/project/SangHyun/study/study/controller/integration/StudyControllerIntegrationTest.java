@@ -71,7 +71,7 @@ class StudyControllerIntegrationTest {
                         .param("size", "6"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.numberOfElements").value(2))
-                .andExpect(jsonPath("$.data.hasNext").value(false));;
+                .andExpect(jsonPath("$.data.hasNext").value(false));
     }
 
     @Test
