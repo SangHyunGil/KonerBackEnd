@@ -37,8 +37,10 @@ public class MessageService {
     @Transactional
     public List<MessageDto> findAllMessages(Long senderId, Long receiverId) {
         List<Message> messages = messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(senderId, receiverId);
+        messages.stream()
+                .filter(message -> message.isSender(senderId))
+                .forEach(Message::read);
         return messages.stream()
-                .map(Message::read)
                 .map(MessageDto::create)
                 .collect(Collectors.toList());
     }

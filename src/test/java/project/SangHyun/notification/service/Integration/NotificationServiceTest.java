@@ -16,7 +16,7 @@ import project.SangHyun.notification.service.NotificationService;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-class NotificationServiceImplTest {
+class NotificationServiceTest {
     @Autowired
     NotificationService notificationService;
     @Autowired

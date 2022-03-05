@@ -77,6 +77,10 @@ public class Message extends EntityDate {
         return deletedByReceiver == true;
     }
 
+    public boolean isSender(Long senderId) {
+        return sender.getId() == senderId;
+    }
+
     public Message read() {
         this.isRead = true;
         return this;

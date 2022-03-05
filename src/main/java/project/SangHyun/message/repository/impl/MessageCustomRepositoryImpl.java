@@ -93,7 +93,8 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     @Override
     public Long countAllUnReadMessages(Long receiverId) {
         return jpaQueryFactory.selectFrom(message)
-                .where(equalsWithReceiverId(receiverId))
+                .where(equalsWithReceiverId(receiverId),
+                        isUnReadMessage())
                 .fetchCount();
     }
 
