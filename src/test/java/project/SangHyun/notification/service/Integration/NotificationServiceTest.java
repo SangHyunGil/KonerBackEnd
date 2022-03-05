@@ -61,20 +61,20 @@ class NotificationServiceTest {
     @DisplayName("모든 알림 메시지를 읽는다.")
     public void findAllNotifications() throws Exception {
         //given
-        Member member = testDB.findNotStudyMember();
+        Member member = testDB.findStudyApplyMember();
 
         //when
         List<NotificationDto> notifications = notificationService.findAllNotifications(member.getId());
 
         //then
-        Assertions.assertEquals(5, notifications);
+        Assertions.assertEquals(5, notifications.size());
     }
     
     @Test
     @DisplayName("읽지 않은 메시지를 개수를 조회한다.")
     public void countUnReadNotifications() throws Exception {
         //given
-        Member member = testDB.findNotStudyMember();
+        Member member = testDB.findStudyApplyMember();
 
         //when
         Long count = notificationService.countUnReadNotifications(member.getId());
@@ -87,7 +87,7 @@ class NotificationServiceTest {
     @DisplayName("메세지를 조회하면 메세지를 읽게 된다.")
     public void countUnReadNotifications2() throws Exception {
         //given
-        Member member = testDB.findNotStudyMember();
+        Member member = testDB.findStudyApplyMember();
 
         //when
         notificationService.findAllNotifications(member.getId());

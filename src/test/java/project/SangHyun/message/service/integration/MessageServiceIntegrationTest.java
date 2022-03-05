@@ -99,18 +99,13 @@ public class MessageServiceIntegrationTest {
         persistenceContextClear();
 
         List<Message> ActualResult = messageRepository.findAllMessagesWithSenderIdAndReceiverIdDescById(sender.getId(), receiver.getId());
-        List<FindCommunicatorsDto> messages = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
 
         //then
         Assertions.assertEquals(4, ActualResult.size());
-        Assertions.assertEquals(true, ActualResult.get(0).getIsRead());
+        Assertions.assertEquals(false, ActualResult.get(0).getIsRead());
         Assertions.assertEquals(true, ActualResult.get(1).getIsRead());
         Assertions.assertEquals(true, ActualResult.get(2).getIsRead());
         Assertions.assertEquals(true, ActualResult.get(3).getIsRead());
-
-        Assertions.assertEquals(0, messages.get(0).getUnReadCount());
-        Assertions.assertEquals(2, messages.get(1).getUnReadCount());
-
     }
 
     @Test

@@ -237,7 +237,7 @@ public class TestDB {
         initMessage(storedMemberC, storedMemberD, storedMemberE);
 
         for (int i = 0; i < 5; i++) {
-            Notification notification = new Notification(memberA, NotificationType.APPLY, "알림"+i, "study/51", false);
+            Notification notification = new Notification(storedMemberD, NotificationType.ACCEPT, "알림"+i, "study/51", false);
             notificationRepository.save(notification);
         }
     }
