@@ -90,19 +90,6 @@ class MemberControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("인증하지 않는 회원은 프로필 로드에 실패한다.")
-    public void getUserProfile() throws Exception {
-        //given
-        Member member = testDB.findNotAuthMember();
-        String accessToken = accessTokenHelper.createToken(member.getEmail());
-
-        //when, then
-        mockMvc.perform(get("/users/{id}", member.getId())
-                        .header("X-AUTH-TOKEN", accessToken))
-                .andExpect(status().is3xxRedirection());
-    }
-
-    @Test
     @DisplayName("회원의 유저 프로필(닉네임)을 수정한다.")
     public void updateMember() throws Exception {
         //given

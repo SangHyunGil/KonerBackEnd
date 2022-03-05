@@ -1,0 +1,86 @@
+spring:
+  sse:
+    time: 3600000
+
+  jwt:
+    key:
+      access: ENC(+gokNOdq6bK9PVEn7hvZB/+VNrozm6RV5UOhZJDl6knYIMrn8d8RzA==)
+      refresh: ENC(PTaCsvKGAQdd8QLvLRGwuV0abz1vAN/Qz2FL5pcWSmJj7ynd+cQXrw+56hR9qxJG)
+
+    time:
+      access: 1800000
+      refresh: 604800000
+
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    database: h2
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
+    username: sa
+    password:
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(Hqntsjre7+AQBxi7VRlIi54rhdkHT0gL)
+    password: ENC(dIeh8wMyHQ2Jg8GUyzaia0hmkhy8Gtj9lJ7qjT0Z6n4=)
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  redis:
+    host: koner.kr
+    port: 6380
+
+  domain:
+    http://koner.kr/
+
+  file:
+    dir: "profileImg/"
+
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
+
+  config:
+    activate:
+      on-profile: test
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(u/vXX3SW22mMgSSjIEDhEqg28RnNkcliVF/dtpu/c+I=)
+      secretKey: ENC(Ih8ngp5C7CKN4Oe0Itwmyrq3teKjkAJHJEHSY3NclEDzJBtvajpfWFnZ9/dBjSduJDOaRETuM1k=)
+    s3:
+      bucket: koner-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
+janus:
+  server: ENC(H6up5neCg2kjSg54kUq7rRxocDWq65513Tnq9RKP4fRyllBaNnFocg==)
+  admin:
+    secret: ENC(0xz2rIeZb6jQwQ0XJKFjFCEuyydFK1eM)

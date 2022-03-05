@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.notification.domain.Notification;
@@ -15,7 +16,9 @@ import project.SangHyun.notification.service.NotificationService;
 import project.SangHyun.notification.service.dto.response.NotificationDto;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,6 +61,20 @@ public class NotificationService {
                     sendNotification(emitter, eventId, key, NotificationResponseDto.create(notification));
                 }
         );
+    }
+
+    @Transactional
+    public List<NotificationDto> findAllNotifications(Long memberId) {
+        List<Notification> notifications = notificationRepository.findAllByMemberId(memberId);
+        notifications.stream()
+                .forEach(notification -> notification.read());
+        return notifications.stream()
+                .map(NotificationDto::create)
+                .collect(Collectors.toList());
+    }
+
+    public Long countUnReadNotifications(Long memberId) {
+        return notificationRepository.countUnReadNotifications(memberId);
     }
 
     private String makeTimeIncludeId(Long memberId) {
