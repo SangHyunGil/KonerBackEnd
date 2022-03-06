@@ -1,15 +1,20 @@
 package project.SangHyun.message.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.common.advice.exception.MessageNotFountException;
+import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.message.repository.impl.RecentMessageDto;
 import project.SangHyun.message.service.dto.request.MessageCreateDto;
 import project.SangHyun.message.service.dto.response.FindCommunicatorsDto;
 import project.SangHyun.message.service.dto.response.MessageDto;
+import project.SangHyun.notification.domain.NotificationType;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,11 +24,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MessageService {
+
+    private final ApplicationEventPublisher eventPublisher;
+    private final MemberRepository memberRepository;
     private final MessageRepository messageRepository;
 
     @Transactional
     public MessageDto createMessage(MessageCreateDto requestDto) {
-        Message message = messageRepository.save(requestDto.toEntity());
+        Member sender = findMemberById(requestDto.getSenderId());
+        Member receiver = findMemberById(requestDto.getReceiverId());
+        Message message = messageRepository.save(requestDto.toEntity(sender, receiver));
+        notifyToReceiver(message);
         return MessageDto.create(message);
     }
 
@@ -59,6 +70,14 @@ public class MessageService {
     public void deleteByReceiver(Long messageId) {
         Message message = findMessageById(messageId);
         deleteMessage(message, Message::deleteByReceiver);
+    }
+
+    private Member findMemberById(Long senderId) {
+        return memberRepository.findById(senderId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private void notifyToReceiver(Message message) {
+        message.publishEvent(eventPublisher, NotificationType.MESSAGE);
     }
 
     private Message findMessageById(Long messageId) {

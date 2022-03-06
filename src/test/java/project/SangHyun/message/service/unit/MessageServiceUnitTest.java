@@ -4,10 +4,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.message.repository.impl.RecentMessageDto;
@@ -22,32 +25,41 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MessageServiceUnitTest {
     @InjectMocks
     MessageService messageService;
     @Mock
+    MemberRepository memberRepository;
+    @Mock
     MessageRepository messageRepository;
+    @Mock
+    ApplicationEventPublisher publisher;
 
     @Test
     @DisplayName("쪽지를 송신한다.")
     public void createMessage() throws Exception {
         //given
+        ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
         Member memberA = MessageFactory.makeTestAuthMember();
         Member memberB = MessageFactory.makeTestAdminMember();
         MessageCreateDto requestDto = MessageFactory.makeCreateDto(1L, memberA, memberB);
-        Message message = requestDto.toEntity();
+        Message message = requestDto.toEntity(memberA, memberB);
         MessageDto ExpectResult = MessageFactory.makeMessageDto(message);
 
         //mocking
         given(messageRepository.save(any())).willReturn(message);
+        given(memberRepository.findById(memberA.getId())).willReturn(java.util.Optional.of(memberA));
+        given(memberRepository.findById(memberB.getId())).willReturn(java.util.Optional.of(memberB));
 
         //when
         MessageDto ActualResult = messageService.createMessage(requestDto);
 
         //then
         Assertions.assertEquals(ExpectResult.getContent(), ActualResult.getContent());
+        verify(publisher).publishEvent(eventCaptor.capture());
     }
 
     @Test

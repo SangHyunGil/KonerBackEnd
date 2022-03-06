@@ -21,11 +21,11 @@ public class MessageCreateDto {
     @ApiModelProperty(value = "쪽지 내용")
     private String content;
 
-    public Message toEntity() {
+    public Message toEntity(Member sender, Member receiver) {
         return Message.builder()
                 .content(content)
-                .sender(new Member(senderId))
-                .receiver(new Member(receiverId))
+                .sender(sender)
+                .receiver(receiver)
                 .deletedBySender(false)
                 .deletedByReceiver(false)
                 .isRead(false)
