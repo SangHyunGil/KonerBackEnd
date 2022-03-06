@@ -342,4 +342,10 @@ public class ExceptionAdvice {
     protected Result janusRequestException() {
         return responseService.getFailureResult(-151, "Janus 요청에 실패했습니다.");
     }
+
+    @ExceptionHandler(InvalidAuthorityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result invalidAuthorityException() {
+        return responseService.getFailureResult(-152, "잘못된 권한 요청입니다.");
+    }
 }

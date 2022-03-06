@@ -77,4 +77,8 @@ public class StudyJoin extends EntityDate {
     public String getParticipantProfileImgUrl() {
         return member.getProfileImgUrl();
     }
+
+    public void changeAuthority(StudyRole studyRole) {
+        this.studyRole = studyRole;
+    }
 }

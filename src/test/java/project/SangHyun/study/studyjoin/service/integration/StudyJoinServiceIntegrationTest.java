@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -11,20 +12,29 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
 import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
+import project.SangHyun.common.advice.exception.InvalidAuthorityException;
 import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
+import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinCreateDto;
+import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinUpdateAuthorityDto;
 import project.SangHyun.study.studyjoin.service.dto.response.FindJoinedStudyDto;
 import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
@@ -199,4 +209,31 @@ class StudyJoinServiceIntegrationTest {
         Assertions.assertEquals(5, ActualResult.size());
     }
 
+    @Test
+    @DisplayName("스터디 멤버의 권한을 수정한다.")
+    public void updateStudyRole() throws Exception {
+        //given
+        Member member = testDB.findStudyGeneralMember();
+        Study study = testDB.findBackEndStudy();
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.ADMIN);
+
+        //when
+        studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto);
+        StudyJoin studyJoin = studyJoinRepository.findApplyStudy(study.getId(), member.getId()).get();
+
+        //then
+        Assertions.assertEquals(StudyRole.ADMIN, studyJoin.getStudyRole());
+    }
+
+    @Test
+    @DisplayName("잘못된 권한으로 요청한다면 스터디 멤버의 권한 수정이 실패한다.")
+    public void updateStudyRole_fail() throws Exception {
+        //given
+        Member member = testDB.findStudyGeneralMember();
+        Study study = testDB.findBackEndStudy();
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.CREATOR);
+
+        //when, then
+        Assertions.assertThrows(InvalidAuthorityException.class, () -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
+    }
 }

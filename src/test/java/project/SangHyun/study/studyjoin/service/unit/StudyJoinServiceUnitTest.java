@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
 import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
+import project.SangHyun.common.advice.exception.InvalidAuthorityException;
 import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
@@ -22,6 +23,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinCreateDto;
+import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinUpdateAuthorityDto;
 import project.SangHyun.study.studyjoin.service.dto.response.FindJoinedStudyDto;
 import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
@@ -33,6 +35,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -261,5 +264,32 @@ class StudyJoinServiceUnitTest {
 
         //then
         Assertions.assertEquals(3, ActualResult.size());
+    }
+
+    @Test
+    @DisplayName("스터디 멤버의 권한을 수정한다.")
+    public void updateStudyRole() throws Exception {
+        //given
+        ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.ADMIN);
+
+        //mocking
+        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
+
+        //when, then
+        Assertions.assertDoesNotThrow(() -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
+        verify(publisher).publishEvent(eventCaptor.capture());
+    }
+
+    @Test
+    @DisplayName("잘못된 권한으로 요청한다면 스터디 멤버의 권한 수정이 실패한다.")
+    public void updateStudyRole_fail() throws Exception {
+        //given
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.CREATOR);
+
+        //mocking
+
+        //when, then
+        Assertions.assertThrows(InvalidAuthorityException.class, () -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
     }
 }
