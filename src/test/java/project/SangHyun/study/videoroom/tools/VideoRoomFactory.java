@@ -1,7 +1,7 @@
 package project.SangHyun.study.videoroom.tools;
 
 import project.SangHyun.BasicFactory;
-import project.SangHyun.study.dto.MemberProfile;
+import project.SangHyun.common.dto.response.MemberProfile;
 import project.SangHyun.study.videoroom.controller.dto.request.VideoRoomCreateRequestDto;
 import project.SangHyun.study.videoroom.controller.dto.request.VideoRoomUpdateRequestDto;
 import project.SangHyun.study.videoroom.controller.dto.response.VideoRoomResponseDto;

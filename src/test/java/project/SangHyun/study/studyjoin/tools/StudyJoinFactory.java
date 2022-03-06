@@ -3,6 +3,7 @@ package project.SangHyun.study.studyjoin.tools;
 import project.SangHyun.BasicFactory;
 import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinCreateRequestDto;
+import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinUpdateAuthorityRequestDto;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinCreateDto;
 import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinUpdateAuthorityDto;
@@ -16,6 +17,10 @@ public class StudyJoinFactory extends BasicFactory {
 
     public static StudyJoinCreateDto makeCreateDto(String content) {
         return new StudyJoinCreateDto(content);
+    }
+
+    public static StudyJoinUpdateAuthorityRequestDto makeUpdateAuthorityRequestDto(StudyRole studyRole) {
+        return new StudyJoinUpdateAuthorityRequestDto(studyRole);
     }
 
     public static StudyJoinUpdateAuthorityDto makeUpdateAuthorityDto(StudyRole studyRole) {

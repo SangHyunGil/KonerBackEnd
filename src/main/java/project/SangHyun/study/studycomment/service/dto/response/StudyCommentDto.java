@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.SangHyun.study.studycomment.helper.HierarchyHelper;
-import project.SangHyun.study.dto.MemberProfile;
+import project.SangHyun.common.dto.response.MemberProfile;
 import project.SangHyun.study.studycomment.domain.StudyComment;
 
 import java.util.ArrayList;

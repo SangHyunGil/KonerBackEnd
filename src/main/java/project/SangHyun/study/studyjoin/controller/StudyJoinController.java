@@ -12,9 +12,11 @@ import project.SangHyun.common.dto.response.Result;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinCreateRequestDto;
+import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinUpdateAuthorityRequestDto;
 import project.SangHyun.study.studyjoin.controller.dto.response.FindJoinedStudyResponseDto;
 import project.SangHyun.study.studyjoin.controller.dto.response.StudyMembersResponseDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
+import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinUpdateAuthorityDto;
 import project.SangHyun.study.studyjoin.service.dto.response.FindJoinedStudyDto;
 import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 import springfox.documentation.annotations.ApiIgnore;
@@ -70,6 +72,15 @@ public class StudyJoinController {
     @ResponseStatus(HttpStatus.OK)
     public Result rejectJoin(@PathVariable Long studyId, @PathVariable Long memberId) {
         studyJoinService.rejectJoin(studyId, memberId);
+        return responseService.getDefaultSuccessResult();
+    }
+
+    @ApiOperation(value = "스터디 권한 수정", notes = "스터디 권한을 수정한다.")
+    @PutMapping("/{studyId}/authority/{memberId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Result updateAuthority(@PathVariable Long studyId, @PathVariable Long memberId,
+                                  @RequestBody StudyJoinUpdateAuthorityRequestDto requestDto) {
+        studyJoinService.updateAuthority(studyId, memberId, requestDto.toServiceDto());
         return responseService.getDefaultSuccessResult();
     }
 }

@@ -348,4 +348,10 @@ public class ExceptionAdvice {
     protected Result invalidAuthorityException() {
         return responseService.getFailureResult(-152, "잘못된 권한 요청입니다.");
     }
+
+    @ExceptionHandler(StudyCreatorChangeAuthorityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result studyCreatorChangeAuthorityException() {
+        return responseService.getFailureResult(-153, "스터디 생성자의 권한 변경은 불가능합니다.");
+    }
 }

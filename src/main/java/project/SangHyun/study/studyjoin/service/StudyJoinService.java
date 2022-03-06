@@ -56,13 +56,19 @@ public class StudyJoinService {
 
     @Transactional
     public void updateAuthority(Long studyId, Long memberId, StudyJoinUpdateAuthorityDto requestDto) {
-        validateAuthority(requestDto.getStudyRole());
+        validateAuthorityType(requestDto.getStudyRole());
         StudyJoin studyJoin = findMemberJoinInfoAboutSpecificStudy(studyId, memberId);
+        validateAuthorityCondition(studyJoin.getStudyRole());
         studyJoin.changeAuthority(requestDto.getStudyRole());
         notifyJoinInfo(studyJoin, NotificationType.CHANGE_AUTHORITY);
     }
 
-    private void validateAuthority(StudyRole studyRole) {
+    private void validateAuthorityCondition(StudyRole studyRole) {
+        if (studyRole.equals(StudyRole.CREATOR))
+            throw new StudyCreatorChangeAuthorityException();
+    }
+
+    private void validateAuthorityType(StudyRole studyRole) {
         if (studyRole.equals(StudyRole.APPLY) || studyRole.equals(StudyRole.CREATOR))
             throw new InvalidAuthorityException();
     }

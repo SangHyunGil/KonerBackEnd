@@ -10,10 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
-import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
-import project.SangHyun.common.advice.exception.InvalidAuthorityException;
-import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
+import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyRole;
@@ -35,14 +32,14 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class StudyJoinServiceUnitTest {
     Member member;
     Study study;
-    StudyJoin studyJoin;
+    StudyJoin studyJoinCreator;
+    StudyJoin studyJoinApply;
 
     @InjectMocks
     StudyJoinService studyJoinService;
@@ -58,7 +55,8 @@ class StudyJoinServiceUnitTest {
     public void init() {
         member = StudyJoinFactory.makeTestAuthMember();
         study = StudyJoinFactory.makeTestStudy(member, new ArrayList<>(), new ArrayList<>());
-        studyJoin = StudyJoinFactory.makeTestStudyJoinCreator(member, study);
+        studyJoinCreator = StudyJoinFactory.makeTestStudyJoinCreator(member, study);
+        studyJoinApply = StudyJoinFactory.makeTestStudyJoinApply(member, study);
     }
 
     @Test
@@ -74,7 +72,7 @@ class StudyJoinServiceUnitTest {
         given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
         given(studyJoinRepository.findAdminAndCreator(any())).willReturn(admins);
-        given(studyJoinRepository.save(any())).willReturn(studyJoin);
+        given(studyJoinRepository.save(any())).willReturn(studyJoinCreator);
 
         //when, then
         Assertions.assertDoesNotThrow(() -> studyJoinService.applyJoin(study.getId(), member.getId(), requestDto));
@@ -274,7 +272,7 @@ class StudyJoinServiceUnitTest {
         StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.ADMIN);
 
         //mocking
-        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
+        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoinApply));
 
         //when, then
         Assertions.assertDoesNotThrow(() -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
@@ -291,5 +289,18 @@ class StudyJoinServiceUnitTest {
 
         //when, then
         Assertions.assertThrows(InvalidAuthorityException.class, () -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
+    }
+
+    @Test
+    @DisplayName("스터디 생성자의 권한의 수정은 실패한다.")
+    public void updateStudyRole_fail2() throws Exception {
+        //given
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.ADMIN);
+
+        //mocking
+        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoinCreator));
+
+        //when, then
+        Assertions.assertThrows(StudyCreatorChangeAuthorityException.class, () -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
     }
 }

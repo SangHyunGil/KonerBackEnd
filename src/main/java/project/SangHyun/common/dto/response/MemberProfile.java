@@ -1,8 +1,9 @@
-package project.SangHyun.study.dto;
+package project.SangHyun.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studycomment.domain.StudyComment;
@@ -17,6 +18,10 @@ public class MemberProfile {
     private Long memberId;
     private String nickname;
     private String profileImgUrl;
+
+    public static MemberProfile create(Member member) {
+        return new MemberProfile(member.getId(), member.getNickname(), member.getProfileImgUrl());
+    }
 
     public static MemberProfile create(Study study) {
         return new MemberProfile(study.getCreatorId(), study.getCreatorNickname(), study.getCreatorProfileImgUrl());

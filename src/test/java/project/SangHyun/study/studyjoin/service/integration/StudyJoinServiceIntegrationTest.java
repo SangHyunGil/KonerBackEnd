@@ -10,10 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
-import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
-import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
-import project.SangHyun.common.advice.exception.InvalidAuthorityException;
-import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
+import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
@@ -235,5 +232,17 @@ class StudyJoinServiceIntegrationTest {
 
         //when, then
         Assertions.assertThrows(InvalidAuthorityException.class, () -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
+    }
+
+    @Test
+    @DisplayName("스터디 생성자의 권한의 수정은 실패한다.")
+    public void updateStudyRole_fail2() throws Exception {
+        //given
+        Member member = testDB.findStudyCreatorMember();
+        Study study = testDB.findBackEndStudy();
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.ADMIN);
+
+        //when, then
+        Assertions.assertThrows(StudyCreatorChangeAuthorityException.class, () -> studyJoinService.updateAuthority(study.getId(), member.getId(), requestDto));
     }
 }

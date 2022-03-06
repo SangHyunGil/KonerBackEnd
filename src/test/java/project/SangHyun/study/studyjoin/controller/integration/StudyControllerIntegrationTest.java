@@ -18,8 +18,11 @@ import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinCreateRequestDto;
+import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinUpdateAuthorityRequestDto;
+import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
@@ -65,7 +68,7 @@ class StudyControllerIntegrationTest {
         StudyJoinCreateRequestDto requestDto = StudyJoinFactory.makeCreateRequestDto("빠르게 지원합니다.");
 
         //when, then
-        mockMvc.perform(post("/study/" + study.getId() + "/join/" + member.getId())
+        mockMvc.perform(post("/study/{studyId}/join/{memberId}", study.getId(), member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -82,7 +85,7 @@ class StudyControllerIntegrationTest {
         Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(post("/study/" + study.getId() + "/join/" + member.getId())
+        mockMvc.perform(post("/study/{studyId}/join/{memberId}", study.getId(), member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -97,7 +100,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(creator.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join/" + applyMember.getId())
+        mockMvc.perform(put("/study/{studyId}/join/{memberId}", study.getId(), applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -112,7 +115,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(adminMember.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join/" + applyMember.getId())
+        mockMvc.perform(put("/study/{studyId}/join/{memberId}", study.getId(), applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -126,7 +129,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join/" + member.getId())
+        mockMvc.perform(put("/study/{studyId}/join/{memberId}", study.getId(), member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -140,7 +143,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/" + study.getId() + "/join/" + member.getId())
+        mockMvc.perform(put("/study/{studyId}/join/{memberId}", study.getId(), member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -155,7 +158,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(creator.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
+        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", study.getId(), applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -170,7 +173,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(adminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
+        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", study.getId(), applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -185,7 +188,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
+        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", study.getId(), applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -200,7 +203,7 @@ class StudyControllerIntegrationTest {
         String accessToken = accessTokenHelper.createToken(member.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/" + study.getId() + "/join/" + applyMember.getId())
+        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", study.getId(), applyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -232,5 +235,99 @@ class StudyControllerIntegrationTest {
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(1));
+    }
+
+    @Test
+    @DisplayName("참여한 모든 스터디를 조회한다.")
+    public void updateAuthority() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyMemberNotResourceOwner();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+
+        //when, then
+        mockMvc.perform(get("/study/join")
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1));
+    }
+
+    @Test
+    @DisplayName("스터디 생성자 권한 수정을 진행한다.")
+    public void changeAuthority() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyCreatorMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Member generalMember = testDB.findStudyGeneralMember();
+
+        StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", study.getId(), generalMember.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("스터디 생성자로 승급하려 한다면 실패한다.")
+    public void changeAuthority_fail() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyCreatorMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Member generalMember = testDB.findStudyGeneralMember();
+
+        StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.CREATOR);
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", study.getId(), generalMember.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("스터디 생성자의 권한 변경은 실패한다.")
+    public void changeAuthority_fail2() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyCreatorMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+
+        StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", study.getId(), member.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("스터디 생성자가 아니라면 권한 변경은 실패한다.")
+    public void changeAuthority_fail3() throws Exception {
+        //given
+        Study study = testDB.findBackEndStudy();
+        Member member = testDB.findStudyAdminMember();
+        String accessToken = accessTokenHelper.createToken(member.getEmail());
+        Member generalMember = testDB.findStudyGeneralMember();
+
+        StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
+
+        //when, then
+        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", study.getId(), generalMember.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(requestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
+                .andExpect(status().is3xxRedirection());
     }
 }

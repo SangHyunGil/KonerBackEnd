@@ -20,11 +20,13 @@ import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.tools.StudyFactory;
 import project.SangHyun.study.studyjoin.controller.StudyJoinController;
 import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinCreateRequestDto;
+import project.SangHyun.study.studyjoin.controller.dto.request.StudyJoinUpdateAuthorityRequestDto;
 import project.SangHyun.study.studyjoin.controller.dto.response.StudyMembersResponseDto;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.StudyJoinService;
 import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinCreateDto;
+import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinUpdateAuthorityDto;
 import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 import project.SangHyun.study.studyjoin.tools.StudyJoinFactory;
 
@@ -140,6 +142,27 @@ class StudyJoinControllerUnitTest {
 
         //when, then
         mockMvc.perform(get("/study/{studyId}/member", study.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("스터디 멤버의 권한을 수정한다.")
+    public void changeAuthority() throws Exception {
+        //given
+        StudyJoinUpdateAuthorityRequestDto updateRequestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
+        StudyJoinUpdateAuthorityDto requestDto = StudyJoinFactory.makeUpdateAuthorityDto(StudyRole.ADMIN);
+        Result ExpectResult = StudyFactory.makeDefaultSuccessResult();
+
+        //mocking
+        willDoNothing().given(studyJoinService).updateAuthority(study.getId(), member.getId(), requestDto);
+        given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
+
+        //when, then
+        mockMvc.perform(put("/study/"+ study.getId()+"/authority/"+member.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new Gson().toJson(updateRequestDto))
+                        .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
 }
