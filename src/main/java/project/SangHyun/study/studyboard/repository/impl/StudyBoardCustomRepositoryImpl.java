@@ -7,7 +7,7 @@ import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.repository.StudyBoardCustomRepository;
 import java.util.List;
 
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.study.studyboard.domain.QStudyBoard.studyBoard;
 
 

@@ -107,7 +107,7 @@ public class StudyJoinService {
         );
     }
 
-    private void notifyJoinInfo(StudyJoin studyJoin, NotificationType accept) {
-        studyJoin.publishEvent(eventPublisher, accept);
+    private void notifyJoinInfo(StudyJoin studyJoin, NotificationType notificationType) {
+        studyJoin.publishEvent(eventPublisher, notificationType);
     }
 }

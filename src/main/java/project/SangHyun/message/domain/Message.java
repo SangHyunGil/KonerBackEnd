@@ -95,6 +95,6 @@ public class Message extends EntityDate {
 
     public void publishEvent(ApplicationEventPublisher eventPublisher, NotificationType notificationType) {
         eventPublisher.publishEvent(new NotificationRequestDto(receiver, notificationType,
-                notificationType.makeContent(receiver.getNickname()), notificationType.makeUrl(receiver.getId())));
+                notificationType.makeContent(sender.getNickname()), notificationType.makeUrl(sender.getId())));
     }
 }

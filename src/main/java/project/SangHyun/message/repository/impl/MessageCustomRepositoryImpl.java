@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.querydsl.core.types.ExpressionUtils.as;
 import static com.querydsl.core.types.dsl.Expressions.constant;
 import static java.util.Comparator.comparing;
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.message.domain.QMessage.message;
 

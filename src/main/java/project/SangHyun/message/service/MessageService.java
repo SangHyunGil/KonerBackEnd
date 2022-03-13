@@ -72,8 +72,8 @@ public class MessageService {
         deleteMessage(message, Message::deleteByReceiver);
     }
 
-    private Member findMemberById(Long senderId) {
-        return memberRepository.findById(senderId).orElseThrow(MemberNotFoundException::new);
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private void notifyToReceiver(Message message) {

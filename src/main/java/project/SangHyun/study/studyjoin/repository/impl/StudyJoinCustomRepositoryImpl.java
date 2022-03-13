@@ -12,7 +12,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
 import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
