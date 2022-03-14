@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.controller.dto.request.EmailAuthRequestDto;
 import project.SangHyun.member.controller.dto.request.VerifyRequestDto;

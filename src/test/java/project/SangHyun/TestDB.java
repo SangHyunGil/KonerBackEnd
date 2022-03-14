@@ -1,7 +1,6 @@
 package project.SangHyun;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +71,7 @@ public class TestDB {
     }
 
     @Transactional(readOnly = true)
-    public Member findAnotherGeneralMember() {
+    public Member findAnotherStudyGeneralMember() {
         return memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
     }
 

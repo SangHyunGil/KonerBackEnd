@@ -1,4 +1,4 @@
-package project.SangHyun.common.exception.controller.unit;
+package project.SangHyun.controller.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.common.dto.response.PageResponseDto;
-import project.SangHyun.common.dto.response.Result;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.PageResponseDto;
+import project.SangHyun.dto.response.Result;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
@@ -44,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class StudyArticleControllerUnitTest {
+
     String accessToken;
     MockMvc mockMvc;
     Member member;

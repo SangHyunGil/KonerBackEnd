@@ -4,37 +4,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.repository.MessageRepository;
 import project.SangHyun.message.repository.impl.RecentMessageDto;
 
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@Transactional
-class MessageRepositoryTest {
+class MessageRepositoryTest extends RepositoryTest{
     Member testMemberA;
     Member testMemberB;
     Member testMemberC;
     Member testMemberD;
-
-    @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    MessageRepository messageRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void beforeEach() {

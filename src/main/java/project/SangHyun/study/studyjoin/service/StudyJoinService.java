@@ -48,7 +48,6 @@ public class StudyJoinService {
 
     @Transactional
     public void rejectJoin(Long studyId, Long memberId) {
-        validateJoinCondition(studyId, memberId);
         StudyJoin studyJoin = findMemberJoinInfoAboutSpecificStudy(studyId, memberId);
         studyJoinRepository.delete(studyJoin);
         notifyJoinInfo(studyJoin, NotificationType.REJECT);

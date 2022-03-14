@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.common.advice.exception.StudyNotFoundException;
-import project.SangHyun.common.dto.response.SliceResponseDto;
+import project.SangHyun.dto.response.SliceResponseDto;
 import project.SangHyun.helper.AwsS3BucketHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;

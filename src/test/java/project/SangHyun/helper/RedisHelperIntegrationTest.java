@@ -1,31 +1,11 @@
 package project.SangHyun.helper;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
-import project.SangHyun.member.helper.RedisHelper;
 
-@SpringBootTest
-@Transactional
-@ActiveProfiles("test")
-class RedisHelperIntegrationTest {
-
-    @Autowired
-    RedisHelper redisHelper;
-    @Autowired
-    TestDB testDB;
-
-    @BeforeEach
-    void beforeEach() {
-        testDB.init();
-    }
+class RedisHelperIntegrationTest extends HelperTest{
 
     @Test
     @DisplayName("Redis에 저장을 값을 저장한다.")

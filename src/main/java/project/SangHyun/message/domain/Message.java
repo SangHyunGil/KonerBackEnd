@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.EntityDate;
-import project.SangHyun.common.dto.request.NotificationRequestDto;
+import project.SangHyun.dto.request.NotificationRequestDto;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.notification.domain.NotificationType;
 

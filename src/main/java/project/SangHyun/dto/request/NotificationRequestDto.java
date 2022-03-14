@@ -1,4 +1,4 @@
-package project.SangHyun.common.dto.request;
+package project.SangHyun.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

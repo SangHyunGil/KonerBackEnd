@@ -26,7 +26,7 @@ public class AwsS3BucketHelper {
         this.awsS3Client = awsS3Client;
     }
 
-    public String store(MultipartFile file) throws IOException {
+    public String store(MultipartFile file) {
         if (file == null) {
             return null;
         }

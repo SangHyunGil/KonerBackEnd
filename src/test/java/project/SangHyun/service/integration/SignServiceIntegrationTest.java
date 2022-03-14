@@ -1,51 +1,19 @@
 package project.SangHyun.service.integration;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.TestDB;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.config.jwt.JwtTokenHelper;
+import project.SangHyun.factory.sign.SignFactory;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.TokenRequestDto;
 import project.SangHyun.member.controller.dto.response.LoginResponseDto;
 import project.SangHyun.member.controller.dto.response.TokenResponseDto;
 import project.SangHyun.member.domain.Member;
-import project.SangHyun.member.helper.RedisHelper;
-import project.SangHyun.member.repository.MemberRepository;
-import project.SangHyun.member.service.SignService;
-import project.SangHyun.member.service.dto.response.MemberDto;
 import project.SangHyun.member.service.dto.request.MemberRegisterDto;
-import project.SangHyun.factory.sign.SignFactory;
+import project.SangHyun.member.service.dto.response.MemberDto;
 
-@SpringBootTest
-@Transactional
-@ActiveProfiles("test")
-class SignServiceIntegrationTest {
-
-    @Autowired
-    SignService signService;
-    @Autowired
-    JwtTokenHelper refreshTokenHelper;
-    @Autowired
-    RedisHelper redisHelper;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    TestDB testDB;
-
-    @BeforeEach
-    void beforeEach() {
-        testDB.init();
-    }
+class SignServiceIntegrationTest extends ServiceIntegrationTest{
 
     @Test
     @DisplayName("회원 가입을 진행한다.")
@@ -117,15 +85,14 @@ class SignServiceIntegrationTest {
     @DisplayName("RefreshToken을 이용해 JWT 토큰을 재발급 받는다.")
     public void reIssue() throws Exception {
         //given
-        Member member = testDB.findGeneralMember();
-        String refreshToken = makeRefreshToken(member);
+        String refreshToken = makeRefreshToken(studyMember);
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto(refreshToken);
 
         //when
         TokenResponseDto ActualResult = signService.tokenReIssue(requestDto);
 
         //then
-        Assertions.assertEquals(member.getId(), ActualResult.getId());
+        Assertions.assertEquals(studyMember.getId(), ActualResult.getId());
     }
 
     private String makeRefreshToken(Member member) {

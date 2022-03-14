@@ -5,17 +5,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.dto.response.PageResponseDto;
-import project.SangHyun.common.dto.response.Result;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.MultipleResult;
+import project.SangHyun.dto.response.PageResponseDto;
+import project.SangHyun.dto.response.Result;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleCreateRequestDto;
+import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleImageUploadRequestDto;
 import project.SangHyun.study.studyarticle.controller.dto.request.StudyArticleUpdateRequestDto;
+import project.SangHyun.study.studyarticle.controller.dto.response.StudyArticleImageResponseDto;
 import project.SangHyun.study.studyarticle.controller.dto.response.StudyArticleResponseDto;
 import project.SangHyun.study.studyarticle.service.StudyArticleService;
 import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleImageDto;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -41,6 +46,16 @@ public class StudyArticleController {
                                                                     @Valid @RequestBody StudyArticleCreateRequestDto requestDto) {
         StudyArticleDto articleDto = studyArticleService.createArticle(boardId, requestDto.toServiceDto());
         return responseService.getSingleResult(StudyArticleResponseDto.create(articleDto));
+    }
+
+    @ApiOperation(value = "스터디 게시글 이미지 업로드", notes = "스터디에 포함된 게시글의 이미지를 업로드한다.")
+    @PostMapping("/image")
+    @ResponseStatus(HttpStatus.OK)
+    public MultipleResult<StudyArticleImageResponseDto> uploadStudyArticleImage(@PathVariable Long studyId, @PathVariable Long boardId,
+                                                                        @Valid @RequestBody StudyArticleImageUploadRequestDto requestDto) {
+        List<StudyArticleImageDto> articleImageDto = studyArticleService.uploadImages(requestDto.toServiceDto());
+        List<StudyArticleImageResponseDto> responseDto = responseService.convertToControllerDto(articleImageDto, StudyArticleImageResponseDto::create);
+        return responseService.getMultipleResult(responseDto);
     }
 
     @ApiOperation(value = "스터디 게시글 세부사항 찾기", notes = "스터디에 포함된 게시글의 세부사항을 찾는다.")

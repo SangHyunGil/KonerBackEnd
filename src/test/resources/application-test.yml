@@ -44,7 +44,7 @@ spring:
           writetimeout: 5000
 
   redis:
-    host: ENC(L5G0hlY7JpMRqoZtOmY3j87ZkrVPkWFQ)
+    host: ENC(WC9j6NjFkOGW25lVzR63zn6iA/qJVtDp)
     port: 6380
 
   domain:

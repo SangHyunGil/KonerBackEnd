@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.dto.response.Result;
 import project.SangHyun.common.response.ResponseService;
 
 

@@ -4,50 +4,24 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.member.domain.Department;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.domain.MemberRole;
-import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;
-import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.videoroom.domain.VideoRoom;
-import project.SangHyun.study.videoroom.repository.VideoRoomRepository;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@Transactional
-@ActiveProfiles("test")
-class VideoRoomRepositoryTest {
+class VideoRoomRepositoryTest extends RepositoryTest{
 
     Member member;
     Study study;
     VideoRoom videoRoom;
-
-    @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    StudyRepository studyRepository;
-    @Autowired
-    VideoRoomRepository videoRoomRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    EntityManager em;
 
     @BeforeEach
     void beforeEach() {

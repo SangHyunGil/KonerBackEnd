@@ -2,9 +2,9 @@ package project.SangHyun.common.response;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.common.dto.response.MultipleResult;
-import project.SangHyun.common.dto.response.Result;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.MultipleResult;
+import project.SangHyun.dto.response.Result;
+import project.SangHyun.dto.response.SingleResult;
 
 import java.util.List;
 import java.util.function.Function;

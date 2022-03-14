@@ -1,55 +1,21 @@
 package project.SangHyun.controller.integration;
 
 import com.google.gson.Gson;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
-import project.SangHyun.TestDB;
-import project.SangHyun.config.jwt.JwtTokenHelper;
-import project.SangHyun.member.domain.Member;
+import project.SangHyun.factory.sign.SignFactory;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
 import project.SangHyun.member.controller.dto.request.TokenRequestDto;
-import project.SangHyun.member.helper.RedisHelper;
-import project.SangHyun.factory.sign.SignFactory;
+import project.SangHyun.member.domain.Member;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
-@ActiveProfiles("test")
-class SignControllerIntegrationTest {
-
-    @Autowired
-    WebApplicationContext context;
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    JwtTokenHelper refreshTokenHelper;
-    @Autowired
-    RedisHelper redisHelper;
-    @Autowired
-    TestDB testDB;
-
-    @BeforeEach
-    void beforeEach() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-        testDB.init();
-    }
+class SignControllerIntegrationTest extends ControllerIntegrationTest{
 
     @Test
     @DisplayName("회원가입을 진행한다.")

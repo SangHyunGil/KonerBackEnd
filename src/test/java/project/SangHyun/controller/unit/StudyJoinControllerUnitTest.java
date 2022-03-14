@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import project.SangHyun.common.dto.response.MultipleResult;
-import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.dto.response.MultipleResult;
+import project.SangHyun.dto.response.Result;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.study.study.domain.Study;
@@ -45,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class StudyJoinControllerUnitTest {
+
     String accessToken;
     Member member;
     Study study;

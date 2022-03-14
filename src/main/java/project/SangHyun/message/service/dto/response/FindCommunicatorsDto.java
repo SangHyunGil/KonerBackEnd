@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.common.dto.response.MemberProfile;
-import project.SangHyun.member.domain.Member;
+import project.SangHyun.dto.response.MemberProfile;
 import project.SangHyun.message.repository.impl.RecentMessageDto;
 
 @Data

@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.advice.ExceptionAdvice;
 import project.SangHyun.common.advice.exception.RedisValueDifferentException;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.member.controller.VerifyController;
@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class VerifyControllerUnitTest {
+
     MockMvc mockMvc;
     @InjectMocks
     VerifyController verifyController;

@@ -1,51 +1,26 @@
 package project.SangHyun.service.integration;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.TestDB;
+import project.SangHyun.factory.message.MessageFactory;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.message.domain.Message;
-import project.SangHyun.message.repository.MessageRepository;
-import project.SangHyun.message.service.MessageService;
 import project.SangHyun.message.service.dto.request.MessageCreateDto;
 import project.SangHyun.message.service.dto.response.FindCommunicatorsDto;
 import project.SangHyun.message.service.dto.response.MessageDto;
-import project.SangHyun.factory.message.MessageFactory;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@SpringBootTest
-@Transactional
-@ActiveProfiles("test")
-public class MessageServiceIntegrationTest {
-    @Autowired
-    MessageService messageService;
-    @Autowired
-    MessageRepository messageRepository;
-    @Autowired
-    TestDB testDB;
-    @Autowired
-    EntityManager em;
-
-    @BeforeEach
-    void beforeEach() {
-        testDB.init();
-    }
+public class MessageServiceIntegrationTest extends ServiceIntegrationTest {
 
     @Test
     @DisplayName("쪽지를 송신한다.")
     public void createMessage() throws Exception {
         //given
-        Member memberA = testDB.findGeneralMember();
-        Member memberB = testDB.findAdminMember();
-        MessageCreateDto requestDto = MessageFactory.makeCreateDto(null, memberA, memberB);
+        Member sender = studyMember;
+        Member receiver = webAdminMember;
+        MessageCreateDto requestDto = MessageFactory.makeCreateDto(null, sender, receiver);
 
         //when
         MessageDto ActualResult = messageService.createMessage(requestDto);
@@ -58,7 +33,7 @@ public class MessageServiceIntegrationTest {
     @DisplayName("쪽지를 나눈 대화 상대 리스트를 최신순으로 정렬하여 출력한다.")
     public void findAllCommunicatorsWithRecentMessage() throws Exception {
         //given
-        Member receiver = testDB.findStudyGeneralMember();
+        Member receiver = studyMember;
 
         //when
         List<FindCommunicatorsDto> ActualResult = messageService.findAllCommunicatorsWithRecentMessage(receiver.getId());
@@ -73,8 +48,8 @@ public class MessageServiceIntegrationTest {
     @DisplayName("어떤 상대와 쪽지를 나눈 모든 쪽지를 최신순으로 정렬하여 출력한다.")
     public void findAllMessages() throws Exception {
         //given
-        Member receiver = testDB.findStudyGeneralMember();
-        Member sender = testDB.findStudyMemberNotResourceOwner();
+        Member receiver = studyMember;
+        Member sender = hasNoResourceMember;
 
         //when
         List<MessageDto> ActualResult = messageService.findAllMessages(sender.getId(), receiver.getId());
@@ -91,8 +66,8 @@ public class MessageServiceIntegrationTest {
     @DisplayName("어떤 상대와 쪽지를 나눈 모든 쪽지를 조회한다면 모두 읽음 처리된다.")
     public void findAllMessages2() throws Exception {
         //given
-        Member receiver = testDB.findStudyGeneralMember();
-        Member sender = testDB.findStudyMemberNotResourceOwner();
+        Member receiver = studyMember;
+        Member sender = hasNoResourceMember;
 
         //when
         messageService.findAllMessages(sender.getId(), receiver.getId());
@@ -166,10 +141,10 @@ public class MessageServiceIntegrationTest {
     @DisplayName("받은 메세지들 중 안읽은 메세지의 개수를 출력한다.")
     public void countUnReadMessages() throws Exception {
         //given
-        Member member = testDB.findStudyGeneralMember();
+        Member receiver = studyMember;
 
         //when
-        Long count = messageRepository.countAllUnReadMessages(member.getId());
+        Long count = messageService.countUnReadMessages(receiver.getId());
 
         //then
         Assertions.assertEquals(5, count);

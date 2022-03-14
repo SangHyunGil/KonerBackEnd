@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.EntityDate;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.notification.domain.NotificationType;
-import project.SangHyun.common.dto.request.NotificationRequestDto;
+import project.SangHyun.dto.request.NotificationRequestDto;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyRole;
 

@@ -3,24 +3,13 @@ package project.SangHyun.helper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.study.videoroom.helper.JanusHelper;
+import project.SangHyun.factory.videoroom.VideoRoomFactory;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomCreateDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomDeleteDto;
 import project.SangHyun.study.videoroom.service.dto.request.VideoRoomUpdateDto;
 import project.SangHyun.study.videoroom.service.dto.response.VideoRoomResultDto;
-import project.SangHyun.factory.videoroom.VideoRoomFactory;
 
-@SpringBootTest
-@Transactional
-@ActiveProfiles("test")
-class JanusHelperTest {
-
-    @Autowired
-    JanusHelper janusHelper;
+class JanusHelperTest extends HelperTest{
 
     @Test
     @DisplayName("Janus Create Post를 진행한다.")
