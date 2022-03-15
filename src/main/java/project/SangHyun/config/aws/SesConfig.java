@@ -17,9 +17,6 @@ public class SesConfig {
     @Value("${cloud.aws.ses.secretKey}")
     private String secretKey;
 
-    @Value("${cloud.aws.region.static}")
-    private String region;
-
     @Bean
     public AmazonSimpleEmailService amazonSimpleEmailService() {
         final BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKey, secretKey);
@@ -28,7 +25,7 @@ public class SesConfig {
 
         return AmazonSimpleEmailServiceClientBuilder.standard()
                 .withCredentials(awsStaticCredentialsProvider)
-                .withRegion(region)
+                .withRegion("us-east-1")
                 .build();
     }
 }
