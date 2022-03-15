@@ -1,4 +1,4 @@
-package project.SangHyun.config;
+package project.SangHyun.config.aws;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class S3config {
 
-    @Value("${cloud.aws.credentials.access-key}")
+    @Value("${cloud.aws.s3.accessKey}")
     private String accessKey;
 
-    @Value("${cloud.aws.credentials.secret-key}")
+    @Value("${cloud.aws.s3.secretKey}")
     private String secretKey;
 
     @Value("${cloud.aws.region.static}")
