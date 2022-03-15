@@ -52,7 +52,7 @@ public class StudyArticleController {
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.OK)
     public MultipleResult<StudyArticleImageResponseDto> uploadStudyArticleImage(@PathVariable Long studyId, @PathVariable Long boardId,
-                                                                        @Valid @RequestBody StudyArticleImageUploadRequestDto requestDto) {
+                                                                                @Valid @ModelAttribute StudyArticleImageUploadRequestDto requestDto) {
         List<StudyArticleImageDto> articleImageDto = studyArticleService.uploadImages(requestDto.toServiceDto());
         List<StudyArticleImageResponseDto> responseDto = responseService.convertToControllerDto(articleImageDto, StudyArticleImageResponseDto::create);
         return responseService.getMultipleResult(responseDto);
@@ -62,7 +62,7 @@ public class StudyArticleController {
     @GetMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
     public SingleResult<StudyArticleResponseDto> findStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId,
-                                                                      @PathVariable Long articleId) {
+                                                                  @PathVariable Long articleId) {
         StudyArticleDto articleDto = studyArticleService.findArticle(articleId);
         return responseService.getSingleResult(StudyArticleResponseDto.create(articleDto));
     }
@@ -71,7 +71,7 @@ public class StudyArticleController {
     @PutMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
     public SingleResult<StudyArticleResponseDto> updateStudyArticle(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable Long articleId,
-                                                                          @Valid @RequestBody StudyArticleUpdateRequestDto requestDto) {
+                                                                    @Valid @RequestBody StudyArticleUpdateRequestDto requestDto) {
         StudyArticleDto articleDto = studyArticleService.updateArticle(articleId, requestDto.toServiceDto());
         return responseService.getSingleResult(StudyArticleResponseDto.create(articleDto));
     }
