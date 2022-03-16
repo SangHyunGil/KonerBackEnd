@@ -37,7 +37,7 @@ public class MemberResponseDto {
 
     public static MemberResponseDto create(MemberDto memberDto) {
         return new MemberResponseDto(memberDto.getId(), memberDto.getEmail(),
-                memberDto.getAuthority(), memberDto.getNickname(), memberDto.getDepartment(),
+                memberDto.getNickname(), memberDto.getAuthority(), memberDto.getDepartment(),
                 memberDto.getProfileImgUrl(), memberDto.getIntroduction());
     }
 }
