@@ -23,6 +23,9 @@ public class MemberResponseDto {
     @ApiModelProperty(value = "닉네임")
     private String nickname;
 
+    @ApiModelProperty(value = "회원 권한")
+    private String authority;
+
     @ApiModelProperty(value = "학과")
     private String department;
 
@@ -34,6 +37,7 @@ public class MemberResponseDto {
 
     public static MemberResponseDto create(MemberDto memberDto) {
         return new MemberResponseDto(memberDto.getId(), memberDto.getEmail(),
-                memberDto.getNickname(), memberDto.getDepartment(), memberDto.getProfileImgUrl(), memberDto.getIntroduction());
+                memberDto.getAuthority(), memberDto.getNickname(), memberDto.getDepartment(),
+                memberDto.getProfileImgUrl(), memberDto.getIntroduction());
     }
 }

@@ -46,7 +46,7 @@ public class HtmlFactory {
                 "                   <td style=\"color: #153643; font-family: Arial, sans-serif; font-size: 24px; text-align: center;\"> <b>학교 이메일 주소 인증</b> </td> \n" +
                 "                  </tr> \n" +
                 "                  <tr> \n" +
-                "                   <td style=\" text-align: center; font-family: Arial, sans-serif;\"> <br><br>안녕하세요.<br><br>Koner 운영팀입니다.<br> <br> 회원 가입을 위해 이메일 주소를 인증해주세요.</td> \n" +
+                "                   <td style=\" text-align: center; font-family: Arial, sans-serif;\"> <br><br>안녕하세요.<br><br>Koner 운영팀입니다.<br> <br> 본인 확인을 위해 이메일 주소를 인증해주세요.</td> \n" +
                 "                  </tr> \n" +
                 "                 </tbody>\n" +
                 "                </table> \n" +
