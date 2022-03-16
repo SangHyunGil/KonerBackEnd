@@ -9,7 +9,7 @@ import project.SangHyun.study.study.repository.StudyCustomRepository;
 
 import java.util.List;
 
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
 

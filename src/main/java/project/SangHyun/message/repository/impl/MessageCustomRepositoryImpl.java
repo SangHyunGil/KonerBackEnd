@@ -16,10 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.querydsl.core.types.ExpressionUtils.as;
-import static com.querydsl.core.types.dsl.Expressions.constant;
+import static com.querydsl.core.types.dsl.Expressions.asNumber;
 import static java.util.Comparator.comparing;
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.message.domain.QMessage.message;
 
@@ -32,7 +31,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         List<RecentMessageDto> receiveMessages = jpaQueryFactory
                 .select(Projections.constructor(RecentMessageDto.class,
                         message.id, message.sender, message.receiver,
-                        message.content.content, as(constant(0L),"unReadCount")))
+                        message.content.content, asNumber(0L).as("unReadCount")))
                 .from(message)
                 .where(message.id.in(
                         JPAExpressions
@@ -45,7 +44,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
         List<RecentMessageDto> sendMessages = jpaQueryFactory
                 .select(Projections.constructor(RecentMessageDto.class,
                         message.id, message.sender, message.receiver,
-                        message.content.content, as(constant(0L),"unReadCount")))
+                        message.content.content, asNumber(0L).as("unReadCount")))
                 .from(message)
                 .where(message.id.in(
                         JPAExpressions
@@ -93,7 +92,8 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     @Override
     public Long countAllUnReadMessages(Long receiverId) {
         return jpaQueryFactory.selectFrom(message)
-                .where(equalsWithReceiverId(receiverId))
+                .where(equalsWithReceiverId(receiverId),
+                        isUnReadMessage())
                 .fetchCount();
     }
 

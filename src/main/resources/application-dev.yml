@@ -71,15 +71,17 @@ spring:
 
 cloud:
   aws:
-    credentials:
-      accessKey: ENC(u/vXX3SW22mMgSSjIEDhEqg28RnNkcliVF/dtpu/c+I=)
-      secretKey: ENC(Ih8ngp5C7CKN4Oe0Itwmyrq3teKjkAJHJEHSY3NclEDzJBtvajpfWFnZ9/dBjSduJDOaRETuM1k=)
     s3:
+      accessKey: ENC(KFhqdcaVvZPTfkW/8/3YzTZ2pwTndBMdkRTocalkCXY=)
+      secretKey: ENC(6WrD32/VKR5Tv1QUevYXm/ECELWdojuiqVbpnV+noVqT9Ac2tytRQs0BkR9QeZ2mkykmFW+wogU=)
       bucket: koner-bucket
     region:
       static: ap-northeast-2
     stack:
       auto: false
+    ses:
+      accessKey: ENC(3+K5eKZPmHj+YgNF0q7r+7qUWJPuTVT1emSWhK6ob1U=)
+      secretKey: ENC(plmqgwgHVfFjdOffTFq4g39GNKBj1FszpMw1Pmvt31Z5OhJm54PZO/XFFpi83L8FES/2KjlrXlQ=)
 
 jasypt:
   encryptor:

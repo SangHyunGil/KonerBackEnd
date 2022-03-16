@@ -3,7 +3,6 @@ package project.SangHyun.member.helper.email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 import project.SangHyun.config.redis.RedisKey;
 
 import javax.mail.Message;
@@ -12,14 +11,13 @@ import javax.mail.internet.MimeMessage;
 
 import static project.SangHyun.member.helper.email.HtmlFactory.getHtml;
 
-@Component
 @RequiredArgsConstructor
 public class GmailHelper implements EmailHelper{
 
     private static final String UNIVERSITY_DOMAIN = "@koreatech.ac.kr";
     private static final String VERIFY_URL = "http://koner.kr/signup/verify";
-
     private final JavaMailSender javaMailSender;
+
     @Async
     public void sendEmail(String email, String value, RedisKey redisKey) {
         MimeMessage mm = makeMail(email, value, redisKey);

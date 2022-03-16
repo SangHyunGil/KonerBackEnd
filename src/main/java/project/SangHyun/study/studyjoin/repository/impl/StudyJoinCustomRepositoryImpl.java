@@ -12,7 +12,7 @@ import project.SangHyun.study.studyjoin.repository.StudyJoinCustomRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.study.domain.QStudy.study;
 import static project.SangHyun.study.studyjoin.domain.QStudyJoin.studyJoin;
@@ -88,12 +88,12 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
     }
 
     @Override
-    public List<StudyJoin> findAdminAndCreator(Long studyJoinId) {
+    public List<StudyJoin> findAdminAndCreator(Long studyId) {
         return jpaQueryFactory.select(studyJoin)
                 .from(studyJoin)
                 .innerJoin(studyJoin.member, member).fetchJoin()
                 .innerJoin(studyJoin.study, study).fetchJoin()
-                .where(equalsStudyJoinId(studyJoinId),
+                .where(equalsStudyId(studyId),
                        isStudyCreatorOrAdmin())
                 .fetch();
     }
@@ -108,10 +108,6 @@ public class StudyJoinCustomRepositoryImpl implements StudyJoinCustomRepository 
 
     private BooleanBuilder equalsMemberId(Long memberId) {
         return nullSafeBuilder(() -> studyJoin.member.id.eq(memberId));
-    }
-
-    private BooleanBuilder equalsStudyJoinId(Long studyJoinId) {
-        return nullSafeBuilder(() -> studyJoin.id.eq(studyJoinId));
     }
 
     private BooleanBuilder isStudyCreatorOrAdmin() {

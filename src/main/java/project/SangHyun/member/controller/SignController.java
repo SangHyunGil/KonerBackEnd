@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.MemberRegisterRequestDto;
@@ -24,7 +24,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sign")
+@RequestMapping("/api/sign")
 public class SignController {
 
     private final SignService signService;

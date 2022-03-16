@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.dto.response.Result;
+import project.SangHyun.dto.response.Result;
 import project.SangHyun.common.response.ResponseService;
 
 
@@ -341,5 +341,17 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected Result janusRequestException() {
         return responseService.getFailureResult(-151, "Janus 요청에 실패했습니다.");
+    }
+
+    @ExceptionHandler(InvalidAuthorityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result invalidAuthorityException() {
+        return responseService.getFailureResult(-152, "잘못된 권한 요청입니다.");
+    }
+
+    @ExceptionHandler(StudyCreatorChangeAuthorityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected Result studyCreatorChangeAuthorityException() {
+        return responseService.getFailureResult(-153, "스터디 생성자의 권한 변경은 불가능합니다.");
     }
 }

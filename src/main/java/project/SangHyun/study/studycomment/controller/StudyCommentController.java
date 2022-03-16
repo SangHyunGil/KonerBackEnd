@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.dto.response.MultipleResult;
-import project.SangHyun.common.dto.response.Result;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.MultipleResult;
+import project.SangHyun.dto.response.Result;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentCreateRequestDto;
 import project.SangHyun.study.studycomment.controller.dto.request.StudyCommentUpdateRequestDto;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study/{studyId}/board/{boardId}/article/{articleId}/comment")
+@RequestMapping("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments")
 public class StudyCommentController {
 
     private final StudyCommentService studyCommentService;

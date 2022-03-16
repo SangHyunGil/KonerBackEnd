@@ -8,8 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.dto.response.Result;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.Result;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;
@@ -24,7 +24,7 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class MemberController {
     private final ResponseService responseService;

@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.context.ApplicationEventPublisher;
 import project.SangHyun.common.EntityDate;
+import project.SangHyun.dto.request.NotificationRequestDto;
 import project.SangHyun.member.domain.Member;
+import project.SangHyun.notification.domain.NotificationType;
 
 import javax.persistence.*;
 
@@ -77,6 +80,10 @@ public class Message extends EntityDate {
         return deletedByReceiver == true;
     }
 
+    public boolean isSender(Long senderId) {
+        return sender.getId() == senderId;
+    }
+
     public Message read() {
         this.isRead = true;
         return this;
@@ -84,5 +91,10 @@ public class Message extends EntityDate {
 
     public String getContent() {
         return content.getContent();
+    }
+
+    public void publishEvent(ApplicationEventPublisher eventPublisher, NotificationType notificationType) {
+        eventPublisher.publishEvent(new NotificationRequestDto(receiver, notificationType,
+                notificationType.makeContent(sender.getNickname()), notificationType.makeUrl(sender.getId())));
     }
 }

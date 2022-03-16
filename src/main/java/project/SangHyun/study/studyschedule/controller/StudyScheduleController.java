@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.SangHyun.common.dto.response.MultipleResult;
-import project.SangHyun.common.dto.response.Result;
-import project.SangHyun.common.dto.response.SingleResult;
+import project.SangHyun.dto.response.MultipleResult;
+import project.SangHyun.dto.response.Result;
+import project.SangHyun.dto.response.SingleResult;
 import project.SangHyun.common.response.ResponseService;
 import project.SangHyun.study.studyschedule.controller.dto.request.StudyScheduleCreateRequestDto;
 import project.SangHyun.study.studyschedule.controller.dto.request.StudyScheduleUpdateRequestDto;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study/{studyId}/schedule")
+@RequestMapping("/api/studies/{studyId}/schedules")
 public class StudyScheduleController {
 
     private final StudyScheduleService studyScheduleService;
