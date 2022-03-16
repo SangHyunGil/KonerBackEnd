@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.SangHyun.study.dto.MemberProfile;
+import project.SangHyun.dto.response.MemberProfile;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
 import project.SangHyun.study.study.domain.StudyOptions.StudyMethod;
 import project.SangHyun.study.study.domain.StudyOptions.StudyState;

@@ -5,17 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.SangHyun.common.advice.exception.AlreadyJoinStudyMember;
-import project.SangHyun.common.advice.exception.ExceedMaximumStudyMember;
-import project.SangHyun.common.advice.exception.StudyJoinNotFoundException;
-import project.SangHyun.common.advice.exception.StudyNotFoundException;
+import project.SangHyun.common.advice.exception.*;
 import project.SangHyun.notification.domain.NotificationType;
 import project.SangHyun.study.study.domain.Study;
+import project.SangHyun.study.study.domain.StudyRole;
 import project.SangHyun.study.study.repository.StudyRepository;
 import project.SangHyun.study.studyjoin.domain.StudyJoin;
 import project.SangHyun.study.studyjoin.repository.StudyJoinRepository;
 import project.SangHyun.study.studyjoin.repository.impl.StudyMembersInfoDto;
 import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinCreateDto;
+import project.SangHyun.study.studyjoin.service.dto.request.StudyJoinUpdateAuthorityDto;
 import project.SangHyun.study.studyjoin.service.dto.response.FindJoinedStudyDto;
 import project.SangHyun.study.studyjoin.service.dto.response.StudyMembersDto;
 
@@ -49,10 +48,28 @@ public class StudyJoinService {
 
     @Transactional
     public void rejectJoin(Long studyId, Long memberId) {
-        validateJoinCondition(studyId, memberId);
         StudyJoin studyJoin = findMemberJoinInfoAboutSpecificStudy(studyId, memberId);
         studyJoinRepository.delete(studyJoin);
         notifyJoinInfo(studyJoin, NotificationType.REJECT);
+    }
+
+    @Transactional
+    public void updateAuthority(Long studyId, Long memberId, StudyJoinUpdateAuthorityDto requestDto) {
+        validateAuthorityType(requestDto.getStudyRole());
+        StudyJoin studyJoin = findMemberJoinInfoAboutSpecificStudy(studyId, memberId);
+        validateAuthorityCondition(studyJoin.getStudyRole());
+        studyJoin.changeAuthority(requestDto.getStudyRole());
+        notifyJoinInfo(studyJoin, NotificationType.CHANGE_AUTHORITY);
+    }
+
+    private void validateAuthorityCondition(StudyRole studyRole) {
+        if (studyRole.equals(StudyRole.CREATOR))
+            throw new StudyCreatorChangeAuthorityException();
+    }
+
+    private void validateAuthorityType(StudyRole studyRole) {
+        if (studyRole.equals(StudyRole.APPLY) || studyRole.equals(StudyRole.CREATOR))
+            throw new InvalidAuthorityException();
     }
 
     public List<FindJoinedStudyDto> findJoinedStudies(Long memberId) {
@@ -89,7 +106,7 @@ public class StudyJoinService {
         );
     }
 
-    private void notifyJoinInfo(StudyJoin studyJoin, NotificationType accept) {
-        studyJoin.publishEvent(eventPublisher, accept);
+    private void notifyJoinInfo(StudyJoin studyJoin, NotificationType notificationType) {
+        studyJoin.publishEvent(eventPublisher, notificationType);
     }
 }

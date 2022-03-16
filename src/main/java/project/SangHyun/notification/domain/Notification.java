@@ -46,6 +46,10 @@ public class Notification extends EntityDate {
         this.isRead = isRead;
     }
 
+    public void read() {
+        isRead = true;
+    }
+
     public String getContent() {
         return content.getContent();
     }

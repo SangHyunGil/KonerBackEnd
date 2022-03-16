@@ -10,7 +10,7 @@ import project.SangHyun.common.advice.exception.AuthenticationEntryPointExceptio
 
 @Slf4j
 @RestController
-@RequestMapping("/exception")
+@RequestMapping("/api/exception")
 public class ExceptionController {
 
     @ApiOperation(value = "인증 실패", notes = "인증 실패에 따른 예외가 발생했습니다.")

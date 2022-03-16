@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
-import project.SangHyun.common.helper.AwsS3BucketHelper;
+import project.SangHyun.helper.AwsS3BucketHelper;
 import project.SangHyun.config.redis.RedisKey;
 import project.SangHyun.config.security.member.MemberDetails;
 import project.SangHyun.member.controller.dto.request.ChangePwRequestDto;

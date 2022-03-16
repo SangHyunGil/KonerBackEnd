@@ -1,7 +1,6 @@
 package project.SangHyun;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +11,9 @@ import project.SangHyun.member.domain.MemberRole;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.message.domain.Message;
 import project.SangHyun.message.repository.MessageRepository;
+import project.SangHyun.notification.domain.Notification;
+import project.SangHyun.notification.domain.NotificationType;
+import project.SangHyun.notification.repository.NotificationRepository;
 import project.SangHyun.study.study.domain.Study;
 import project.SangHyun.study.study.domain.StudyCategory;
 import project.SangHyun.study.study.domain.StudyOptions.RecruitState;
@@ -35,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Profile("test")
 public class TestDB {
     @Autowired
     MemberRepository memberRepository;
@@ -54,6 +55,8 @@ public class TestDB {
     @Autowired
     VideoRoomRepository videoRoomRepository;
     @Autowired
+    NotificationRepository notificationRepository;
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -68,7 +71,7 @@ public class TestDB {
     }
 
     @Transactional(readOnly = true)
-    public Member findAnotherGeneralMember() {
+    public Member findAnotherStudyGeneralMember() {
         return memberRepository.findByEmail("xptmxm3!").orElseThrow(MemberNotFoundException::new);
     }
 
@@ -231,6 +234,11 @@ public class TestDB {
 
         // findStudyGeneralMember, findStudyApplyMember, findStudyMemberNotResourceOwner
         initMessage(storedMemberC, storedMemberD, storedMemberE);
+
+        for (int i = 0; i < 5; i++) {
+            Notification notification = new Notification(storedMemberD, NotificationType.ACCEPT, "알림"+i, "study/51", false);
+            notificationRepository.save(notification);
+        }
     }
 
     private void initMessage(Member testMemberA, Member testMemberB, Member testMemberC) {

@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.*;
-import project.SangHyun.common.helper.AwsS3BucketHelper;
+import project.SangHyun.helper.AwsS3BucketHelper;
 import project.SangHyun.config.jwt.JwtTokenHelper;
 import project.SangHyun.member.controller.dto.request.LoginRequestDto;
 import project.SangHyun.member.controller.dto.request.TokenRequestDto;

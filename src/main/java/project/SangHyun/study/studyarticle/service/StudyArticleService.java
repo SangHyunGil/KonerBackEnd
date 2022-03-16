@@ -9,16 +9,22 @@ import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.common.advice.exception.MemberNotFoundException;
 import project.SangHyun.common.advice.exception.StudyArticleNotFoundException;
 import project.SangHyun.common.advice.exception.StudyBoardNotFoundException;
-import project.SangHyun.common.dto.response.PageResponseDto;
+import project.SangHyun.dto.response.PageResponseDto;
+import project.SangHyun.helper.AwsS3BucketHelper;
 import project.SangHyun.member.domain.Member;
 import project.SangHyun.member.repository.MemberRepository;
 import project.SangHyun.study.studyarticle.domain.StudyArticle;
 import project.SangHyun.study.studyarticle.repository.StudyArticleRepository;
 import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleCreateDto;
-import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleImageUploadDto;
 import project.SangHyun.study.studyarticle.service.dto.request.StudyArticleUpdateDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleDto;
+import project.SangHyun.study.studyarticle.service.dto.response.StudyArticleImageDto;
 import project.SangHyun.study.studyboard.domain.StudyBoard;
 import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,6 +32,7 @@ import project.SangHyun.study.studyboard.repository.StudyBoardRepository;
 @Transactional(readOnly = true)
 public class StudyArticleService {
 
+    private final AwsS3BucketHelper awsS3BucketHelper;
     private final MemberRepository memberRepository;
     private final StudyBoardRepository studyBoardRepository;
     private final StudyArticleRepository studyArticleRepository;
@@ -36,6 +43,13 @@ public class StudyArticleService {
         StudyBoard studyBoard = findStudyBoardById(boardId);
         StudyArticle studyArticle = studyArticleRepository.save(requestDto.toEntity(member, studyBoard));
         return StudyArticleDto.create(studyArticle);
+    }
+
+    public List<StudyArticleImageDto> uploadImages(StudyArticleImageUploadDto requestDto) {
+        return requestDto.getMultipartFiles().stream()
+                .map(awsS3BucketHelper::store)
+                .map(StudyArticleImageDto::new)
+                .collect(Collectors.toList());
     }
 
     public PageResponseDto findAllArticles(Long boardId, Integer page, Integer size) {

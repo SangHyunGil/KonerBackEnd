@@ -12,7 +12,7 @@ import project.SangHyun.study.studyarticle.repository.StudyArticleCustomReposito
 
 import java.util.List;
 
-import static project.SangHyun.common.helper.BooleanBuilderHelper.nullSafeBuilder;
+import static project.SangHyun.helper.BooleanBuilderHelper.nullSafeBuilder;
 import static project.SangHyun.member.domain.QMember.member;
 import static project.SangHyun.study.studyarticle.domain.QStudyArticle.studyArticle;
 
