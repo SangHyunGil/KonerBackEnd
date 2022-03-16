@@ -24,7 +24,7 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class MemberController {
     private final ResponseService responseService;

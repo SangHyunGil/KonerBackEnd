@@ -104,24 +104,6 @@ class StudyJoinServiceIntegrationTest extends ServiceIntegrationTest{
     }
 
     @Test
-    @DisplayName("스터디에 이미 참가한 회원은 스터디 참가 거절에 실패한다.")
-    public void rejectJoin_fail1() {
-        //given
-
-        //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(backendStudy.getId(), studyMember.getId()));
-    }
-
-    @Test
-    @DisplayName("스터디의 정원이 꽉 찼다면 스터디 참가 거절에 실패한다.")
-    public void rejectJoin_fail2() {
-        //given
-
-        //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.rejectJoin(zeroHeadCountStudy.getId(), studyApplyMember.getId()));
-    }
-
-    @Test
     @DisplayName("스터디에 참여하지 않았다면 스터디 참가 거절에 실패한다.")
     public void rejectJoin_fail3() {
         //given

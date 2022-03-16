@@ -2,7 +2,6 @@ package project.SangHyun.controller.integration;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.SangHyun.member.domain.Member;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -17,7 +16,7 @@ class NotificationControllerTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/subscribe")
+        mockMvc.perform(get("/api/subscribe")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -29,7 +28,7 @@ class NotificationControllerTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyApplyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/notification")
+        mockMvc.perform(get("/api/notifications")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(5));
@@ -43,7 +42,7 @@ class NotificationControllerTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyApplyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/notification/count")
+        mockMvc.perform(get("/api/notifications/count")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(5L));
@@ -58,7 +57,7 @@ class NotificationControllerTest extends ControllerIntegrationTest{
         notificationService.findAllNotifications(studyApplyMember.getId());
 
         //when, then
-        mockMvc.perform(get("/notification/count")
+        mockMvc.perform(get("/api/notifications/count")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(0L));

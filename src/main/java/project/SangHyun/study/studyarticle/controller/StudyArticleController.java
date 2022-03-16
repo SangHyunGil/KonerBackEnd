@@ -25,7 +25,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study/{studyId}/board/{boardId}/article")
+@RequestMapping("/api/studies/{studyId}/boards/{boardId}/articles")
 public class StudyArticleController {
 
     public final StudyArticleService studyArticleService;
@@ -49,7 +49,7 @@ public class StudyArticleController {
     }
 
     @ApiOperation(value = "스터디 게시글 이미지 업로드", notes = "스터디에 포함된 게시글의 이미지를 업로드한다.")
-    @PostMapping("/image")
+    @PostMapping("/images")
     @ResponseStatus(HttpStatus.OK)
     public MultipleResult<StudyArticleImageResponseDto> uploadStudyArticleImage(@PathVariable Long studyId, @PathVariable Long boardId,
                                                                                 @Valid @ModelAttribute StudyArticleImageUploadRequestDto requestDto) {

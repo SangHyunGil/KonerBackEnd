@@ -23,7 +23,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         VideoRoomCreateRequestDto createRequestDto = VideoRoomFactory.createRequestDto(studyMember.getId());
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/videoroom", backendStudy.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/videorooms", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -40,7 +40,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         VideoRoomCreateRequestDto createRequestDto = VideoRoomFactory.createRequestDto(notStudyMember.getId());
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/videoroom", backendStudy.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/videorooms", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -56,7 +56,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(put("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -72,7 +72,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(put("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -88,7 +88,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(put("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -104,7 +104,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         VideoRoomUpdateRequestDto updateRequestDto = VideoRoomFactory.updateRequestDto("React Query 회의 방");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(put("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -119,7 +119,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(delete("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -133,7 +133,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         String accessToken = accessTokenHelper.createToken(studyAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(delete("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -147,7 +147,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(delete("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -161,7 +161,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         String accessToken = accessTokenHelper.createToken(hasNoResourceMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
+        mockMvc.perform(delete("/api/studies/{studyId}/videorooms/{roomId}", backendStudy.getId(), jpaVideoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -175,7 +175,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/videoroom", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/videorooms", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -189,7 +189,7 @@ public class VideoRoomControllerIntegrationTest extends ControllerIntegrationTes
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/videoroom", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/videorooms", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))

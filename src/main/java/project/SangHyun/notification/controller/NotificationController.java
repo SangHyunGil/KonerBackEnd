@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import project.SangHyun.dto.response.MultipleResult;
 import project.SangHyun.dto.response.SingleResult;
@@ -23,6 +20,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class NotificationController {
 
@@ -38,7 +36,7 @@ public class NotificationController {
     }
 
     @ApiOperation(value = "알림 조회", notes = "알림을 모두 조회한다.")
-    @GetMapping(value = "/notification")
+    @GetMapping(value = "/notifications")
     @ResponseStatus(HttpStatus.OK)
     public MultipleResult<NotificationResponseDto> findAllNotifications(@ApiIgnore @AuthenticationPrincipal MemberDetails memberDetails) {
         List<NotificationDto> notifications = notificationService.findAllNotifications(memberDetails.getId());
@@ -47,7 +45,7 @@ public class NotificationController {
     }
 
     @ApiOperation(value = "알림 조회", notes = "알림을 모두 조회한다.")
-    @GetMapping(value = "/notification/count")
+    @GetMapping(value = "/notifications/count")
     @ResponseStatus(HttpStatus.OK)
     public SingleResult<Long> countUnReadNotifications(@ApiIgnore @AuthenticationPrincipal MemberDetails memberDetails) {
         Long count = notificationService.countUnReadNotifications(memberDetails.getId());

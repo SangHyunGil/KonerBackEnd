@@ -78,7 +78,7 @@ class StudyControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study")
+        mockMvc.perform(get("/api/studies")
                         .param("studyId", String.valueOf(Long.MAX_VALUE))
                         .param("department", String.valueOf(StudyCategory.CSE))
                         .param("size", "6"))
@@ -100,7 +100,7 @@ class StudyControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{id}", study.getId()))
+        mockMvc.perform(get("/api/studies/{id}", study.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(ExpectResult.getData().getId()));
     }
@@ -120,7 +120,7 @@ class StudyControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(multipart("/study")
+        mockMvc.perform(multipart("/api/studies")
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("memberId", String.valueOf(requestDto.getMemberId()))
                         .param("title", requestDto.getTitle())
@@ -158,7 +158,7 @@ class StudyControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(multipart("/study/{studyId}", this.study.getId())
+        mockMvc.perform(multipart("/api/studies/{studyId}", this.study.getId())
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("memberId", String.valueOf(member.getId()))
                         .param("title", requestDto.getTitle())
@@ -192,7 +192,7 @@ class StudyControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/{id}", study.getId()))
+        mockMvc.perform(delete("/api/studies/{id}", study.getId()))
                 .andExpect(status().isOk());
     }
 }

@@ -23,7 +23,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest 
         MessageCreateRequestDto requestDto = MessageFactory.makeCreateRequestDto(null, anotherStudyMember, studyMember);
 
         //when, then
-        mockMvc.perform(post("/messages")
+        mockMvc.perform(post("/api/messages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -38,7 +38,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest 
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/messages")
+        mockMvc.perform(get("/api/messages")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].unReadCount").value(3L))
@@ -52,7 +52,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest 
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/messages/count")
+        mockMvc.perform(get("/api/messages/count")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(5L));
@@ -65,7 +65,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest 
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/messages/sender")
+        mockMvc.perform(get("/api/messages/sender")
                         .param("senderId", String.valueOf(studyApplyMember.getId()))
                         .header("X-AUTH-TOKEN", accessToken))
                 .andDo(print())
@@ -81,7 +81,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest 
         Message message = messageRepository.findAllMessagesByContent("첫 번째").get(0);
 
         //when, then
-        mockMvc.perform(delete("/messages/sender/" + message.getId())
+        mockMvc.perform(delete("/api/messages/sender/" + message.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -94,7 +94,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest 
         Message message = messageRepository.findAllMessagesByContent("첫 번째").get(0);
 
         //when, then
-        mockMvc.perform(delete("/messages/sender/" + message.getId())
+        mockMvc.perform(delete("/api/messages/sender/" + message.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andDo(print())
                 .andExpect(status().isOk());

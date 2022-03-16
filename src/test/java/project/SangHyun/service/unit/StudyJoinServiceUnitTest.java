@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -162,7 +163,7 @@ class StudyJoinServiceUnitTest {
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
         given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
-        given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
+        given(studyJoinRepository.findStudyJoinCount(any())).willReturn(100L);
 
         //when, then
         Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
@@ -176,8 +177,6 @@ class StudyJoinServiceUnitTest {
         //mocking
         given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
         given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
-        given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
-        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.empty());
 
         //when, then
         Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.acceptJoin(study.getId(), member.getId()));
@@ -191,56 +190,12 @@ class StudyJoinServiceUnitTest {
         StudyJoin studyJoin = StudyJoinFactory.makeTestStudyJoinApply(member, study);
 
         //mocking
-        given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
-        given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
-        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.of(studyJoin));
+        given(studyJoinRepository.findApplyStudy(study.getId(), member.getId())).willReturn(Optional.of(studyJoin));
+        willDoNothing().given(studyJoinRepository).delete(studyJoin);
 
         //when, then
         Assertions.assertDoesNotThrow(() -> studyJoinService.rejectJoin(study.getId(), member.getId()));
         verify(publisher).publishEvent(eventCaptor.capture());
-    }
-
-    @Test
-    @DisplayName("스터디에 이미 참가한 회원은 스터디 참가 거절에 실패한다.")
-    public void rejectJoin_fail1() {
-        //given
-
-        //mocking
-        given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(true);
-
-        //when, then
-        Assertions.assertThrows(AlreadyJoinStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
-    }
-
-    @Test
-    @DisplayName("스터디의 정원이 꽉 찼다면 스터디 참가 수락에 실패한다.")
-    public void rejectJoin_fail2() {
-        //given
-
-        //mocking
-        given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
-        given(studyJoinRepository.findStudyJoinCount(any())).willReturn(2L);
-
-        //when, then
-        Assertions.assertThrows(ExceedMaximumStudyMember.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
-    }
-
-    @Test
-    @DisplayName("스터디에 참여하지 않았다면 스터디 참가 수락에 실패한다.")
-    public void rejectJoin_fail3() {
-        //given
-
-        //mocking
-        given(studyRepository.findById(study.getId())).willReturn(Optional.ofNullable(study));
-        given(studyJoinRepository.isStudyMember(any(), any())).willReturn(false);
-        given(studyJoinRepository.findStudyJoinCount(any())).willReturn(1L);
-        given(studyJoinRepository.findApplyStudy(any(), any())).willReturn(Optional.empty());
-
-        //when, then
-        Assertions.assertThrows(StudyJoinNotFoundException.class, () -> studyJoinService.rejectJoin(study.getId(), member.getId()));
     }
 
     @Test

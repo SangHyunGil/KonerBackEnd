@@ -24,7 +24,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sign")
+@RequestMapping("/api/sign")
 public class SignController {
 
     private final SignService signService;

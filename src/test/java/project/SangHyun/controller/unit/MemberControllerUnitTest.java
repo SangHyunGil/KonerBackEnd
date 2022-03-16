@@ -70,7 +70,7 @@ class MemberControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/users/info")
+        mockMvc.perform(post("/api/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(2L));
@@ -90,7 +90,7 @@ class MemberControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/users/{id}", 1)
+        mockMvc.perform(get("/api/users/{id}", 1)
                         .header("X-AUTH-TOKEN", accessToken)
                         .with(securityContext(SecurityContextHolder.getContext())))
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ class MemberControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(multipart("/users/{id}", 1)
+        mockMvc.perform(multipart("/api/users/{id}", 1)
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("nickname", requestDto.getNickname())
                         .param("department", String.valueOf(requestDto.getDepartment()))
@@ -138,7 +138,7 @@ class MemberControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/users/{id}", 1)
+        mockMvc.perform(delete("/api/users/{id}", 1)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -155,7 +155,7 @@ class MemberControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/users/password")
+        mockMvc.perform(post("/api/users/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());

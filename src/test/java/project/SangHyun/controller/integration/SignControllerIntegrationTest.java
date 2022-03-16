@@ -24,7 +24,7 @@ class SignControllerIntegrationTest extends ControllerIntegrationTest{
         MemberRegisterRequestDto requestDto = SignFactory.makeRegisterRequestDto();
 
         //when, then
-        mockMvc.perform(multipart("/sign/register")
+        mockMvc.perform(multipart("/api/sign/register")
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
@@ -45,7 +45,7 @@ class SignControllerIntegrationTest extends ControllerIntegrationTest{
         MemberRegisterRequestDto requestDto = SignFactory.makeNotValidRequestDto();
 
         //when, then
-        mockMvc.perform(multipart("/sign/register")
+        mockMvc.perform(multipart("/api/sign/register")
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
@@ -66,7 +66,7 @@ class SignControllerIntegrationTest extends ControllerIntegrationTest{
         MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateEmailRequestDto();
 
         //when, then
-        mockMvc.perform(multipart("/sign/register")
+        mockMvc.perform(multipart("/api/sign/register")
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
@@ -87,7 +87,7 @@ class SignControllerIntegrationTest extends ControllerIntegrationTest{
         MemberRegisterRequestDto requestDto = SignFactory.makeDuplicateNicknameRequestDto();
 
         //when, then
-        mockMvc.perform(multipart("/sign/register")
+        mockMvc.perform(multipart("/api/sign/register")
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
@@ -108,7 +108,7 @@ class SignControllerIntegrationTest extends ControllerIntegrationTest{
         LoginRequestDto requestDto = SignFactory.makeAuthMemberLoginRequestDto();
 
         //when, then
-        mockMvc.perform(post("/sign/login")
+        mockMvc.perform(post("/api/sign/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
@@ -124,7 +124,7 @@ class SignControllerIntegrationTest extends ControllerIntegrationTest{
         TokenRequestDto requestDto = SignFactory.makeTokenRequestDto(refreshToken);
 
         //when, then
-        mockMvc.perform(post("/sign/reissue")
+        mockMvc.perform(post("/api/sign/reissue")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))

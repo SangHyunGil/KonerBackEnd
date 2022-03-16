@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study/{studyId}/board/{boardId}/article/{articleId}/comment")
+@RequestMapping("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments")
 public class StudyCommentController {
 
     private final StudyCommentService studyCommentService;

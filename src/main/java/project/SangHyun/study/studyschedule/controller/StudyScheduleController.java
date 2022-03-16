@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study/{studyId}/schedule")
+@RequestMapping("/api/studies/{studyId}/schedules")
 public class StudyScheduleController {
 
     private final StudyScheduleService studyScheduleService;

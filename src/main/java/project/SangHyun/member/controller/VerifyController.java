@@ -14,7 +14,7 @@ import project.SangHyun.member.service.VerifyService;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sign")
+@RequestMapping("/api/sign")
 public class VerifyController {
 
     private final VerifyService verifyService;

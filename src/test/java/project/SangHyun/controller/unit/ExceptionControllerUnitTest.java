@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.SangHyun.common.advice.controller.ExceptionController;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,7 +30,7 @@ class ExceptionControllerUnitTest {
         //given
 
         //when, then
-        mockMvc.perform(post("/exception/entry"))
+        mockMvc.perform(post("/api/exception/entry"))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -41,7 +40,7 @@ class ExceptionControllerUnitTest {
         //given
 
         //when, then
-        mockMvc.perform(post("/exception/denied"))
+        mockMvc.perform(post("/api//exception/denied"))
                 .andExpect(status().is4xxClientError());
     }
 }

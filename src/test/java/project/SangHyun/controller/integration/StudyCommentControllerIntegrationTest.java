@@ -21,7 +21,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article/{articleId}/comment", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -33,7 +33,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article/{articleId}/comment", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -46,7 +46,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(studyMember, null);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/board/{boardId}/article/{articleId}/comment", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -62,7 +62,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(studyMember, parentComment);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/board/{boardId}/article/{articleId}/comment", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -78,7 +78,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentCreateRequestDto requestDto = StudyCommentFactory.makeCreateRequestDto(notStudyMember, null);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/board/{boardId}/article/{articleId}/comment", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments", backendStudy.getId(), announceBoard.getId(), announceArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -94,7 +94,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -111,7 +111,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -128,7 +128,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -145,7 +145,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -161,7 +161,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCommentUpdateRequestDto requestDto = StudyCommentFactory.makeUpdateRequestDto("테스트 댓글 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -176,7 +176,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -188,7 +188,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -200,7 +200,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -212,7 +212,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -224,7 +224,7 @@ class StudyCommentControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(hasNoResourceMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}/comment/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}/comments/{commentId}", backendStudy.getId(), announceBoard.getId(), announceArticle.getId(), parentComment.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }

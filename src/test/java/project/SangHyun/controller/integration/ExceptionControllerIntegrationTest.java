@@ -14,7 +14,7 @@ class ExceptionControllerIntegrationTest extends ControllerIntegrationTest {
         //given
 
         //when, then
-        mockMvc.perform(post("/exception/entry"))
+        mockMvc.perform(post("/api/exception/entry"))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -24,7 +24,7 @@ class ExceptionControllerIntegrationTest extends ControllerIntegrationTest {
         //given
 
         //when, then
-        mockMvc.perform(post("/exception/denied"))
+        mockMvc.perform(post("/api/exception/denied"))
                 .andExpect(status().is4xxClientError());
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study/{studyId}/videoroom")
+@RequestMapping("/api/studies/{studyId}/videorooms")
 public class VideoRoomController {
 
     private final VideoRoomService videoRoomService;

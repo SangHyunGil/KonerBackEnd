@@ -82,7 +82,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/"+ study.getId()+"/join/"+member.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/joins/{memberId}", study.getId(), member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -101,7 +101,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/"+ study.getId()+"/join/"+member.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", study.getId(), member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -117,7 +117,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/"+ study.getId()+"/join/"+member.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/joins/{memberId}", study.getId(), member.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -142,7 +142,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/member", study.getId()))
+        mockMvc.perform(get("/api/studies/{studyId}/members", study.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -159,7 +159,7 @@ class StudyJoinControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/"+ study.getId()+"/authority/"+member.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/authorities/{memberId}", study.getId(), member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))

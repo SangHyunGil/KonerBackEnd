@@ -57,7 +57,7 @@ public class VerifyControllerUnitTest {
         given(responseService.getSingleResult(result)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/sign/email")
+        mockMvc.perform(post("/api/sign/email")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
@@ -76,7 +76,7 @@ public class VerifyControllerUnitTest {
         given(responseService.getSingleResult(result)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/sign/email")
+        mockMvc.perform(post("/api/sign/email")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
@@ -94,7 +94,7 @@ public class VerifyControllerUnitTest {
         given(verifyService.verify(requestDto)).willReturn(result);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
@@ -112,7 +112,7 @@ public class VerifyControllerUnitTest {
         given(verifyService.verify(requestDto)).willThrow(RedisValueDifferentException.class);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().is4xxClientError());
@@ -131,7 +131,7 @@ public class VerifyControllerUnitTest {
         given(responseService.getSingleResult(result)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
@@ -149,7 +149,7 @@ public class VerifyControllerUnitTest {
         given(verifyService.verify(requestDto)).willThrow(RedisValueDifferentException.class);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().is4xxClientError());

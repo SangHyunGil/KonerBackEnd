@@ -23,7 +23,7 @@ public class VerifyControllerIntegrationTest extends ControllerIntegrationTest{
         EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.VERIFY);
 
         //when, then
-        mockMvc.perform(post("/sign/email")
+        mockMvc.perform(post("/api/sign/email")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
@@ -37,7 +37,7 @@ public class VerifyControllerIntegrationTest extends ControllerIntegrationTest{
         EmailAuthRequestDto requestDto = SignFactory.makeEmailAuthRequestDto(RedisKey.PASSWORD);
 
         //when, then
-        mockMvc.perform(post("/sign/email")
+        mockMvc.perform(post("/api/sign/email")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
@@ -52,7 +52,7 @@ public class VerifyControllerIntegrationTest extends ControllerIntegrationTest{
         VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", authCode, RedisKey.VERIFY);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
@@ -67,7 +67,7 @@ public class VerifyControllerIntegrationTest extends ControllerIntegrationTest{
         VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm2!", "wrongAuthCode", RedisKey.VERIFY);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
@@ -82,7 +82,7 @@ public class VerifyControllerIntegrationTest extends ControllerIntegrationTest{
         VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", authCode, RedisKey.PASSWORD);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))
@@ -97,7 +97,7 @@ public class VerifyControllerIntegrationTest extends ControllerIntegrationTest{
         VerifyRequestDto requestDto = SignFactory.makeVerifyEmailRequestDto("xptmxm1!", "wrongAuthCode", RedisKey.PASSWORD);
 
         //when, then
-        mockMvc.perform(post("/sign/verify")
+        mockMvc.perform(post("/api/sign/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))

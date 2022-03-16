@@ -83,7 +83,7 @@ class StudyBoardControllerUnitTest {
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board", study.getId()))
+        mockMvc.perform(get("/api/studies/{studyId}/boards", study.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(1));
     }
@@ -103,7 +103,7 @@ class StudyBoardControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/board", study.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/boards", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -127,7 +127,7 @@ class StudyBoardControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}", study.getId(), studyBoard.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -147,7 +147,7 @@ class StudyBoardControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}", study.getId(), studyBoard.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}", study.getId(), studyBoard.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }

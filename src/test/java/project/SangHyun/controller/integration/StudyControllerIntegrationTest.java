@@ -24,7 +24,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         //given
 
         //when, then
-        mockMvc.perform(get("/study")
+        mockMvc.perform(get("/api/studies")
                         .param("studyId", String.valueOf(Long.MAX_VALUE))
                         .param("department", String.valueOf(StudyCategory.CSE))
                         .param("size", "6"))
@@ -39,7 +39,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         //given
 
         //when, then
-        mockMvc.perform(get("/study/{id}", backendStudy.getId()))
+        mockMvc.perform(get("/api/studies/{id}", backendStudy.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(backendStudy.getId()))
                 .andExpect(jsonPath("$.data.title").value(backendStudy.getTitle()));
@@ -53,7 +53,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(studyMember);
 
         //when, then
-        mockMvc.perform(multipart("/study")
+        mockMvc.perform(multipart("/api/studies")
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("memberId", String.valueOf(requestDto.getMemberId()))
                         .param("title", requestDto.getTitle())
@@ -84,7 +84,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         StudyCreateRequestDto requestDto = StudyFactory.makeCreateRequestDto(notAuthMember);
 
         //when, then
-        mockMvc.perform(post("/study")
+        mockMvc.perform(post("/api/studies")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -99,7 +99,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{id}/board", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{id}/boards", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(3));
@@ -113,7 +113,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", List.of("모바일"));
 
         //when, then
-        mockMvc.perform(multipart("/study/{studyId}", backendStudy.getId())
+        mockMvc.perform(multipart("/api/studies/{studyId}", backendStudy.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("title", requestDto.getTitle())
                         .param("description", requestDto.getDescription())
@@ -142,7 +142,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", List.of("모바일"));
 
         //when, then
-        mockMvc.perform(multipart("/study/{studyId}", backendStudy.getId())
+        mockMvc.perform(multipart("/api/studies/{studyId}", backendStudy.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("title", requestDto.getTitle())
                         .param("description", requestDto.getDescription())
@@ -171,7 +171,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         StudyUpdateRequestDto requestDto = StudyFactory.makeUpdateRequestDto("모바일 모집", List.of("모바일"));
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}", backendStudy.getId())
+        mockMvc.perform(put("/api/studies/{studyId}", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -186,7 +186,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyCreator.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}", backendStudy.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -198,7 +198,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}", backendStudy.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -210,7 +210,7 @@ class StudyControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}", backendStudy.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }

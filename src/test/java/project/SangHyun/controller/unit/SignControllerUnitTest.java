@@ -68,7 +68,7 @@ class SignControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(multipart("/sign/register")
+        mockMvc.perform(multipart("/api/sign/register")
                         .file("profileImg", requestDto.getProfileImg().getBytes())
                         .param("email", requestDto.getEmail())
                         .param("password", requestDto.getPassword())
@@ -95,7 +95,7 @@ class SignControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/sign/login")
+        mockMvc.perform(post("/api/sign/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());
@@ -114,7 +114,7 @@ class SignControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/sign/reissue")
+        mockMvc.perform(post("/api/sign/reissue")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(requestDto)))
                 .andExpect(status().isOk());

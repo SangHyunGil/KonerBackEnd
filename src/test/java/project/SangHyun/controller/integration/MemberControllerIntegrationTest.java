@@ -24,7 +24,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(post("/users/info")
+        mockMvc.perform(post("/api/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -36,7 +36,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = "Wrong Token";
 
         //when, then
-        mockMvc.perform(post("/users/info")
+        mockMvc.perform(post("/api/users/info")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -48,7 +48,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/users/{id}", studyMember.getId())
+        mockMvc.perform(get("/api/users/{id}", studyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -61,7 +61,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수", "철수입니다.");
 
         //when, then
-        mockMvc.perform(multipart("/users/{id}", studyMember.getId())
+        mockMvc.perform(multipart("/api/users/{id}", studyMember.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("nickname", requestDto.getNickname())
                         .param("department", String.valueOf(requestDto.getDepartment()))
@@ -85,7 +85,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("적절한닉네임", "적절한닉네임의 수정글입니다.");
 
         //when, then
-        mockMvc.perform(multipart("/users/{id}", webAdminMember.getId())
+        mockMvc.perform(multipart("/api/users/{id}", webAdminMember.getId())
                         .file((MockMultipartFile) requestDto.getProfileImg())
                         .param("nickname", requestDto.getNickname())
                         .param("department", String.valueOf(requestDto.getDepartment()))
@@ -110,7 +110,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         MemberUpdateRequestDto requestDto = MemberFactory.makeUpdateRequestDto("철수", "철수입니다.");
 
         //when, then
-        mockMvc.perform(put("/users/{id}", studyMember.getId())
+        mockMvc.perform(put("/api/users/{id}", studyMember.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -125,7 +125,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());;
 
         //when, then
-        mockMvc.perform(delete("/users/{id}", studyMember.getId())
+        mockMvc.perform(delete("/api/users/{id}", studyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -137,7 +137,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/users/{id}", webAdminMember.getId())
+        mockMvc.perform(delete("/api/users/{id}", webAdminMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -149,7 +149,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(anotherStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/users/{id}", studyMember.getId())
+        mockMvc.perform(delete("/api/users/{id}", studyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -161,7 +161,7 @@ class MemberControllerIntegrationTest extends ControllerIntegrationTest{
         ChangePwRequestDto requestDto = SignFactory.makeChangePwRequestDto("xptmxm1!", "change1!");
 
         //when, then
-        mockMvc.perform(post("/users/password")
+        mockMvc.perform(post("/api/users/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto)))

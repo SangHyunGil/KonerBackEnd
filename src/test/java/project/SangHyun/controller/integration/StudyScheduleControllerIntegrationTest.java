@@ -21,7 +21,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedule", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/schedules", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -33,7 +33,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedule", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/schedules", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -45,7 +45,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedule", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/schedules", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -58,7 +58,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         StudyScheduleCreateRequestDto requestDto = StudyScheduleFactory.makeCreateRequestDto();
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/schedule", backendStudy.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/schedules", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -74,7 +74,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         StudyScheduleCreateRequestDto requestDto = StudyScheduleFactory.makeCreateRequestDto();
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/schedule", backendStudy.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/schedules", backendStudy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -90,7 +90,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -107,7 +107,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -124,7 +124,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         StudyScheduleUpdateRequestDto requestDto = StudyScheduleFactory.makeUpdateRequestDto("일정 수정");
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -139,7 +139,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -153,7 +153,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -167,7 +167,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -181,7 +181,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -196,7 +196,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -211,7 +211,7 @@ public class StudyScheduleControllerIntegrationTest extends ControllerIntegratio
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/schedule/{scheduleId}", backendStudy.getId(), studySchedule.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/schedules/{scheduleId}", backendStudy.getId(), studySchedule.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))

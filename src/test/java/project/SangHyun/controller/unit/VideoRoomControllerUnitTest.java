@@ -83,7 +83,7 @@ public class VideoRoomControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/videoroom", study.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/videorooms", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -105,7 +105,7 @@ public class VideoRoomControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
+        mockMvc.perform(put("/api/studies/{studyId}/videorooms/{roomId}", study.getId(), videoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -124,7 +124,7 @@ public class VideoRoomControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/videoroom/{roomId}", study.getId(), videoRoom.getRoomId())
+        mockMvc.perform(delete("/api/studies/{studyId}/videorooms/{roomId}", study.getId(), videoRoom.getRoomId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -147,7 +147,7 @@ public class VideoRoomControllerUnitTest {
         given(responseService.getMultipleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/videoroom", study.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/videorooms", study.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header("X-AUTH-TOKEN", accessToken))

@@ -23,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study")
+@RequestMapping("/api/studies")
 public class StudyController {
 
     private final StudyService studyService;

@@ -24,7 +24,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         StudyJoinCreateRequestDto requestDto = StudyJoinFactory.makeCreateRequestDto("빠르게 지원합니다.");
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/join/{memberId}", backendStudy.getId(), notStudyMember.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), notStudyMember.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -40,7 +40,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/join/{memberId}", study.getId(), notAuthMember.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/joins/{memberId}", study.getId(), notAuthMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -52,7 +52,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyCreator.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/join/{memberId}", backendStudy.getId(), studyApplyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -65,7 +65,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/join/{memberId}", study.getId(), studyApplyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", study.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -77,7 +77,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/join/{memberId}", backendStudy.getId(), studyApplyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -89,7 +89,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/join/{memberId}", backendStudy.getId(), notStudyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), notStudyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -101,7 +101,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyCreator.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", backendStudy.getId(), studyApplyMember.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -113,7 +113,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", backendStudy.getId(), studyApplyMember.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -125,7 +125,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", backendStudy.getId(), studyApplyMember.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -137,7 +137,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(notStudyMember.getEmail());
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/join/{memberId}", backendStudy.getId(), studyApplyMember.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -149,7 +149,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(studyMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/member", backendStudy.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/members", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -161,7 +161,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(hasNoResourceMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/join")
+        mockMvc.perform(get("/api/studies/joins")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(1));
@@ -174,7 +174,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         String accessToken = accessTokenHelper.createToken(hasNoResourceMember.getEmail());
 
         //when, then
-        mockMvc.perform(get("/study/join")
+        mockMvc.perform(get("/api/studies/joins")
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(1));
@@ -188,7 +188,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", backendStudy.getId(), studyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/authorities/{memberId}", backendStudy.getId(), studyMember.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -204,7 +204,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.CREATOR);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", backendStudy.getId(), studyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/authorities/{memberId}", backendStudy.getId(), studyMember.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -220,7 +220,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", backendStudy.getId(), studyCreator.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/authorities/{memberId}", backendStudy.getId(), studyCreator.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))
@@ -236,7 +236,7 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
         StudyJoinUpdateAuthorityRequestDto requestDto = StudyJoinFactory.makeUpdateAuthorityRequestDto(StudyRole.ADMIN);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/authority/{memberId}", backendStudy.getId(), studyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/authorities/{memberId}", backendStudy.getId(), studyMember.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(requestDto))

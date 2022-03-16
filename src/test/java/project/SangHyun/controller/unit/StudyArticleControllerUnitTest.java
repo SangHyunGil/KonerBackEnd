@@ -86,7 +86,7 @@ public class StudyArticleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/boards/{boardId}/articles", study.getId(), studyBoard.getId())
                         .param("page", "0")
                         .param("size", "10")
                         .header("X-AUTH-TOKEN", accessToken))
@@ -106,7 +106,7 @@ public class StudyArticleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(get("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -126,7 +126,7 @@ public class StudyArticleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/study/{studyId}/board/{boardId}/article", study.getId(), studyBoard.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/boards/{boardId}/articles", study.getId(), studyBoard.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -149,7 +149,7 @@ public class StudyArticleControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(put("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(updateRequestDto))
@@ -170,7 +170,7 @@ public class StudyArticleControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/study/{studyId}/board/{boardId}/article/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
+        mockMvc.perform(delete("/api/studies/{studyId}/boards/{boardId}/articles/{articleId}", study.getId(), studyBoard.getId(), studyArticle.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }

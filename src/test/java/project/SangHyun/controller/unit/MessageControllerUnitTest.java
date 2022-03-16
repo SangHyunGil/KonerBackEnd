@@ -71,7 +71,7 @@ public class MessageControllerUnitTest {
         given(responseService.getSingleResult(responseDto)).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(post("/messages")
+        mockMvc.perform(post("/api/messages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new Gson().toJson(createRequestDto))
@@ -91,7 +91,7 @@ public class MessageControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/messages/sender/"+messageId)
+        mockMvc.perform(delete("/api/messages/sender/"+messageId)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -108,7 +108,7 @@ public class MessageControllerUnitTest {
         given(responseService.getDefaultSuccessResult()).willReturn(ExpectResult);
 
         //when, then
-        mockMvc.perform(delete("/messages/receiver/"+messageId)
+        mockMvc.perform(delete("/api/messages/receiver/"+messageId)
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
