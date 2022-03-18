@@ -27,6 +27,7 @@ public class StudyArticleCustomRepositoryImpl implements StudyArticleCustomRepos
                 .selectFrom(studyArticle)
                 .innerJoin(studyArticle.member, member).fetchJoin()
                 .where(equalsBoardId(boardId))
+                .orderBy(studyArticle.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
