@@ -81,7 +81,7 @@ public class Message extends EntityDate {
     }
 
     public boolean isSender(Long senderId) {
-        return sender.getId() == senderId;
+        return sender.getId().equals(senderId);
     }
 
     public Message read() {
