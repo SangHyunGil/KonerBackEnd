@@ -82,15 +82,17 @@ public class StudyCommentServiceIntegrationTest extends ServiceIntegrationTest{
     @DisplayName("댓글을 삭제한다.(부모가 삭제처리되어있다면 부모와 자신 모두 삭제처리된다.)")
     public void deleteComment2() throws Exception {
         //given
+        int prevSize = studyCommentRepository.findAll().size();
+        studyCommentService.deleteComment(parentComment.getId());
         persistContextClear();
-        parentComment.delete();
 
         //when
         studyCommentService.deleteComment(childComment.getId());
 
 
         //then
-        Assertions.assertEquals(0, studyCommentRepository.findAll().size());
+        int currentSize = studyCommentRepository.findAll().size();
+        Assertions.assertEquals(2, prevSize - currentSize);
     }
 
     private void persistContextClear() {

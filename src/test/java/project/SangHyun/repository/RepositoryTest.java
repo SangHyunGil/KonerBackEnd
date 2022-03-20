@@ -23,34 +23,24 @@ public class RepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
-
     @Autowired
     MessageRepository messageRepository;
-
     @Autowired
     StudyRepository studyRepository;
-
     @Autowired
     StudyJoinRepository studyJoinRepository;
-
     @Autowired
     StudyBoardRepository studyBoardRepository;
-
     @Autowired
     StudyArticleRepository studyArticleRepository;
-
     @Autowired
     StudyCommentRepository studyCommentRepository;
-
     @Autowired
     NotificationRepository notificationRepository;
-
     @Autowired
     VideoRoomRepository videoRoomRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
     @Autowired
     EntityManager em;
 }

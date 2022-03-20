@@ -38,7 +38,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                                 .select(message.id.max())
                                 .from(message)
                                 .where(equalsWithReceiverId(memberId))
-                                .groupBy(message.sender, message.receiver)))
+                                .groupBy(message.sender.id, message.receiver.id)))
                 .fetch();
 
         List<RecentMessageDto> sendMessages = jpaQueryFactory
@@ -51,17 +51,16 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
                                 .select(message.id.max())
                                 .from(message)
                                 .where(equalsWithSenderId(memberId))
-                                .groupBy(message.sender, message.receiver)))
+                                .groupBy(message.sender.id, message.receiver.id)))
                 .fetch();
 
-        List<RecentMessageDto> countMessages = jpaQueryFactory
-                .select(Projections.constructor(RecentMessageDto.class,
-                        message.id, message.sender, message.receiver,
-                        message.content.content, message.count()))
+        List<CountMessageDto> countMessages = jpaQueryFactory
+                .select(Projections.constructor(CountMessageDto.class,
+                        message.sender, message.receiver, message.count()))
                 .from(message)
                 .where(equalsWithReceiverId(memberId),
                         isUnReadMessage())
-                .groupBy(message.sender, message.receiver)
+                .groupBy(message.sender.id, message.receiver.id)
                 .fetch();
 
         return findRecentCommunicatorsByCompareSendAndReceiveMessage(receiveMessages, sendMessages, countMessages);
@@ -106,7 +105,7 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository {
     }
 
     private List<RecentMessageDto> findRecentCommunicatorsByCompareSendAndReceiveMessage(List<RecentMessageDto> receiveMessages,
-                                                                                         List<RecentMessageDto> sendMessages, List<RecentMessageDto> countMessages) {
+                                                                                         List<RecentMessageDto> sendMessages, List<CountMessageDto> countMessages) {
         Map<Member, RecentMessageDto> store = new HashMap<>();
 
         // 보낸 메세지 중 최신 메세지 기록

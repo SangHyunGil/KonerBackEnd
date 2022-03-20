@@ -37,10 +37,9 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
     public void applyJoin_fail() throws Exception {
         //given
         String accessToken = accessTokenHelper.createToken(notAuthMember.getEmail());
-        Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(post("/api/studies/{studyId}/joins/{memberId}", study.getId(), notAuthMember.getId())
+        mockMvc.perform(post("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), notAuthMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().is3xxRedirection());
     }
@@ -61,11 +60,10 @@ class StudyJoinControllerIntegrationTest extends ControllerIntegrationTest{
     @DisplayName("웹 관리자는 스터디 참가를 수락할 수 있다.")
     public void acceptJoin2() throws Exception {
         //given
-        Study study = testDB.findBackEndStudy();
         String accessToken = accessTokenHelper.createToken(webAdminMember.getEmail());
 
         //when, then
-        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", study.getId(), studyApplyMember.getId())
+        mockMvc.perform(put("/api/studies/{studyId}/joins/{memberId}", backendStudy.getId(), studyApplyMember.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }

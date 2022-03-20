@@ -1,9 +1,13 @@
 package project.SangHyun.service.integration;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import project.SangHyun.TestDB;
 import project.SangHyun.config.jwt.JwtTokenHelper;
@@ -42,6 +46,7 @@ import javax.persistence.EntityManager;
 @Transactional
 public class ServiceIntegrationTest {
 
+    protected Member generalMember;
     protected Member studyMember;
     protected Member anotherStudyMember;
     protected Member notStudyMember;
@@ -113,8 +118,7 @@ public class ServiceIntegrationTest {
 
     @BeforeEach
     void beforeEach() {
-        testDB.init();
-
+        generalMember = testDB.findGeneralMember();
         notAuthMember = testDB.findNotAuthMember();
         studyMember = testDB.findStudyGeneralMember();
         anotherStudyMember = testDB.findAnotherStudyGeneralMember();
