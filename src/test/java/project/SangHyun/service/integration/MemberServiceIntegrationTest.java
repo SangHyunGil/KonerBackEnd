@@ -19,7 +19,7 @@ class MemberServiceIntegrationTest extends ServiceIntegrationTest {
     @DisplayName("회원 정보를 로드한다.")
     public void loadUserInfo() throws Exception {
         //given
-        MemberDetails memberDetails = MemberFactory.makeMemberDetails(testDB.findGeneralMember().getId());
+        MemberDetails memberDetails = MemberFactory.makeMemberDetails(generalMember.getId());
 
         //when
         MemberDto ActualResult = memberService.getMemberInfo(memberDetails);

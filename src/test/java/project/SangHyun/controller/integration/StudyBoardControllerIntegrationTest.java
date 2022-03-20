@@ -19,10 +19,9 @@ class StudyBoardControllerIntegrationTest extends ControllerIntegrationTest{
     public void loadBoard() throws Exception {
         //given
         String accessToken = refreshTokenHelper.createToken(studyMember.getEmail());
-        Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(get("/api/studies/{studyId}/boards", study.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/boards", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
@@ -32,10 +31,9 @@ class StudyBoardControllerIntegrationTest extends ControllerIntegrationTest{
     public void loadBoard_fail() throws Exception {
         //given
         String accessToken = refreshTokenHelper.createToken(studyMember.getEmail());
-        Study study = testDB.findBackEndStudy();
 
         //when, then
-        mockMvc.perform(get("/api/studies/{studyId}/boards", study.getId())
+        mockMvc.perform(get("/api/studies/{studyId}/boards", backendStudy.getId())
                         .header("X-AUTH-TOKEN", accessToken))
                 .andExpect(status().isOk());
     }
