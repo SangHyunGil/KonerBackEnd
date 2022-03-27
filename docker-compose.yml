@@ -1,12 +1,6 @@
 version: '3'
 
 services:
-  redis:
-    image: redis:latest
-    hostname: redis
-    ports:
-      - "6380:6379"
-
   demo:
     build: .
     restart: on-failure
@@ -14,5 +8,3 @@ services:
       - /var/jenkins_home/web.env
     ports:
       - "8080:8080"
-    depends_on:
-      - redis
